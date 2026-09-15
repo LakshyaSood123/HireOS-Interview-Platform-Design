@@ -54,8 +54,12 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const [cvFileName, setCvFileName] = useState<string | null>(null)
   const [interviewSession, setInterviewSession] = useState<InterviewSessionData | null>(null)
 
-  // Ecosystem state
-  const [activeProduct, setActiveProduct] = useState<ActiveProduct>("reagvis")
+  // Ecosystem state.
+  // Course-First Development Mode: boot into the HireOS/Results side so
+  // App.tsx's DEVELOPMENT_MODE.DEFAULT_ENTRY ("results") actually renders
+  // first, instead of always jumping straight to Reagvis Trails. See
+  // /COURSE_FIRST_DEVELOPMENT_MODE.md
+  const [activeProduct, setActiveProduct] = useState<ActiveProduct>("hireos")
   const [reagvisView, setReagvisView] = useState<ReagvisView>("map")
   const [courseData, setCourseData] = useState<CourseData>(dsaCourseData)
   const [activeNode, setActiveNode] = useState<TrailNode | null>(dsaCourseData.nodes[2]) // Sorting Clearing
