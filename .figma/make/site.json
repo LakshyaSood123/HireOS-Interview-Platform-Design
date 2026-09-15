@@ -1,0 +1,10 @@
+{
+  "description": "AI-powered interview platform offering adaptive questions, real-time analytics, and unbiased evaluations to enhance candidate assessment and hiring decisions.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
