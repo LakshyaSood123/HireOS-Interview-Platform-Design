@@ -15,7 +15,7 @@ export const DEVELOPMENT_MODE = {
   /** Setup/Interview entry points are gated off while this is false. */
   INTERVIEW_FLOW_ENABLED: false,
   /** Page the app boots into while COURSE_FIRST_MODE is active. */
-  DEFAULT_ENTRY: "results",
+  DEFAULT_ENTRY: "reagvis-trail",
 } as const
 
 /**

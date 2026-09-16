@@ -1,5 +1,16 @@
 import { useState } from "react"
 import type { PracticeChallenge } from "../../data/reagvisCourses"
+import { practiceChallengeToActivity } from "../../learning/legacyChallengeAdapter"
+import { MockCodeRunner } from "../../learning/services/codeRunner"
+
+// Shared with the new Lesson Workspace — this is the "retire the second mock
+// execution path" fix. ChallengeStage no longer has its own independent
+// setTimeout/always-succeeds mock; it calls the same MockCodeRunner Trees/
+// Foundations/Linked Lists/Recursion use, via practiceChallengeToActivity's
+// adapter. See src/learning/legacyChallengeAdapter.ts for that shape's
+// known limitations (no structured visible/hidden test data in the old
+// PracticeChallenge shape).
+const codeRunner = new MockCodeRunner()
 
 interface ChallengeStageProps {
   challenge: PracticeChallenge
@@ -18,23 +29,34 @@ export default function ChallengeStage({
   const [showHint, setShowHint] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
 
-  const handleRunCode = () => {
+  const activity = practiceChallengeToActivity(challenge)
+
+  const handleRunCode = async () => {
     setIsRunning(true)
     setConsoleOutput("⚡ Compiling test suite against boundary test cases...")
-    setTimeout(() => {
-      setIsRunning(false)
-      setConsoleOutput(challenge.mockRunOutput)
-    }, 700)
+    const result = await codeRunner.run({ code, language: "javascript", activity })
+    setIsRunning(false)
+    setConsoleOutput(
+      result.status !== "completed"
+        ? (result.message ?? "Run failed.")
+        : `${result.tests.map((t, i) => `${t.status === "passed" ? "✓" : "✗"} Test ${i + 1}: ${t.description} — ${t.status === "passed" ? "Passed" : `expected ${t.expected}, received ${t.received}`}`).join("\n")}\n\n${result.testsPassed}/${result.totalTests} visible tests passed.`,
+    )
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setIsRunning(true)
     setConsoleOutput("🔍 Evaluating time complexity, edge cases, and memory limits...")
-    setTimeout(() => {
-      setIsRunning(false)
-      setIsSuccess(true)
-      setConsoleOutput("🎉 All test cases passed! Complexity verified O(N) Time, O(N) Space.\nReady to lock in mastery!")
-    }, 850)
+    const result = await codeRunner.submit({ code, language: "javascript", activity })
+    setIsRunning(false)
+    const passed = result.status === "completed" && result.testsPassed === result.totalTests
+    setIsSuccess(passed)
+    setConsoleOutput(
+      result.status !== "completed"
+        ? (result.message ?? "Submission failed.")
+        : passed
+          ? "🎉 All test cases passed! Ready to lock in mastery!"
+          : `${result.testsPassed}/${result.totalTests} tests passed. ${result.tests.find(t => t.status === "failed")?.description ?? ""} needs another look.`,
+    )
   }
 
   return (

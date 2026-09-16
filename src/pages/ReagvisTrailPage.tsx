@@ -5,6 +5,8 @@ import LessonModal from "../components/forest/LessonModal"
 import LessonReader from "../components/forest/LessonReader"
 import ChallengeStage from "../components/forest/ChallengeStage"
 import UnlockCelebration from "../components/forest/UnlockCelebration"
+import ModuleRoadmap from "../components/roadmap/ModuleRoadmap"
+import LessonWorkspace from "../components/lesson/LessonWorkspace"
 import OwlAvatar from "../components/OwlAvatar"
 import AlpineMountainRange from "../components/forest/scenic/AlpineMountainRange"
 import AlpineCabin from "../components/forest/scenic/AlpineCabin"
@@ -12,6 +14,14 @@ import AlpinePineTree from "../components/forest/scenic/AlpinePineTree"
 import { MeadowCow } from "../components/forest/scenic/ScenicAnimals"
 import { useAppState } from "../state/AppStateContext"
 import { libraryCourses, type TrailNode } from "../data/reagvisCourses"
+import { getCourseById, isCourseAvailable, getAllCheckpointsInOrder } from "../learning/courseRegistry"
+import { MockCodeRunner } from "../learning/services/codeRunner"
+import { LocalNotesRepository } from "../learning/services/notesRepository"
+
+// Module-level singletons — one mock code runner / local notes repository
+// for the whole app, same pattern as AppStateContext's progressRepository.
+const codeRunner = new MockCodeRunner()
+const notesRepository = new LocalNotesRepository()
 
 interface ReagvisTrailPageProps {
   onNavigateHireOS?: (page: string) => void
@@ -27,9 +37,27 @@ export default function ReagvisTrailPage({ onNavigateHireOS }: ReagvisTrailPageP
     completeCurrentLesson,
     retakeInterview,
     returnToHireOS,
+    startLearningTrail,
+    activeCourseId,
+    lives,
+    viewedModuleId,
+    viewedCheckpointId,
+    enterModule,
+    enterCheckpoint,
+    backToRoadmap,
+    completeCheckpointById,
+    failCheckpointAttempt,
+    getCheckpointState,
+    dsaModuleStates,
   } = useAppState()
 
   const [previewNode, setPreviewNode] = useState<TrailNode | null>(null)
+  const [previewModuleId, setPreviewModuleId] = useState<string | null>(null)
+
+  const course = getCourseById(activeCourseId)
+  const viewedModule = course?.zones.flatMap(z => z.modules).find(m => m.id === viewedModuleId)
+  const viewedCheckpoint = viewedModule?.checkpoints.find(cp => cp.id === viewedCheckpointId)
+  const orderedCheckpoints = course ? getAllCheckpointsInOrder(course) : []
 
   const handleSelectNode = (node: TrailNode) => {
     setPreviewNode(node)
@@ -48,12 +76,19 @@ export default function ReagvisTrailPage({ onNavigateHireOS }: ReagvisTrailPageP
     }
   }
 
-  return (
-    <div className="min-h-screen bg-[#CFDFBA] font-display text-[#1E3B2B] relative flex flex-col overflow-x-hidden">
-      {/* ── TOP NAV / HUD ── */}
-      <TrailHUD />
+  const handleReturnToHireOS = () => {
+    returnToHireOS()
+    onNavigateHireOS?.("results")
+  }
 
-      <main className="relative z-10 flex-1">
+  return (
+    <div className={`font-display text-[#1E3B2B] relative flex flex-col ${
+      reagvisView === "map" ? "h-screen overflow-hidden bg-[#D2ECED]" : "min-h-screen bg-[#CFDFBA] overflow-x-hidden"
+    }`}>
+      {/* ── TOP NAV / HUD ── */}
+      <TrailHUD onNavigateHireOS={onNavigateHireOS} />
+
+      <main className={`relative z-10 ${reagvisView === "map" ? "flex-1 min-h-0 overflow-hidden" : "flex-1"}`}>
         {/* ══════════════════════════════════════════════════════
             1. COURSE INTRO / EXPEDITION BRIEF SCREEN
             ══════════════════════════════════════════════════════ */}
@@ -151,7 +186,7 @@ export default function ReagvisTrailPage({ onNavigateHireOS }: ReagvisTrailPageP
                   Explore All Course Biomes
                 </button>
                 <button
-                  onClick={returnToHireOS}
+                  onClick={handleReturnToHireOS}
                   className="w-full sm:w-auto px-4 py-3 text-xs font-bold text-gray-500 hover:text-gray-800 text-center cursor-pointer"
                 >
                   Return to Results
@@ -165,7 +200,7 @@ export default function ReagvisTrailPage({ onNavigateHireOS }: ReagvisTrailPageP
             2. THE PRIMARY SCENIC ALPINE COURSE MAP
             ══════════════════════════════════════════════════════ */}
         {reagvisView === "map" && (
-          <div className="animate-fade-up w-full">
+          <div className="animate-fade-up w-full h-full">
             <BiomeTrailMap
               nodes={courseData.nodes}
               biomes={courseData.biomes}
@@ -202,6 +237,60 @@ export default function ReagvisTrailPage({ onNavigateHireOS }: ReagvisTrailPageP
         )}
 
         {/* ══════════════════════════════════════════════════════
+            MODULE ROADMAP VIEW (new Lesson Workspace model — Trees today)
+            ══════════════════════════════════════════════════════ */}
+        {reagvisView === "roadmap" && viewedModule && (
+          <div className="animate-fade-up">
+            <ModuleRoadmap
+              module={viewedModule}
+              checkpointStates={
+                previewModuleId === viewedModule.id
+                  ? Object.fromEntries(viewedModule.checkpoints.map(cp => [cp.id, "available"]))
+                  : Object.fromEntries(
+                      viewedModule.checkpoints.map(cp => [cp.id, getCheckpointState(cp.id)]),
+                    )
+              }
+              onEnterCheckpoint={enterCheckpoint}
+              onBack={() => {
+                setPreviewModuleId(null)
+                setReagvisView("map")
+              }}
+            />
+          </div>
+        )}
+
+        {/* ══════════════════════════════════════════════════════
+            LESSON WORKSPACE VIEW (new Lesson Workspace model — Trees today)
+            ══════════════════════════════════════════════════════ */}
+        {reagvisView === "workspace" && viewedCheckpoint && viewedModule && (
+          <div className="animate-fade-up">
+            <LessonWorkspace
+              key={viewedCheckpoint.id}
+              checkpoint={viewedCheckpoint}
+              moduleTitle={viewedModule.title}
+              state={previewModuleId === viewedModule.id ? "available" : getCheckpointState(viewedCheckpoint.id)}
+              lives={lives}
+              runner={codeRunner}
+              notesRepository={notesRepository}
+              courseId={activeCourseId}
+              moduleId={viewedModule.id}
+              onFailedSubmit={previewModuleId ? () => {} : failCheckpointAttempt}
+              onComplete={previewModuleId ? () => {} : () => completeCheckpointById(viewedCheckpoint.id)}
+              onContinue={() => {
+                const index = orderedCheckpoints.findIndex(cp => cp.id === viewedCheckpoint.id)
+                const next = index >= 0 ? orderedCheckpoints[index + 1] : undefined
+                if (next && viewedModule.checkpoints.some(cp => cp.id === next.id)) {
+                  enterCheckpoint(next.id)
+                } else {
+                  backToRoadmap()
+                }
+              }}
+              onBack={backToRoadmap}
+            />
+          </div>
+        )}
+
+        {/* ══════════════════════════════════════════════════════
             5. COURSE LIBRARY / BIOMES VIEW
             ══════════════════════════════════════════════════════ */}
         {reagvisView === "library" && (
@@ -217,34 +306,132 @@ export default function ReagvisTrailPage({ onNavigateHireOS }: ReagvisTrailPageP
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {libraryCourses.map(course => (
-                <div
-                  key={course.id}
-                  className="rounded-[30px] bg-[#F7F5EC] border-2 border-[#C2D6B8] p-6 shadow-[0_15px_35px_rgba(40,65,45,0.08)] flex flex-col justify-between transition-all hover:scale-[1.02]"
-                >
-                  <div>
-                    <div className="w-12 h-12 rounded-2xl bg-[#E4EED5] border border-[#BBD4B8] flex items-center justify-center text-2xl mb-4 shadow-2xs">
-                      {course.icon}
+              {libraryCourses.map(course => {
+                const available = isCourseAvailable(course.id)
+                return (
+                  <div
+                    key={course.id}
+                    className={`rounded-[30px] bg-[#F7F5EC] border-2 border-[#C2D6B8] p-6 shadow-[0_15px_35px_rgba(40,65,45,0.08)] flex flex-col justify-between transition-all ${
+                      available ? "hover:scale-[1.02]" : "opacity-70"
+                    }`}
+                  >
+                    <div>
+                      <div className="w-12 h-12 rounded-2xl bg-[#E4EED5] border border-[#BBD4B8] flex items-center justify-center text-2xl mb-4 shadow-2xs">
+                        {course.biomeIcon}
+                      </div>
+                      <span className="text-[10px] font-black uppercase tracking-wider text-[#1DB584] block mb-1">
+                        {course.biomeTitle}
+                      </span>
+                      <h3 className="text-lg font-black text-[#1B3F2B] mb-2">{course.title}</h3>
+                      <p className="text-xs text-gray-600 leading-relaxed mb-4">{course.description}</p>
                     </div>
-                    <span className="text-[10px] font-black uppercase tracking-wider text-[#1DB584] block mb-1">
-                      {course.category}
-                    </span>
-                    <h3 className="text-lg font-black text-[#1B3F2B] mb-2">{course.title}</h3>
-                    <p className="text-xs text-gray-600 leading-relaxed mb-4">{course.description}</p>
-                  </div>
 
-                  <div className="pt-4 border-t border-[#CBDCC4] flex items-center justify-between text-xs">
-                    <span className="text-gray-500 font-bold">⏱️ {course.duration}</span>
-                    <button
-                      onClick={() => setReagvisView("map")}
-                      className="px-4 py-2 rounded-full bg-[#5B8854] hover:bg-[#487342] text-white font-bold transition-all shadow-xs cursor-pointer"
-                    >
-                      Enter Trail ➔
-                    </button>
+                    <div className="pt-4 border-t border-[#CBDCC4] flex items-center justify-between text-xs">
+                      <span className="text-gray-500 font-bold">⏱️ {course.duration}</span>
+                      {available ? (
+                        <button
+                          onClick={() => {
+                            startLearningTrail(course.id)
+                            setReagvisView("map")
+                          }}
+                          className="px-4 py-2 rounded-full bg-[#5B8854] hover:bg-[#487342] text-white font-bold transition-all shadow-xs cursor-pointer"
+                        >
+                          Enter Trail ➔
+                        </button>
+                      ) : (
+                        <span
+                          className="px-4 py-2 rounded-full bg-gray-200 text-gray-500 font-bold cursor-not-allowed"
+                          title="This course world is still being built"
+                        >
+                          Coming Soon
+                        </span>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
+
+            {/* ── DSA course-world module list (full functional curriculum) ──
+                Course World (the Alpine scenic map) still only shows the
+                original 7 module tiles — see LEARNING_ENGINE_ARCHITECTURE.md's
+                "Course World vs Module Roadmap" note. This plain list is the
+                navigation path to every other real module until the scenic
+                map grows more regions, without touching the Alpine visuals
+                at all. */}
+            {course && (
+              <div className="mt-12">
+                <div className="mb-6">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-[#1DB584] block mb-1">
+                    Data Structures &amp; Algorithms
+                  </span>
+                  <h3 className="text-xl font-black text-[#1B3F2B]">Full DSA Curriculum</h3>
+                  <p className="text-xs text-gray-600 mt-1">
+                    Every module has real lessons — the scenic Course World above still shows the
+                    original 7 destinations until the next world-map phase.
+                  </p>
+                </div>
+
+                {course.zones
+                  .map(zone => (
+                    <div key={zone.id} className="mb-8">
+                      <h4 className="text-xs font-black uppercase tracking-wider text-gray-500 mb-3">{zone.title}</h4>
+                      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {zone.modules
+                          .filter(module => module.checkpoints.length > 0)
+                          .map(module => {
+                            const state = dsaModuleStates[module.id] ?? "locked"
+                            const isTwoPointers = module.id === "two-pointers"
+                            const enterable = state !== "locked" || isTwoPointers
+                            return (
+                              <button
+                                key={module.id}
+                                onClick={() => {
+                                  if (isTwoPointers && state === "locked") {
+                                    setPreviewModuleId("two-pointers")
+                                  }
+                                  if (enterable) enterModule(module.id)
+                                }}
+                                disabled={!enterable}
+                                className={`text-left rounded-2xl border p-4 transition-all ${
+                                  enterable
+                                    ? "bg-white/90 border-[#C2D6B8] hover:bg-white hover:shadow-md cursor-pointer"
+                                    : "bg-white/40 border-[#D8E4D2] opacity-60 cursor-not-allowed"
+                                }`}
+                              >
+                                <div className="flex items-center gap-2.5 mb-1.5">
+                                  <span className="text-lg">{module.icon}</span>
+                                  <span className="text-sm font-black text-[#1B3F2B]">{module.title}</span>
+                                </div>
+                                <p className="text-[11px] text-gray-600 leading-snug mb-2">{module.description}</p>
+                                <div className="flex items-center gap-2">
+                                  <span
+                                    className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${
+                                      state === "completed" || state === "mastered"
+                                        ? "bg-[#1DB584]/15 text-[#128A5B]"
+                                        : state === "current"
+                                          ? "bg-[#1DB584] text-white"
+                                          : state === "available"
+                                            ? "bg-[#E2EED5] text-[#234E35]"
+                                            : "bg-gray-200 text-gray-500"
+                                    }`}
+                                  >
+                                    {state === "locked" ? "🔒 Locked" : state}
+                                  </span>
+                                  {isTwoPointers && state === "locked" && (
+                                    <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-[#3B82F6]/15 text-[#2563EB] border border-[#3B82F6]/30">
+                                      Demo Preview 👁️
+                                    </span>
+                                  )}
+                                </div>
+                              </button>
+                            )
+                          })}
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            )}
           </div>
         )}
       </main>
