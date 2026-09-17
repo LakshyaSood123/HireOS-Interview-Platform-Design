@@ -145,6 +145,11 @@ const codeLab: Checkpoint = {
       ],
       hint: "Keep left and right boundaries, compute mid each iteration, and narrow left = mid + 1 or right = mid - 1 based on the comparison.",
       mistakeFeedback: "This looks like it's scanning linearly through nums instead of narrowing the search space by comparing against the middle element each step.",
+      demoSolution: {
+        python: "def binarySearch(nums, target):\n    if not nums:\n        return -1\n    left, right = 0, len(nums) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if nums[mid] == target:\n            return mid\n        elif nums[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1\n",
+        cpp: "int binarySearch(vector<int>& nums, int target) {\n    if (nums.empty()) return -1;\n    int left = 0, right = (int)nums.size() - 1;\n    while (left <= right) {\n        int mid = left + (right - left) / 2;\n        if (nums[mid] == target) return mid;\n        else if (nums[mid] < target) left = mid + 1;\n        else right = mid - 1;\n    }\n    return -1;\n}\n",
+        java: "int binarySearch(int[] nums, int target) {\n    if (nums.length == 0) return -1;\n    int left = 0, right = nums.length - 1;\n    while (left <= right) {\n        int mid = left + (right - left) / 2;\n        if (nums[mid] == target) return mid;\n        else if (nums[mid] < target) left = mid + 1;\n        else right = mid - 1;\n    }\n    return -1;\n}\n",
+      },
     },
   },
   questionIds: ["q-binary-search"],
@@ -189,6 +194,11 @@ const mastery: Checkpoint = {
       ],
       hint: "At each step, determine whether the left half (nums[left..mid]) or right half (nums[mid..right]) is sorted, then check if the target lies within that sorted half's range.",
       mistakeFeedback: "This looks like it's assuming the whole array is sorted (ignoring the rotation) rather than first figuring out which half around mid is actually sorted.",
+      demoSolution: {
+        python: "def searchRotated(nums, target):\n    if not nums:\n        return -1\n    left, right = 0, len(nums) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if nums[mid] == target:\n            return mid\n        if nums[left] <= nums[mid]:\n            if nums[left] <= target < nums[mid]:\n                right = mid - 1\n            else:\n                left = mid + 1\n        else:\n            if nums[mid] < target <= nums[right]:\n                left = mid + 1\n            else:\n                right = mid - 1\n    return -1\n",
+        cpp: "int searchRotated(vector<int>& nums, int target) {\n    if (nums.empty()) return -1;\n    int left = 0, right = (int)nums.size() - 1;\n    while (left <= right) {\n        int mid = left + (right - left) / 2;\n        if (nums[mid] == target) return mid;\n        if (nums[left] <= nums[mid]) {\n            if (nums[left] <= target && target < nums[mid]) right = mid - 1;\n            else left = mid + 1;\n        } else {\n            if (nums[mid] < target && target <= nums[right]) left = mid + 1;\n            else right = mid - 1;\n        }\n    }\n    return -1;\n}\n",
+        java: "int searchRotated(int[] nums, int target) {\n    if (nums.length == 0) return -1;\n    int left = 0, right = nums.length - 1;\n    while (left <= right) {\n        int mid = left + (right - left) / 2;\n        if (nums[mid] == target) return mid;\n        if (nums[left] <= nums[mid]) {\n            if (nums[left] <= target && target < nums[mid]) right = mid - 1;\n            else left = mid + 1;\n        } else {\n            if (nums[mid] < target && target <= nums[right]) left = mid + 1;\n            else right = mid - 1;\n        }\n    }\n    return -1;\n}\n",
+      },
     },
   },
   questionIds: ["q-search-rotated-sorted-array"],

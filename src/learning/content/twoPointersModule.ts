@@ -124,6 +124,11 @@ const codeLab: Checkpoint = {
       ],
       hint: "Move left forward and right backward, skipping non-alphanumeric characters, and compare lowercase letters at each step.",
       mistakeFeedback: "This looks like it's comparing the raw string to its reverse without skipping punctuation/case — that fails on anything with spaces or symbols in it.",
+      demoSolution: {
+        python: "def isPalindrome(s):\n    if not s:\n        return True\n    left, right = 0, len(s) - 1\n    while left < right:\n        while left < right and not s[left].isalnum():\n            left += 1\n        while left < right and not s[right].isalnum():\n            right -= 1\n        if s[left].lower() != s[right].lower():\n            return False\n        left += 1\n        right -= 1\n    return True\n",
+        cpp: "bool isPalindrome(string s) {\n    if (s.empty()) return true;\n    int left = 0, right = (int)s.size() - 1;\n    while (left < right) {\n        while (left < right && !isalnum(s[left])) left++;\n        while (left < right && !isalnum(s[right])) right--;\n        if (tolower(s[left]) != tolower(s[right])) return false;\n        left++;\n        right--;\n    }\n    return true;\n}\n",
+        java: "boolean isPalindrome(String s) {\n    char[] chars = s.toCharArray();\n    if (chars.length == 0) return true;\n    int left = 0, right = chars.length - 1;\n    while (left < right) {\n        while (left < right && !Character.isLetterOrDigit(chars[left])) left++;\n        while (left < right && !Character.isLetterOrDigit(chars[right])) right--;\n        if (Character.toLowerCase(chars[left]) != Character.toLowerCase(chars[right])) return false;\n        left++;\n        right--;\n    }\n    return true;\n}\n",
+      },
     },
   },
   questionIds: ["q-valid-palindrome"],
@@ -168,6 +173,11 @@ const mastery: Checkpoint = {
       ],
       hint: "Start left and right at the two ends, track the best area seen, and always move the pointer at the shorter wall inward.",
       mistakeFeedback: "This looks like it's checking every pair of walls (O(n²)) instead of narrowing from both ends and always moving the shorter wall inward (O(n)).",
+      demoSolution: {
+        python: "def maxArea(heights):\n    if not heights:\n        return 0\n    left, right = 0, len(heights) - 1\n    best = 0\n    while left < right:\n        area = min(heights[left], heights[right]) * (right - left)\n        best = max(best, area)\n        if heights[left] < heights[right]:\n            left += 1\n        else:\n            right -= 1\n    return best\n",
+        cpp: "int maxArea(vector<int>& heights) {\n    if (heights.empty()) return 0;\n    int left = 0, right = (int)heights.size() - 1, best = 0;\n    while (left < right) {\n        int area = min(heights[left], heights[right]) * (right - left);\n        best = max(best, area);\n        if (heights[left] < heights[right]) left++; else right--;\n    }\n    return best;\n}\n",
+        java: "int maxArea(int[] heights) {\n    if (heights.length == 0) return 0;\n    int left = 0, right = heights.length - 1, best = 0;\n    while (left < right) {\n        int area = Math.min(heights[left], heights[right]) * (right - left);\n        best = Math.max(best, area);\n        if (heights[left] < heights[right]) left++; else right--;\n    }\n    return best;\n}\n",
+      },
     },
   },
   questionIds: ["q-container-with-most-water"],

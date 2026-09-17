@@ -158,6 +158,11 @@ const dfsBfsCodeLab: Checkpoint = {
       ],
       hint: "Think recursively: process the current node, then traverse the left and right subtrees.",
       mistakeFeedback: "You are visiting the right child before the left child, so this produces a different traversal order.",
+      demoSolution: {
+        python: "def preorderTraversal(root):\n    if not root:\n        return []\n    return [root.val] + preorderTraversal(root.left) + preorderTraversal(root.right)\n",
+        cpp: "vector<int> preorderTraversal(TreeNode* root) {\n    if (root == nullptr) return {};\n    vector<int> result = {root->val};\n    vector<int> left = preorderTraversal(root->left);\n    vector<int> right = preorderTraversal(root->right);\n    result.insert(result.end(), left.begin(), left.end());\n    result.insert(result.end(), right.begin(), right.end());\n    return result;\n}\n",
+        java: "List<Integer> preorderTraversal(TreeNode root) {\n    List<Integer> result = new ArrayList<>();\n    if (root == null) return result;\n    result.add(root.val);\n    result.addAll(preorderTraversal(root.left));\n    result.addAll(preorderTraversal(root.right));\n    return result;\n}\n",
+      },
     },
   },
 }
@@ -214,6 +219,11 @@ const binarySearchTrees: Checkpoint = {
       ],
       hint: "Compare target to root.val, then recurse into the left or right subtree accordingly — you never need to search both sides.",
       mistakeFeedback: "You're recursing into both subtrees on every call — the BST invariant means you only ever need to go one direction.",
+      demoSolution: {
+        python: "def searchBST(root, target):\n    if not root:\n        return None\n    if root.val == target:\n        return root\n    if target < root.val:\n        return searchBST(root.left, target)\n    return searchBST(root.right, target)\n",
+        cpp: "TreeNode* searchBST(TreeNode* root, int target) {\n    if (root == nullptr) return nullptr;\n    if (root->val == target) return root;\n    if (target < root->val) return searchBST(root->left, target);\n    return searchBST(root->right, target);\n}\n",
+        java: "TreeNode searchBST(TreeNode root, int target) {\n    if (root == null) return null;\n    if (root.val == target) return root;\n    if (target < root.val) return searchBST(root.left, target);\n    return searchBST(root.right, target);\n}\n",
+      },
     },
   },
 }
@@ -257,6 +267,11 @@ const interviewChallenge: Checkpoint = {
       ],
       hint: "Compute the height of each subtree; a tree is balanced only if both subtrees are themselves balanced AND their heights differ by at most 1.",
       mistakeFeedback: "You're comparing subtree heights but not checking that both subtrees are themselves balanced — a locally-balanced-looking node can still sit above an unbalanced one further down.",
+      demoSolution: {
+        python: "def isBalanced(root):\n    if not root:\n        return True\n\n    def isBalancedHeight(node):\n        if not node:\n            return 0\n        left = isBalancedHeight(node.left)\n        if left == -1:\n            return -1\n        right = isBalancedHeight(node.right)\n        if right == -1:\n            return -1\n        if abs(left - right) > 1:\n            return -1\n        return max(left, right) + 1\n\n    return isBalancedHeight(root) != -1\n",
+        cpp: "int isBalancedHeight(TreeNode* node) {\n    if (node == nullptr) return 0;\n    int left = isBalancedHeight(node->left);\n    if (left == -1) return -1;\n    int right = isBalancedHeight(node->right);\n    if (right == -1) return -1;\n    if (abs(left - right) > 1) return -1;\n    return max(left, right) + 1;\n}\n\nbool isBalanced(TreeNode* root) {\n    if (root == nullptr) return true;\n    return isBalancedHeight(root) != -1;\n}\n",
+        java: "private int isBalancedHeight(TreeNode node) {\n    if (node == null) return 0;\n    int left = isBalancedHeight(node.left);\n    if (left == -1) return -1;\n    int right = isBalancedHeight(node.right);\n    if (right == -1) return -1;\n    if (Math.abs(left - right) > 1) return -1;\n    return Math.max(left, right) + 1;\n}\n\nboolean isBalanced(TreeNode root) {\n    if (root == null) return true;\n    return isBalancedHeight(root) != -1;\n}\n",
+      },
     },
   },
 }

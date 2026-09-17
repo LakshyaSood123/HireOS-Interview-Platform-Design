@@ -197,6 +197,11 @@ const codeLab: Checkpoint = {
       ],
       hint: "Track three pointers — prev, curr, and next — and flip curr.next to point at prev on each step, then advance all three.",
       mistakeFeedback: "You're walking the list but not actually flipping each node's next pointer to point backward — reversal happens by rewiring next, not by reading the list into a new structure.",
+      demoSolution: {
+        python: "def reverseList(head):\n    if not head:\n        return None\n    prev = None\n    curr = head\n    while curr:\n        nxt = curr.next\n        curr.next = prev\n        prev = curr\n        curr = nxt\n    return prev\n",
+        cpp: "ListNode* reverseList(ListNode* head) {\n    if (head == nullptr) return nullptr;\n    ListNode* prev = nullptr;\n    ListNode* curr = head;\n    while (curr != nullptr) {\n        ListNode* next = curr->next;\n        curr->next = prev;\n        prev = curr;\n        curr = next;\n    }\n    return prev;\n}\n",
+        java: "ListNode reverseList(ListNode head) {\n    if (head == null) return null;\n    ListNode prev = null;\n    ListNode curr = head;\n    while (curr != null) {\n        ListNode next = curr.next;\n        curr.next = prev;\n        prev = curr;\n        curr = next;\n    }\n    return prev;\n}\n",
+      },
     },
   },
   questionIds: ["q-linked-list-reverse", "q-linked-list-cycle"],
@@ -241,6 +246,11 @@ const mastery: Checkpoint = {
       ],
       hint: "Use a dummy head node, then repeatedly attach whichever of l1/l2's current node is smaller and advance that list's pointer.",
       mistakeFeedback: "This looks like it's only walking one list and appending the other at the end, rather than interleaving nodes by comparing values at each step — that produces an unsorted result.",
+      demoSolution: {
+        python: "def mergeTwoLists(l1, l2):\n    if not l1 and not l2:\n        return None\n    dummy = ListNode(0)\n    tail = dummy\n    while l1 and l2:\n        if l1.val <= l2.val:\n            tail.next = l1\n            l1 = l1.next\n        else:\n            tail.next = l2\n            l2 = l2.next\n        tail = tail.next\n    tail.next = l1 if l1 else l2\n    return dummy.next\n",
+        cpp: "ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {\n    if (l1 == nullptr && l2 == nullptr) return nullptr;\n    ListNode dummy(0);\n    ListNode* tail = &dummy;\n    while (l1 != nullptr && l2 != nullptr) {\n        if (l1->val <= l2->val) {\n            tail->next = l1;\n            l1 = l1->next;\n        } else {\n            tail->next = l2;\n            l2 = l2->next;\n        }\n        tail = tail->next;\n    }\n    tail->next = (l1 != nullptr) ? l1 : l2;\n    return dummy.next;\n}\n",
+        java: "ListNode mergeTwoLists(ListNode l1, ListNode l2) {\n    if (l1 == null && l2 == null) return null;\n    ListNode dummy = new ListNode(0);\n    ListNode tail = dummy;\n    while (l1 != null && l2 != null) {\n        if (l1.val <= l2.val) {\n            tail.next = l1;\n            l1 = l1.next;\n        } else {\n            tail.next = l2;\n            l2 = l2.next;\n        }\n        tail = tail.next;\n    }\n    tail.next = (l1 != null) ? l1 : l2;\n    return dummy.next;\n}\n",
+      },
     },
   },
   questionIds: ["q-merge-two-sorted-lists"],

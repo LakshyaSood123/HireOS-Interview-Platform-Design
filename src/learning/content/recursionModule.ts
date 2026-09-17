@@ -179,6 +179,11 @@ const codeLab: Checkpoint = {
       ],
       hint: "n % 10 gives the last digit; n // 10 (integer division) gives the rest of the number to recurse on.",
       mistakeFeedback: "This isn't actually calling itself with a smaller version of n — recursion needs the function to call itself again on a reduced input, not just compute the answer directly.",
+      demoSolution: {
+        python: "def sumOfDigits(n):\n    if n < 10:\n        return n\n    return n % 10 + sumOfDigits(n // 10)\n",
+        cpp: "int sumOfDigits(int n) {\n    if (n < 10) return n;\n    return n % 10 + sumOfDigits(n / 10);\n}\n",
+        java: "int sumOfDigits(int n) {\n    if (n < 10) return n;\n    return n % 10 + sumOfDigits(n / 10);\n}\n",
+      },
     },
   },
   questionIds: ["q-recursion-fibonacci"],
@@ -223,6 +228,11 @@ const mastery: Checkpoint = {
       ],
       hint: "Multiply base by power(base, exp - 1), and stop recursing once exp reaches 0.",
       mistakeFeedback: "This looks like a fixed number of multiplications rather than a true recursive call that shrinks exp toward the base case each time — recheck the recursive call itself.",
+      demoSolution: {
+        python: "def power(base, exp):\n    if exp == 0:\n        return 1\n    return base * power(base, exp - 1)\n",
+        cpp: "long power(int base, int exp) {\n    if (exp == 0) return 1;\n    return base * power(base, exp - 1);\n}\n",
+        java: "long power(int base, int exp) {\n    if (exp == 0) return 1;\n    return base * power(base, exp - 1);\n}\n",
+      },
     },
   },
 }

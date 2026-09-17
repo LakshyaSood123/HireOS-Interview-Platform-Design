@@ -1,6 +1,7 @@
 import { useState } from "react"
 import type { CodeLanguage, CodingActivityContent } from "../../learning/types"
 import type { CodeRunner, CodeRunResult } from "../../learning/services/codeRunner"
+import { DEVELOPMENT_MODE } from "../../config/developmentMode"
 
 const LANGUAGE_LABEL: Record<CodeLanguage, string> = { python: "Python", cpp: "C++", java: "Java", javascript: "JavaScript" }
 
@@ -91,6 +92,21 @@ export default function CodeWorkspace({ activity, runner, onFailedSubmit, onSucc
     setShowMistakeFeedback(false)
   }
 
+  /** DEMO-ONLY (see DEVELOPMENT_MODE.DEMO_CODE_AUTOFILL_ENABLED) — drops a
+   * canonical correct solution into the editor for the CURRENT language.
+   * Deliberately does not Run, Submit, award XP, or complete the
+   * checkpoint — the presenter drives those explicitly afterward, exactly
+   * like a real learner would. */
+  const handleAutoFillDemo = () => {
+    const solution = activity.demoSolution?.[language]
+    if (!solution) return
+    setCode(solution)
+    setRunResult(null)
+    setSubmitResult(null)
+    setShowMistakeFeedback(false)
+    setAccepted(false)
+  }
+
   const handleRun = async () => {
     setIsRunning(true)
     setSubmitResult(null)
@@ -169,6 +185,15 @@ export default function CodeWorkspace({ activity, runner, onFailedSubmit, onSucc
           >
             💡 Hint
           </button>
+          {DEVELOPMENT_MODE.DEMO_CODE_AUTOFILL_ENABLED && activity.demoSolution?.[language] && (
+            <button
+              onClick={handleAutoFillDemo}
+              title="Demo convenience only — never shown to real learners"
+              className="px-3 py-2 rounded-xl text-xs font-bold text-purple-300 bg-purple-500/10 hover:bg-purple-500/15 border border-purple-500/25 transition-all cursor-pointer"
+            >
+              ✨ Auto-fill Demo Answer
+            </button>
+          )}
         </div>
         <div className="flex items-center gap-2">
           <button

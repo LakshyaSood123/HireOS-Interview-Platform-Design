@@ -106,6 +106,11 @@ const codeLab: Checkpoint = {
       ],
       hint: "Sort by start time first. Then, for each interval, merge it into the last kept interval if its start is <= the last kept interval's end; otherwise append it as a new interval.",
       mistakeFeedback: "This looks like it's comparing every pair of intervals directly (O(n²)) instead of sorting first and merging in a single pass against only the last kept interval (O(n log n)).",
+      demoSolution: {
+        python: "def mergeIntervals(intervals):\n    if not intervals:\n        return []\n    intervals = sorted(intervals, key=lambda x: x[0])\n    merged = [intervals[0]]\n    for start, end in intervals[1:]:\n        last = merged[-1]\n        if start <= last[1]:\n            last[1] = max(last[1], end)\n        else:\n            merged.append([start, end])\n    return merged\n",
+        cpp: "vector<vector<int>> mergeIntervals(vector<vector<int>>& intervals) {\n    if (intervals.empty()) return {};\n    sort(intervals.begin(), intervals.end());\n    vector<vector<int>> merged;\n    merged.push_back(intervals[0]);\n    for (int i = 1; i < (int)intervals.size(); i++) {\n        auto& last = merged.back();\n        if (intervals[i][0] <= last[1]) {\n            last[1] = max(last[1], intervals[i][1]);\n        } else {\n            merged.push_back(intervals[i]);\n        }\n    }\n    return merged;\n}\n",
+        java: "List<int[]> mergeIntervals(int[][] intervals) {\n    if (intervals.length == 0) return new ArrayList<>();\n    Arrays.sort(intervals, (a, b) -> a[0] - b[0]);\n    List<int[]> merged = new ArrayList<>();\n    merged.add(intervals[0]);\n    for (int i = 1; i < intervals.length; i++) {\n        int[] last = merged.get(merged.size() - 1);\n        if (intervals[i][0] <= last[1]) {\n            last[1] = Math.max(last[1], intervals[i][1]);\n        } else {\n            merged.add(intervals[i]);\n        }\n    }\n    return merged;\n}\n",
+      },
     },
   },
   questionIds: ["q-merge-intervals"],
@@ -150,6 +155,11 @@ const mastery: Checkpoint = {
       ],
       hint: "Add all intervals ending before newInterval starts, then merge all overlapping intervals into newInterval itself, then add the merged interval and everything remaining.",
       mistakeFeedback: "This looks like it's inserting newInterval and re-sorting/re-merging everything from scratch, rather than taking advantage of the list already being sorted and non-overlapping to do it in one pass.",
+      demoSolution: {
+        python: "def insertInterval(intervals, newInterval):\n    if not intervals:\n        return [newInterval]\n    result = []\n    i = 0\n    n = len(intervals)\n    while i < n and intervals[i][1] < newInterval[0]:\n        result.append(intervals[i])\n        i += 1\n    start, end = newInterval\n    while i < n and intervals[i][0] <= end:\n        start = min(start, intervals[i][0])\n        end = max(end, intervals[i][1])\n        i += 1\n    result.append([start, end])\n    for j in range(i, n):\n        result.append(intervals[j])\n    return result\n",
+        cpp: "vector<vector<int>> insertInterval(vector<vector<int>>& intervals, vector<int>& newInterval) {\n    if (intervals.empty()) return {newInterval};\n    vector<vector<int>> result;\n    int i = 0, n = (int)intervals.size();\n    while (i < n && intervals[i][1] < newInterval[0]) {\n        result.push_back(intervals[i]);\n        i++;\n    }\n    int start = newInterval[0], end = newInterval[1];\n    while (i < n && intervals[i][0] <= end) {\n        start = min(start, intervals[i][0]);\n        end = max(end, intervals[i][1]);\n        i++;\n    }\n    result.push_back({start, end});\n    for (int j = i; j < n; j++) result.push_back(intervals[j]);\n    return result;\n}\n",
+        java: "List<int[]> insertInterval(int[][] intervals, int[] newInterval) {\n    List<int[]> result = new ArrayList<>();\n    if (intervals.length == 0) {\n        result.add(newInterval);\n        return result;\n    }\n    int i = 0, n = intervals.length;\n    while (i < n && intervals[i][1] < newInterval[0]) {\n        result.add(intervals[i]);\n        i++;\n    }\n    int start = newInterval[0], end = newInterval[1];\n    while (i < n && intervals[i][0] <= end) {\n        start = Math.min(start, intervals[i][0]);\n        end = Math.max(end, intervals[i][1]);\n        i++;\n    }\n    result.add(new int[]{start, end});\n    for (int j = i; j < n; j++) result.add(intervals[j]);\n    return result;\n}\n",
+      },
     },
   },
   questionIds: ["q-insert-interval"],

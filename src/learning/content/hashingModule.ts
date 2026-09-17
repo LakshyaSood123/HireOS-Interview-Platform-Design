@@ -130,6 +130,11 @@ const codeLab: Checkpoint = {
       ],
       hint: "Build a frequency map of s, then walk t decrementing counts — if any count goes negative or a character is missing, it's not an anagram.",
       mistakeFeedback: "This looks like it's only comparing sorted characters or lengths rather than building and checking a real frequency map — that misses cases with matching counts in different arrangements.",
+      demoSolution: {
+        python: "def isAnagram(s, t):\n    if not s and not t:\n        return True\n    if len(s) != len(t):\n        return False\n    counts = {}\n    for ch in s:\n        counts[ch] = counts.get(ch, 0) + 1\n    for ch in t:\n        if counts.get(ch, 0) == 0:\n            return False\n        counts[ch] -= 1\n    return True\n",
+        cpp: "bool isAnagram(string s, string t) {\n    if (s.empty() && t.empty()) return true;\n    if (s.size() != t.size()) return false;\n    unordered_map<char, int> counts;\n    for (char c : s) counts[c]++;\n    for (char c : t) {\n        if (counts[c] == 0) return false;\n        counts[c]--;\n    }\n    return true;\n}\n",
+        java: "boolean isAnagram(String s, String t) {\n    char[] sc = s.toCharArray(), tc = t.toCharArray();\n    if (sc.length == 0 && tc.length == 0) return true;\n    if (sc.length != tc.length) return false;\n    Map<Character, Integer> counts = new HashMap<>();\n    for (char c : sc) counts.merge(c, 1, Integer::sum);\n    for (char c : tc) {\n        Integer cur = counts.get(c);\n        if (cur == null || cur == 0) return false;\n        counts.put(c, cur - 1);\n    }\n    return true;\n}\n",
+      },
     },
   },
   questionIds: ["q-valid-anagram"],
@@ -174,6 +179,11 @@ const mastery: Checkpoint = {
       ],
       hint: "For each number, compute target - number and check if it's already in your map before inserting the current number and its index.",
       mistakeFeedback: "This looks like it's checking every pair of numbers (O(n²)) instead of looking up each number's complement in a hash map as you scan (O(n)).",
+      demoSolution: {
+        python: "def twoSum(nums, target):\n    if not nums:\n        return []\n    seen = {}\n    for i, n in enumerate(nums):\n        complement = target - n\n        if complement in seen:\n            return [seen[complement], i]\n        seen[n] = i\n    return []\n",
+        cpp: "vector<int> twoSum(vector<int>& nums, int target) {\n    if (nums.empty()) return {};\n    unordered_map<int, int> seen;\n    for (int i = 0; i < (int)nums.size(); i++) {\n        int complement = target - nums[i];\n        if (seen.count(complement)) return {seen[complement], i};\n        seen[nums[i]] = i;\n    }\n    return {};\n}\n",
+        java: "int[] twoSum(int[] nums, int target) {\n    if (nums.length == 0) return new int[0];\n    Map<Integer, Integer> seen = new HashMap<>();\n    for (int i = 0; i < nums.length; i++) {\n        int complement = target - nums[i];\n        if (seen.containsKey(complement)) return new int[]{seen.get(complement), i};\n        seen.put(nums[i], i);\n    }\n    return new int[0];\n}\n",
+      },
     },
   },
   questionIds: ["q-two-sum"],

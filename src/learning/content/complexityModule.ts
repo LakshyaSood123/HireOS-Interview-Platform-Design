@@ -141,6 +141,11 @@ const miniAnalysisChallenge: Checkpoint = {
       ],
       hint: "Keep a running 'best so far' variable, start it at the first element, and update it whenever you see something larger.",
       mistakeFeedback: "You're comparing values but not updating a running maximum as you scan — keep the best value seen so far in a variable and update it inside the loop.",
+      demoSolution: {
+        python: "def findMax(nums):\n    if not nums:\n        return None\n    best = nums[0]\n    for n in nums:\n        if n > best:\n            best = n\n    return best\n",
+        cpp: "int findMax(vector<int>& nums) {\n    int best = nums[0];\n    for (int n : nums) {\n        if (n > best) best = n;\n    }\n    return best;\n}\n",
+        java: "int findMax(int[] nums) {\n    int best = nums[0];\n    for (int n : nums) {\n        if (n > best) best = n;\n    }\n    return best;\n}\n",
+      },
     },
   },
   questionIds: ["q-foundations-complexity-analysis"],
@@ -185,6 +190,11 @@ const foundationsMastery: Checkpoint = {
       ],
       hint: "Add each value to a set as you scan — if a value is already in the set before you add it, you've found your duplicate.",
       mistakeFeedback: "This looks like it's comparing every pair of elements (O(n²)) instead of tracking seen values in a set (O(n)) — that's the exact trade-off this module has been building toward.",
+      demoSolution: {
+        python: "def hasDuplicate(nums):\n    if not nums:\n        return False\n    seen = set()\n    for n in nums:\n        if n in seen:\n            return True\n        seen.add(n)\n    return False\n",
+        cpp: "bool hasDuplicate(vector<int>& nums) {\n    if (nums.empty()) return false;\n    unordered_set<int> seen;\n    for (int n : nums) {\n        if (seen.count(n)) return true;\n        seen.insert(n);\n    }\n    return false;\n}\n",
+        java: "boolean hasDuplicate(int[] nums) {\n    if (nums.length == 0) return false;\n    Set<Integer> seen = new HashSet<>();\n    for (int n : nums) {\n        if (seen.contains(n)) return true;\n        seen.add(n);\n    }\n    return false;\n}\n",
+      },
     },
   },
 }

@@ -127,6 +127,11 @@ const codeLab: Checkpoint = {
       ],
       hint: "Compute the sum of the first k elements, then for each subsequent position add the new element and subtract the one that's now outside the window.",
       mistakeFeedback: "This looks like it's re-summing all k elements for every window position (O(n×k)) instead of sliding the sum incrementally (O(n)).",
+      demoSolution: {
+        python: "def maxSumFixedWindow(nums, k):\n    if not nums or k <= 0:\n        return 0\n    window_sum = sum(nums[:k])\n    best = window_sum\n    for i in range(k, len(nums)):\n        window_sum += nums[i] - nums[i - k]\n        best = max(best, window_sum)\n    return best\n",
+        cpp: "int maxSumFixedWindow(vector<int>& nums, int k) {\n    if (nums.empty() || k <= 0) return 0;\n    int windowSum = 0;\n    for (int i = 0; i < k; i++) windowSum += nums[i];\n    int best = windowSum;\n    for (int i = k; i < (int)nums.size(); i++) {\n        windowSum += nums[i] - nums[i - k];\n        best = max(best, windowSum);\n    }\n    return best;\n}\n",
+        java: "int maxSumFixedWindow(int[] nums, int k) {\n    if (nums.length == 0 || k <= 0) return 0;\n    int windowSum = 0;\n    for (int i = 0; i < k; i++) windowSum += nums[i];\n    int best = windowSum;\n    for (int i = k; i < nums.length; i++) {\n        windowSum += nums[i] - nums[i - k];\n        best = Math.max(best, windowSum);\n    }\n    return best;\n}\n",
+      },
     },
   },
 }
@@ -170,6 +175,11 @@ const mastery: Checkpoint = {
       ],
       hint: "Keep a set of characters currently in the window; when the incoming character is already in the set, shrink from the left (removing characters) until it isn't.",
       mistakeFeedback: "This looks like it's checking every substring for repeats (O(n²) or worse) instead of maintaining a sliding window with a set and shrinking only when a duplicate would enter (O(n)).",
+      demoSolution: {
+        python: "def lengthOfLongestSubstring(s):\n    if not s:\n        return 0\n    seen = set()\n    left = 0\n    best = 0\n    for right in range(len(s)):\n        while s[right] in seen:\n            seen.remove(s[left])\n            left += 1\n        seen.add(s[right])\n        best = max(best, right - left + 1)\n    return best\n",
+        cpp: "int lengthOfLongestSubstring(string s) {\n    if (s.empty()) return 0;\n    unordered_set<char> seen;\n    int left = 0, best = 0;\n    for (int right = 0; right < (int)s.size(); right++) {\n        while (seen.count(s[right])) {\n            seen.erase(s[left]);\n            left++;\n        }\n        seen.insert(s[right]);\n        best = max(best, right - left + 1);\n    }\n    return best;\n}\n",
+        java: "int lengthOfLongestSubstring(String s) {\n    char[] chars = s.toCharArray();\n    if (chars.length == 0) return 0;\n    Set<Character> seen = new HashSet<>();\n    int left = 0, best = 0;\n    for (int right = 0; right < chars.length; right++) {\n        while (seen.contains(chars[right])) {\n            seen.remove(chars[left]);\n            left++;\n        }\n        seen.add(chars[right]);\n        best = Math.max(best, right - left + 1);\n    }\n    return best;\n}\n",
+      },
     },
   },
   questionIds: ["q-longest-substring-no-repeat"],

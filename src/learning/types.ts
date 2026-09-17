@@ -146,6 +146,14 @@ export interface CodingActivityContent {
   hiddenTests: TestCase[]
   hint: string
   mistakeFeedback: string
+  /** DEMO-ONLY canonical correct solution per language, used exclusively by
+   * CodeWorkspace's "Auto-fill Demo Answer" button (gated behind
+   * DEVELOPMENT_MODE.DEMO_CODE_AUTOFILL_ENABLED — see
+   * src/config/developmentMode.ts). Never shown to a normal learner and
+   * never read by anything else. Not required for every language in
+   * `languages` to keep authoring incremental, but every activity should
+   * have one per declared language. */
+  demoSolution?: Partial<Record<CodeLanguage, string>>
 }
 
 export interface QuickCheckContent {

@@ -103,6 +103,11 @@ const codeLab: Checkpoint = {
       ],
       hint: "Build a prefix array where prefix[i] is the sum of nums[0..i], then rangeSum(left, right) = prefix[right] - (prefix[left-1] if left > 0 else 0).",
       mistakeFeedback: "This looks like it's summing the range directly with a loop every call instead of building a prefix array once and answering with a subtraction.",
+      demoSolution: {
+        python: "def rangeSum(nums, left, right):\n    if not nums:\n        return 0\n    prefix = [0] * (len(nums) + 1)\n    for i in range(len(nums)):\n        prefix[i + 1] = prefix[i] + nums[i]\n    return prefix[right + 1] - prefix[left]\n",
+        cpp: "int rangeSum(vector<int>& nums, int left, int right) {\n    if (nums.empty()) return 0;\n    vector<int> prefix(nums.size() + 1, 0);\n    for (int i = 0; i < (int)nums.size(); i++) prefix[i + 1] = prefix[i] + nums[i];\n    return prefix[right + 1] - prefix[left];\n}\n",
+        java: "int rangeSum(int[] nums, int left, int right) {\n    if (nums.length == 0) return 0;\n    int[] prefix = new int[nums.length + 1];\n    for (int i = 0; i < nums.length; i++) prefix[i + 1] = prefix[i] + nums[i];\n    return prefix[right + 1] - prefix[left];\n}\n",
+      },
     },
   },
   questionIds: ["q-product-except-self"],
@@ -147,6 +152,11 @@ const mastery: Checkpoint = {
       ],
       hint: "Track a running prefix sum and a map of {prefix value: how many times seen}. At each step, add the count of (current prefix - k) to your answer, then record the current prefix.",
       mistakeFeedback: "This looks like it's checking every possible subarray directly (O(n²)) instead of tracking prefix-sum counts in a hash map as you scan (O(n)).",
+      demoSolution: {
+        python: "def subarraySum(nums, k):\n    if not nums:\n        return 0\n    counts = {0: 1}\n    prefix = 0\n    total = 0\n    for n in nums:\n        prefix += n\n        total += counts.get(prefix - k, 0)\n        counts[prefix] = counts.get(prefix, 0) + 1\n    return total\n",
+        cpp: "int subarraySum(vector<int>& nums, int k) {\n    if (nums.empty()) return 0;\n    unordered_map<int, int> counts;\n    counts[0] = 1;\n    int prefix = 0, total = 0;\n    for (int n : nums) {\n        prefix += n;\n        total += counts[prefix - k];\n        counts[prefix]++;\n    }\n    return total;\n}\n",
+        java: "int subarraySum(int[] nums, int k) {\n    if (nums.length == 0) return 0;\n    Map<Integer, Integer> counts = new HashMap<>();\n    counts.put(0, 1);\n    int prefix = 0, total = 0;\n    for (int n : nums) {\n        prefix += n;\n        total += counts.getOrDefault(prefix - k, 0);\n        counts.merge(prefix, 1, Integer::sum);\n    }\n    return total;\n}\n",
+      },
     },
   },
   questionIds: ["q-subarray-sum-equals-k"],

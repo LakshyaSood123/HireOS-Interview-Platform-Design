@@ -130,6 +130,11 @@ const codeLab: Checkpoint = {
       ],
       hint: "Track a 'write' index starting at 1 — whenever nums[read] differs from nums[write-1], copy it to nums[write] and advance write.",
       mistakeFeedback: "This looks like it's counting duplicates rather than compacting the array in place — the unique values need to actually be written to the front of the array, not just counted.",
+      demoSolution: {
+        python: "def removeDuplicates(nums):\n    if not nums:\n        return 0\n    k = 1\n    for i in range(1, len(nums)):\n        if nums[i] != nums[i - 1]:\n            nums[k] = nums[i]\n            k += 1\n    return k\n",
+        cpp: "int removeDuplicates(vector<int>& nums) {\n    if (nums.empty()) return 0;\n    int k = 1;\n    for (int i = 1; i < (int)nums.size(); i++) {\n        if (nums[i] != nums[i - 1]) {\n            nums[k] = nums[i];\n            k++;\n        }\n    }\n    return k;\n}\n",
+        java: "int removeDuplicates(int[] nums) {\n    if (nums.length == 0) return 0;\n    int k = 1;\n    for (int i = 1; i < nums.length; i++) {\n        if (nums[i] != nums[i - 1]) {\n            nums[k] = nums[i];\n            k++;\n        }\n    }\n    return k;\n}\n",
+      },
     },
   },
 }
@@ -173,6 +178,11 @@ const mastery: Checkpoint = {
       ],
       hint: "Keep a running minimum price seen so far, and at each day compute price - minSoFar, updating your best answer.",
       mistakeFeedback: "This looks like it's comparing every pair of days (O(n²)) instead of tracking the minimum price seen so far in a single pass (O(n)).",
+      demoSolution: {
+        python: "def maxProfit(prices):\n    if not prices:\n        return 0\n    min_price = prices[0]\n    profit = 0\n    for price in prices:\n        min_price = min(min_price, price)\n        profit = max(profit, price - min_price)\n    return profit\n",
+        cpp: "int maxProfit(vector<int>& prices) {\n    if (prices.empty()) return 0;\n    int minPrice = prices[0];\n    int profit = 0;\n    for (int price : prices) {\n        minPrice = min(minPrice, price);\n        profit = max(profit, price - minPrice);\n    }\n    return profit;\n}\n",
+        java: "int maxProfit(int[] prices) {\n    if (prices.length == 0) return 0;\n    int minPrice = prices[0];\n    int profit = 0;\n    for (int price : prices) {\n        minPrice = Math.min(minPrice, price);\n        profit = Math.max(profit, price - minPrice);\n    }\n    return profit;\n}\n",
+      },
     },
   },
   questionIds: ["q-best-time-buy-sell-stock"],
