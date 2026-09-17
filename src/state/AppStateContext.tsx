@@ -128,7 +128,10 @@ interface AppStateValue {
   startLearningTrail: (courseId?: string) => void
   openNodeLesson: (nodeId: number) => void
   completeCurrentLesson: () => void
-  completeCheckpointById: (checkpointId: string) => void
+  /** Returns true only if the checkpoint was actually completed (state was
+   * "available" or "current"); false for locked/completed/mastered, where
+   * no mutation happens. Callers must gate any success UI on this value. */
+  completeCheckpointById: (checkpointId: string) => boolean
   failCheckpointAttempt: () => void
   retakeInterview: () => void
   returnToHireOS: () => void
@@ -223,15 +226,27 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
 
   /** Generic checkpoint completion — used by BOTH the legacy LessonReader/
    * ChallengeStage flow (via completeCurrentLesson below) and the new Lesson
-   * Workspace. Only actually advances progress when `checkpointId` is the
-   * engine's true current checkpoint; reviewing an already-completed
-   * checkpoint is a no-op (no double XP — PART 17). */
-  const completeCheckpointById = (checkpointId: string) => {
-    if (!course) return
-    if (progress.completedCheckpointIds.includes(checkpointId) || progress.masteredCheckpointIds.includes(checkpointId)) {
-      return
-    }
-    if (checkpointId !== progress.activeCheckpointId) return
+   * Workspace. Eligibility is derived generically from the engine's own
+   * `resolveCheckpointState`, exactly like the roadmap/workspace UI already
+   * uses to decide what's enterable — completion is allowed for ANY
+   * checkpoint the engine currently considers "available" or "current", not
+   * only the single global `activeCheckpointId`. A branching prerequisite
+   * graph can legitimately make several checkpoints available at once (e.g.
+   * every Pattern Meadows module fans out in parallel from Hashing); the old
+   * `checkpointId !== progress.activeCheckpointId` check rejected every one
+   * of those except whichever single checkpoint happened to be the demo
+   * bootstrap's `activeCheckpointId`, even though the roadmap correctly
+   * showed them as enterable and completable. Returns whether a mutation
+   * actually happened — callers must gate success UI (celebration, XP
+   * toast) on this, never assume completion succeeded just because it was
+   * attempted. */
+  const completeCheckpointById = (checkpointId: string): boolean => {
+    if (!course) return false
+    const checkpoint = findCheckpoint(course, checkpointId)
+    if (!checkpoint) return false
+
+    const state = resolveCheckpointState(checkpoint, progress)
+    if (state !== "available" && state !== "current") return false
 
     const nextProgress = completeCheckpoint(course, progress, checkpointId, todayIso())
     setProgress(nextProgress)
@@ -241,6 +256,8 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       ? dsaCourseData.nodes.find(n => String(n.id) === nextProgress.activeCheckpointId)
       : null
     if (nextNode) setActiveNode(nextNode)
+
+    return true
   }
 
   const completeCurrentLesson = () => {

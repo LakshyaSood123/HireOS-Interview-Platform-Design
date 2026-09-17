@@ -274,8 +274,9 @@ export default function ReagvisTrailPage({ onNavigateHireOS }: ReagvisTrailPageP
               notesRepository={notesRepository}
               courseId={activeCourseId}
               moduleId={viewedModule.id}
+              isPreview={Boolean(previewModuleId)}
               onFailedSubmit={previewModuleId ? () => {} : failCheckpointAttempt}
-              onComplete={previewModuleId ? () => {} : () => completeCheckpointById(viewedCheckpoint.id)}
+              onComplete={previewModuleId ? () => false : () => completeCheckpointById(viewedCheckpoint.id)}
               onContinue={() => {
                 const index = orderedCheckpoints.findIndex(cp => cp.id === viewedCheckpoint.id)
                 const next = index >= 0 ? orderedCheckpoints[index + 1] : undefined

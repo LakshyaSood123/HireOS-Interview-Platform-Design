@@ -19,10 +19,20 @@ interface LessonWorkspaceProps {
   notesRepository: NotesRepository
   courseId: string
   moduleId: string
+  /** True when this checkpoint is being viewed via Course Library's
+   * "Preview" flow rather than real progression — inspection only, never
+   * mutating. Changes the completion button to an honest "End Preview"
+   * instead of pretending to complete/award XP. */
+  isPreview?: boolean
   onFailedSubmit: () => void
   /** Performs the actual engine completion (AppStateContext's
-   * completeCheckpointById) — synchronous, called once. */
-  onComplete: () => void
+   * completeCheckpointById) — synchronous, called once. Returns whether the
+   * completion actually happened (true) or was rejected by the engine
+   * (false, e.g. the checkpoint wasn't actually available/current) — the
+   * celebration UI must only appear when this is true. Preview mode passes
+   * a callback that always returns false, since preview must never mutate
+   * progress or award XP. */
+  onComplete: () => boolean
   /** Navigate to the next checkpoint's workspace (or back to the roadmap if
    * this was the module's last checkpoint) — called from the post-completion
    * celebration's "Continue" button. */
@@ -45,6 +55,7 @@ export default function LessonWorkspace({
   notesRepository,
   courseId,
   moduleId,
+  isPreview = false,
   onFailedSubmit,
   onComplete,
   onContinue,
@@ -71,7 +82,7 @@ export default function LessonWorkspace({
 
   const isReview = state === "completed" || state === "mastered"
   const requiresActivity = Boolean(content.codingActivity) || Boolean(content.quickCheck)
-  const canComplete = isReview || !requiresActivity || activitySatisfied
+  const canComplete = isReview || isPreview || !requiresActivity || activitySatisfied
 
   const handleFailedSubmit = () => {
     onFailedSubmit()
@@ -205,17 +216,17 @@ export default function LessonWorkspace({
         <div className="pt-4 border-t border-white/10 flex justify-end">
           <button
             onClick={() => {
-              if (isReview) {
+              if (isReview || isPreview) {
                 onBack()
                 return
               }
-              onComplete()
-              setCelebrating(true)
+              const completed = onComplete()
+              if (completed) setCelebrating(true)
             }}
             disabled={!canComplete}
             className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-[#1DB584] to-[#10B981] hover:from-[#159a6f] hover:to-[#0d9668] shadow-lg shadow-[#1DB584]/30 hover:scale-[1.02] transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
           >
-            <span>{isReview ? "Return to Roadmap" : "Complete Checkpoint"}</span>
+            <span>{isReview ? "Return to Roadmap" : isPreview ? "End Preview" : "Complete Checkpoint"}</span>
             <span>➔</span>
           </button>
         </div>
@@ -252,7 +263,7 @@ export default function LessonWorkspace({
                 onClick={onBack}
                 className="py-3 rounded-xl text-xs font-bold text-gray-300 bg-white/5 hover:bg-white/10 border border-white/10 transition-all cursor-pointer"
               >
-                Return to Trees Trail
+                Return to {moduleTitle} Roadmap
               </button>
             </div>
           </div>

@@ -82,15 +82,27 @@ export function resolveAllZoneStates(course: Course, progress: LearnerProgressSt
   return result
 }
 
-/** The checkpoint immediately after `checkpointId` in course order, or null
- * if it was the last one. Used to advance `activeCheckpointId` on
- * completion — this is the one place that replaces the old `id + 1` logic,
- * now expressed against the real sequence instead of raw arithmetic. */
+/** The checkpoint immediately after `checkpointId` WITHIN THE SAME MODULE,
+ * or null if it was that module's last checkpoint (or the checkpoint isn't
+ * found at all). Deliberately scoped to the owning module rather than
+ * flattened course order (`getAllCheckpointsInOrder`) — this course's zones
+ * fan out into parallel modules (Pattern Meadows, Structure Woods, Graph
+ * Highlands, etc.), so "next in flattened registry order" can land in a
+ * completely unrelated module purely because of how courseRegistry.ts
+ * happens to list modules within a zone. That was a real bug: finishing the
+ * last checkpoint of one module could silently move the learner's active
+ * focus into a different module's checkpoint that isn't even unlocked yet.
+ * Used to advance `activeCheckpointId` on completion — see
+ * `completeCheckpoint` below. */
 export function getNextCheckpointId(course: Course, checkpointId: string): string | null {
-  const ordered = getAllCheckpointsInOrder(course)
-  const index = ordered.findIndex(cp => cp.id === checkpointId)
-  if (index === -1 || index === ordered.length - 1) return null
-  return ordered[index + 1].id
+  for (const zone of course.zones) {
+    for (const module of zone.modules) {
+      const index = module.checkpoints.findIndex(cp => cp.id === checkpointId)
+      if (index === -1) continue
+      return index + 1 < module.checkpoints.length ? module.checkpoints[index + 1].id : null
+    }
+  }
+  return null
 }
 
 /** Applies a checkpoint completion to a progress snapshot and returns the
@@ -129,7 +141,12 @@ export function completeCheckpoint(
       ...progress,
       completedCheckpointIds,
       masteredCheckpointIds,
-      activeCheckpointId: nextId,
+      // A same-module next checkpoint becomes the new focus. When the
+      // module is now fully complete, there's no single correct next
+      // destination the pure engine can pick without guessing (which of
+      // possibly several newly-available parallel modules?) — preserve the
+      // learner's current focus rather than jumping via flattened order.
+      activeCheckpointId: nextId ?? progress.activeCheckpointId,
       activeModuleId: nextModule?.id ?? progress.activeModuleId,
       activeZoneId: nextZone?.id ?? progress.activeZoneId,
       xp: progress.xp + xpGain,
