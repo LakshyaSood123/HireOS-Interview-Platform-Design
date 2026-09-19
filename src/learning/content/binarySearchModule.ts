@@ -21,6 +21,9 @@ const mentalModel: Checkpoint = {
         body: "Halving the search space repeatedly means you can only do it ~log₂(n) times before there's nothing left to search — for n = 1,000,000, that's about 20 steps.",
       },
     ],
+    animation: {
+      id: "binary-search-decision",
+    },
     quickCheck: {
       question: "What must be true about the data for binary search to work?",
       options: ["It must be an array (not a list)", "It must be sorted (or have a monotonic condition)", "It must contain unique values", "It must be small"],

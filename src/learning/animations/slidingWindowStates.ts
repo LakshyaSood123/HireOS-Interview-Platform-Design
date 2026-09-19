@@ -1,0 +1,160 @@
+export const SLIDING_WINDOW_VALUES = [2, 1, 3, 2, 4, 1]
+export const SLIDING_WINDOW_TARGET = 6
+
+export interface SlidingWindowState {
+  operation: "READY" | "EXPAND_RIGHT" | "UPDATE_BEST" | "CHECK_CONDITION" | "REMOVE_LEFT" | "COMPLETE"
+  left: number
+  right: number
+  sum: number
+  valid: boolean
+  len: number
+  best: number
+  message: string
+  incomingIndex?: number
+  outgoingIndex?: number
+  bestRange?: [number, number]
+}
+
+export const slidingWindowStates: SlidingWindowState[] = [
+  {
+    operation: "READY",
+    left: 0,
+    right: -1,
+    sum: 0,
+    valid: true,
+    len: 0,
+    best: 0,
+    message: "Start with an empty window before expanding right.",
+  },
+  {
+    operation: "EXPAND_RIGHT",
+    left: 0,
+    right: 0,
+    sum: 2,
+    valid: true,
+    len: 1,
+    best: 1,
+    incomingIndex: 0,
+    bestRange: [0, 0],
+    message: "Expand right to include 2. The window is valid, so best length becomes 1.",
+  },
+  {
+    operation: "UPDATE_BEST",
+    left: 0,
+    right: 1,
+    sum: 3,
+    valid: true,
+    len: 2,
+    best: 2,
+    incomingIndex: 1,
+    bestRange: [0, 1],
+    message: "Add 1. The running sum stays within the limit, so the best valid window grows.",
+  },
+  {
+    operation: "CHECK_CONDITION",
+    left: 0,
+    right: 2,
+    sum: 6,
+    valid: true,
+    len: 3,
+    best: 3,
+    incomingIndex: 2,
+    bestRange: [0, 2],
+    message: "Add 3. The sum equals the limit, giving the current best window.",
+  },
+  {
+    operation: "CHECK_CONDITION",
+    left: 0,
+    right: 3,
+    sum: 8,
+    valid: false,
+    len: 4,
+    best: 3,
+    incomingIndex: 3,
+    bestRange: [0, 2],
+    message: "Add 2. The window [2, 1, 3, 2] breaks the constraint because the sum is 8.",
+  },
+  {
+    operation: "REMOVE_LEFT",
+    left: 1,
+    right: 3,
+    sum: 6,
+    valid: true,
+    len: 3,
+    best: 3,
+    outgoingIndex: 0,
+    bestRange: [0, 2],
+    message: "Remove the leftmost 2. The window [1, 3, 2] is valid again.",
+  },
+  {
+    operation: "EXPAND_RIGHT",
+    left: 1,
+    right: 4,
+    sum: 10,
+    valid: false,
+    len: 4,
+    best: 3,
+    incomingIndex: 4,
+    bestRange: [0, 2],
+    message: "Expand to include 4. The sum jumps to 10, so shrinking must begin.",
+  },
+  {
+    operation: "REMOVE_LEFT",
+    left: 2,
+    right: 4,
+    sum: 9,
+    valid: false,
+    len: 3,
+    best: 3,
+    outgoingIndex: 1,
+    bestRange: [0, 2],
+    message: "Remove 1 from the left. The window is still too large.",
+  },
+  {
+    operation: "REMOVE_LEFT",
+    left: 3,
+    right: 4,
+    sum: 6,
+    valid: true,
+    len: 2,
+    best: 3,
+    outgoingIndex: 2,
+    bestRange: [0, 2],
+    message: "Remove 3 as well. The window is valid again at sum 6.",
+  },
+  {
+    operation: "EXPAND_RIGHT",
+    left: 3,
+    right: 5,
+    sum: 7,
+    valid: false,
+    len: 3,
+    best: 3,
+    incomingIndex: 5,
+    bestRange: [0, 2],
+    message: "Include the final 1. The sum is 7, so one more shrink is needed.",
+  },
+  {
+    operation: "REMOVE_LEFT",
+    left: 4,
+    right: 5,
+    sum: 5,
+    valid: true,
+    len: 2,
+    best: 3,
+    outgoingIndex: 3,
+    bestRange: [0, 2],
+    message: "Remove 2 from the left. The final active window is valid.",
+  },
+  {
+    operation: "COMPLETE",
+    left: 4,
+    right: 5,
+    sum: 5,
+    valid: true,
+    len: 2,
+    best: 3,
+    bestRange: [0, 2],
+    message: "Done. The best valid window length was 3: [2, 1, 3].",
+  },
+]

@@ -63,6 +63,9 @@ const fixedVsVariable: Checkpoint = {
     return best`,
       },
     ],
+    animation: {
+      id: "sliding-window-variable",
+    },
   },
 }
 

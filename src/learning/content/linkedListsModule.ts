@@ -98,6 +98,9 @@ const traversalAndPointers: Checkpoint = {
 }`,
       },
     ],
+    animation: {
+      id: "linked-list-reversal",
+    },
     quickCheck: {
       question: "When reversing a list iteratively, why do you save `next` before reassigning `curr.next`?",
       options: [

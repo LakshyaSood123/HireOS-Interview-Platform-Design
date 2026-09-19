@@ -109,6 +109,9 @@ const traversals: Checkpoint = {
       },
     ],
     visual: EXAMPLE_TREE,
+    animation: {
+      id: "tree-preorder-traversal",
+    },
     codeExamples: PREORDER_EXAMPLES,
     quickCheck: {
       question: "Which traversal visits Left → Root → Right?",

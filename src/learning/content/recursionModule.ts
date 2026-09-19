@@ -79,6 +79,9 @@ const baseAndRecursiveCase: Checkpoint = {
 }`,
       },
     ],
+    animation: {
+      id: "recursion-factorial-unwind",
+    },
     quickCheck: {
       question: "What happens if factorial(n) is called without a base case?",
       options: ["It returns 0", "It runs once and stops", "The recursive calls never stop", "It automatically becomes a loop"],

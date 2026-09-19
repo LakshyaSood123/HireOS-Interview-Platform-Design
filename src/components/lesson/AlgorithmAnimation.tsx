@@ -1,42 +1,57 @@
 import type { AlgorithmAnimationSpec } from "../../learning/types"
-import ArrayTraversalVisual, { type ArrayTraversalState } from "./ArrayTraversalVisual"
+import type { ReactElement } from "react"
+import { arraysInPlaceStates } from "../../learning/animations/arraysInPlaceStates"
+import { validateAnimationStates } from "../../learning/animations/animationValidators"
+import { binarySearchStates } from "../../learning/animations/binarySearchStates"
+import { linkedListReversalStates } from "../../learning/animations/linkedListReversalStates"
+import { recursionFactorialStates } from "../../learning/animations/recursionFactorialStates"
+import { slidingWindowStates } from "../../learning/animations/slidingWindowStates"
+import { treePreorderStates } from "../../learning/animations/treePreorderStates"
+import ArrayTraversalVisual from "./ArrayTraversalVisual"
+import BinarySearchAnimation from "./BinarySearchAnimation"
+import LinkedListAnimation from "./LinkedListAnimation"
+import RecursionAnimation from "./RecursionAnimation"
+import SlidingWindowAnimation from "./SlidingWindowAnimation"
+import TreeTraversalAnimation from "./TreeTraversalAnimation"
 
-interface RegisteredAnimation {
+interface RegisteredAnimation<TState> {
   title: string
-  states: ArrayTraversalState[]
+  states: TState[]
+  render: (title: string, states: TState[]) => ReactElement
 }
 
-const animations: Record<AlgorithmAnimationSpec["id"], RegisteredAnimation> = {
+const animations = {
   "arrays-in-place-reversal": {
     title: "Index, update, then reverse with two indices",
-    states: [
-      {
-        operation: "SCAN",
-        values: [4, 8, 1, 9, 3, 6],
-        activeIndex: 0,
-        message: "Read nums[0] directly by index.",
-      },
-      {
-        operation: "UPDATE",
-        values: [4, 8, 1, 7, 3, 6],
-        activeIndex: 3,
-        message: "Update index 3 from 9 to 7.",
-      },
-      {
-        operation: "REVERSE_SWAP",
-        values: [4, 8, 1, 7, 3, 6],
-        leftIndex: 0,
-        rightIndex: 5,
-        message: "Reverse: swap the two ends.",
-      },
-      {
-        operation: "REVERSED",
-        values: [6, 3, 7, 1, 8, 4],
-        message: "Final reversed order after symmetric swaps.",
-      },
-    ],
+    states: arraysInPlaceStates,
+    render: (title, states) => <ArrayTraversalVisual title={title} states={states} />,
   },
-}
+  "sliding-window-variable": {
+    title: "Variable window: expand right, shrink until valid",
+    states: slidingWindowStates,
+    render: (title, states) => <SlidingWindowAnimation title={title} states={states} />,
+  },
+  "binary-search-decision": {
+    title: "Compare mid, discard half, then find the target",
+    states: binarySearchStates,
+    render: (title, states) => <BinarySearchAnimation title={title} states={states} />,
+  },
+  "linked-list-reversal": {
+    title: "Reverse a linked list with prev, curr, and next",
+    states: linkedListReversalStates,
+    render: (title, states) => <LinkedListAnimation title={title} states={states} />,
+  },
+  "recursion-factorial-unwind": {
+    title: "Factorial calls grow, hit the base case, then unwind",
+    states: recursionFactorialStates,
+    render: (title, states) => <RecursionAnimation title={title} states={states} />,
+  },
+  "tree-preorder-traversal": {
+    title: "Preorder traversal: root, left, right",
+    states: treePreorderStates,
+    render: (title, states) => <TreeTraversalAnimation title={title} states={states} />,
+  },
+} satisfies Record<AlgorithmAnimationSpec["id"], RegisteredAnimation<any>>
 
 interface AlgorithmAnimationProps {
   animation: AlgorithmAnimationSpec
@@ -53,10 +68,15 @@ export default function AlgorithmAnimation({ animation }: AlgorithmAnimationProp
     )
   }
 
-  return (
-    <ArrayTraversalVisual
-      title={animation.title ?? registered.title}
-      states={registered.states}
-    />
-  )
+  const validationErrors = validateAnimationStates(animation.id, registered.states)
+
+  if (validationErrors.length) {
+    return (
+      <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-xs text-amber-100">
+        Animation invalid: {validationErrors.join(" ")}
+      </div>
+    )
+  }
+
+  return registered.render(animation.title ?? registered.title, registered.states)
 }

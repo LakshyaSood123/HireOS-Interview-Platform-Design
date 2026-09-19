@@ -1,13 +1,5 @@
 import { useEffect, useState } from "react"
-
-export interface ArrayTraversalState {
-  operation: "SCAN" | "UPDATE" | "REVERSE_SWAP" | "REVERSED"
-  values: number[]
-  message: string
-  activeIndex?: number
-  leftIndex?: number
-  rightIndex?: number
-}
+import type { ArrayTraversalState } from "../../learning/animations/arraysInPlaceStates"
 
 interface ArrayTraversalVisualProps {
   title: string

@@ -181,7 +181,13 @@ export interface TwoPointerVisualSpec {
   mode: "opposite" | "same-direction"
 }
 
-export type AlgorithmAnimationId = "arrays-in-place-reversal"
+export type AlgorithmAnimationId =
+  | "arrays-in-place-reversal"
+  | "sliding-window-variable"
+  | "binary-search-decision"
+  | "linked-list-reversal"
+  | "recursion-factorial-unwind"
+  | "tree-preorder-traversal"
 
 export interface AlgorithmAnimationSpec {
   id: AlgorithmAnimationId
