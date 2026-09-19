@@ -14,7 +14,18 @@ type ModuleSeed = {
     functionName: string
     prompt: string
     keywords: string[]
+    /** Python starter — a bare `def name(realParams): pass` matching the
+     * Python demoSolution's signature. */
     starter: string
+    /** C++/Java starters — real typed signatures matching this seed's own
+     * `demo.cpp`/`demo.java`, function body only (no includes, no
+     * `using namespace std;`, no class/main wrapper — those are the future
+     * execution harness's responsibility, not learner-facing starter
+     * content). Required (not defaulted) so every generated activity's
+     * starter is reviewed against its own demoSolution at authoring time,
+     * rather than falling back to a generic signature-less stub. */
+    starterCpp: string
+    starterJava: string
     hint: string
     /** DEMO-ONLY canonical solutions (see CodingActivityContent.demoSolution
      * in types.ts) — used exclusively by CodeWorkspace's Auto-fill Demo
@@ -101,8 +112,8 @@ function codeCheckpoint(seed: ModuleSeed, previousId: string): Checkpoint {
         languages: ["python", "cpp", "java"],
         starterCode: {
           python: code.starter,
-          cpp: `${code.functionName}() {\n    // your code here\n}\n`,
-          java: `${code.functionName}() {\n    // your code here\n}\n`,
+          cpp: code.starterCpp,
+          java: code.starterJava,
         },
         visibleTests: [
           { id: "v1", description: "Basic case", input: "[1,2,3]", expected: "valid result" },
@@ -187,6 +198,8 @@ export const stackQueueModule = buildModule({
     prompt: "Implement isBalanced(s) using a stack to decide whether brackets (), [], and {} are properly nested.",
     keywords: ["stack", "for"],
     starter: "def isBalanced(s):\n    # your code here\n    pass\n",
+    starterCpp: "bool isBalanced(string s) {\n    // your code here\n}\n",
+    starterJava: "boolean isBalanced(String s) {\n    // your code here\n}\n",
     hint: "Push openers. On a closer, pop and compare against the expected opener.",
     demo: {
       python: "def isBalanced(s):\n    if not s:\n        return True\n    stack = []\n    pairs = {')': '(', ']': '[', '}': '{'}\n    for ch in s:\n        if ch in '([{':\n            stack.append(ch)\n        elif ch in pairs:\n            if not stack or stack.pop() != pairs[ch]:\n                return False\n    return not stack\n",
@@ -211,6 +224,8 @@ export const heapPriorityQueueModule = buildModule({
     prompt: "Implement topK(nums, k) that returns the k largest values using a heap-shaped approach.",
     keywords: ["heap", "for"],
     starter: "def topK(nums, k):\n    # your code here\n    pass\n",
+    starterCpp: "vector<int> topK(vector<int>& nums, int k) {\n    // your code here\n}\n",
+    starterJava: "List<Integer> topK(int[] nums, int k) {\n    // your code here\n}\n",
     hint: "Keep only k values in the heap; when it grows too large, remove the smallest.",
     demo: {
       python: "import heapq\n\ndef topK(nums, k):\n    if not nums or k <= 0:\n        return []\n    heap = []\n    for n in nums:\n        heapq.heappush(heap, n)\n        if len(heap) > k:\n            heapq.heappop(heap)\n    return sorted(heap, reverse=True)\n",
@@ -235,6 +250,8 @@ export const trieModule = buildModule({
     prompt: "Implement insertWord(root, word) for a trie represented by nested maps and terminal markers.",
     keywords: ["for", "children"],
     starter: "def insertWord(root, word):\n    # your code here\n    pass\n",
+    starterCpp: "void insertWord(TrieNode* root, string word) {\n    // your code here\n}\n",
+    starterJava: "void insertWord(TrieNode root, String word) {\n    // your code here\n}\n",
     hint: "Walk one character at a time, creating the child node if it does not exist.",
     demo: {
       python: "def insertWord(root, word):\n    if not word:\n        return\n    node = root\n    for ch in word:\n        if ch not in node['children']:\n            node['children'][ch] = {'children': {}, 'is_word': False}\n        node = node['children'][ch]\n    node['is_word'] = True\n",
@@ -259,6 +276,8 @@ export const backtrackingModule = buildModule({
     prompt: "Implement subsets(nums) using recursive choose/explore/undo backtracking.",
     keywords: ["def", "for"],
     starter: "def subsets(nums):\n    # your code here\n    pass\n",
+    starterCpp: "vector<vector<int>> subsets(vector<int>& nums) {\n    // your code here\n}\n",
+    starterJava: "List<List<Integer>> subsets(int[] nums) {\n    // your code here\n}\n",
     hint: "Carry a path list, append a copy to answers, then recurse over remaining choices.",
     demo: {
       python: "def subsets(nums):\n    if not nums:\n        return [[]]\n    result = []\n    path = []\n\n    def backtrack(start):\n        result.append(path.copy())\n        for i in range(start, len(nums)):\n            path.append(nums[i])\n            backtrack(i + 1)\n            path.pop()\n\n    backtrack(0)\n    return result\n",
@@ -283,6 +302,8 @@ export const binarySearchTreesModule = buildModule({
     prompt: "Implement searchBST(root, target) by moving left or right according to BST ordering.",
     keywords: ["left", "right"],
     starter: "def searchBST(root, target):\n    # your code here\n    pass\n",
+    starterCpp: "TreeNode* searchBST(TreeNode* root, int target) {\n    // your code here\n}\n",
+    starterJava: "TreeNode searchBST(TreeNode root, int target) {\n    // your code here\n}\n",
     hint: "If target is smaller than root.val go left; if larger go right.",
     demo: {
       python: "def searchBST(root, target):\n    if not root:\n        return None\n    if root.val == target:\n        return root\n    if target < root.val:\n        return searchBST(root.left, target)\n    return searchBST(root.right, target)\n",
@@ -307,6 +328,8 @@ export const graphFundamentalsModule = buildModule({
     prompt: "Implement buildGraph(edges) that returns an adjacency list for an undirected graph.",
     keywords: ["for", "append"],
     starter: "def buildGraph(edges):\n    # your code here\n    pass\n",
+    starterCpp: "unordered_map<int, vector<int>> buildGraph(vector<vector<int>>& edges) {\n    // your code here\n}\n",
+    starterJava: "Map<Integer, List<Integer>> buildGraph(int[][] edges) {\n    // your code here\n}\n",
     hint: "For each [a,b], add b to a's list and a to b's list.",
     demo: {
       python: "def buildGraph(edges):\n    graph = {}\n    if not edges:\n        return graph\n    for a, b in edges:\n        graph.setdefault(a, []).append(b)\n        graph.setdefault(b, []).append(a)\n    return graph\n",
@@ -331,6 +354,8 @@ export const dfsBfsModule = buildModule({
     prompt: "Implement countReachable(graph, start) with a visited set and stack or queue.",
     keywords: ["visited", "while"],
     starter: "def countReachable(graph, start):\n    # your code here\n    pass\n",
+    starterCpp: "int countReachable(unordered_map<int, vector<int>>& graph, int start) {\n    // your code here\n}\n",
+    starterJava: "int countReachable(Map<Integer, List<Integer>> graph, int start) {\n    // your code here\n}\n",
     hint: "Pop a node, skip if visited, then add unvisited neighbors.",
     demo: {
       python: "def countReachable(graph, start):\n    if not graph or start not in graph:\n        return 0\n    visited = {start}\n    stack = [start]\n    count = 0\n    while stack:\n        node = stack.pop()\n        count += 1\n        for neighbor in graph.get(node, []):\n            if neighbor not in visited:\n                visited.add(neighbor)\n                stack.append(neighbor)\n    return count\n",
@@ -355,6 +380,8 @@ export const gridGraphsModule = buildModule({
     prompt: "Implement countIsland(grid, r, c) that counts connected land cells from a start cell.",
     keywords: ["visited", "while"],
     starter: "def countIsland(grid, r, c):\n    # your code here\n    pass\n",
+    starterCpp: "int countIsland(vector<vector<int>>& grid, int r, int c) {\n    // your code here\n}\n",
+    starterJava: "int countIsland(int[][] grid, int r, int c) {\n    // your code here\n}\n",
     hint: "Use a stack or queue of coordinates and check bounds before visiting.",
     demo: {
       python: "def countIsland(grid, r, c):\n    if not grid or not grid[0]:\n        return 0\n    rows, cols = len(grid), len(grid[0])\n    visited = set()\n    stack = [(r, c)]\n    count = 0\n    while stack:\n        cr, cc = stack.pop()\n        if (cr, cc) in visited or cr < 0 or cr >= rows or cc < 0 or cc >= cols or grid[cr][cc] == 0:\n            continue\n        visited.add((cr, cc))\n        count += 1\n        for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:\n            stack.append((cr + dr, cc + dc))\n    return count\n",
@@ -379,6 +406,8 @@ export const topologicalSortModule = buildModule({
     prompt: "Implement topoOrder(n, edges) using indegrees and a queue of zero-indegree nodes.",
     keywords: ["queue", "indegree"],
     starter: "def topoOrder(n, edges):\n    # your code here\n    pass\n",
+    starterCpp: "vector<int> topoOrder(int n, vector<vector<int>>& edges) {\n    // your code here\n}\n",
+    starterJava: "List<Integer> topoOrder(int n, int[][] edges) {\n    // your code here\n}\n",
     hint: "Compute indegrees, push all zeros, and reduce neighbors as nodes leave the queue.",
     demo: {
       python: "from collections import deque\n\ndef topoOrder(n, edges):\n    if not n:\n        return []\n    indegree = [0] * n\n    graph = {i: [] for i in range(n)}\n    for a, b in edges:\n        graph[a].append(b)\n        indegree[b] += 1\n    queue = deque(i for i in range(n) if indegree[i] == 0)\n    order = []\n    while queue:\n        node = queue.popleft()\n        order.append(node)\n        for neighbor in graph[node]:\n            indegree[neighbor] -= 1\n            if indegree[neighbor] == 0:\n                queue.append(neighbor)\n    return order\n",
@@ -403,6 +432,8 @@ export const unionFindModule = buildModule({
     prompt: "Implement countComponents(n, edges) with parent links and union operations.",
     keywords: ["parent", "find"],
     starter: "def countComponents(n, edges):\n    # your code here\n    pass\n",
+    starterCpp: "int countComponents(int n, vector<vector<int>>& edges) {\n    // your code here\n}\n",
+    starterJava: "int countComponents(int n, int[][] edges) {\n    // your code here\n}\n",
     hint: "Initialize each node as its own parent, then union edge endpoints.",
     demo: {
       python: "def countComponents(n, edges):\n    if not n:\n        return 0\n    parent = list(range(n))\n\n    def find(x):\n        while parent[x] != x:\n            parent[x] = parent[parent[x]]\n            x = parent[x]\n        return x\n\n    def union(a, b):\n        rootA, rootB = find(a), find(b)\n        if rootA != rootB:\n            parent[rootA] = rootB\n\n    for a, b in edges:\n        union(a, b)\n    return len({find(i) for i in range(n)})\n",
@@ -427,6 +458,8 @@ export const greedyModule = buildModule({
     prompt: "Implement maxNonOverlapping(intervals) by sorting by end time and greedily taking compatible intervals.",
     keywords: ["sort", "for"],
     starter: "def maxNonOverlapping(intervals):\n    # your code here\n    pass\n",
+    starterCpp: "int maxNonOverlapping(vector<vector<int>>& intervals) {\n    // your code here\n}\n",
+    starterJava: "int maxNonOverlapping(int[][] intervals) {\n    // your code here\n}\n",
     hint: "Take an interval when its start is at or after the last chosen end.",
     demo: {
       python: "def maxNonOverlapping(intervals):\n    if not intervals:\n        return 0\n    intervals = sorted(intervals, key=lambda x: x[1])\n    count = 0\n    last_end = float('-inf')\n    for start, end in intervals:\n        if start >= last_end:\n            count += 1\n            last_end = end\n    return count\n",
@@ -451,6 +484,8 @@ export const oneDDynamicProgrammingModule = buildModule({
     prompt: "Implement climbWays(n) where each move is 1 or 2 steps, using iterative DP.",
     keywords: ["for", "return"],
     starter: "def climbWays(n):\n    # your code here\n    pass\n",
+    starterCpp: "int climbWays(int n) {\n    // your code here\n}\n",
+    starterJava: "int climbWays(int n) {\n    // your code here\n}\n",
     hint: "ways[i] = ways[i - 1] + ways[i - 2].",
     demo: {
       python: "def climbWays(n):\n    ways = [0] * (n + 1)\n    if len(ways) == 0:\n        return 1\n    ways[0] = 1\n    for i in range(1, n + 1):\n        ways[i] = ways[i - 1] + (ways[i - 2] if i >= 2 else 0)\n    return ways[n]\n",
@@ -475,6 +510,8 @@ export const twoDDynamicProgrammingModule = buildModule({
     prompt: "Implement uniquePaths(rows, cols) with a 2D DP table.",
     keywords: ["for", "dp"],
     starter: "def uniquePaths(rows, cols):\n    # your code here\n    pass\n",
+    starterCpp: "int uniquePaths(int rows, int cols) {\n    // your code here\n}\n",
+    starterJava: "int uniquePaths(int rows, int cols) {\n    // your code here\n}\n",
     hint: "Initialize the first row and first column to 1, then add top plus left.",
     demo: {
       python: "def uniquePaths(rows, cols):\n    if not rows or not cols:\n        return 0\n    dp = [[1] * cols for _ in range(rows)]\n    for r in range(1, rows):\n        for c in range(1, cols):\n            dp[r][c] = dp[r - 1][c] + dp[r][c - 1]\n    return dp[rows - 1][cols - 1]\n",
@@ -547,6 +584,8 @@ export const finalMasteryModule = buildModule({
     prompt: "Implement solveFinal(items) for a mixed original challenge after naming your chosen pattern in comments.",
     keywords: ["for", "return"],
     starter: "def solveFinal(items):\n    # name the pattern, then solve\n    pass\n",
+    starterCpp: "unordered_map<int, int> solveFinal(vector<int>& items) {\n    // your code here\n}\n",
+    starterJava: "Map<Integer, Integer> solveFinal(int[] items) {\n    // your code here\n}\n",
     hint: "Start with the simplest correct invariant, then add the data structure that removes repeated work.",
     demo: {
       python: "def solveFinal(items):\n    # Pattern: hashing — count occurrences in one pass, O(n) time, O(n) space.\n    if not items:\n        return {}\n    counts = {}\n    for item in items:\n        counts[item] = counts.get(item, 0) + 1\n    return counts\n",
