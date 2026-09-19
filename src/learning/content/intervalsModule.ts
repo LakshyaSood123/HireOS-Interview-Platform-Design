@@ -51,6 +51,9 @@ const sortingAndOverlap: Checkpoint = {
         body: "After sorting, a single O(n) pass — comparing each interval to the last one you kept — is enough to merge, count overlaps, or detect conflicts.",
       },
     ],
+    animation: {
+      id: "intervals-merge-overlap",
+    },
     codeExamples: [
       {
         language: "python",

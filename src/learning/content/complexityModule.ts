@@ -29,6 +29,9 @@ const bigO: Checkpoint = {
         body: "Memory grows too — count the extra structures you allocate (arrays, hash maps, recursion stack), not the input you were already given.",
       },
     ],
+    animation: {
+      id: "complexity-growth",
+    },
     quickCheck: {
       question: "Which complexity best describes a single loop over n items?",
       options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],

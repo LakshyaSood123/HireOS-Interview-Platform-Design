@@ -57,6 +57,9 @@ const oppositeEnd: Checkpoint = {
       values: [3, 8, 2, 9, 4, 1, 7],
       mode: "opposite",
     },
+    animation: {
+      id: "two-pointers-opposite-sum",
+    },
   },
 }
 

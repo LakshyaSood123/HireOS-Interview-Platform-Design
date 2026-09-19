@@ -52,6 +52,9 @@ const buildingPrefixInfo: Checkpoint = {
         body: "sum(i, j) = prefix[j] - prefix[i-1] (or just prefix[j] if i is 0) — subtracting off everything before the range leaves exactly the range's total.",
       },
     ],
+    animation: {
+      id: "prefix-sum-range-query",
+    },
     codeExamples: [
       {
         language: "python",

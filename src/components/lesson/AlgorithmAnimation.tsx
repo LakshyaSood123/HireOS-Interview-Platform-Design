@@ -4,12 +4,20 @@ import { arraysInPlaceStates } from "../../learning/animations/arraysInPlaceStat
 import { validateAnimationStates } from "../../learning/animations/animationValidators"
 import { binarySearchStates } from "../../learning/animations/binarySearchStates"
 import { linkedListReversalStates } from "../../learning/animations/linkedListReversalStates"
+import {
+  complexityStates,
+  hashingStates,
+  intervalsStates,
+  prefixSumStates,
+  twoPointersStates,
+} from "../../learning/animations/patternBasicsStates"
 import { recursionFactorialStates } from "../../learning/animations/recursionFactorialStates"
 import { slidingWindowStates } from "../../learning/animations/slidingWindowStates"
 import { treePreorderStates } from "../../learning/animations/treePreorderStates"
 import ArrayTraversalVisual from "./ArrayTraversalVisual"
 import BinarySearchAnimation from "./BinarySearchAnimation"
 import LinkedListAnimation from "./LinkedListAnimation"
+import PatternBasicsAnimation from "./PatternBasicsAnimation"
 import RecursionAnimation from "./RecursionAnimation"
 import SlidingWindowAnimation from "./SlidingWindowAnimation"
 import TreeTraversalAnimation from "./TreeTraversalAnimation"
@@ -26,15 +34,40 @@ const animations = {
     states: arraysInPlaceStates,
     render: (title, states) => <ArrayTraversalVisual title={title} states={states} />,
   },
+  "complexity-growth": {
+    title: "Relative growth of five complexity classes",
+    states: complexityStates,
+    render: (title, states) => <PatternBasicsAnimation title={title} states={states} kind="complexity" />,
+  },
+  "hashing-frequency-map": {
+    title: "Key to hash to bucket to frequency update",
+    states: hashingStates,
+    render: (title, states) => <PatternBasicsAnimation title={title} states={states} kind="hashing" />,
+  },
+  "two-pointers-opposite-sum": {
+    title: "Move the pointer justified by the current sum",
+    states: twoPointersStates,
+    render: (title, states) => <PatternBasicsAnimation title={title} states={states} kind="two-pointers" />,
+  },
   "sliding-window-variable": {
     title: "Variable window: expand right, shrink until valid",
     states: slidingWindowStates,
     render: (title, states) => <SlidingWindowAnimation title={title} states={states} />,
   },
+  "prefix-sum-range-query": {
+    title: "Build prefix values, then subtract before the range",
+    states: prefixSumStates,
+    render: (title, states) => <PatternBasicsAnimation title={title} states={states} kind="prefix-sum" />,
+  },
   "binary-search-decision": {
     title: "Compare mid, discard half, then find the target",
     states: binarySearchStates,
     render: (title, states) => <BinarySearchAnimation title={title} states={states} />,
+  },
+  "intervals-merge-overlap": {
+    title: "Merge overlapping intervals",
+    states: intervalsStates,
+    render: (title, states) => <PatternBasicsAnimation title={title} states={states} kind="intervals" />,
   },
   "linked-list-reversal": {
     title: "Reverse a linked list with prev, curr, and next",

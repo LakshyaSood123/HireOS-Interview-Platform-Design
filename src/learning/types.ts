@@ -183,8 +183,13 @@ export interface TwoPointerVisualSpec {
 
 export type AlgorithmAnimationId =
   | "arrays-in-place-reversal"
+  | "complexity-growth"
+  | "hashing-frequency-map"
+  | "two-pointers-opposite-sum"
   | "sliding-window-variable"
+  | "prefix-sum-range-query"
   | "binary-search-decision"
+  | "intervals-merge-overlap"
   | "linked-list-reversal"
   | "recursion-factorial-unwind"
   | "tree-preorder-traversal"

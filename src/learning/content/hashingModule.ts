@@ -51,6 +51,9 @@ const frequencyMapsSets: Checkpoint = {
         body: "A hash map attaches a value to each key — a running count (frequency map), an index, or anything else you need to remember about that key.",
       },
     ],
+    animation: {
+      id: "hashing-frequency-map",
+    },
     codeExamples: [
       {
         language: "python",
