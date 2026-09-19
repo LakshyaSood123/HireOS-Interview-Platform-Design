@@ -23,7 +23,7 @@ export const DEVELOPMENT_MODE = {
    * normal learner experience. Flip to false (or delete this flag entirely
    * once a real production build step exists) before shipping. */
   DEMO_CODE_AUTOFILL_ENABLED: true,
-  /** MVP real-execution proof: when true, the checkpoints listed in
+  /** Real-execution rollout: when true, the checkpoints listed in
    * REAL_CODE_EXECUTION_ACTIVITY_IDS run through a self-hosted Piston
    * instance (via the local tools/code-runner-gateway.mjs gateway) instead
    * of MockCodeRunner. Every other activity keeps using MockCodeRunner
@@ -31,8 +31,30 @@ export const DEVELOPMENT_MODE = {
    * (127.0.0.1:2000) to be running locally — see tools/code-runner-gateway.mjs. */
   REAL_CODE_EXECUTION_ENABLED: true,
   /** Checkpoint ids eligible for real execution while REAL_CODE_EXECUTION_ENABLED
-   * is true. Keep this to the proven MVP activity only. */
-  REAL_CODE_EXECUTION_ACTIVITY_IDS: ["foundations-4"] as string[],
+   * is true — must stay in lockstep with the gateway's own ALLOWED_ACTIVITY_IDS
+   * allowlist (tools/code-runner-gateway.mjs), which is the authoritative
+   * enforcement point. Currently: "Family A" (scalar/array/string in,
+   * int/long/bool out) activities whose curriculum tests were verified to be
+   * genuine deterministic data. Six other Family A checkpoints generated via
+   * fullCurriculumModules.ts (stack-queue-3, grid-graphs-3, union-find-3,
+   * greedy-3, dp-3, dp-2d-3) still share one placeholder test fixture and are
+   * deliberately excluded — see the Family A expansion task's final report. */
+  REAL_CODE_EXECUTION_ACTIVITY_IDS: [
+    "foundations-4",
+    "foundations-5",
+    "arrays-strings-5",
+    "hashing-4",
+    "two-pointers-4",
+    "two-pointers-5",
+    "sliding-window-4",
+    "sliding-window-5",
+    "prefix-sum-3",
+    "prefix-sum-4",
+    "binary-search-4",
+    "binary-search-5",
+    "recursion-4",
+    "recursion-5",
+  ] as string[],
 } as const
 
 /**
