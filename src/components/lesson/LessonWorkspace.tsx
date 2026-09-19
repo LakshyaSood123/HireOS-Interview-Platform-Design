@@ -188,6 +188,7 @@ export default function LessonWorkspace({
           <div className="mb-8">
             <CodeWorkspace
               activity={content.codingActivity}
+              activityId={checkpoint.id}
               runner={runner}
               onFailedSubmit={handleFailedSubmit}
               onSuccessfulSubmit={() => setActivitySatisfied(true)}

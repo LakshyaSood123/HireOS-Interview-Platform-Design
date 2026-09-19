@@ -22,7 +22,9 @@ export interface TestOutcome {
 }
 
 export interface CodeRunResult {
-  status: "empty" | "unchanged" | "completed"
+  /** "error" is a real (non-mock) compile/runtime/timeout failure — see
+   * PistonCodeRunner. It is never produced by MockCodeRunner. */
+  status: "empty" | "unchanged" | "completed" | "error"
   message?: string
   testsPassed: number
   totalTests: number
@@ -34,6 +36,10 @@ export interface CodeRunRequest {
   code: string
   language: CodeLanguage
   activity: CodingActivityContent
+  /** Checkpoint id (e.g. "foundations-4") — optional because MockCodeRunner
+   * never needs it; PistonCodeRunner/RoutingCodeRunner use it to decide
+   * whether a request is eligible for real execution. */
+  activityId?: string
 }
 
 export interface CodeRunner {
@@ -49,7 +55,9 @@ function normalize(code: string): string {
   return code.replace(/\s+/g, " ").trim().toLowerCase()
 }
 
-function looksLikeStarter(code: string, activity: CodingActivityContent, language: CodeLanguage): boolean {
+/** Exported so PistonCodeRunner can reuse the exact same empty/unchanged
+ * detection MockCodeRunner already uses, instead of re-deriving it. */
+export function looksLikeStarter(code: string, activity: CodingActivityContent, language: CodeLanguage): boolean {
   return normalize(code) === normalize(activity.starterCode[language] ?? "")
 }
 

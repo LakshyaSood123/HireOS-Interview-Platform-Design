@@ -23,6 +23,16 @@ export const DEVELOPMENT_MODE = {
    * normal learner experience. Flip to false (or delete this flag entirely
    * once a real production build step exists) before shipping. */
   DEMO_CODE_AUTOFILL_ENABLED: true,
+  /** MVP real-execution proof: when true, the checkpoints listed in
+   * REAL_CODE_EXECUTION_ACTIVITY_IDS run through a self-hosted Piston
+   * instance (via the local tools/code-runner-gateway.mjs gateway) instead
+   * of MockCodeRunner. Every other activity keeps using MockCodeRunner
+   * regardless of this flag. Requires the gateway (port 8787) and Piston
+   * (127.0.0.1:2000) to be running locally — see tools/code-runner-gateway.mjs. */
+  REAL_CODE_EXECUTION_ENABLED: true,
+  /** Checkpoint ids eligible for real execution while REAL_CODE_EXECUTION_ENABLED
+   * is true. Keep this to the proven MVP activity only. */
+  REAL_CODE_EXECUTION_ACTIVITY_IDS: ["foundations-4"] as string[],
 } as const
 
 /**

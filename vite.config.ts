@@ -34,6 +34,15 @@ export default defineConfig(({ mode }) => {
       port: parseInt(process.env.PORT || '8443'),
       strictPort: true,
       watch: { ignored: ['**/.figma/**'] },
+      proxy: {
+        // Routes only to our own local gateway (tools/code-runner-gateway.mjs) —
+        // never proxies raw Piston endpoints. The gateway owns all Piston
+        // policy/config; the browser never reaches Piston directly.
+        '/api/code-runner': {
+          target: 'http://127.0.0.1:8787',
+          changeOrigin: true,
+        },
+      },
     },
     preview: {
       host: '0.0.0.0',

@@ -7,6 +7,10 @@ const LANGUAGE_LABEL: Record<CodeLanguage, string> = { python: "Python", cpp: "C
 
 interface CodeWorkspaceProps {
   activity: CodingActivityContent
+  /** Checkpoint id (e.g. "foundations-4") — passed through to the runner so
+   * RoutingCodeRunner can decide whether this activity is real-execution-eligible.
+   * Optional: omitting it simply means the request is never eligible. */
+  activityId?: string
   runner: CodeRunner
   /** Submit failed (0 tests short of full pass) — caller decrements a life. */
   onFailedSubmit: () => void
@@ -15,6 +19,15 @@ interface CodeWorkspaceProps {
 }
 
 function ResultPanel({ result, label }: { result: CodeRunResult; label: string }) {
+  if (result.status === "error") {
+    return (
+      <div className="rounded-xl bg-red-500/10 border border-red-500/30 p-3.5 text-xs text-red-200">
+        <p className="font-bold mb-1.5">Execution Error</p>
+        <pre className="whitespace-pre-wrap font-mono text-[11px] text-red-300 leading-relaxed">{result.message}</pre>
+      </div>
+    )
+  }
+
   if (result.status !== "completed") {
     return (
       <div className="rounded-xl bg-amber-500/10 border border-amber-500/30 p-3.5 text-xs text-amber-200">
@@ -71,7 +84,7 @@ function ResultPanel({ result, label }: { result: CodeRunResult; label: string }
  * `CodeRunner` (currently `MockCodeRunner`) rather than executing anything
  * itself, so swapping in a real judge later doesn't touch this component
  * (PART 9). Not Trees-specific — works off any `CodingActivityContent`. */
-export default function CodeWorkspace({ activity, runner, onFailedSubmit, onSuccessfulSubmit }: CodeWorkspaceProps) {
+export default function CodeWorkspace({ activity, activityId, runner, onFailedSubmit, onSuccessfulSubmit }: CodeWorkspaceProps) {
   const [language, setLanguage] = useState<CodeLanguage>(activity.languages[0])
   const [codeByLanguage, setCodeByLanguage] = useState<Record<string, string>>(() => ({ ...activity.starterCode }))
   const [runResult, setRunResult] = useState<CodeRunResult | null>(null)
@@ -110,7 +123,7 @@ export default function CodeWorkspace({ activity, runner, onFailedSubmit, onSucc
   const handleRun = async () => {
     setIsRunning(true)
     setSubmitResult(null)
-    const result = await runner.run({ code, language, activity })
+    const result = await runner.run({ code, language, activity, activityId })
     setRunResult(result)
     setIsRunning(false)
     if (result.status === "completed" && result.testsPassed < result.totalTests) {
@@ -120,7 +133,7 @@ export default function CodeWorkspace({ activity, runner, onFailedSubmit, onSucc
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
-    const result = await runner.submit({ code, language, activity })
+    const result = await runner.submit({ code, language, activity, activityId })
     setSubmitResult(result)
     setIsSubmitting(false)
 

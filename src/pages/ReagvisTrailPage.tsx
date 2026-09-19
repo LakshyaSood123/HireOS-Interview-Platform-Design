@@ -15,12 +15,14 @@ import { MeadowCow } from "../components/forest/scenic/ScenicAnimals"
 import { useAppState } from "../state/AppStateContext"
 import { libraryCourses, type TrailNode } from "../data/reagvisCourses"
 import { getCourseById, isCourseAvailable, getAllCheckpointsInOrder } from "../learning/courseRegistry"
-import { MockCodeRunner } from "../learning/services/codeRunner"
+import { RoutingCodeRunner } from "../learning/services/pistonCodeRunner"
 import { LocalNotesRepository } from "../learning/services/notesRepository"
 
-// Module-level singletons — one mock code runner / local notes repository
-// for the whole app, same pattern as AppStateContext's progressRepository.
-const codeRunner = new MockCodeRunner()
+// Module-level singletons — one code runner / local notes repository for
+// the whole app, same pattern as AppStateContext's progressRepository.
+// RoutingCodeRunner sends only the MVP-enabled activity (foundations-4) to
+// real Piston execution; every other activity still uses MockCodeRunner.
+const codeRunner = new RoutingCodeRunner()
 const notesRepository = new LocalNotesRepository()
 
 interface ReagvisTrailPageProps {
