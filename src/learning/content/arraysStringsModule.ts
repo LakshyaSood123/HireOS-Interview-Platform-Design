@@ -51,6 +51,9 @@ const traversalInPlace: Checkpoint = {
         body: "Overwriting elements as you scan (instead of allocating a new array) keeps space at O(1) — common in 'remove X' or 'compact the array' problems.",
       },
     ],
+    animation: {
+      id: "arrays-in-place-reversal",
+    },
     quickCheck: {
       question: "Which is true about in-place array mutation?",
       options: [

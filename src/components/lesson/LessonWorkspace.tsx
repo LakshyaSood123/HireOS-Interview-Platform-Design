@@ -5,6 +5,7 @@ import type { NotesRepository } from "../../learning/services/notesRepository"
 import BinaryTreeDiagram from "./BinaryTreeDiagram"
 import CallStackVisual from "./CallStackVisual"
 import TwoPointerVisual from "./TwoPointerVisual"
+import AlgorithmAnimation from "./AlgorithmAnimation"
 import CodeExampleTabs from "./CodeExampleTabs"
 import CodeWorkspace from "./CodeWorkspace"
 import QuickCheckCard from "./QuickCheckCard"
@@ -167,6 +168,11 @@ export default function LessonWorkspace({
         {content.twoPointerVisual && (
           <div className="mb-8">
             <TwoPointerVisual values={content.twoPointerVisual.values} mode={content.twoPointerVisual.mode} />
+          </div>
+        )}
+        {content.animation && (
+          <div className="mb-8">
+            <AlgorithmAnimation animation={content.animation} />
           </div>
         )}
 

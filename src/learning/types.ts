@@ -181,6 +181,13 @@ export interface TwoPointerVisualSpec {
   mode: "opposite" | "same-direction"
 }
 
+export type AlgorithmAnimationId = "arrays-in-place-reversal"
+
+export interface AlgorithmAnimationSpec {
+  id: AlgorithmAnimationId
+  title?: string
+}
+
 export interface LessonWorkspaceContent {
   title: string
   theory: TheoryBlock[]
@@ -193,6 +200,7 @@ export interface LessonWorkspaceContent {
   visual?: TraversalVisual
   callStackVisual?: CallStackVisualSpec
   twoPointerVisual?: TwoPointerVisualSpec
+  animation?: AlgorithmAnimationSpec
   codeExamples?: CodeExample[]
   quickCheck?: QuickCheckContent
   codingActivity?: CodingActivityContent
