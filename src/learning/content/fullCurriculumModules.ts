@@ -1,4 +1,4 @@
-import type { Checkpoint, CodeExample, CodeLanguage, Module, QuickCheckContent, TheoryBlock } from "../types"
+import type { AlgorithmAnimationId, Checkpoint, CodeExample, CodeLanguage, Module, QuickCheckContent, TheoryBlock } from "../types"
 
 type ModuleSeed = {
   id: string
@@ -9,6 +9,7 @@ type ModuleSeed = {
   concept: string
   pattern: string
   practice: string
+  animationId?: AlgorithmAnimationId
   code?: {
     functionName: string
     prompt: string
@@ -155,6 +156,7 @@ function buildModule(seed: ModuleSeed): Module {
             { heading: "Worked example", body: seed.pattern },
             { heading: "Complexity target", body: "Prefer the standard interview bound for this module and call out any extra memory you allocate." },
           ],
+          animation: seed.animationId ? { id: seed.animationId } : undefined,
           codeExamples: pythonExample(seed.code?.functionName ?? "solve", "    # maintain the module invariant here\n    for item in items:\n        pass\n    return items"),
           quickCheck: quick(seed.title, seed.pattern),
         },
@@ -179,6 +181,7 @@ export const stackQueueModule = buildModule({
   concept: "Use a stack when the most recent unresolved item must be handled first, and a queue when items must be processed in arrival order.",
   pattern: "For valid parentheses, push opening brackets and require each closing bracket to match the latest opener. For BFS, push neighbors into a queue so distance grows level by level.",
   practice: "Implement a balanced-brackets scanner with a stack and reject the first mismatched closing token.",
+  animationId: "stack-queue-lifo-fifo",
   code: {
     functionName: "isBalanced",
     prompt: "Implement isBalanced(s) using a stack to decide whether brackets (), [], and {} are properly nested.",
@@ -202,6 +205,7 @@ export const heapPriorityQueueModule = buildModule({
   concept: "Use a heap when repeated min or max extraction matters more than full sorted order.",
   pattern: "For top-k tasks, keep a heap of only k candidates. The heap root is the weakest kept candidate, so replacements are cheap.",
   practice: "Track the k largest numbers by maintaining a size-k min-heap.",
+  animationId: "heap-insert-bubble",
   code: {
     functionName: "topK",
     prompt: "Implement topK(nums, k) that returns the k largest values using a heap-shaped approach.",
@@ -225,6 +229,7 @@ export const trieModule = buildModule({
   concept: "Use a trie when many words share prefixes and queries ask whether a prefix or whole word exists.",
   pattern: "Each edge represents one character. A terminal marker distinguishes the prefix 'car' from the full word 'car'.",
   practice: "Insert words character by character and check search/prefix queries without scanning every stored word.",
+  animationId: "trie-prefix-branch",
   code: {
     functionName: "insertWord",
     prompt: "Implement insertWord(root, word) for a trie represented by nested maps and terminal markers.",
@@ -248,6 +253,7 @@ export const backtrackingModule = buildModule({
   concept: "Use backtracking when you must enumerate valid combinations under constraints.",
   pattern: "At each decision, choose one candidate, recurse, then undo that choice before trying the next branch.",
   practice: "Generate subsets by deciding include/exclude for each element.",
+  animationId: "backtracking-choose-undo",
   code: {
     functionName: "subsets",
     prompt: "Implement subsets(nums) using recursive choose/explore/undo backtracking.",
@@ -271,6 +277,7 @@ export const binarySearchTreesModule = buildModule({
   concept: "A BST keeps all left values smaller and all right values larger, recursively at every node.",
   pattern: "Validation needs low/high bounds, not only comparing a node with its direct children.",
   practice: "Search or validate a BST by narrowing the allowed value range as you descend.",
+  animationId: "bst-search-invariant",
   code: {
     functionName: "searchBST",
     prompt: "Implement searchBST(root, target) by moving left or right according to BST ordering.",
@@ -294,6 +301,7 @@ export const graphFundamentalsModule = buildModule({
   concept: "Use graphs when relationships are many-to-many rather than parent-to-child.",
   pattern: "An adjacency list stores each node's neighbors, making traversal proportional to vertices plus edges.",
   practice: "Build an adjacency list from edge pairs, then inspect neighbors without scanning every edge.",
+  animationId: "graph-adjacency-build",
   code: {
     functionName: "buildGraph",
     prompt: "Implement buildGraph(edges) that returns an adjacency list for an undirected graph.",
@@ -317,6 +325,7 @@ export const dfsBfsModule = buildModule({
   concept: "Use DFS to exhaust a branch and BFS to expand evenly by distance.",
   pattern: "Both need a visited set. Without it, cycles turn traversal into repeated work or infinite loops.",
   practice: "Count reachable nodes from a start node using either a stack or queue.",
+  animationId: "dfs-bfs-frontier",
   code: {
     functionName: "countReachable",
     prompt: "Implement countReachable(graph, start) with a visited set and stack or queue.",
@@ -340,6 +349,7 @@ export const gridGraphsModule = buildModule({
   concept: "Use grid graph thinking when cells connect to nearby cells by direction rules.",
   pattern: "Bounds checks, visited marking, and four-direction movement are the core loop.",
   practice: "Flood-fill a region by walking up, down, left, and right from a starting cell.",
+  animationId: "grid-graph-frontier",
   code: {
     functionName: "countIsland",
     prompt: "Implement countIsland(grid, r, c) that counts connected land cells from a start cell.",
@@ -363,6 +373,7 @@ export const topologicalSortModule = buildModule({
   concept: "Use topological sort when tasks have one-way dependency edges and you need a valid order.",
   pattern: "Kahn's algorithm repeatedly removes nodes with zero incoming edges.",
   practice: "Return a course order from prerequisite pairs or detect that a cycle prevents one.",
+  animationId: "topological-sort-kahn",
   code: {
     functionName: "topoOrder",
     prompt: "Implement topoOrder(n, edges) using indegrees and a queue of zero-indegree nodes.",
@@ -386,6 +397,7 @@ export const unionFindModule = buildModule({
   concept: "Use union-find when the problem repeatedly connects items and asks whether they are in the same component.",
   pattern: "Path compression makes future find calls faster by pointing nodes directly at their representative.",
   practice: "Count connected components as edges merge previously separate sets.",
+  animationId: "union-find-compression",
   code: {
     functionName: "countComponents",
     prompt: "Implement countComponents(n, edges) with parent links and union operations.",
@@ -409,6 +421,7 @@ export const greedyModule = buildModule({
   concept: "Use greedy when a locally best choice can be proven not to block an optimal final answer.",
   pattern: "Sort by the decision that matters, then make the earliest safe commitment.",
   practice: "Select the maximum number of non-overlapping intervals by finishing time.",
+  animationId: "greedy-interval-selection",
   code: {
     functionName: "maxNonOverlapping",
     prompt: "Implement maxNonOverlapping(intervals) by sorting by end time and greedily taking compatible intervals.",
@@ -432,6 +445,7 @@ export const oneDDynamicProgrammingModule = buildModule({
   concept: "Use 1D DP when each answer depends on earlier positions in one sequence or index line.",
   pattern: "Define dp[i] as the best answer up to index i, then derive it from earlier states.",
   practice: "Solve a stair-climbing count or house-robber maximum by filling one array left to right.",
+  animationId: "dp-1d-fill",
   code: {
     functionName: "climbWays",
     prompt: "Implement climbWays(n) where each move is 1 or 2 steps, using iterative DP.",
@@ -455,6 +469,7 @@ export const twoDDynamicProgrammingModule = buildModule({
   concept: "Use 2D DP when the state needs two coordinates, such as row/column or two string indices.",
   pattern: "Fill a table so each cell reads already-solved neighboring cells.",
   practice: "Count grid paths where each cell depends on the cell above and the cell to the left.",
+  animationId: "dp-2d-grid-paths",
   code: {
     functionName: "uniquePaths",
     prompt: "Implement uniquePaths(rows, cols) with a 2D DP table.",
@@ -478,6 +493,7 @@ export const dpPatternsModule = buildModule({
   concept: "Use DP pattern recognition when brute force explores overlapping choices or repeated subproblems.",
   pattern: "Ask what state uniquely describes the remaining work, then choose memoization or tabulation.",
   practice: "Classify a problem by state shape before writing the recurrence.",
+  animationId: "dp-take-skip",
 })
 
 export const mixedPatternRecognitionModule = buildModule({
@@ -489,6 +505,7 @@ export const mixedPatternRecognitionModule = buildModule({
   concept: "This is an application module: read constraints, verbs, and data shape to choose a candidate pattern.",
   pattern: "Sorted input hints binary search or two pointers; repeated membership hints hashing; dependencies hint graphs or topological sort.",
   practice: "Given a short problem setup, name the likely pattern and one reason before coding.",
+  animationId: "pattern-recognition-clues",
 })
 
 export const timedProblemsModule = buildModule({
@@ -500,6 +517,7 @@ export const timedProblemsModule = buildModule({
   concept: "Timed practice is about pacing: clarify, brute force, optimize, code, test, and summarize.",
   pattern: "Use time boxes: 2 minutes to clarify, 5 to derive, 12 to code, 3 to test, and the remainder to explain trade-offs.",
   practice: "Run a self-contained practice loop using original prompts and record where time was lost.",
+  animationId: "timed-problem-phases",
 })
 
 export const companyMissionsModule = buildModule({
@@ -511,6 +529,7 @@ export const companyMissionsModule = buildModule({
   concept: "Company practice should group by patterns and difficulty, not copied problem statements.",
   pattern: "Use titles, links, difficulty, company tags, and your own notes to create a repeatable practice mission.",
   practice: "Pick a target company set, solve by pattern cluster, and review misses by root cause.",
+  animationId: "company-mission-review",
 })
 
 export const finalMasteryModule = buildModule({
@@ -522,6 +541,7 @@ export const finalMasteryModule = buildModule({
   concept: "Final mastery combines recognition, coding, testing, and communication.",
   pattern: "A strong final attempt explains the chosen pattern, complexity, edge cases, and why alternatives were rejected.",
   practice: "Complete a mixed assessment: classify two prompts, implement one solution, and write the complexity summary.",
+  animationId: "final-mastery-readiness",
   code: {
     functionName: "solveFinal",
     prompt: "Implement solveFinal(items) for a mixed original challenge after naming your chosen pattern in comments.",

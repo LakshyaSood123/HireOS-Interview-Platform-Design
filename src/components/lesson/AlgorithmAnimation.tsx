@@ -1,5 +1,6 @@
 import type { AlgorithmAnimationSpec } from "../../learning/types"
 import type { ReactElement } from "react"
+import { advancedAnimationStates } from "../../learning/animations/advancedAnimationStates"
 import { arraysInPlaceStates } from "../../learning/animations/arraysInPlaceStates"
 import { validateAnimationStates } from "../../learning/animations/animationValidators"
 import { binarySearchStates } from "../../learning/animations/binarySearchStates"
@@ -14,6 +15,7 @@ import {
 import { recursionFactorialStates } from "../../learning/animations/recursionFactorialStates"
 import { slidingWindowStates } from "../../learning/animations/slidingWindowStates"
 import { treePreorderStates } from "../../learning/animations/treePreorderStates"
+import AdvancedConceptAnimation from "./AdvancedConceptAnimation"
 import ArrayTraversalVisual from "./ArrayTraversalVisual"
 import BinarySearchAnimation from "./BinarySearchAnimation"
 import LinkedListAnimation from "./LinkedListAnimation"
@@ -74,15 +76,105 @@ const animations = {
     states: linkedListReversalStates,
     render: (title, states) => <LinkedListAnimation title={title} states={states} />,
   },
+  "stack-queue-lifo-fifo": {
+    title: "LIFO stack versus FIFO queue",
+    states: advancedAnimationStates["stack-queue-lifo-fifo"],
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+  },
+  "heap-insert-bubble": {
+    title: "Insert leaf, compare parent, swap upward",
+    states: advancedAnimationStates["heap-insert-bubble"],
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+  },
+  "trie-prefix-branch": {
+    title: "Reuse shared prefix before branching",
+    states: advancedAnimationStates["trie-prefix-branch"],
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+  },
   "recursion-factorial-unwind": {
     title: "Factorial calls grow, hit the base case, then unwind",
     states: recursionFactorialStates,
     render: (title, states) => <RecursionAnimation title={title} states={states} />,
   },
+  "backtracking-choose-undo": {
+    title: "Choose, explore, dead end, undo, alternate",
+    states: advancedAnimationStates["backtracking-choose-undo"],
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+  },
   "tree-preorder-traversal": {
     title: "Preorder traversal: root, left, right",
     states: treePreorderStates,
     render: (title, states) => <TreeTraversalAnimation title={title} states={states} />,
+  },
+  "bst-search-invariant": {
+    title: "Use the BST invariant to choose one direction",
+    states: advancedAnimationStates["bst-search-invariant"],
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+  },
+  "graph-adjacency-build": {
+    title: "Edges and adjacency list represent the same graph",
+    states: advancedAnimationStates["graph-adjacency-build"],
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+  },
+  "dfs-bfs-frontier": {
+    title: "Same graph, different frontier discipline",
+    states: advancedAnimationStates["dfs-bfs-frontier"],
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+  },
+  "grid-graph-frontier": {
+    title: "Traversal grows from one start through a frontier",
+    states: advancedAnimationStates["grid-graph-frontier"],
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+  },
+  "topological-sort-kahn": {
+    title: "Kahn's algorithm processes zero-indegree nodes",
+    states: advancedAnimationStates["topological-sort-kahn"],
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+  },
+  "union-find-compression": {
+    title: "Find root, then compress the parent chain",
+    states: advancedAnimationStates["union-find-compression"],
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+  },
+  "greedy-interval-selection": {
+    title: "Select the earliest-finishing compatible interval",
+    states: advancedAnimationStates["greedy-interval-selection"],
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+  },
+  "dp-1d-fill": {
+    title: "Fill each state from previously solved states",
+    states: advancedAnimationStates["dp-1d-fill"],
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+  },
+  "dp-2d-grid-paths": {
+    title: "Grid paths: each cell is top plus left",
+    states: advancedAnimationStates["dp-2d-grid-paths"],
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+  },
+  "dp-take-skip": {
+    title: "Take versus skip, then merge with max",
+    states: advancedAnimationStates["dp-take-skip"],
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+  },
+  "pattern-recognition-clues": {
+    title: "Clues suggest a pattern but do not guarantee one",
+    states: advancedAnimationStates["pattern-recognition-clues"],
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+  },
+  "timed-problem-phases": {
+    title: "Calm phase budgets for timed problems",
+    states: advancedAnimationStates["timed-problem-phases"],
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+  },
+  "company-mission-review": {
+    title: "Target, solve, then review misses by root cause",
+    states: advancedAnimationStates["company-mission-review"],
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+  },
+  "final-mastery-readiness": {
+    title: "Five capstone abilities converge into readiness",
+    states: advancedAnimationStates["final-mastery-readiness"],
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
   },
 } satisfies Record<AlgorithmAnimationSpec["id"], RegisteredAnimation<any>>
 
