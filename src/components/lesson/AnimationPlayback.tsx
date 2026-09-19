@@ -1,4 +1,7 @@
 import { type ReactNode, useEffect, useState } from "react"
+import { getCodeTrace } from "../../learning/animations/codeTraceRegistry"
+import type { AlgorithmAnimationId } from "../../learning/types"
+import CodeTracePanel from "./CodeTracePanel"
 
 const AUTOPLAY_INTERVAL_MS = 2000
 
@@ -8,6 +11,10 @@ interface AnimationPlaybackProps<TState> {
   getOperation: (state: TState) => string
   getMessage: (state: TState) => string
   children: (state: TState, index: number) => ReactNode
+  /** When provided, renders a synchronized Code Trace panel alongside the
+   * visual, reading THIS SAME playback's `index` — no separate timeline,
+   * no duplicated Previous/Play/Pause/Next/Restart controls. */
+  traceId?: AlgorithmAnimationId
 }
 
 export default function AnimationPlayback<TState>({
@@ -16,6 +23,7 @@ export default function AnimationPlayback<TState>({
   getOperation,
   getMessage,
   children,
+  traceId,
 }: AnimationPlaybackProps<TState>) {
   const [index, setIndex] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -42,6 +50,8 @@ export default function AnimationPlayback<TState>({
   }, [isPlaying, isLast, states.length, index])
 
   if (!current) return null
+
+  const trace = traceId ? getCodeTrace(traceId) : undefined
 
   const goPrevious = () => {
     setIsPlaying(false)
@@ -79,11 +89,17 @@ export default function AnimationPlayback<TState>({
         </span>
       </div>
 
-      {children(current, index)}
+      <div className={trace ? "grid items-stretch gap-4 lg:grid-cols-[3fr_2fr]" : undefined}>
+        <div>
+          {children(current, index)}
 
-      <div className="mt-4 rounded-xl border border-white/10 bg-black/20 px-3.5 py-3">
-        <div className="text-[10px] font-black tracking-wider text-[#A7CE65]">{getOperation(current)}</div>
-        <p className="mt-1 text-xs leading-relaxed text-gray-300">{getMessage(current)}</p>
+          <div className="mt-4 rounded-xl border border-white/10 bg-black/20 px-3.5 py-3">
+            <div className="text-[10px] font-black tracking-wider text-[#A7CE65]">{getOperation(current)}</div>
+            <p className="mt-1 text-xs leading-relaxed text-gray-300">{getMessage(current)}</p>
+          </div>
+        </div>
+
+        {trace && <CodeTracePanel trace={trace} currentStep={index} />}
       </div>
 
       <div className="mt-4 flex flex-wrap gap-2">

@@ -5,14 +5,28 @@ import type {
   PrefixSumState,
   TwoPointersState,
 } from "../../learning/animations/patternBasicsStates"
+import type { AlgorithmAnimationId } from "../../learning/types"
 import AnimationPlayback from "./AnimationPlayback"
 
 type PatternState = ComplexityState | HashingState | TwoPointersState | PrefixSumState | IntervalsState
 
+type PatternKind = "complexity" | "hashing" | "two-pointers" | "prefix-sum" | "intervals"
+
 interface PatternBasicsAnimationProps<TState extends PatternState> {
   title: string
   states: TState[]
-  kind: "complexity" | "hashing" | "two-pointers" | "prefix-sum" | "intervals"
+  kind: PatternKind
+}
+
+/** Each `kind` maps to exactly one production animation id — resolved here
+ * rather than threaded as a separate prop, since `kind` already uniquely
+ * determines it. */
+const KIND_TO_TRACE_ID: Record<PatternKind, AlgorithmAnimationId> = {
+  complexity: "complexity-growth",
+  hashing: "hashing-frequency-map",
+  "two-pointers": "two-pointers-opposite-sum",
+  "prefix-sum": "prefix-sum-range-query",
+  intervals: "intervals-merge-overlap",
 }
 
 export default function PatternBasicsAnimation<TState extends PatternState>({
@@ -26,6 +40,7 @@ export default function PatternBasicsAnimation<TState extends PatternState>({
       states={states}
       getOperation={state => state.operation}
       getMessage={state => state.message}
+      traceId={KIND_TO_TRACE_ID[kind]}
     >
       {state => renderPatternState(kind, state)}
     </AnimationPlayback>

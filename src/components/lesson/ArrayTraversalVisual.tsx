@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react"
 import type { ArrayTraversalState } from "../../learning/animations/arraysInPlaceStates"
+import { getCodeTrace } from "../../learning/animations/codeTraceRegistry"
+import CodeTracePanel from "./CodeTracePanel"
 
 interface ArrayTraversalVisualProps {
   title: string
   states: ArrayTraversalState[]
 }
+
+const TRACE = getCodeTrace("arrays-in-place-reversal")
 
 export default function ArrayTraversalVisual({ title, states }: ArrayTraversalVisualProps) {
   const [index, setIndex] = useState(0)
@@ -69,38 +73,44 @@ export default function ArrayTraversalVisual({ title, states }: ArrayTraversalVi
         </span>
       </div>
 
-      <div className="overflow-x-auto pb-1">
-        <div className="inline-flex gap-2 min-w-max">
-          {current.values.map((value, cellIndex) => {
-            const isActive = cellIndex === current.activeIndex
-            const isLeft = cellIndex === current.leftIndex
-            const isRight = cellIndex === current.rightIndex
-            return (
-              <div key={`${index}-${cellIndex}`} className="relative flex flex-col items-center pt-7">
-                <div className="absolute top-0 flex gap-1">
-                  {isActive && <span className="text-[10px] font-black text-[#A7CE65]">idx</span>}
-                  {isLeft && <span className="text-[10px] font-black text-[#A7CE65]">L</span>}
-                  {isRight && <span className="text-[10px] font-black text-amber-300">R</span>}
-                </div>
-                <div
-                  className={`w-11 h-11 rounded-xl flex items-center justify-center text-sm font-black border transition-colors ${
-                    isActive || isLeft || isRight
-                      ? "bg-[#1DB584] text-white border-[#1DB584]"
-                      : "bg-black/30 text-gray-300 border-white/10"
-                  }`}
-                >
-                  {value}
-                </div>
-                <span className="mt-1.5 text-[10px] text-gray-500">{cellIndex}</span>
-              </div>
-            )
-          })}
-        </div>
-      </div>
+      <div className={TRACE ? "grid items-stretch gap-4 lg:grid-cols-[3fr_2fr]" : undefined}>
+        <div>
+          <div className="overflow-x-auto pb-1">
+            <div className="inline-flex gap-2 min-w-max">
+              {current.values.map((value, cellIndex) => {
+                const isActive = cellIndex === current.activeIndex
+                const isLeft = cellIndex === current.leftIndex
+                const isRight = cellIndex === current.rightIndex
+                return (
+                  <div key={`${index}-${cellIndex}`} className="relative flex flex-col items-center pt-7">
+                    <div className="absolute top-0 flex gap-1">
+                      {isActive && <span className="text-[10px] font-black text-[#A7CE65]">idx</span>}
+                      {isLeft && <span className="text-[10px] font-black text-[#A7CE65]">L</span>}
+                      {isRight && <span className="text-[10px] font-black text-amber-300">R</span>}
+                    </div>
+                    <div
+                      className={`w-11 h-11 rounded-xl flex items-center justify-center text-sm font-black border transition-colors ${
+                        isActive || isLeft || isRight
+                          ? "bg-[#1DB584] text-white border-[#1DB584]"
+                          : "bg-black/30 text-gray-300 border-white/10"
+                      }`}
+                    >
+                      {value}
+                    </div>
+                    <span className="mt-1.5 text-[10px] text-gray-500">{cellIndex}</span>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
 
-      <div className="mt-4 rounded-xl bg-black/20 border border-white/10 px-3.5 py-3">
-        <div className="text-[10px] font-black tracking-wider text-[#A7CE65]">{current.operation}</div>
-        <p className="mt-1 text-xs leading-relaxed text-gray-300">{current.message}</p>
+          <div className="mt-4 rounded-xl bg-black/20 border border-white/10 px-3.5 py-3">
+            <div className="text-[10px] font-black tracking-wider text-[#A7CE65]">{current.operation}</div>
+            <p className="mt-1 text-xs leading-relaxed text-gray-300">{current.message}</p>
+          </div>
+        </div>
+
+        {TRACE && <CodeTracePanel trace={TRACE} currentStep={index} />}
       </div>
 
       <div className="mt-4 flex flex-wrap gap-2">

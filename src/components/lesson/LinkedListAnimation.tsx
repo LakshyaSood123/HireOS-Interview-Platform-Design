@@ -13,6 +13,7 @@ export default function LinkedListAnimation({ title, states }: LinkedListAnimati
       states={states}
       getOperation={state => state.operation}
       getMessage={state => state.message}
+      traceId="linked-list-reversal"
     >
       {state => (
         <div>

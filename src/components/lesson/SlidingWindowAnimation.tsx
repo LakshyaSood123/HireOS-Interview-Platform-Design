@@ -17,6 +17,7 @@ export default function SlidingWindowAnimation({ title, states }: SlidingWindowA
       states={states}
       getOperation={state => state.operation}
       getMessage={state => state.message}
+      traceId="sliding-window-variable"
     >
       {state => {
         const hasWindow = state.right >= state.left

@@ -40,6 +40,7 @@ export default function TreeTraversalAnimation({ title, states }: TreeTraversalA
       states={states}
       getOperation={state => state.operation}
       getMessage={state => state.message}
+      traceId="tree-preorder-traversal"
     >
       {state => (
         <div className="grid gap-4 md:grid-cols-[1fr_0.85fr]">

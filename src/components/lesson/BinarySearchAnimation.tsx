@@ -17,6 +17,7 @@ export default function BinarySearchAnimation({ title, states }: BinarySearchAni
       states={states}
       getOperation={state => state.operation}
       getMessage={state => state.message}
+      traceId="binary-search-decision"
     >
       {state => (
         <div>

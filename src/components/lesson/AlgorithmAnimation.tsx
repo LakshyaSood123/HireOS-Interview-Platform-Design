@@ -79,17 +79,17 @@ const animations = {
   "stack-queue-lifo-fifo": {
     title: "LIFO stack versus FIFO queue",
     states: advancedAnimationStates["stack-queue-lifo-fifo"],
-    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} traceId="stack-queue-lifo-fifo" />,
   },
   "heap-insert-bubble": {
     title: "Insert leaf, compare parent, swap upward",
     states: advancedAnimationStates["heap-insert-bubble"],
-    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} traceId="heap-insert-bubble" />,
   },
   "trie-prefix-branch": {
     title: "Reuse shared prefix before branching",
     states: advancedAnimationStates["trie-prefix-branch"],
-    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} traceId="trie-prefix-branch" />,
   },
   "recursion-factorial-unwind": {
     title: "Factorial calls grow, hit the base case, then unwind",
@@ -99,7 +99,7 @@ const animations = {
   "backtracking-choose-undo": {
     title: "Choose, explore, dead end, undo, alternate",
     states: advancedAnimationStates["backtracking-choose-undo"],
-    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} traceId="backtracking-choose-undo" />,
   },
   "tree-preorder-traversal": {
     title: "Preorder traversal: root, left, right",
@@ -109,72 +109,72 @@ const animations = {
   "bst-search-invariant": {
     title: "Use the BST invariant to choose one direction",
     states: advancedAnimationStates["bst-search-invariant"],
-    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} traceId="bst-search-invariant" />,
   },
   "graph-adjacency-build": {
     title: "Edges and adjacency list represent the same graph",
     states: advancedAnimationStates["graph-adjacency-build"],
-    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} traceId="graph-adjacency-build" />,
   },
   "dfs-bfs-frontier": {
     title: "Same graph, different frontier discipline",
     states: advancedAnimationStates["dfs-bfs-frontier"],
-    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} traceId="dfs-bfs-frontier" />,
   },
   "grid-graph-frontier": {
     title: "Traversal grows from one start through a frontier",
     states: advancedAnimationStates["grid-graph-frontier"],
-    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} traceId="grid-graph-frontier" />,
   },
   "topological-sort-kahn": {
     title: "Kahn's algorithm processes zero-indegree nodes",
     states: advancedAnimationStates["topological-sort-kahn"],
-    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} traceId="topological-sort-kahn" />,
   },
   "union-find-compression": {
     title: "Find root, then compress the parent chain",
     states: advancedAnimationStates["union-find-compression"],
-    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} traceId="union-find-compression" />,
   },
   "greedy-interval-selection": {
     title: "Select the earliest-finishing compatible interval",
     states: advancedAnimationStates["greedy-interval-selection"],
-    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} traceId="greedy-interval-selection" />,
   },
   "dp-1d-fill": {
     title: "Fill each state from previously solved states",
     states: advancedAnimationStates["dp-1d-fill"],
-    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} traceId="dp-1d-fill" />,
   },
   "dp-2d-grid-paths": {
     title: "Grid paths: each cell is top plus left",
     states: advancedAnimationStates["dp-2d-grid-paths"],
-    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} traceId="dp-2d-grid-paths" />,
   },
   "dp-take-skip": {
     title: "Take versus skip, then merge with max",
     states: advancedAnimationStates["dp-take-skip"],
-    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} traceId="dp-take-skip" />,
   },
   "pattern-recognition-clues": {
     title: "Clues suggest a pattern but do not guarantee one",
     states: advancedAnimationStates["pattern-recognition-clues"],
-    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} traceId="pattern-recognition-clues" />,
   },
   "timed-problem-phases": {
     title: "Calm phase budgets for timed problems",
     states: advancedAnimationStates["timed-problem-phases"],
-    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} traceId="timed-problem-phases" />,
   },
   "company-mission-review": {
     title: "Target, solve, then review misses by root cause",
     states: advancedAnimationStates["company-mission-review"],
-    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} traceId="company-mission-review" />,
   },
   "final-mastery-readiness": {
     title: "Five capstone abilities converge into readiness",
     states: advancedAnimationStates["final-mastery-readiness"],
-    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} />,
+    render: (title, states) => <AdvancedConceptAnimation title={title} states={states} traceId="final-mastery-readiness" />,
   },
 } satisfies Record<AlgorithmAnimationSpec["id"], RegisteredAnimation<any>>
 

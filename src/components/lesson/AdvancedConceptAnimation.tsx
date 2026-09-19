@@ -1,18 +1,24 @@
 import type { AdvancedAnimationState } from "../../learning/animations/advancedAnimationStates"
+import type { AlgorithmAnimationId } from "../../learning/types"
 import AnimationPlayback from "./AnimationPlayback"
 
 interface AdvancedConceptAnimationProps {
   title: string
   states: AdvancedAnimationState[]
+  /** This component is reused for 14 different animation ids with no other
+   * internal discriminator, so the caller (AlgorithmAnimation.tsx, which
+   * already knows the id for each registry entry) passes it explicitly. */
+  traceId: AlgorithmAnimationId
 }
 
-export default function AdvancedConceptAnimation({ title, states }: AdvancedConceptAnimationProps) {
+export default function AdvancedConceptAnimation({ title, states, traceId }: AdvancedConceptAnimationProps) {
   return (
     <AnimationPlayback
       title={title}
       states={states}
       getOperation={state => state.operation}
       getMessage={state => state.message}
+      traceId={traceId}
     >
       {state => <AdvancedFrame state={state} />}
     </AnimationPlayback>
