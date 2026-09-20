@@ -11,6 +11,7 @@ logs/
 *.log
 .claude-replay.*
 .tmp-*
+.DS_Store
 
 # Platform-managed agentplat state, not project source. In the
 # client-initiated single-repo workspace layout (make's `Path: "."` spec) the
@@ -18,3 +19,4 @@ logs/
 # beside it.
 /.plugins/
 /.opencode-skills/
+Reagvis_Trails_Frontend_Backend_Handoff_Keshav_v2.pdf
