@@ -12,10 +12,10 @@ export default function CodeExampleTabs({ examples }: { examples: CodeExample[] 
   if (!current) return null
 
   return (
-    <div className="rounded-xl overflow-hidden border border-white/10 bg-[#0d1117]">
-      <div className="flex items-center justify-between px-4 py-2 bg-[#161b22] border-b border-white/10">
+    <div className="rounded-xl overflow-hidden border border-white/10 bg-[#0d1117] min-w-0 w-full max-w-full box-border">
+      <div className="flex items-center justify-between px-4 py-2 bg-[#161b22] border-b border-white/10 flex-wrap gap-2 min-w-0">
         <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500">Worked Example</span>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 shrink-0">
           {examples.map(ex => (
             <button
               key={ex.language}
@@ -29,7 +29,7 @@ export default function CodeExampleTabs({ examples }: { examples: CodeExample[] 
           ))}
         </div>
       </div>
-      <pre className="p-4 text-xs sm:text-sm font-mono text-emerald-300 overflow-x-auto leading-relaxed">
+      <pre className="p-4 text-xs sm:text-sm font-mono text-emerald-300 overflow-x-auto leading-relaxed min-w-0 max-w-full">
         <code>{current.code}</code>
       </pre>
     </div>

@@ -100,8 +100,8 @@ export default function NotesPanel({ repository, courseId, moduleId, lessonId, o
             .slice()
             .reverse()
             .map(note => (
-              <div key={note.id} className="rounded-xl bg-white/5 border border-white/10 p-3">
-                <p className="text-xs text-gray-200 whitespace-pre-wrap leading-relaxed">{note.text}</p>
+              <div key={note.id} className="rounded-xl bg-white/5 border border-white/10 p-3 min-w-0">
+                <p className="text-xs text-gray-200 whitespace-pre-wrap break-words leading-relaxed">{note.text}</p>
                 <div className="flex items-center justify-between mt-2">
                   <span className="text-[10px] text-gray-500">{new Date(note.updatedAt).toLocaleString()}</span>
                   <div className="flex items-center gap-2">

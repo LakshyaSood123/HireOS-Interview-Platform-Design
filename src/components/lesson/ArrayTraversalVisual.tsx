@@ -62,20 +62,22 @@ export default function ArrayTraversalVisual({ title, states }: ArrayTraversalVi
   }
 
   return (
-    <div className="rounded-2xl border border-[#1DB584]/25 bg-[#092218] p-5">
-      <div className="flex items-start justify-between gap-4 mb-4">
-        <div>
+    <div className="rounded-2xl border border-[#1DB584]/25 bg-[#092218] p-4 sm:p-5 w-full max-w-full min-w-0 box-border">
+      <div className="flex items-start justify-between gap-4 mb-4 min-w-0">
+        <div className="min-w-0">
           <p className="text-[11px] font-black uppercase tracking-wider text-[#A7CE65]">Algorithm Animation</p>
-          <h3 className="text-sm font-bold text-white mt-1">{title}</h3>
+          <h3 className="text-sm font-bold text-white mt-1 break-words">{title}</h3>
         </div>
         <span className="shrink-0 rounded-full bg-black/30 border border-white/10 px-2.5 py-1 text-[10px] font-bold text-gray-300">
           Step {index + 1}/{states.length}
         </span>
       </div>
 
-      <div className={TRACE ? "grid items-stretch gap-4 lg:grid-cols-[3fr_2fr]" : undefined}>
-        <div>
-          <div className="overflow-x-auto pb-1">
+      {/* Sequential Teaching Hierarchy: VISUAL ACTION -> PSEUDOCODE ACTION -> STATE CHANGE */}
+      <div className="flex flex-col gap-4 min-w-0 w-full">
+        {/* 1. Primary Visual Action */}
+        <div className="min-w-0 w-full">
+          <div className="overflow-x-auto pb-1 max-w-full">
             <div className="inline-flex gap-2 min-w-max">
               {current.values.map((value, cellIndex) => {
                 const isActive = cellIndex === current.activeIndex
@@ -104,21 +106,27 @@ export default function ArrayTraversalVisual({ title, states }: ArrayTraversalVi
             </div>
           </div>
 
-          <div className="mt-4 rounded-xl bg-black/20 border border-white/10 px-3.5 py-3">
+          <div className="mt-3 rounded-xl bg-black/20 border border-white/10 px-3.5 py-2.5 min-w-0">
             <div className="text-[10px] font-black tracking-wider text-[#A7CE65]">{current.operation}</div>
-            <p className="mt-1 text-xs leading-relaxed text-gray-300">{current.message}</p>
+            <p className="mt-1 text-xs leading-relaxed text-gray-300 break-words">{current.message}</p>
           </div>
         </div>
 
-        {TRACE && <CodeTracePanel trace={TRACE} currentStep={index} />}
+        {/* 2. Code Trace Action directly beneath animation */}
+        {TRACE && (
+          <div className="min-w-0 w-full">
+            <CodeTracePanel trace={TRACE} currentStep={index} />
+          </div>
+        )}
       </div>
 
-      <div className="mt-4 flex flex-wrap gap-2">
+      {/* 3. Playback Controls */}
+      <div className="mt-4 flex flex-wrap gap-2 pt-3 border-t border-white/10">
         <button
           type="button"
           onClick={goPrevious}
           disabled={isFirst}
-          className="px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold text-gray-200 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold text-gray-200 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
         >
           Previous
         </button>
@@ -126,7 +134,7 @@ export default function ArrayTraversalVisual({ title, states }: ArrayTraversalVi
           type="button"
           onClick={play}
           disabled={isPlaying}
-          className="px-3 py-2 rounded-lg bg-[#1DB584] hover:bg-[#159a6f] text-xs font-bold text-white disabled:opacity-40 disabled:cursor-not-allowed"
+          className="px-3.5 py-1.5 rounded-lg bg-[#1DB584] hover:bg-[#159a6f] text-xs font-bold text-white disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer shadow-xs transition-all"
         >
           Play
         </button>
@@ -134,7 +142,7 @@ export default function ArrayTraversalVisual({ title, states }: ArrayTraversalVi
           type="button"
           onClick={pause}
           disabled={!isPlaying}
-          className="px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold text-gray-200 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold text-gray-200 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
         >
           Pause
         </button>
@@ -142,14 +150,14 @@ export default function ArrayTraversalVisual({ title, states }: ArrayTraversalVi
           type="button"
           onClick={goNext}
           disabled={isLast}
-          className="px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold text-gray-200 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold text-gray-200 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
         >
           Next
         </button>
         <button
           type="button"
           onClick={restart}
-          className="px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold text-gray-200"
+          className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold text-gray-200 cursor-pointer transition-colors"
         >
           Restart
         </button>

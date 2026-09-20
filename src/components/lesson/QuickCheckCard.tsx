@@ -31,10 +31,10 @@ export default function QuickCheckCard({ quickCheck }: { quickCheck: QuickCheckC
             <button
               key={idx}
               onClick={() => !submitted && setSelected(idx)}
-              className={`w-full text-left px-3.5 py-2.5 rounded-xl border text-xs transition-all flex items-center justify-between gap-2 ${style}`}
+              className={`w-full text-left px-3.5 py-2.5 rounded-xl border text-xs transition-all flex items-center justify-between gap-2 min-w-0 ${style}`}
             >
-              <span>{opt}</span>
-              {submitted && isCorrectOption && <span className="text-[#1DB584] font-black">✓</span>}
+              <span className="min-w-0 flex-1 break-words">{opt}</span>
+              {submitted && isCorrectOption && <span className="text-[#1DB584] font-black shrink-0">✓</span>}
             </button>
           )
         })}
