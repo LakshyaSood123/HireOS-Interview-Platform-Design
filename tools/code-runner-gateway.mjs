@@ -46,13 +46,14 @@ const MAX_SOURCE_BYTES = 50 * 1024
 // browser. Java's single-file source launch (compile+run in one "run"
 // stage) measured ~95MB RSS for a trivial program in direct smoke testing,
 // so run_memory_limit is set well above that for headroom.
-// 15s (Piston server ceiling raised to 20s via PISTON_COMPILE_TIMEOUT in the
-// external Piston docker-compose.yaml) — this host's Docker/WSL2 filesystem
-// showed I/O-bound g++ compiles ranging ~6s-10s+ for the same trivial
-// source across repeated runs (cpu_time stayed <1s throughout), so 10s was
-// occasionally tripped by environment noise rather than a real compile
-// problem. 15s keeps a real ceiling while absorbing that variance.
-const COMPILE_TIMEOUT_MS = 15_000
+// Raised to the Piston server's actual max (20s, via PISTON_COMPILE_TIMEOUT
+// in the external Piston docker-compose.yaml) — this host's Docker/WSL2
+// filesystem is consistently I/O-bound for g++ compiles (cpu_time stays
+// under 1s while wall_time has ranged from ~6s to ~15s across sessions on
+// the same trivial source), so 15s was occasionally tripped by environment
+// noise rather than a real compile problem. This is a host I/O
+// characteristic, not a Trail Guide or compiler-semantics change.
+const COMPILE_TIMEOUT_MS = 20_000
 const RUN_TIMEOUT_MS = 3_000
 const COMPILE_CPU_TIME_MS = 10_000
 const RUN_CPU_TIME_MS = 3_000

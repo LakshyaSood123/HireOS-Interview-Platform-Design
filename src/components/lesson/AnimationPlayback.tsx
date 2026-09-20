@@ -2,6 +2,7 @@ import { type ReactNode, useEffect, useState } from "react"
 import { getCodeTrace } from "../../learning/animations/codeTraceRegistry"
 import type { AlgorithmAnimationId } from "../../learning/types"
 import CodeTracePanel from "./CodeTracePanel"
+import { useTrailGuide } from "../../assistant/TrailGuideContext"
 
 const AUTOPLAY_INTERVAL_MS = 2000
 
@@ -30,6 +31,30 @@ export default function AnimationPlayback<TState>({
   const current = states[index] ?? states[0]
   const isFirst = index === 0
   const isLast = index === states.length - 1
+
+  const { setAnimationContext } = useTrailGuide()
+
+  useEffect(() => {
+    if (current) {
+      setAnimationContext({
+        animationId: traceId ?? title,
+        step: index + 1,
+        totalSteps: states.length,
+        operation: getOperation(current),
+        message: getMessage(current),
+      })
+    }
+  }, [index, traceId, title, states.length, current, getOperation, getMessage, setAnimationContext])
+
+  // Clear on unmount ONLY (empty deps) so navigating away from this
+  // animation never leaves stale step/operation data visible to Trail
+  // Guide on a DIFFERENT checkpoint (topic isolation) — a fresh
+  // AnimationPlayback mounting elsewhere republishes its own context
+  // immediately, so this never fights the per-step update above.
+  useEffect(() => {
+    return () => setAnimationContext(null)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     setIndex(0)

@@ -1,7 +1,8 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import type { CodeLanguage, CodingActivityContent, TheoryBlock } from "../../learning/types"
 import type { CodeRunner, CodeRunResult } from "../../learning/services/codeRunner"
 import { DEVELOPMENT_MODE } from "../../config/developmentMode"
+import { useTrailGuide } from "../../assistant/TrailGuideContext"
 
 const LANGUAGE_LABEL: Record<CodeLanguage, string> = {
   python: "Python",
@@ -141,8 +142,26 @@ export default function CodeWorkspace({
   const [accepted, setAccepted] = useState(false)
   const [learnMoreOpen, setLearnMoreOpen] = useState(false)
 
+  const { setCodingContext } = useTrailGuide()
+
   const code = codeByLanguage[language] ?? ""
   const setCode = (value: string) => setCodeByLanguage(prev => ({ ...prev, [language]: value }))
+
+  useEffect(() => {
+    setCodingContext({
+      language,
+      code,
+      compilerSummary: runResult?.message || submitResult?.message,
+    })
+  }, [language, code, runResult, submitResult, setCodingContext])
+
+  // Clear on unmount ONLY so leaving a coding checkpoint never leaves stale
+  // editor code/language visible to Trail Guide on a different checkpoint
+  // (topic isolation, PART 25).
+  useEffect(() => {
+    return () => setCodingContext(null)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const handleReset = () => {
     setCode(activity.starterCode[language] ?? "")

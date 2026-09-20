@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import LandingPage from "./pages/LandingPage"
 import SetupPage from "./pages/SetupPage"
 import InterviewPage from "./pages/InterviewPage"
@@ -11,6 +11,11 @@ import TransitionPortal from "./components/forest/TransitionPortal"
 import { LanguageProvider } from "./i18n/LanguageContext"
 import { AppStateProvider, useAppState } from "./state/AppStateContext"
 import { DEVELOPMENT_MODE, isInterviewPage } from "./config/developmentMode"
+import { FeedbackProvider } from "./feedback/FeedbackContext"
+import FeedbackDrawer from "./components/feedback/FeedbackDrawer"
+import { TrailGuideProvider } from "./assistant/TrailGuideContext"
+import TrailGuideDrawer from "./components/assistant/TrailGuideDrawer"
+import TrailUtilityCluster from "./components/assistant/TrailUtilityCluster"
 
 type Page =
   | "landing"
@@ -66,6 +71,20 @@ function AppContent() {
 
   // When activeProduct is set to reagvis via card button / CTA
   const isReagvis = activeProduct === "reagvis" || page === "reagvis-trail"
+
+  // Course-First Development Mode boots straight into `page ===
+  // "reagvis-trail"` (DEVELOPMENT_MODE.DEFAULT_ENTRY) WITHOUT ever going
+  // through handleNavigate("reagvis-trail") — so on a fresh load,
+  // `activeProduct` stayed at its default "hireos" even though the learner
+  // is looking at Reagvis Trails the whole time. That mismatch fed wrong
+  // (empty) context into learningScreenContext.ts, which Feedback AND Trail
+  // Guide both derive from — this keeps `activeProduct` in sync with what's
+  // actually rendered instead of only with explicit nav clicks.
+  useEffect(() => {
+    if (isReagvis && activeProduct !== "reagvis") {
+      setActiveProduct("reagvis")
+    }
+  }, [isReagvis, activeProduct, setActiveProduct])
 
   return (
     <div className="relative font-display bg-[#071A14]">
@@ -168,7 +187,14 @@ export default function App() {
   return (
     <LanguageProvider>
       <AppStateProvider>
-        <AppContent />
+        <FeedbackProvider>
+          <TrailGuideProvider>
+            <AppContent />
+            <TrailUtilityCluster />
+            <FeedbackDrawer />
+            <TrailGuideDrawer />
+          </TrailGuideProvider>
+        </FeedbackProvider>
       </AppStateProvider>
     </LanguageProvider>
   )
