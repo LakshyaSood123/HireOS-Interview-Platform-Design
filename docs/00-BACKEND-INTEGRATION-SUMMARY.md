@@ -9,7 +9,8 @@
 | Frontend baseline | `frontend/dsa-world-v2` @ `99e1d72` — *"Redesign lesson workspace for desktop learning"* |
 | My branch | `backend/keshav-current-baseline` (branched from that exact commit) |
 | Merge plan | Smaller reviewable pull requests into the frontend branch — **not** one large merge at the end |
-| Backend code written so far | None. Day 0 (documents) is complete and approved; Day 1 starts now. |
+| Backend code | [`backend/`](../backend) — a self-contained npm workspace, because the repo root `src/` is the frontend app |
+| Progress | Days 0 and 1 complete. Day 2 (progress, XP, lives, streak) is next. |
 
 ---
 
@@ -120,8 +121,8 @@ The local versions stay in the code as the offline fallback.
 | Day | What ships | Status |
 |---|---|---|
 | 0 | These documents, revised against the final handoff SHA | ✅ **Done** |
-| 1 | Server skeleton, MongoDB, login, health check | ▶ Today |
-| 2 | Progress, XP, lives, streak, locked/available logic | ⬜ |
+| 1 | Server skeleton, MongoDB, login, health check | ✅ **Done** |
+| 2 | Progress, XP, lives, streak, locked/available logic | ▶ Next |
 | 3 | Notes + the frontend adapters — progress survives logout | ⬜ |
 | 4 | Code run/submit endpoints on **Piston**, server-side hidden fixtures | ⬜ |
 | 5 | Interview result + recommendations | ⬜ |

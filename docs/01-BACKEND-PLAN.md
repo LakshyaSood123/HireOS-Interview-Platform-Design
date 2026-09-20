@@ -100,17 +100,26 @@ Source files: `courseRegistry.ts`, `content/dsaSkeleton.ts`, `scripts/validateCu
 
 ## 5. Folder layout
 
+The repository root `src/` is the frontend Vite app, so the backend is a self-contained npm
+workspace in `backend/` and this layout sits under `backend/src/`:
+
 ```
-src/
-  server.ts              express app + boot
-  config/env.ts          all environment variables, one place
-  db/connect.ts          mongo connection + index creation on boot
-  middleware/            auth, validate(zod), errorHandler, requestId, rateLimit
-  modules/
-    auth/  curriculum/  learning/  notes/  execution/
-    interviews/  recommendations/  practice/  analytics/
-  shared/                response envelope, error codes, shared types
-scripts/                 seedCurriculum.ts, seedPractice.ts, seedJudgeFixtures.ts, seedDemoUser.ts
+backend/
+  src/
+    server.ts            boot: database first, then listen
+    app.ts               express app factory (tests build it without listening)
+    config/env.ts        all environment variables, one place
+    db/connect.ts        mongo connection + index creation on boot
+    db/models.ts         the model list indexes are built from
+    middleware/          auth, validate(zod), errorHandler, requestId, rateLimit, httpLogger
+    modules/
+      auth/  system/  curriculum/  learning/  notes/  execution/
+      interviews/  recommendations/  practice/  analytics/
+    docs/swagger.ts      serves ../docs/openapi.yaml at /api/v1/docs
+    shared/              response envelope, error codes, logger, shared types
+  scripts/               verify-day1.sh, then seedCurriculum.ts, seedPractice.ts,
+                         seedJudgeFixtures.ts, seedDemoUser.ts
+  .env.example           placeholders only; .env is git-ignored
 docs/                    these documents + openapi.yaml
 ```
 
@@ -156,8 +165,8 @@ compiler left to write, wait for, or defer.
 
 | Day | Work | Done when |
 |---|---|---|
-| 0 | These documents | Reviewed and approved |
-| 1 | Express skeleton, MongoDB connection, env config, `/health`, register/login/refresh/logout, `/users/me` | A clean machine boots by following the README |
+| 0 | These documents | Reviewed and approved ✅ |
+| 1 | Express skeleton, MongoDB connection, env config, `/health`, register/login/refresh/logout, `/users/me` | A clean machine boots by following the README ✅ |
 | 2 | Curriculum seeder, enrollment, course state, start module, complete checkpoint, reward ledger, XP / lives / streak | Completed, current, available and locked all persist correctly |
 | 3 | Notes API, `ApiProgressRepository`, `ApiNotesRepository`, localStorage import path | Logout and login restore progress and notes exactly |
 | 4 | `/code/run`, `/code/submit`, submission storage, rate and size limits, server-side hidden fixtures, the `mock` and `piston` providers | CodeWorkspace works against the API with no UI change, on real Python/C++/Java |

@@ -77,6 +77,12 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/ErrorEnvelope" }
+              example:
+                error:
+                  code: "EMAIL_ALREADY_REGISTERED"
+                  message: "That email address is already registered."
+                  requestId: "req_err"
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /auth/login:
     post:
@@ -123,12 +129,23 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/AuthSuccess" }
-        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "400": { $ref: "#/components/responses/ValidationError" }
+        "401":
+          description: |
+            The refresh token is unknown, expired, already rotated or revoked.
+            Presenting an already-rotated token is treated as theft and revokes
+            every live session for that user.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErrorEnvelope" }
+              example:
+                error: { code: "UNAUTHENTICATED", message: "Invalid or expired refresh token.", requestId: "req_err" }
 
   /auth/logout:
     post:
       tags: [Auth]
       summary: Revoke a refresh token
+      description: Requires the access token in `Authorization`; the refresh token must belong to the same user.
       requestBody:
         required: true
         content:
@@ -139,7 +156,10 @@ paths:
               properties:
                 refreshToken: { type: string }
       responses:
-        "204": { description: Revoked }
+        "204": { description: Revoked. Repeating the call is harmless. }
+        "400": { $ref: "#/components/responses/ValidationError" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "403": { $ref: "#/components/responses/Forbidden" }
 
   /users/me:
     get:
@@ -725,7 +745,7 @@ components:
           properties:
             code:
               type: string
-              enum: [UNAUTHENTICATED, FORBIDDEN, NOT_FOUND, VALIDATION_ERROR, MODULE_LOCKED, CHECKPOINT_LOCKED, ALREADY_COMPLETED, EXECUTION_TIMEOUT, COMPILE_ERROR, RUNNER_UNAVAILABLE, RATE_LIMITED]
+              enum: [UNAUTHENTICATED, FORBIDDEN, NOT_FOUND, VALIDATION_ERROR, EMAIL_ALREADY_REGISTERED, MODULE_LOCKED, CHECKPOINT_LOCKED, ALREADY_COMPLETED, EXECUTION_TIMEOUT, COMPILE_ERROR, PAYLOAD_TOO_LARGE, RUNNER_UNAVAILABLE, RATE_LIMITED, INTERNAL_ERROR]
             message: { type: string }
             details: { type: object, additionalProperties: true }
             requestId: { type: string }

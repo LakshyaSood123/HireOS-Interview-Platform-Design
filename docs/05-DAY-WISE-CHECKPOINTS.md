@@ -7,8 +7,8 @@
 | Day | Theme | Status |
 |---|---|---|
 | **0** | Planning, baseline, approval | ✅ **Done** |
-| **1** | Server skeleton + auth | ▶ **In progress** |
-| 2 | Progress, XP, lives, streak | ⬜ Not started |
+| **1** | Server skeleton + auth | ✅ **Done** |
+| 2 | Progress, XP, lives, streak | ▶ **Next** |
 | 3 | Notes + frontend adapters | ⬜ Not started |
 | 4 | Code execution via Piston | ⬜ Not started |
 | 5 | Interview handoff + recommendations | ⬜ Not started |
@@ -59,37 +59,51 @@ integration work is wasted on a stale baseline.
 
 ---
 
-## Day 1 — Server skeleton and authentication ▶
+## Day 1 — Server skeleton and authentication ✅
 
 **Goal:** a clean machine can clone the repo, follow the README, and reach a running authenticated
 API backed by Atlas.
 
+The backend lives in [`backend/`](../backend), a self-contained npm workspace — the repository root
+`src/` is the frontend Vite app, so plan §5's layout sits under `backend/src/`.
+
 ### Checkpoints
 
-| # | Checkpoint | Done when |
-|---|---|---|
-| 1.1 | Project scaffold — TypeScript, Express 5, folder layout from plan §5 | `npm run dev` boots on `PORT` (default **4883**) |
-| 1.2 | `config/env.ts` — every environment variable validated by Zod at boot, `PORT` defaulting to 4883 | A missing `MONGO_URI` fails loudly at startup, not on first request |
-| 1.3 | `db/connect.ts` — Atlas connection + index creation on boot | Logs `db: connected` |
-| 1.4 | Middleware — `requestId`, `errorHandler`, `validate(zod)`, `rateLimit`, pino logging | Every response carries `meta.requestId`; every error uses the `{ error }` envelope |
-| 1.5 | `GET /health` | Returns `{ status, db, uptimeSeconds }` |
-| 1.6 | `users` + `refreshTokens` models with indexes | `email` unique; TTL index on `expiresAt` |
-| 1.7 | `POST /auth/register` — bcrypt, duplicate email → 409 | |
-| 1.8 | `POST /auth/login` — access (~15 min) + refresh token | |
-| 1.9 | `POST /auth/refresh` — rotates the refresh token | The old refresh token stops working |
-| 1.10 | `POST /auth/logout` — revokes the refresh token | |
-| 1.11 | `GET /users/me` — identity from the verified token only | |
-| 1.12 | Swagger served at `/api/v1/docs` | |
-| 1.13 | `README.md` + `.env.example` (placeholders only) | |
+| # | Checkpoint | Done when | Status |
+|---|---|---|---|
+| 1.1 | Project scaffold — TypeScript, Express 5, folder layout from plan §5 | `npm run dev` boots on `PORT` (default **4883**) | ✅ |
+| 1.2 | `config/env.ts` — every environment variable validated by Zod at boot, `PORT` defaulting to 4883 | A missing `MONGO_URI` fails loudly at startup, not on first request | ✅ |
+| 1.3 | `db/connect.ts` — Atlas connection + index creation on boot | Logs `db: connected` | ✅ |
+| 1.4 | Middleware — `requestId`, `errorHandler`, `validate(zod)`, `rateLimit`, pino logging | Every response carries `meta.requestId`; every error uses the `{ error }` envelope | ✅ |
+| 1.5 | `GET /health` | Returns `{ status, db, uptimeSeconds }` | ✅ |
+| 1.6 | `users` + `refreshTokens` models with indexes | `email` unique; TTL index on `expiresAt` | ✅ |
+| 1.7 | `POST /auth/register` — bcrypt, duplicate email → 409 | | ✅ |
+| 1.8 | `POST /auth/login` — access (~15 min) + refresh token | | ✅ |
+| 1.9 | `POST /auth/refresh` — rotates the refresh token | The old refresh token stops working | ✅ |
+| 1.10 | `POST /auth/logout` — revokes the refresh token | | ✅ |
+| 1.11 | `GET /users/me` — identity from the verified token only | | ✅ |
+| 1.12 | Swagger served at `/api/v1/docs` | | ✅ |
+| 1.13 | `README.md` + `.env.example` (placeholders only) | | ✅ |
 
 ### Verification
 
 ```bash
+cd backend
+cp .env.example .env     # fill in MONGO_URI and the two JWT secrets
 npm install && npm run dev
 curl localhost:4883/api/v1/health
 # → { "data": { "status": "ok", "db": "connected", ... } }
+```
 
-# register → login → me → refresh → logout
+The whole flow below is asserted by `backend/scripts/verify-day1.sh`, which runs against a live
+server and checks every "Passes when" line:
+
+```bash
+npm run verify:day1      # 47 checks — register → login → me → refresh → logout
+```
+
+```bash
+# the same flow by hand
 curl -X POST localhost:4883/api/v1/auth/register \
   -H 'content-type: application/json' \
   -d '{"email":"demo@example.com","password":"correct-horse-battery","displayName":"Demo"}'
@@ -101,17 +115,40 @@ curl -X POST localhost:4883/api/v1/auth/login \
 curl localhost:4883/api/v1/users/me -H "authorization: Bearer $ACCESS"
 ```
 
-**Passes when:**
+**Passes when:** ✅ all verified — 47/47 on 20 Sep 2026.
 
-- A wrong password returns `401`, never a hint about which field was wrong.
-- A second register with the same email returns `409`.
-- `GET /users/me` with no token, an expired token or a tampered token returns `401`.
-- A refresh token cannot be reused after rotation or after logout.
-- `passwordHash` never appears in any response or log line.
-- No secret is committed — `.env` is git-ignored, `.env.example` has placeholders only.
+- A wrong password returns `401`, never a hint about which field was wrong. ✅ Both a wrong password
+  and an unknown email return the same `"Invalid email or password."`, and an unknown email is
+  compared against a throwaway hash so the two take the same time.
+- A second register with the same email returns `409`. ✅ `EMAIL_ALREADY_REGISTERED`, enforced by
+  the unique index rather than a read-then-write.
+- `GET /users/me` with no token, an expired token or a tampered token returns `401`. ✅ A refresh
+  token presented as an access token is also rejected.
+- A refresh token cannot be reused after rotation or after logout. ✅ Rotation revokes the presented
+  token in the same atomic write that claims it; presenting an already-rotated token revokes every
+  live session for that user.
+- `passwordHash` never appears in any response or log line. ✅ `select: false` on the model, plus a
+  redaction list in `shared/logger.ts`. Grepped the boot-to-shutdown log for the password, the
+  hash prefix and the token prefix — none present.
+- No secret is committed — `.env` is git-ignored, `.env.example` has placeholders only. ✅ The root
+  `.gitignore` excludes `.env*`, so `backend/.gitignore` re-includes `.env.example` explicitly.
+
+**Also done, beyond the checkpoint list:** refresh-token reuse detection, `x-request-id` request
+and response header, CORS allowlist, helmet, a body-size cap, and the auth/general rate limits from
+the contract.
+
+**Contract drift fixed:** `openapi.yaml` gained `EMAIL_ALREADY_REGISTERED`, `PAYLOAD_TOO_LARGE` and
+`INTERNAL_ERROR` in the error enum, and the real response codes for `/auth/refresh` and
+`/auth/logout` — the codes the implementation actually returns.
+
+**Carried to Day 7:** no automated tests yet (`npm test` passes with none). Day 7.2 owns the
+Vitest + in-memory MongoDB suite; `verify-day1.sh` is the manual stand-in until then.
 
 **Demo line:** "Register, log in, and the server knows who you are — from the token, never from the
 request body."
+
+**Demo script and a reviewer's manual verification walkthrough:**
+[06-DAY-1-DEMO-AND-VERIFICATION.md](./06-DAY-1-DEMO-AND-VERIFICATION.md).
 
 ---
 
