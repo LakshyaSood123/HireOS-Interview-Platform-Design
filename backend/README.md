@@ -14,10 +14,14 @@ Plans and contract live in [`../docs/`](../docs). The machine-readable contract 
 
 ```bash
 cd backend
-cp .env.example .env     # then fill in MONGO_URI and the two JWT secrets
+cp .env.example .env       # then fill in MONGO_URI and the two JWT secrets
 npm install
-npm run dev              # http://localhost:4883
+npm run seed:curriculum    # 7 zones · 29 modules · 107 checkpoints
+npm run dev                # http://localhost:4883
 ```
+
+The seeder is a one-off. Skip it and the server still boots — auth and health work — but every
+learning endpoint returns 404 with a message naming the command, and the boot log says so.
 
 ```bash
 curl localhost:4883/api/v1/health
@@ -84,24 +88,76 @@ stops the process with a readable message — it never fails later on a request.
 | `npm run build` | Compile to `dist/` |
 | `npm start` | Run the compiled build |
 | `npm run typecheck` | `tsc --noEmit` |
-| `npm test` | Vitest, in-memory MongoDB — never touches Atlas |
+| `npm test` | Vitest, in-memory MongoDB — never touches Atlas (none yet; Day 7) |
+| `npm run seed` | Everything seedable. Today that is the curriculum |
+| `npm run seed:curriculum` | Writes the curriculum snapshot. `-- --dry-run` builds and checks without writing |
+| `npm run verify:day1` | 47 assertions — the auth flow, against a running server |
+| `npm run verify:day2` | 67 assertions — progress, XP, locks, streak, against a running server |
+| `npm run verify:parity` | Backend engine vs. the frontend's `progressEngine.ts`. No server, no database |
+| `npm run verify:ledger` | Reconciles stored XP against the reward ledger, for every user |
+
+### Seeding the curriculum
+
+```bash
+npm run seed:curriculum -- --dry-run              # build and check, write nothing
+npm run seed:curriculum -- --version=2026-09-16   # name the snapshot yourself
+npm run seed:curriculum -- --course=dsa-foundations
+```
+
+It imports the frontend's own `src/learning/courseRegistry.ts` and writes the course's **ID
+structure only** — ids, order, type, XP, mastery bonus, prerequisites, a coding-activity flag, and
+one short title per zone and module for the lock messages. No theory, no questions, no starter
+code, no solutions. That is enforced by a field allowlist and a 120-character cap on every string
+in `scripts/lib/buildSnapshot.ts`: add anything else and the seeder refuses to write and names the
+field.
+
+Re-running is safe. The same structure is an upsert on `{ courseId, version }`, and `isActive`
+moves to the snapshot just written — a unique partial index guarantees exactly one active snapshot
+per course, so a rollback is a flag flip. **Restart the API afterwards**: it loads the snapshot at
+boot and keeps it in memory.
 
 ---
 
-## What is live today (Day 1)
+## What is live today (Days 1–2)
 
-| Method | Path | Auth |
-|---|---|---|
-| `GET` | `/api/v1/health` | — |
-| `POST` | `/api/v1/auth/register` | — |
-| `POST` | `/api/v1/auth/login` | — |
-| `POST` | `/api/v1/auth/refresh` | — |
-| `POST` | `/api/v1/auth/logout` | Bearer |
-| `GET` | `/api/v1/users/me` | Bearer |
-| `GET` | `/api/v1/docs` | — |
+| Method | Path | Auth | Day |
+|---|---|---|---|
+| `GET` | `/api/v1/health` | — | 1 |
+| `POST` | `/api/v1/auth/register` | — | 1 |
+| `POST` | `/api/v1/auth/login` | — | 1 |
+| `POST` | `/api/v1/auth/refresh` | — | 1 |
+| `POST` | `/api/v1/auth/logout` | Bearer | 1 |
+| `GET` | `/api/v1/users/me` | Bearer | 1 |
+| `GET` | `/api/v1/docs` | — | 1 |
+| `GET` | `/api/v1/me/courses/{courseId}/state` | Bearer | 2 |
+| `PUT` | `/api/v1/me/courses/{courseId}/active` | Bearer | 2 |
+| `POST` | `/api/v1/me/modules/{moduleId}/start` | Bearer | 2 |
+| `GET` | `/api/v1/me/modules/{moduleId}/progress` | Bearer | 2 |
+| `POST` | `/api/v1/me/checkpoints/{checkpointId}/complete` | Bearer | 2 |
+| `POST` | `/api/v1/me/attempts` | Bearer | 2 |
 
-Learning, notes, execution, interviews, recommendations and analytics arrive on Days 2–6, per
+Notes, execution, interviews, recommendations and analytics arrive on Days 3–6, per
 [`../docs/05-DAY-WISE-CHECKPOINTS.md`](../docs/05-DAY-WISE-CHECKPOINTS.md).
+
+### Walking through the learning flow
+
+```bash
+BASE=http://localhost:4883/api/v1
+ACCESS=…                                    # from /auth/login
+
+# where the learner stands — this call also enrolls, first time
+curl -s $BASE/me/courses/dsa-foundations/state -H "authorization: Bearer $ACCESS" | jq .data
+
+# a locked module says no, and says what is missing
+curl -sX POST $BASE/me/modules/graphs/start -H "authorization: Bearer $ACCESS" \
+  -H 'content-type: application/json' -d '{"courseId":"dsa-foundations"}'
+# → 409 MODULE_LOCKED  details.missingPrerequisites: ["trees-5"]
+
+# complete one — and again, and again
+curl -sX POST $BASE/me/checkpoints/foundations-1/complete -H "authorization: Bearer $ACCESS" \
+  -H 'content-type: application/json' -d '{"courseId":"dsa-foundations","source":"reading"}'
+# → xpAwarded 30, then 0, then 0 …
+```
 
 ### Walking through the auth flow
 
@@ -160,9 +216,17 @@ src/
   middleware/            requestId · auth · validate(zod) · rateLimit · httpLogger · errorHandler
   modules/
     auth/                routes · service · schema · user.model · refreshToken.model · tokens
+    curriculum/          the seeded ID structure, and the in-memory prerequisite graph
+    learning/            routes · service · schema · progress.engine · three models
     system/              health
   docs/swagger.ts        serves ../docs/openapi.yaml
-  shared/                envelope · errors · logger
+  shared/                envelope · errors · logger · dates · transaction
+scripts/
+  lib/buildSnapshot.ts   registry → snapshot, with the structure-only rules
+  seedCurriculum.ts      writes it to MongoDB
+  verifyEngineParity.ts  backend engine vs. the frontend's
+  verifyLedger.ts        stored XP vs. the ledger
+  verify-day1.sh · verify-day2.sh
 ```
 
 Each module folder keeps the same four files — `*.routes.ts`, `*.service.ts`, `*.model.ts`,
@@ -191,6 +255,47 @@ request body later (Day 4's `sourceCode`) belongs in that redaction list.
 
 ---
 
+## How progress works
+
+**The server derives; it does not store what it can derive.** `courseProgress` holds facts — which
+checkpoints are completed, XP, lives, streak, the active pointer. `locked` / `available` /
+`current` / `completed` / `mastered` are computed per request from the prerequisite graph by
+`modules/learning/progress.engine.ts`, which is a function-for-function port of the frontend's
+`src/learning/progressEngine.ts`. Storing those states would create a second source of truth that
+drifts.
+
+`npm run verify:parity` is what stops the port drifting: it loads the real frontend engine and the
+backend one, runs both over 49 progress snapshots, and compares 16,005 answers. Both are pure
+functions, so it needs no server and no database. Change either engine and run it.
+
+**No duplicate XP.** Completing a checkpoint writes a `rewardEvents` row *before* the XP, on a
+unique `{ userId, courseId, eventKey }` index. A retry, a double-click, ten parallel requests, or a
+learner reviewing a module they finished last week all collide on that index and take the same
+path: `200`, `alreadyCompleted: true`, `xpAwarded: 0`, identical progress. "Already completed" is a
+state, not an HTTP error.
+
+On Atlas the ledger row and the progress update share a transaction. On a deployment with no
+replica set the work runs un-wrapped with a warning — safe, because the index is the guarantee and
+the transaction only stops a half-applied write.
+
+**Locked stays locked.** The prerequisite graph is in the database, so the check runs server-side
+at all three write endpoints — start a module, set the active pointer, complete a checkpoint. A
+request that never touches the UI gets the same answer, with `missingPrerequisites` filled in.
+
+**Rewards come from the curriculum.** A checkpoint pays its own `xp`; a module's terminal
+checkpoint also pays `masteryXp` and joins `masteredCheckpointIds`. Both numbers are read from the
+snapshot — there is no reward constant anywhere in the server.
+
+**The streak** follows `progressEngine.recordActivity`: same day changes nothing, yesterday adds
+one, anything else resets to one. The arithmetic is UTC here and local-timezone there, which
+differs only on DST fall-back days; the server is the authority and is the correct one.
+`verify:parity` sweeps three years of dates and prints any divergence.
+
+**Identity comes from the token, always.** No endpoint accepts a `userId`. `/me/attempts` accepts a
+`moduleId` and ignores it — the curriculum says which module a checkpoint belongs to.
+
+---
+
 ## Rate limits
 
 From the contract. Disabled under `NODE_ENV=test` so suites are not throttled.
@@ -213,3 +318,7 @@ From the contract. Disabled under `NODE_ENV=test` so suites are not throttled.
 | `429` | Rate limit — see the table above |
 | Swagger page is blank | `docs/openapi.yaml` was not found; the boot log line `docs: swagger ready` names the file it loaded |
 | `EADDRINUSE` | Something already holds `PORT`; change it in `.env` |
+| `404` on every `/me/...` call | The curriculum is not seeded — run `npm run seed:curriculum`, then restart |
+| Seeded, but the server still serves the old structure | The snapshot is loaded at boot; restart the API |
+| `Refusing to seed — the snapshot is not structure-only` | Something non-structural reached the draft. The message names the field |
+| `db: this deployment does not support transactions` | Not Atlas / not a replica set. Completions still cannot double-award; the unique ledger key is the guard |

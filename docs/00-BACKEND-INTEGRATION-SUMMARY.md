@@ -10,7 +10,7 @@
 | My branch | `backend/keshav-current-baseline` (branched from that exact commit) |
 | Merge plan | Smaller reviewable pull requests into the frontend branch — **not** one large merge at the end |
 | Backend code | [`backend/`](../backend) — a self-contained npm workspace, because the repo root `src/` is the frontend app |
-| Progress | Days 0 and 1 complete. Day 2 (progress, XP, lives, streak) is next. |
+| Progress | Days 0, 1 and 2 complete. Day 3 (notes + the frontend adapters) is next. |
 
 ---
 
@@ -68,6 +68,11 @@ future scope, along with the CMS.
 `courseProgress` is shaped exactly like the frontend's `LearnerProgressState`, so the frontend can
 use the response directly.
 
+Six are live as of Day 2 — `users` and `refreshTokens` from Day 1, plus `courseProgress`,
+`rewardEvents`, `learningAttempts` and `curriculumSnapshots`. The snapshot holds 7 zones, 29
+modules and 107 checkpoints: ids, order, XP and prerequisites only, enforced by a field allowlist
+in the seeder rather than left to good intentions.
+
 ---
 
 ## API — 25 endpoints under `/api/v1`
@@ -106,8 +111,9 @@ The local versions stay in the code as the offline fallback.
 
 1. **No duplicate XP.** Completing a checkpoint writes a unique ledger key first. A repeat call
    (retry, double-click, or reviewing a finished module) returns the same state and awards zero.
+   ✅ Live and verified — ten parallel calls award once.
 2. **Locked stays locked.** The server checks prerequisites itself, so calling the API directly
-   cannot unlock a module.
+   cannot unlock a module. ✅ Live and verified — at all three write endpoints.
 3. **Preview costs nothing.** The Two Pointers demo never calls the backend at all.
 4. **Run never rewards.** `/code/run` uses visible/sample tests only and can never grant XP or
    complete a checkpoint. Only a passing `/code/submit` can.
@@ -122,8 +128,8 @@ The local versions stay in the code as the offline fallback.
 |---|---|---|
 | 0 | These documents, revised against the final handoff SHA | ✅ **Done** |
 | 1 | Server skeleton, MongoDB, login, health check | ✅ **Done** |
-| 2 | Progress, XP, lives, streak, locked/available logic | ▶ Next |
-| 3 | Notes + the frontend adapters — progress survives logout | ⬜ |
+| 2 | Progress, XP, lives, streak, locked/available logic | ✅ **Done** |
+| 3 | Notes + the frontend adapters — progress survives logout | ▶ Next |
 | 4 | Code run/submit endpoints on **Piston**, server-side hidden fixtures | ⬜ |
 | 5 | Interview result + recommendations | ⬜ |
 | 6 | Analytics + security pass | ⬜ |

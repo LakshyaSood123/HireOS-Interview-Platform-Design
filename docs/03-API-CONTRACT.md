@@ -101,7 +101,13 @@ computing them locally; both sides use the same rules.
              "requestId": "req_03" } }
 ```
 
-Checked against the stored prerequisite graph, so it holds even if the UI is bypassed.
+Checked against the stored prerequisite graph, so it holds even if the UI is bypassed. The same
+check guards `PUT …/active` and `POST …/complete`, which return `CHECKPOINT_LOCKED` in the same
+shape — one lock rule behind three doors.
+
+Module names in the message are the registry's own, verbatim. The example above reads *"Trees"*;
+the registry titles that module *"Ancient Canopy"*, so that is what the server actually says. The
+backend does not rename the frontend's world.
 
 ### Completing a checkpoint
 
@@ -120,7 +126,14 @@ Checked against the stored prerequisite graph, so it holds even if the UI is byp
 ```
 
 Calling it again — retry, double-click, or reviewing a finished module — returns 200 with
-`"alreadyCompleted": true`, `xpAwarded: 0` and identical progress.
+`"alreadyCompleted": true`, `xpAwarded: 0` and identical progress. Ten of them at once return one
+reward and nine of those, because the ledger row is written before the XP and the unique key
+settles the race.
+
+`unlocked` is computed by diffing derived states before and after the write, so it always agrees
+with what the roadmap will draw. A module's terminal checkpoint pays `xp + masteryXp` and joins
+`masteredCheckpointIds`; both numbers come from the curriculum, never from a constant in the
+server.
 
 ### Run (never rewards)
 

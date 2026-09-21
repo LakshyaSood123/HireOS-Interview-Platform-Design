@@ -8,8 +8,8 @@
 |---|---|---|
 | **0** | Planning, baseline, approval | ✅ **Done** |
 | **1** | Server skeleton + auth | ✅ **Done** |
-| 2 | Progress, XP, lives, streak | ▶ **Next** |
-| 3 | Notes + frontend adapters | ⬜ Not started |
+| **2** | Progress, XP, lives, streak | ✅ **Done** |
+| 3 | Notes + frontend adapters | ▶ **Next** |
 | 4 | Code execution via Piston | ⬜ Not started |
 | 5 | Interview handoff + recommendations | ⬜ Not started |
 | 6 | Analytics + security pass | ⬜ Not started |
@@ -152,39 +152,110 @@ request body."
 
 ---
 
-## Day 2 — Progress, XP, lives and streak
+## Day 2 — Progress, XP, lives and streak ✅
 
 **Goal:** durable learner state that the server, not the browser, is the authority on.
 
 ### Checkpoints
 
-| # | Checkpoint | Done when |
-|---|---|---|
-| 2.1 | `scripts/seedCurriculum.ts` — imports the frontend registry, writes ids/order/XP/prerequisites | 7 zones, 29 modules, 107 checkpoints, **no lesson text** |
-| 2.2 | `courseProgress` model shaped like `LearnerProgressState` | |
-| 2.3 | `rewardEvents` ledger with unique `{ userId, courseId, eventKey }` | |
-| 2.4 | `GET /me/courses/{id}/state` — derives locked/available/current/completed/mastered | Matches `progressEngine.ts` exactly |
-| 2.5 | `PUT /me/courses/{id}/active` | Rejects an unavailable target with 409 |
-| 2.6 | `POST /me/modules/{id}/start` — server-side prerequisite check | 409 lists the missing prerequisite ids |
-| 2.7 | `POST /me/checkpoints/{id}/complete` — ledger insert **before** XP, atomic | |
-| 2.8 | `POST /me/attempts` — quick-check / quiz records | |
-| 2.9 | Streak logic from `lastActivityDate` | |
+| # | Checkpoint | Done when | Status |
+|---|---|---|---|
+| 2.1 | `scripts/seedCurriculum.ts` — imports the frontend registry, writes ids/order/XP/prerequisites | 7 zones, 29 modules, 107 checkpoints, **no lesson text** | ✅ |
+| 2.2 | `courseProgress` model shaped like `LearnerProgressState` | | ✅ |
+| 2.3 | `rewardEvents` ledger with unique `{ userId, courseId, eventKey }` | | ✅ |
+| 2.4 | `GET /me/courses/{id}/state` — derives locked/available/current/completed/mastered | Matches `progressEngine.ts` exactly | ✅ |
+| 2.5 | `PUT /me/courses/{id}/active` | Rejects an unavailable target with 409 | ✅ |
+| 2.6 | `POST /me/modules/{id}/start` — server-side prerequisite check | 409 lists the missing prerequisite ids | ✅ |
+| 2.7 | `POST /me/checkpoints/{id}/complete` — ledger insert **before** XP, atomic | | ✅ |
+| 2.8 | `POST /me/attempts` — quick-check / quiz records | | ✅ |
+| 2.9 | Streak logic from `lastActivityDate` | | ✅ |
 
 ### Verification
 
-**Passes when:**
+```bash
+cd backend
+npm run seed:curriculum      # 7 zones · 29 modules · 107 checkpoints
+npm run dev                  # terminal 1
+npm run verify:day2          # terminal 2 — 67 checks
+```
+
+Three suites, because three different kinds of claim need three different kinds of proof:
+
+| Command | What it proves | Result |
+|---|---|---|
+| `npm run verify:day2` | The API behaves — 67 assertions over two fresh accounts | 67/67 ✅ |
+| `npm run verify:parity` | The backend derives what `progressEngine.ts` derives | 16,005 comparisons ✅ |
+| `npm run verify:ledger` | Every point of XP in the database traces to the row that granted it | reconciles ✅ |
+
+**Passes when:** ✅ all verified — 67/67 on 20 Sep 2026, against Atlas.
 
 - **Idempotency:** calling complete on the same checkpoint 5× in a row awards XP exactly once.
-  Calls 2–5 return `200` with `alreadyCompleted: true`, `xpAwarded: 0` and identical progress.
-- **Concurrency:** 10 parallel complete calls for the same checkpoint → one reward, one ledger row.
+  Calls 2–5 return `200` with `alreadyCompleted: true`, `xpAwarded: 0` and identical progress. ✅
+  Asserted by comparing the whole `progress` object, not just the XP.
+- **Concurrency:** 10 parallel complete calls for the same checkpoint → one reward, one ledger
+  row. ✅ Exactly one of ten returns `alreadyCompleted: false`; XP moves 30 → 60 once. The guard
+  is the unique `{ userId, courseId, eventKey }` index, written **before** the XP, not a
+  read-then-write.
 - **Locked stays locked:** `POST /me/modules/graphs/start` on a fresh account returns `409` with
-  the missing prerequisites, even though the request bypasses the UI entirely.
-- **Review is free:** completing an already-completed checkpoint awards zero additional XP.
+  the missing prerequisites, even though the request bypasses the UI entirely. ✅
+  `MODULE_LOCKED`, `missingPrerequisites: ["trees-5"]`, and a message a learner can act on. The
+  same check guards `PUT …/active` and `complete`, so there is one lock rule behind three doors.
+- **Review is free:** completing an already-completed checkpoint awards zero additional XP. ✅
 - Derived states match `progressEngine.ts` for a fresh account, a mid-course account and a
-  completed account.
+  completed account. ✅ **Proved rather than argued:** `npm run verify:parity` loads the real
+  frontend engine and the backend port, runs both over 49 progress snapshots — fresh, mid-course
+  on both curriculum branches, completed, fully mastered, pointer-at-a-locked-checkpoint, and 40
+  seeded-random ones — and compares every checkpoint state, module state, zone state, "what is
+  next" answer and completion result. 16,005 comparisons, zero differences.
+
+**Also done, beyond the checkpoint list:**
+
+- `GET /me/modules/{id}/progress` — the roadmap-refresh endpoint from the contract, with
+  per-checkpoint state, attempt count and completion time.
+- `scripts/verifyEngineParity.ts` and `scripts/verifyLedger.ts`, above.
+- The seeder refuses to write anything that is not structure: a field allowlist plus a 120-character
+  cap on every string, so "no lesson text in the database" is enforced, not just intended. It also
+  rejects a prerequisite graph with a dangling or self-referencing edge.
+- `curriculumSnapshots` carries `structureHash`, `frontendCommit` and an `isActive` flag held by a
+  unique partial index, so exactly one snapshot answers for a course and a rollback is a flag flip.
+- `checkpointStats` and `moduleStats` are populated — attempts, first completion, module start and
+  finish — which is what Day 5's recommendations and Day 6's analytics read.
+- Completion runs inside a transaction on Atlas, and degrades to an un-wrapped write on a
+  deployment that has no replica set (a developer's standalone `mongod`, or an in-memory test
+  server), with a warning. The unique ledger key is the idempotency guard either way; the
+  transaction only stops a half-applied write.
+
+**Contract drift fixed:** `openapi.yaml` dropped `ALREADY_COMPLETED`, `COMPILE_ERROR` and
+`EXECUTION_TIMEOUT` from the error-code enum — the contract has always said they are states inside
+a 200, and `src/shared/errors.ts` has never had them. The learning endpoints gained their real
+`400` / `401` / `404` responses, the `source` default, the rule that `moduleId` on `/me/attempts`
+is accepted and ignored, and the real request rules for `PUT …/active`.
+
+**Documentation corrected:** plan §4 said the three legacy modules (`graphs`, `dp`, `summit`) use
+bare `"1"`–`"18"` checkpoint ids. At the handoff baseline they do not: `fullCurriculumModules`
+supersedes the legacy TrailNode-derived build for all three, so **all 107 checkpoints** use
+`<moduleId>-<n>`. The seeder reads whatever the registry says, so this was never a code problem —
+but a stale id list in a planning document is how a Day 5 lookup table gets written wrong.
+
+**One deliberate divergence from the frontend — the streak.** The rule is identical: same day
+changes nothing, yesterday adds one, anything else resets to one. The arithmetic is not.
+`progressEngine.recordActivity` derives "yesterday" with `new Date(today)` and local-timezone
+getters, so on the two days a year a DST zone falls back — a 25-hour local day — it names the wrong
+date, breaking a real streak and continuing a broken one. The server is the authority on the streak
+now, so it does the arithmetic in UTC, where every day is 24 hours. `verify:parity` sweeps 3,288
+date pairs across a three-year window, confirms the backend is right on all of them, and prints the
+six the frontend would have answered differently. No frontend change is needed: the browser stops
+computing the streak once Day 3's adapter lands.
+
+**Carried to Day 7:** still no automated tests (`npm test` passes with none). Day 7.2 owns the
+Vitest + in-memory MongoDB suite; `verify-day2.sh`, `verify:parity` and `verify:ledger` are the
+stand-in until then, and the last two need no server at all.
 
 **Demo line:** "Double-click Complete ten times. XP goes up once. Call the API directly to unlock
 Graphs — the server says no."
+
+**Demo script and a reviewer's manual verification walkthrough:**
+[07-DAY-2-DEMO-AND-VERIFICATION.md](./07-DAY-2-DEMO-AND-VERIFICATION.md).
 
 ---
 

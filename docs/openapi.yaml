@@ -179,6 +179,15 @@ paths:
     get:
       tags: [Learning]
       summary: Full durable learner snapshot (used to hydrate the app on boot)
+      description: |
+        Enrolls on first call: a learner with no progress document gets one, starting at
+        the course's first checkpoint with 0 XP, 3 lives and no streak. Demo bootstrap
+        data is never imported.
+
+        `progress` is field-for-field the frontend's `LearnerProgressState`.
+        `moduleStates` and `zoneStates` are derived per request from the prerequisite
+        graph by the same rules as `src/learning/progressEngine.ts` — nothing derived is
+        stored. 404 means the course id is unknown, or no curriculum has been seeded.
       parameters:
         - $ref: "#/components/parameters/CourseId"
       responses:
@@ -212,6 +221,15 @@ paths:
     put:
       tags: [Learning]
       summary: Set the active module / checkpoint after checking availability
+      description: |
+        At least one of `moduleId` and `checkpointId` is required. Given both, the
+        checkpoint must belong to the module or the request is a VALIDATION_ERROR.
+        Given `moduleId` alone, the server points at that module's first unfinished
+        checkpoint. The active zone always follows the module.
+
+        A locked target is rejected: CHECKPOINT_LOCKED when a checkpoint was named,
+        MODULE_LOCKED when only a module was. Returns the full course state, so a
+        client needs one call rather than a set-then-refetch.
       parameters:
         - $ref: "#/components/parameters/CourseId"
       requestBody:
@@ -220,6 +238,7 @@ paths:
           application/json:
             schema:
               type: object
+              minProperties: 1
               properties:
                 moduleId: { type: string }
                 checkpointId: { type: string }
@@ -230,6 +249,9 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/CourseStateSuccess" }
+        "400": { $ref: "#/components/responses/ValidationError" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "404": { $ref: "#/components/responses/NotFound" }
         "409": { $ref: "#/components/responses/Locked" }
 
   /me/modules/{moduleId}/start:
@@ -259,6 +281,9 @@ paths:
                   state: "current"
                   activeCheckpointId: "trees-1"
                 meta: { requestId: "req_04" }
+        "400": { $ref: "#/components/responses/ValidationError" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "404": { $ref: "#/components/responses/NotFound" }
         "409":
           description: Module is locked
           content:
@@ -292,6 +317,9 @@ paths:
                     - { id: "trees-3", state: "current", attempts: 1, completedAt: null }
                     - { id: "trees-4", state: "locked", attempts: 0, completedAt: null }
                 meta: { requestId: "req_05" }
+        "400": { $ref: "#/components/responses/ValidationError" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /me/checkpoints/{checkpointId}/complete:
     post:
@@ -312,8 +340,8 @@ paths:
               required: [courseId]
               properties:
                 courseId: { type: string }
-                source: { type: string, enum: [submit, quick-check, reading, manual] }
-                submissionId: { type: string }
+                source: { type: string, enum: [submit, quick-check, reading, manual], default: manual, description: "Recorded on the ledger row; does not change the reward." }
+                submissionId: { type: string, description: "Day 4. The submission that earned it." }
             example: { courseId: "dsa-foundations", source: "submit", submissionId: "66f1bb" }
       responses:
         "200":
@@ -355,6 +383,9 @@ paths:
                         lastActivityDate: "2026-09-19"
                       unlocked: { checkpointIds: [], moduleIds: [] }
                     meta: { requestId: "req_07" }
+        "400": { $ref: "#/components/responses/ValidationError" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "404": { $ref: "#/components/responses/NotFound" }
         "409": { $ref: "#/components/responses/Locked" }
 
   /me/attempts:
@@ -370,9 +401,13 @@ paths:
               required: [courseId, checkpointId, activityId, attemptType, passed]
               properties:
                 courseId: { type: string }
-                moduleId: { type: string }
+                moduleId:
+                  type: string
+                  description: |
+                    Accepted for compatibility and IGNORED. The owning module is read from
+                    the curriculum, the same way the user id is read from the token.
                 checkpointId: { type: string }
-                activityId: { type: string }
+                activityId: { type: string, description: "Frontend-owned, stored as sent." }
                 attemptType: { type: string, enum: [quick-check, quiz, reading] }
                 passed: { type: boolean }
                 payload: { type: object, additionalProperties: true }
@@ -392,6 +427,9 @@ paths:
               example:
                 data: { attemptId: "66f4cc", passed: true }
                 meta: { requestId: "req_08" }
+        "400": { $ref: "#/components/responses/ValidationError" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /me/notes:
     get:
@@ -745,7 +783,11 @@ components:
           properties:
             code:
               type: string
-              enum: [UNAUTHENTICATED, FORBIDDEN, NOT_FOUND, VALIDATION_ERROR, EMAIL_ALREADY_REGISTERED, MODULE_LOCKED, CHECKPOINT_LOCKED, ALREADY_COMPLETED, EXECUTION_TIMEOUT, COMPILE_ERROR, PAYLOAD_TOO_LARGE, RUNNER_UNAVAILABLE, RATE_LIMITED, INTERNAL_ERROR]
+              description: |
+                Every code the API can return, and only those. ALREADY_COMPLETED,
+                COMPILE_ERROR and EXECUTION_TIMEOUT are deliberately absent: they are
+                states inside a 200 response body, not HTTP errors.
+              enum: [UNAUTHENTICATED, FORBIDDEN, NOT_FOUND, VALIDATION_ERROR, EMAIL_ALREADY_REGISTERED, MODULE_LOCKED, CHECKPOINT_LOCKED, PAYLOAD_TOO_LARGE, RUNNER_UNAVAILABLE, RATE_LIMITED, INTERNAL_ERROR]
             message: { type: string }
             details: { type: object, additionalProperties: true }
             requestId: { type: string }

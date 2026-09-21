@@ -56,7 +56,7 @@ const envSchema = z
 
     // HTTP
     // `.default()` supplies the parsed output, so this is the list, not a CSV string.
-    CORS_ORIGINS: csv.default(["http://localhost:8443", "http://localhost:5173", "http://localhost:3000"]),
+    CORS_ORIGINS: csv.default(["http://localhost:8443", "http://localhost:5173", "http://localhost:3000", "http://localhost:4883"]),
     TRUST_PROXY: z.string().default("loopback"),
     JSON_BODY_LIMIT: z.string().default("128kb"),
 

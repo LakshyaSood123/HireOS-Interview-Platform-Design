@@ -3,14 +3,18 @@ import type { Server } from "node:http";
 import { createApp } from "./app.js";
 import { env } from "./config/env.js";
 import { connectToDatabase, disconnectFromDatabase } from "./db/connect.js";
+import { warmCurriculumCache } from "./modules/curriculum/curriculum.service.js";
 import { logger } from "./shared/logger.js";
 
 /**
  * Boot order: the database first, so a bad `MONGO_URI` fails at startup rather
- * than on the first request.
+ * than on the first request. Then the curriculum, so the prerequisite graph is
+ * in memory before the first learner request and an unseeded database says so
+ * in the boot log instead of on a 404.
  */
 async function start(): Promise<void> {
   await connectToDatabase();
+  await warmCurriculumCache();
 
   const app = createApp();
   const server: Server = app.listen(env.PORT, () => {

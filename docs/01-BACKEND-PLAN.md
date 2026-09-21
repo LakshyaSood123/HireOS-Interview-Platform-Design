@@ -90,11 +90,18 @@ Read from the frontend registry. Display names are never used as keys.
   `heap-priority-queue`, `trie`, `recursion`, `backtracking`, `trees`, `binary-search-trees`,
   `graphs`, `dfs-bfs`, `grid-graphs`, `topological-sort`, `union-find`, `greedy`, `dp`, `dp-2d`,
   `dp-patterns`, `mixed-pattern-recognition`, `timed-problems`, `company-missions`, `summit`
-- **Checkpoints:** `<moduleId>-<n>` (e.g. `trees-3`), except the three legacy modules
-  (`graphs`, `dp`, `summit`) which use the bare strings `"1"`–`"18"`
+- **Checkpoints:** `<moduleId>-<n>` (e.g. `trees-3`) — **all 107 of them**
 - A checkpoint **is** the lesson, so `lessonId === checkpointId`
 
 Source files: `courseRegistry.ts`, `content/dsaSkeleton.ts`, `scripts/validateCurriculum.ts`.
+
+**Corrected at Day 2.** This section previously said the three legacy modules (`graphs`, `dp`,
+`summit`) keep bare `"1"`–`"18"` checkpoint ids. At the handoff baseline they do not:
+`content/fullCurriculumModules.ts` supersedes the legacy TrailNode-derived build for all three, so
+every checkpoint in the course uses `<moduleId>-<n>`. `scripts/seedCurriculum.ts` reads the
+registry rather than any list in these documents, so nothing was built on the wrong ids — but a
+stale id list here is how Day 5's weak-skill lookup table gets written wrong, so it is fixed at the
+source.
 
 ---
 
@@ -167,7 +174,7 @@ compiler left to write, wait for, or defer.
 |---|---|---|
 | 0 | These documents | Reviewed and approved ✅ |
 | 1 | Express skeleton, MongoDB connection, env config, `/health`, register/login/refresh/logout, `/users/me` | A clean machine boots by following the README ✅ |
-| 2 | Curriculum seeder, enrollment, course state, start module, complete checkpoint, reward ledger, XP / lives / streak | Completed, current, available and locked all persist correctly |
+| 2 | Curriculum seeder, enrollment, course state, start module, complete checkpoint, reward ledger, XP / lives / streak | Completed, current, available and locked all persist correctly ✅ |
 | 3 | Notes API, `ApiProgressRepository`, `ApiNotesRepository`, localStorage import path | Logout and login restore progress and notes exactly |
 | 4 | `/code/run`, `/code/submit`, submission storage, rate and size limits, server-side hidden fixtures, the `mock` and `piston` providers | CodeWorkspace works against the API with no UI change, on real Python/C++/Java |
 | 5 | Interview result endpoint, skill signals, rule-based recommendations, practice metadata | Weak skills produce an explainable next step |
@@ -239,6 +246,7 @@ boundary** so hidden fixtures and judging stop living in the browser. The coding
 
 ---
 
-**Status:** Day 0 is complete — these documents are revised against the final handoff SHA and the
-Piston decision. Day 1 implementation starts now. Day-by-day checkpoints, goals and verification
-steps are tracked in [05-DAY-WISE-CHECKPOINTS.md](./05-DAY-WISE-CHECKPOINTS.md).
+**Status:** Days 0, 1 and 2 are complete — planning and baseline, the server skeleton with
+authentication, and durable learner progress with server-side locks and an idempotent reward
+ledger. Day 3 (notes and the frontend adapters) is next. Day-by-day checkpoints, goals and
+verification steps are tracked in [05-DAY-WISE-CHECKPOINTS.md](./05-DAY-WISE-CHECKPOINTS.md).

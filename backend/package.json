@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Reagvis Trails backend — accounts, learner progress, notes, submissions, recommendations.",
+  "description": "Reagvis Trails backend \u2014 accounts, learner progress, notes, submissions, recommendations.",
   "engines": {
     "node": ">=20"
   },
@@ -13,7 +13,12 @@
     "start": "node dist/server.js",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run --passWithNoTests",
-    "verify:day1": "bash scripts/verify-day1.sh"
+    "seed": "npm run seed:curriculum",
+    "seed:curriculum": "tsx scripts/seedCurriculum.ts",
+    "verify:day1": "bash scripts/verify-day1.sh",
+    "verify:parity": "tsx scripts/verifyEngineParity.ts",
+    "verify:ledger": "tsx scripts/verifyLedger.ts",
+    "verify:day2": "bash scripts/verify-day2.sh"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
