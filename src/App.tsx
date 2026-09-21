@@ -16,6 +16,7 @@ import FeedbackDrawer from "./components/feedback/FeedbackDrawer"
 import { TrailGuideProvider } from "./assistant/TrailGuideContext"
 import TrailGuideDrawer from "./components/assistant/TrailGuideDrawer"
 import TrailUtilityCluster from "./components/assistant/TrailUtilityCluster"
+import CreatorStudioApp from "./creator/CreatorStudioApp"
 
 type Page =
   | "landing"
@@ -26,6 +27,7 @@ type Page =
   | "dashboard"
   | "admin"
   | "reagvis-trail"
+  | "creator-studio"
 
 const navItems: { id: Page; label: string; emoji: string }[] = [
   { id: "landing", label: "Landing", emoji: "🏠" },
@@ -33,6 +35,7 @@ const navItems: { id: Page; label: string; emoji: string }[] = [
   { id: "interview", label: "Interview", emoji: "🎤" },
   { id: "results", label: "Results", emoji: "📊" },
   { id: "reagvis-trail", label: "Reagvis Trails", emoji: "🌿" },
+  { id: "creator-studio", label: "Creator Studio", emoji: "🧭" },
   { id: "placement-flow", label: "Placement", emoji: "📚" },
   { id: "dashboard", label: "Journey", emoji: "🎓" },
   { id: "admin", label: "Admin", emoji: "⚙️" },
@@ -91,7 +94,9 @@ function AppContent() {
       <TransitionPortal />
 
       {/* Page content */}
-      {isReagvis ? (
+      {page === "creator-studio" ? (
+        <CreatorStudioApp onExit={() => handleNavigate("reagvis-trail")} />
+      ) : isReagvis ? (
         <ReagvisTrailPage onNavigateHireOS={handleNavigate} />
       ) : (
         <>

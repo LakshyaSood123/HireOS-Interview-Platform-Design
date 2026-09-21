@@ -46,6 +46,62 @@ export default function TrailGuideDrawer() {
 
   if (!isOpen) return null
 
+  // ── CMS (CREATOR STUDIO) LIMITED-SUPPORT STATE ──
+  // Trail Guide's curriculum knowledge (topicKnowledgeBuilder/topicOverrides)
+  // is grounded entirely in the static DSA course registry. Rather than
+  // silently produce a generic/ungrounded answer for a Creator
+  // Studio-authored lesson it has no real knowledge of, show this explicit,
+  // honest state instead — never invents facts about arbitrary CMS content.
+  if (context.source === "cms") {
+    return (
+      <div className="fixed inset-0 z-50 flex justify-end">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity" onClick={closeGuide} aria-hidden="true" />
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="trail-guide-title"
+          className="relative z-10 w-full sm:w-[460px] h-full bg-[#082017] border-l border-[#1DB584]/30 shadow-2xl flex flex-col text-white font-display overflow-hidden animate-in slide-in-from-right duration-200"
+        >
+          <div className="relative overflow-hidden bg-gradient-to-b from-[#0B2E21] to-[#082017] border-b border-white/10 px-5 pt-5 pb-4 flex-shrink-0 flex items-start justify-between gap-3">
+            <div>
+              <span className="text-[10px] font-black uppercase tracking-wider text-[#A7CE65] block mb-1">Alpine Learning Companion</span>
+              <h2 id="trail-guide-title" className="text-xl font-black text-white tracking-tight flex items-center gap-2">
+                <span>🧭</span>
+                <span>Trail Guide</span>
+              </h2>
+              {context.moduleTitle && <p className="mt-1 text-xs text-gray-300 truncate">{context.moduleTitle}</p>}
+            </div>
+            <button
+              ref={closeButtonRef}
+              onClick={closeGuide}
+              aria-label="Close Trail Guide"
+              className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white flex items-center justify-center text-sm font-bold transition-colors cursor-pointer shrink-0"
+            >
+              ✕
+            </button>
+          </div>
+          <div className="flex-1 overflow-y-auto px-5 py-6">
+            <div className="p-4 rounded-2xl bg-black/35 border border-amber-400/25">
+              <div className="flex items-center gap-2.5 mb-2">
+                <span className="text-xl">🏗️</span>
+                <h3 className="text-xs font-black text-white">Limited support for this course</h3>
+              </div>
+              <p className="text-[12px] text-gray-300 leading-relaxed">
+                Trail Guide's curriculum knowledge is built for the Data Structures &amp; Algorithms course today. Creator
+                Studio-authored courses like this one aren't connected to that knowledge base yet, so Trail Guide can't
+                answer questions about this lesson's specific content.
+              </p>
+              <p className="text-[11px] text-gray-500 leading-relaxed mt-3">
+                For real DSA checkpoints, open Trail Guide from any lesson, animation, quick check, or coding challenge for
+                full contextual help.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   const handleSend = async () => {
     if (!input.trim() || isThinking) return
     const text = input

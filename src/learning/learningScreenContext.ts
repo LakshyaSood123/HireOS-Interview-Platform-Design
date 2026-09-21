@@ -6,6 +6,8 @@ import {
   findModuleForCheckpoint,
   findZoneForModule,
 } from "./courseRegistry"
+import { courseAuthoringRepository } from "../creator/courseAuthoringRepository"
+import type { CreatorActivity } from "../creator/types"
 
 export type LearningScreenType =
   | "course-library"
@@ -51,6 +53,12 @@ export interface LearningScreenContext {
 
   animationId?: string
   pageKey?: string
+
+  /** Set to "cms" when this context describes a Creator Studio-authored
+   * course rather than the static DSA curriculum. Absent (undefined) for
+   * every existing DSA/HireOS screen — Feedback and Trail Guide behavior
+   * for those screens is completely unchanged by this field's existence. */
+  source?: "cms"
 }
 
 /**
@@ -66,6 +74,9 @@ export function deriveLearningScreenContext(appState: {
   viewedModuleId: string | null
   viewedCheckpointId: string | null
   interviewSession: { company: string; jobTitle: string } | null
+  viewedCmsCourseId?: string | null
+  viewedCmsModuleId?: string | null
+  viewedCmsActivityId?: string | null
 }): LearningScreenContext {
   const {
     activeProduct,
@@ -75,9 +86,84 @@ export function deriveLearningScreenContext(appState: {
     viewedModuleId,
     viewedCheckpointId,
     interviewSession,
+    viewedCmsCourseId,
+    viewedCmsModuleId,
+    viewedCmsActivityId,
   } = appState
 
   if (activeProduct === "reagvis") {
+    // ── 0. CMS (CREATOR STUDIO) COURSE VIEW ──
+    // A published Creator Studio course being viewed through the real
+    // learner shell. Distinct source repository from the static DSA
+    // curriculum (courseRegistry) — see src/creator/README and PART 28/29
+    // of the original CMS demo task. Never touches courseRegistry.
+    if (reagvisView === "cms-course" && viewedCmsCourseId) {
+      const cmsCourse = courseAuthoringRepository.getCourse(viewedCmsCourseId)
+      const cmsModule = cmsCourse?.modules.find(m => m.id === viewedCmsModuleId)
+      const cmsActivity: CreatorActivity | undefined = cmsModule?.activities.find(a => a.id === viewedCmsActivityId)
+
+      const cmsCourseTitle = cmsCourse?.title ?? "Creator Studio Course"
+      const cmsModuleTitle = cmsModule?.title ?? "Module"
+      const cmsActivityTitle = cmsActivity?.title ?? cmsModuleTitle
+
+      if (!cmsModule) {
+        // Course landing — no module selected yet.
+        return {
+          screenType: "module",
+          screenId: `cms-${viewedCmsCourseId}`,
+          title: cmsCourseTitle,
+          subtitle: cmsCourse?.shortDescription,
+          breadcrumb: ["Reagvis Trails", "Course Library", cmsCourseTitle],
+          courseId: viewedCmsCourseId,
+          courseTitle: cmsCourseTitle,
+          activityType: "general-learning",
+          activityTitle: "Course Overview",
+          source: "cms",
+        }
+      }
+
+      if (!cmsActivity) {
+        // Module roadmap — a module is selected but no activity yet.
+        return {
+          screenType: "module-roadmap",
+          screenId: `cms-roadmap-${cmsModule.id}`,
+          title: `${cmsModuleTitle} Roadmap`,
+          subtitle: cmsCourseTitle,
+          breadcrumb: ["Reagvis Trails", "Course Library", cmsCourseTitle, cmsModuleTitle],
+          courseId: viewedCmsCourseId,
+          courseTitle: cmsCourseTitle,
+          moduleId: cmsModule.id,
+          moduleTitle: cmsModuleTitle,
+          activityType: "module-roadmap",
+          activityTitle: "Module Roadmap",
+          source: "cms",
+        }
+      }
+
+      const activityScreenType =
+        cmsActivity.type === "quick-check" ? "quick-check" : cmsActivity.type === "coding" ? "coding-challenge" : "lesson"
+      const activityKind =
+        cmsActivity.type === "quick-check" ? "quick-check" : cmsActivity.type === "coding" ? "coding-challenge" : "concept-theory"
+
+      return {
+        screenType: activityScreenType,
+        screenId: cmsActivity.id,
+        title: cmsActivityTitle,
+        subtitle: cmsModuleTitle,
+        breadcrumb: ["Reagvis Trails", "Course Library", cmsCourseTitle, cmsModuleTitle, cmsActivityTitle],
+        courseId: viewedCmsCourseId,
+        courseTitle: cmsCourseTitle,
+        moduleId: cmsModule?.id,
+        moduleTitle: cmsModuleTitle,
+        checkpointId: cmsActivity.id,
+        checkpointTitle: cmsActivityTitle,
+        activityType: activityKind,
+        activityTitle: cmsActivityTitle,
+        problemTitle: cmsActivity.type === "coding" ? cmsActivity.functionName : undefined,
+        source: "cms",
+      }
+    }
+
     const course = getCourseById(activeCourseId)
     const courseTitle = course?.title ?? "DSA World"
 
@@ -295,5 +381,8 @@ export function useLearningScreenContext(): LearningScreenContext {
     appState.viewedModuleId,
     appState.viewedCheckpointId,
     appState.interviewSession,
+    appState.viewedCmsCourseId,
+    appState.viewedCmsModuleId,
+    appState.viewedCmsActivityId,
   ])
 }

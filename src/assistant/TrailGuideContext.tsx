@@ -96,6 +96,7 @@ export function TrailGuideProvider({
       checkpointTitle: learningScreenContext.checkpointTitle,
       activityType: (learningScreenContext.activityType as AssistantContext["activityType"]) ?? "general-learning",
       problemTitle: learningScreenContext.problemTitle,
+      source: learningScreenContext.source,
     }
   }, [learningScreenContext])
 

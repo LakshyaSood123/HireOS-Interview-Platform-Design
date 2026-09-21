@@ -20,7 +20,16 @@ import { LocalProgressRepository } from "../learning/progressRepository"
 import { MockRecommendationProvider } from "../learning/services/recommendationProvider"
 
 export type ActiveProduct = "hireos" | "reagvis"
-export type ReagvisView = "intro" | "map" | "library" | "lesson" | "challenge" | "complete" | "roadmap" | "workspace"
+export type ReagvisView =
+  | "intro"
+  | "map"
+  | "library"
+  | "lesson"
+  | "challenge"
+  | "complete"
+  | "roadmap"
+  | "workspace"
+  | "cms-course"
 
 const progressRepository = new LocalProgressRepository()
 const recommendationProvider = new MockRecommendationProvider()
@@ -117,6 +126,17 @@ interface AppStateValue {
   enterModule: (moduleId: string) => void
   enterCheckpoint: (checkpointId: string) => void
   backToRoadmap: () => void
+
+  // Creator Studio (CMS) learner-viewing state — entirely separate from the
+  // DSA progression pointers above. Not persisted, no XP/lives/streak
+  // interaction; see src/creator/cmsCourseAdapter.ts and
+  // src/components/cms/CmsCourseRuntime.tsx.
+  viewedCmsCourseId: string | null
+  viewedCmsModuleId: string | null
+  viewedCmsActivityId: string | null
+  enterCmsCourse: (courseId: string) => void
+  setViewedCmsModuleId: (moduleId: string | null) => void
+  setViewedCmsActivityId: (activityId: string | null) => void
   /** Resolved ProgressState for an arbitrary checkpoint id in the active
    * course — used by ModuleRoadmap/LessonWorkspace so they don't need to
    * import the engine directly. */
@@ -180,6 +200,13 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   // learner progress, it resets to "wherever the map takes you" on reload.
   const [viewedModuleId, setViewedModuleId] = useState<string | null>(null)
   const [viewedCheckpointId, setViewedCheckpointId] = useState<string | null>(null)
+
+  // Creator Studio (CMS) learner-viewing state — see AppStateValue's doc
+  // comment above. Not persisted, same rationale as viewedModuleId/
+  // viewedCheckpointId.
+  const [viewedCmsCourseId, setViewedCmsCourseId] = useState<string | null>(null)
+  const [viewedCmsModuleId, setViewedCmsModuleId] = useState<string | null>(null)
+  const [viewedCmsActivityId, setViewedCmsActivityId] = useState<string | null>(null)
 
   // Transition animation state
   const [isTransitioning, setIsTransitioning] = useState(false)
@@ -310,6 +337,13 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     setReagvisView("roadmap")
   }
 
+  const enterCmsCourse = (courseId: string) => {
+    setViewedCmsCourseId(courseId)
+    setViewedCmsModuleId(null)
+    setViewedCmsActivityId(null)
+    setReagvisView("cms-course")
+  }
+
   const retakeInterview = () => {
     // Course-First Development Mode: block entry into the interview flow.
     // See /COURSE_FIRST_DEVELOPMENT_MODE.md
@@ -361,6 +395,12 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       enterCheckpoint,
       backToRoadmap,
       getCheckpointState,
+      viewedCmsCourseId,
+      viewedCmsModuleId,
+      viewedCmsActivityId,
+      enterCmsCourse,
+      setViewedCmsModuleId,
+      setViewedCmsActivityId,
       isTransitioning,
       transitionMessage,
       startLearningTrail,
@@ -389,6 +429,9 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       dsaZoneStates,
       viewedModuleId,
       viewedCheckpointId,
+      viewedCmsCourseId,
+      viewedCmsModuleId,
+      viewedCmsActivityId,
       isTransitioning,
       transitionMessage,
     ],

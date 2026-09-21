@@ -13,10 +13,12 @@ import AlpineCabin from "../components/forest/scenic/AlpineCabin"
 import AlpinePineTree from "../components/forest/scenic/AlpinePineTree"
 import { MeadowCow } from "../components/forest/scenic/ScenicAnimals"
 import { useAppState } from "../state/AppStateContext"
-import { libraryCourses, type TrailNode } from "../data/reagvisCourses"
+import { type TrailNode } from "../data/reagvisCourses"
 import { getCourseById, isCourseAvailable, getAllCheckpointsInOrder } from "../learning/courseRegistry"
 import { RoutingCodeRunner } from "../learning/services/pistonCodeRunner"
 import { LocalNotesRepository } from "../learning/services/notesRepository"
+import { getUnifiedLibraryCourses } from "../learning/libraryCourseSource"
+import CmsCourseRuntime from "../components/cms/CmsCourseRuntime"
 
 // Module-level singletons — one code runner / local notes repository for
 // the whole app, same pattern as AppStateContext's progressRepository.
@@ -51,10 +53,12 @@ export default function ReagvisTrailPage({ onNavigateHireOS }: ReagvisTrailPageP
     failCheckpointAttempt,
     getCheckpointState,
     dsaModuleStates,
+    enterCmsCourse,
   } = useAppState()
 
   const [previewNode, setPreviewNode] = useState<TrailNode | null>(null)
   const [previewModuleId, setPreviewModuleId] = useState<string | null>(null)
+  const unifiedLibraryCourses = getUnifiedLibraryCourses()
 
   const course = getCourseById(activeCourseId)
   const viewedModule = course?.zones.flatMap(z => z.modules).find(m => m.id === viewedModuleId)
@@ -298,19 +302,29 @@ export default function ReagvisTrailPage({ onNavigateHireOS }: ReagvisTrailPageP
             ══════════════════════════════════════════════════════ */}
         {reagvisView === "library" && (
           <div className="max-w-6xl mx-auto py-10 px-6 animate-fade-up">
-            <div className="mb-8">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-[#5B8854]/15 text-[#2F6747] mb-2">
-                <span>📚</span> Reagvis Labs Course Worlds
+            <div className="mb-8 flex items-start justify-between gap-4 flex-wrap">
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-[#5B8854]/15 text-[#2F6747] mb-2">
+                  <span>📚</span> Reagvis Labs Course Worlds
+                </div>
+                <h2 className="text-3xl font-black text-[#1B3F2B]">Course Library &amp; Destinations</h2>
+                <p className="text-sm text-gray-600 mt-1">
+                  Each engineering discipline forms an explorable alpine environment in the Knowledge Forest.
+                </p>
               </div>
-              <h2 className="text-3xl font-black text-[#1B3F2B]">Course Library &amp; Destinations</h2>
-              <p className="text-sm text-gray-600 mt-1">
-                Each engineering discipline forms an explorable alpine environment in the Knowledge Forest.
-              </p>
+              {onNavigateHireOS && (
+                <button
+                  onClick={() => onNavigateHireOS("creator-studio")}
+                  className="px-4 py-2.5 rounded-full bg-white border-2 border-[#C2D6B8] hover:border-[#5B8854] text-[#2F6747] font-bold text-xs cursor-pointer transition-all shadow-xs inline-flex items-center gap-2"
+                >
+                  <span>🧭</span> Creator Studio
+                </button>
+              )}
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {libraryCourses.map(course => {
-                const available = isCourseAvailable(course.id)
+              {unifiedLibraryCourses.map(course => {
+                const available = course.source === "cms" ? true : isCourseAvailable(course.id)
                 return (
                   <div
                     key={course.id}
@@ -334,8 +348,12 @@ export default function ReagvisTrailPage({ onNavigateHireOS }: ReagvisTrailPageP
                       {available ? (
                         <button
                           onClick={() => {
-                            startLearningTrail(course.id)
-                            setReagvisView("map")
+                            if (course.source === "cms") {
+                              enterCmsCourse(course.id)
+                            } else {
+                              startLearningTrail(course.id)
+                              setReagvisView("map")
+                            }
                           }}
                           className="px-4 py-2 rounded-full bg-[#5B8854] hover:bg-[#487342] text-white font-bold transition-all shadow-xs cursor-pointer"
                         >
@@ -437,6 +455,11 @@ export default function ReagvisTrailPage({ onNavigateHireOS }: ReagvisTrailPageP
             )}
           </div>
         )}
+
+        {/* ══════════════════════════════════════════════════════
+            6. PUBLISHED CMS (CREATOR STUDIO) COURSE VIEW
+            ══════════════════════════════════════════════════════ */}
+        {reagvisView === "cms-course" && <CmsCourseRuntime onExit={() => setReagvisView("library")} />}
       </main>
 
       {/* ── MODALS ── */}

@@ -46,6 +46,12 @@ export interface AssistantContext {
   includeLearnerCode?: boolean
   learnerCode?: string
   compilerSummary?: string
+
+  /** Set to "cms" for a published Creator Studio course screen. Trail Guide
+   * shows an explicit limited-support state for these rather than routing
+   * through the DSA-curriculum-grounded TopicAssistantProvider — see
+   * TrailGuideDrawer.tsx. Absent for every DSA/HireOS screen. */
+  source?: "cms"
 }
 
 export interface TopicAssistantRequest {
