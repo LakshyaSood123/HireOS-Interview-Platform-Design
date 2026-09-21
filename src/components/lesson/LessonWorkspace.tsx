@@ -11,6 +11,7 @@ import CodeWorkspace from "./CodeWorkspace"
 import QuickCheckCard from "./QuickCheckCard"
 import NotesPanel from "./NotesPanel"
 import LessonCampBackdrop from "./camp/LessonCampBackdrop"
+import LessonQuickFeedback from "../feedback/LessonQuickFeedback"
 
 interface LessonWorkspaceProps {
   checkpoint: Checkpoint
@@ -261,11 +262,14 @@ export default function LessonWorkspace({
 
             {/* Bottom completion bar for coding */}
             <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between gap-4 flex-wrap">
-              <span className="text-xs text-gray-400">
-                {activitySatisfied
-                  ? "✓ Coding challenge solved! You can advance to the next trail milestone."
-                  : "Submit solution passing all test cases to complete this checkpoint."}
-              </span>
+              <div className="flex flex-col gap-2 min-w-0">
+                <span className="text-xs text-gray-400">
+                  {activitySatisfied
+                    ? "✓ Coding challenge solved! You can advance to the next trail milestone."
+                    : "Submit solution passing all test cases to complete this checkpoint."}
+                </span>
+                <LessonQuickFeedback checkpointTitle={content.title} />
+              </div>
               <button
                 onClick={handleCompleteAction}
                 disabled={!canComplete}
@@ -394,6 +398,10 @@ export default function LessonWorkspace({
                     <span>{isReview ? "Return to Roadmap" : isPreview ? "End Preview" : "Complete Checkpoint"}</span>
                     <span>➔</span>
                   </button>
+
+                  <div className="mt-4 pt-3.5 border-t border-white/10">
+                    <LessonQuickFeedback checkpointTitle={content.title} />
+                  </div>
                 </div>
               </div>
 
@@ -472,25 +480,31 @@ export default function LessonWorkspace({
                 )}
 
                 {/* Completion Action Card */}
-                <div className="rounded-2xl bg-[#082017]/95 border border-[#1DB584]/25 p-5 shadow-xl flex items-center justify-between gap-4 flex-wrap min-w-0">
-                  <div className="min-w-0">
-                    <h4 className="text-xs font-bold text-white mb-0.5">Checkpoint Status</h4>
-                    <p className="text-[11px] text-gray-400">
-                      {isReview
-                        ? "Review complete. Return to roadmap anytime."
-                        : canComplete
-                          ? "Ready to record progress!"
-                          : "Review concepts or answer quick check to unlock."}
-                    </p>
+                <div className="rounded-2xl bg-[#082017]/95 border border-[#1DB584]/25 p-5 shadow-xl flex flex-col gap-4 min-w-0">
+                  <div className="flex items-center justify-between gap-4 flex-wrap min-w-0">
+                    <div className="min-w-0">
+                      <h4 className="text-xs font-bold text-white mb-0.5">Checkpoint Status</h4>
+                      <p className="text-[11px] text-gray-400">
+                        {isReview
+                          ? "Review complete. Return to roadmap anytime."
+                          : canComplete
+                            ? "Ready to record progress!"
+                            : "Review concepts or answer quick check to unlock."}
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleCompleteAction}
+                      disabled={!canComplete}
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-[#1DB584] to-[#10B981] hover:from-[#159a6f] hover:to-[#0d9668] shadow-lg shadow-[#1DB584]/30 hover:scale-[1.02] transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 shrink-0"
+                    >
+                      <span>{isReview ? "Return to Roadmap" : isPreview ? "End Preview" : "Complete Checkpoint"}</span>
+                      <span>➔</span>
+                    </button>
                   </div>
-                  <button
-                    onClick={handleCompleteAction}
-                    disabled={!canComplete}
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-[#1DB584] to-[#10B981] hover:from-[#159a6f] hover:to-[#0d9668] shadow-lg shadow-[#1DB584]/30 hover:scale-[1.02] transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 shrink-0"
-                  >
-                    <span>{isReview ? "Return to Roadmap" : isPreview ? "End Preview" : "Complete Checkpoint"}</span>
-                    <span>➔</span>
-                  </button>
+
+                  <div className="pt-3 border-t border-white/10">
+                    <LessonQuickFeedback checkpointTitle={content.title} />
+                  </div>
                 </div>
               </div>
 
