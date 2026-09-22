@@ -72,7 +72,6 @@ Current configuration:
 DEVELOPMENT_MODE = {
   COURSE_FIRST_MODE: true,
   INTERVIEW_FLOW_ENABLED: false,
-  DEFAULT_ENTRY: "results",
 }
 ```
 
@@ -174,7 +173,6 @@ When interview development resumes:
 ```ts
 COURSE_FIRST_MODE = false
 INTERVIEW_FLOW_ENABLED = true
-DEFAULT_ENTRY = "landing"
 ```
 
 ### 3. Verify previously gated navigation becomes visible/active

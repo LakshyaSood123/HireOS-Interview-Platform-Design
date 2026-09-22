@@ -14,10 +14,11 @@ import {
   resolveCheckpointState,
   DEFAULT_LIVES,
 } from "../learning/progressEngine"
-import { getCourseById, isCourseAvailable, findCheckpoint } from "../learning/courseRegistry"
+import { getCourseById, isCourseAvailable, findCheckpoint, getAllCheckpointsInOrder } from "../learning/courseRegistry"
 import { deriveLegacyCourseData } from "../learning/legacyAdapter"
 import { learnerSession, progressRepository } from "../learning/services/learnerSession"
 import { MockRecommendationProvider } from "../learning/services/recommendationProvider"
+import { navigate, useRoute } from "../router"
 
 export type ActiveProduct = "hireos" | "reagvis"
 export type ReagvisView = "intro" | "map" | "library" | "lesson" | "challenge" | "complete" | "roadmap" | "workspace"
@@ -76,9 +77,9 @@ interface AppStateValue {
   interviewSession: InterviewSessionData | null
   setInterviewSession: (session: InterviewSessionData | null) => void
 
-  // Dual-Product Ecosystem states
+  // Dual-Product Ecosystem states. `activeProduct` follows the URL: Reagvis on
+  // /trails, HireOS everywhere else.
   activeProduct: ActiveProduct
-  setActiveProduct: (product: ActiveProduct) => void
   reagvisView: ReagvisView
   setReagvisView: (view: ReagvisView) => void
 
@@ -144,12 +145,9 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const [cvFileName, setCvFileName] = useState<string | null>(null)
   const [interviewSession, setInterviewSession] = useState<InterviewSessionData | null>(null)
 
-  // Ecosystem state.
-  // Course-First Development Mode: boot into the HireOS/Results side so
-  // App.tsx's DEVELOPMENT_MODE.DEFAULT_ENTRY actually renders first instead
-  // of always jumping straight to Reagvis Trails. See
-  // /COURSE_FIRST_DEVELOPMENT_MODE.md
-  const [activeProduct, setActiveProduct] = useState<ActiveProduct>("hireos")
+  // Ecosystem state. The URL is the one source of truth for which product is
+  // showing (src/router.ts); entering or leaving Reagvis navigates.
+  const activeProduct: ActiveProduct = useRoute() === "trails" ? "reagvis" : "hireos"
   const [reagvisView, setReagvisView] = useState<ReagvisView>("map")
 
   // Learning-engine progress snapshot — the single source of truth for
@@ -189,7 +187,15 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const [transitionMessage, setTransitionMessage] = useState("")
 
   const course = getCourseById(progress.activeCourseId)
-  const courseData = useMemo(() => deriveLegacyCourseData(progress, simulatedReadinessScore), [progress, simulatedReadinessScore])
+  const totalCheckpoints = useMemo(() => (course ? getAllCheckpointsInOrder(course).length : 0), [course])
+  // Signed in, readiness is the learner's real share of the course — 0 on a
+  // new account. Signed out it stays the demo story's simulated score.
+  const readinessScore = learnerSession.signedIn
+    ? totalCheckpoints > 0
+      ? Math.round((100 * progress.completedCheckpointIds.length) / totalCheckpoints)
+      : 0
+    : simulatedReadinessScore
+  const courseData = useMemo(() => deriveLegacyCourseData(progress, readinessScore), [progress, readinessScore])
   const dsaModuleStates = useMemo(() => (course ? resolveAllModuleStates(course, progress) : {}), [course, progress])
   const dsaZoneStates = useMemo(() => (course ? resolveAllZoneStates(course, progress) : {}), [course, progress])
 
@@ -213,9 +219,9 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       if (resolvedId !== progress.activeCourseId) {
         setProgress(progressRepository.load(resolvedId) ?? buildDemoLearnerBootstrap(resolvedId))
       }
-      setActiveProduct("reagvis")
       setReagvisView("intro")
       setIsTransitioning(false)
+      navigate("trails")
     }, 1200)
   }
 
@@ -318,16 +324,16 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     // See /COURSE_FIRST_DEVELOPMENT_MODE.md
     if (!DEVELOPMENT_MODE.INTERVIEW_FLOW_ENABLED) return
 
+    // The caller navigates to the interview; this only plays the transition.
     setIsTransitioning(true)
     setTransitionMessage("Returning to HireOS with refreshed credentials...")
     setTimeout(() => {
-      setActiveProduct("hireos")
       setIsTransitioning(false)
     }, 1000)
   }
 
   const returnToHireOS = () => {
-    setActiveProduct("hireos")
+    navigate("landing")
   }
 
   const value = useMemo<AppStateValue>(
@@ -341,7 +347,6 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       interviewSession,
       setInterviewSession,
       activeProduct,
-      setActiveProduct,
       reagvisView,
       setReagvisView,
       courseData,
@@ -352,7 +357,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       lives: progress.lives,
       completedLessonIds,
       currentLessonId,
-      simulatedReadinessScore,
+      simulatedReadinessScore: readinessScore,
       activeCourseId: progress.activeCourseId,
       activeModuleId: progress.activeModuleId,
       activeZoneId: progress.activeZoneId,
@@ -387,7 +392,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       progress,
       completedLessonIds.join(","),
       currentLessonId,
-      simulatedReadinessScore,
+      readinessScore,
       dsaModuleStates,
       dsaZoneStates,
       viewedModuleId,

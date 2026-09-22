@@ -12,10 +12,11 @@
 //    signed-out local repositories stand in.
 //
 // main.tsx awaits `bootLearnerSession()` before rendering, because
-// AppStateContext reads progress synchronously as it mounts. There is no
-// sign-in screen yet — that is the frontend's to design — so the browser
-// console is the way in: `reagvis.login(email, password)`, `reagvis.logout()`,
-// `reagvis.status()`. A screen would call the same functions.
+// AppStateContext reads progress synchronously as it mounts. The auth page
+// (pages/AuthPage.tsx) and the landing page's Log out call `signIn`,
+// `signUp` and `signOut` below, then reload so boot runs again as the new
+// learner. The browser console has the same functions for scripted checks:
+// `reagvis.login(email, password)`, `reagvis.logout()`, `reagvis.status()`.
 
 import {
   ApiProgressRepository,
@@ -35,10 +36,13 @@ import { ApiClient, SessionExpiredError, forgetLearner, type SessionUser } from 
 export type LearnerSessionMode = "local" | "api" | "offline"
 
 /** What boot decided. AppStateContext reads `signedIn`: a signed-in
- * learner's progress is their own and is never swapped for demo data. */
+ * learner's progress is their own and is never swapped for demo data.
+ * The pages read `account` — who is signed in on this browser, set whenever
+ * a session exists, even on a boot that could not reach the API. */
 export const learnerSession = {
   mode: "local" as LearnerSessionMode,
   user: null as SessionUser | null,
+  account: null as SessionUser | null,
   get signedIn(): boolean {
     return this.mode !== "local"
   },
@@ -46,6 +50,12 @@ export const learnerSession = {
 
 let activeProgress: ProgressRepository = new LocalProgressRepository()
 let activeNotes: NotesRepository = new LocalNotesRepository()
+
+// Set by boot. `signIn`/`signUp`/`signOut` need the same client and storage,
+// and sign-out needs the learner's repositories to send what is queued.
+let bootClient: ApiClient | null = null
+let bootStorage: Storage | null = null
+let bootAccount: LearnerSessionOutcome["account"] = null
 
 /** The app's progress repository — whichever one boot chose. */
 export const progressRepository: ProgressRepository = {
@@ -142,6 +152,9 @@ export async function bootLearnerSession(): Promise<void> {
   try {
     const storage = window.localStorage
     const client = new ApiClient({ storage })
+    bootClient = client
+    bootStorage = storage
+
     const outcome = await startLearnerSession({
       client,
       storage,
@@ -151,8 +164,11 @@ export async function bootLearnerSession(): Promise<void> {
 
     activeProgress = outcome.progress
     activeNotes = outcome.notes
+    bootAccount = outcome.account
     learnerSession.mode = outcome.mode
     learnerSession.user = outcome.user
+    // Read after boot: an expired session was cleared while it ran.
+    learnerSession.account = client.session()?.user ?? null
 
     const { account } = outcome
     if (account) {
@@ -162,11 +178,76 @@ export async function bootLearnerSession(): Promise<void> {
       })
     }
 
-    installConsole(client, storage, outcome)
+    installConsole(client, outcome)
     announce(outcome, client)
   } catch (error) {
     console.error("[reagvis] Could not start the learner session — using this browser's local progress.", error)
   }
+}
+
+// ── signing in and out ───────────────────────────────────────────────────
+
+/** Sign-out found changes the server has not confirmed; signing out would
+ * delete them from this browser. `signOut({ discardUnsent: true })` does it anyway. */
+export class UnsentChangesError extends Error {
+  constructor(readonly count: number) {
+    super(`${count} change(s) have not reached the server yet — it is unreachable. Signing out removes them from this browser.`)
+    this.name = "UnsentChangesError"
+  }
+}
+
+function bootedClient(): ApiClient {
+  if (!bootClient) throw new Error("The learner session has not started.")
+  return bootClient
+}
+
+function unsentChanges(): { progress: number; notes: number } {
+  return { progress: bootAccount?.progress.pendingCount() ?? 0, notes: bootAccount?.notes.pendingCount() ?? 0 }
+}
+
+function refuseIfSignedIn(client: ApiClient): void {
+  const current = client.session()
+  if (current) throw new Error(`Already signed in as ${current.user.email}. Sign out first.`)
+}
+
+/** Starts a session in this browser. The caller reloads the page so boot
+ * runs again as this learner. Throws `ApiRequestError` (wrong password: 401
+ * UNAUTHENTICATED) or `ApiUnavailableError`. */
+export async function signIn(email: string, password: string): Promise<SessionUser> {
+  const client = bootedClient()
+  refuseIfSignedIn(client)
+  return client.signIn(email, password)
+}
+
+/** Creates the account and starts a session. The caller reloads. Throws
+ * `ApiRequestError` (taken: 409 EMAIL_ALREADY_REGISTERED; invalid: 400
+ * VALIDATION_ERROR) or `ApiUnavailableError`. */
+export async function signUp(email: string, password: string, displayName: string): Promise<SessionUser> {
+  const client = bootedClient()
+  refuseIfSignedIn(client)
+  return client.register(email, password, displayName)
+}
+
+/** Sends what is queued, revokes the session and removes everything this
+ * browser kept for the learner. Throws `UnsentChangesError`, having removed
+ * nothing, when the server is unreachable with changes still queued — unless
+ * `discardUnsent`. The caller reloads. */
+export async function signOut({ discardUnsent = false }: { discardUnsent?: boolean } = {}): Promise<void> {
+  const client = bootedClient()
+  const current = client.session()
+  if (!current) return
+
+  if (bootAccount) {
+    await Promise.all([bootAccount.progress.flush(), bootAccount.notes.flush()])
+    const left = unsentChanges()
+    if (left.progress + left.notes > 0 && !discardUnsent) throw new UnsentChangesError(left.progress + left.notes)
+    bootAccount.progress.stop()
+    bootAccount.notes.stop()
+  }
+
+  await client.signOut()
+  // Nothing of this learner stays behind in this browser.
+  if (bootStorage) forgetLearner(bootStorage, current.user.id)
 }
 
 // ── console ──────────────────────────────────────────────────────────────
@@ -179,62 +260,42 @@ interface ReagvisConsole {
   sync(): Promise<{ progress: number; notes: number }>
 }
 
-function installConsole(client: ApiClient, storage: Storage, outcome: LearnerSessionOutcome): void {
-  const { account } = outcome
-  const unsent = () => ({ progress: account?.progress.pendingCount() ?? 0, notes: account?.notes.pendingCount() ?? 0 })
-
-  const refuseIfSignedIn = () => {
-    const current = client.session()
-    if (current) throw new Error(`Already signed in as ${current.user.email}. Run reagvis.logout() first.`)
-  }
-
+function installConsole(client: ApiClient, outcome: LearnerSessionOutcome): void {
   const reagvis: ReagvisConsole = {
-    status: () => ({ mode: outcome.mode, user: client.session()?.user.email ?? null, api: client.baseUrl, unsent: unsent() }),
+    status: () => ({ mode: outcome.mode, user: client.session()?.user.email ?? null, api: client.baseUrl, unsent: unsentChanges() }),
 
     async login(email, password) {
-      refuseIfSignedIn()
-      const user = await client.signIn(email, password)
+      const user = await signIn(email, password)
       console.info(`[reagvis] Signed in as ${user.email}. Reloading…`)
       window.location.reload()
     },
 
     async register(email, password, displayName = email.split("@")[0] || "Learner") {
-      refuseIfSignedIn()
-      const user = await client.register(email, password, displayName)
+      const user = await signUp(email, password, displayName)
       console.info(`[reagvis] Registered and signed in as ${user.email}. Reloading…`)
       window.location.reload()
     },
 
-    async logout({ discardUnsent = false } = {}) {
-      const current = client.session()
-      if (!current) {
+    async logout(options) {
+      if (!client.session()) {
         console.info("[reagvis] Not signed in.")
         return
       }
-
-      if (account) {
-        await Promise.all([account.progress.flush(), account.notes.flush()])
-        const left = unsent()
-        if (left.progress + left.notes > 0 && !discardUnsent) {
-          throw new Error(
-            `${left.progress + left.notes} change(s) have not reached the server yet — it is unreachable. ` +
-              "Signing out removes them from this browser. Run reagvis.logout({ discardUnsent: true }) to do it anyway.",
-          )
+      try {
+        await signOut(options)
+      } catch (error) {
+        if (error instanceof UnsentChangesError) {
+          throw new Error(`${error.message} Run reagvis.logout({ discardUnsent: true }) to do it anyway.`)
         }
-        account.progress.stop()
-        account.notes.stop()
+        throw error
       }
-
-      await client.signOut()
-      // Nothing of this learner stays behind in this browser.
-      forgetLearner(storage, current.user.id)
       console.info("[reagvis] Signed out. Reloading…")
       window.location.reload()
     },
 
     async sync() {
-      if (account) await Promise.all([account.progress.flush(), account.notes.flush()])
-      return unsent()
+      if (bootAccount) await Promise.all([bootAccount.progress.flush(), bootAccount.notes.flush()])
+      return unsentChanges()
     },
   }
 

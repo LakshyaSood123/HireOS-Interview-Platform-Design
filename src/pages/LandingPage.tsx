@@ -1,10 +1,12 @@
-import { useState } from "react"
+import { useState, type MouseEvent } from "react"
 import OwlAvatar from "../components/OwlAvatar"
 import LanguageToggle from "../components/LanguageToggle"
 import ForestBackdrop from "../components/forest/ForestBackdrop"
 import { useLanguage } from "../i18n/LanguageContext"
 import { useAppState } from "../state/AppStateContext"
 import { DEVELOPMENT_MODE, INTERVIEW_FROZEN_MESSAGE } from "../config/developmentMode"
+import { learnerSession, signOut, UnsentChangesError } from "../learning/services/learnerSession"
+import { hrefFor, navigate, reloadTo, type Route } from "../router"
 
 type Page = "landing" | "setup" | "interview" | "results" | "dashboard" | "admin" | "placement-flow"
 
@@ -37,10 +39,39 @@ const stats = [
   { value: "2.4×", label: "Faster Skill Recovery" },
 ]
 
+/** An in-app link: a real href (open in new tab still works), routed without a reload. */
+function routeLink(route: Route) {
+  return {
+    href: hrefFor(route),
+    onClick: (event: MouseEvent<HTMLAnchorElement>) => {
+      event.preventDefault()
+      navigate(route)
+    },
+  }
+}
+
 export default function LandingPage({ onNavigate }: Props) {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [signingOut, setSigningOut] = useState(false)
   const { t } = useLanguage()
   const { startLearningTrail } = useAppState()
+  const { account } = learnerSession
+
+  const handleLogout = async () => {
+    setSigningOut(true)
+    try {
+      try {
+        await signOut()
+      } catch (error) {
+        if (!(error instanceof UnsentChangesError) || !window.confirm(`${error.message}\n\nLog out anyway?`)) throw error
+        await signOut({ discardUnsent: true })
+      }
+      reloadTo("landing")
+    } catch (error) {
+      if (!(error instanceof UnsentChangesError)) console.error("[reagvis] Could not sign out.", error)
+      setSigningOut(false)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-[#071A14] font-display text-white overflow-x-hidden relative">
@@ -61,7 +92,7 @@ export default function LandingPage({ onNavigate }: Props) {
           </div>
 
           {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
+          {/* <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
             <a href="#how" className="hover:text-white transition-colors">Ecosystem Loop</a>
             <a href="#features" className="hover:text-white transition-colors">Sylva Engine</a>
             <button
@@ -70,23 +101,53 @@ export default function LandingPage({ onNavigate }: Props) {
             >
               <span>🌿</span> Reagvis Trails
             </button>
-          </div>
+          </div> */}
 
           {/* Auth & CTA */}
           <div className="hidden md:flex items-center gap-3">
-            <LanguageToggle variant="dark" />
-            <button
+            {/* <LanguageToggle variant="dark" /> */}
+            {/* <button
               onClick={() => DEVELOPMENT_MODE.INTERVIEW_FLOW_ENABLED && onNavigate("setup")}
               disabled={!DEVELOPMENT_MODE.INTERVIEW_FLOW_ENABLED}
               title={DEVELOPMENT_MODE.INTERVIEW_FLOW_ENABLED ? undefined : INTERVIEW_FROZEN_MESSAGE}
-              className={`text-xs font-bold text-white transition-all px-5 py-2.5 rounded-xl shadow-lg ${
-                DEVELOPMENT_MODE.INTERVIEW_FLOW_ENABLED
+              className={`text-xs font-bold text-white transition-all px-5 py-2.5 rounded-xl shadow-lg ${DEVELOPMENT_MODE.INTERVIEW_FLOW_ENABLED
                   ? "bg-gradient-to-r from-[#1DB584] to-[#10B981] hover:from-[#159a6f] hover:to-[#0d9668] shadow-[#1DB584]/25 hover:scale-105 active:scale-95 cursor-pointer"
                   : "bg-white/10 text-gray-500 shadow-none cursor-not-allowed"
-              }`}
+                }`}
             >
               Begin Interview ➔
-            </button>
+            </button> */}
+            {account ? (
+              <>
+                <div className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full bg-white/5 border border-white/10">
+                  <span className="w-7 h-7 rounded-full bg-[#1DB584]/25 border border-[#1DB584]/40 flex items-center justify-center text-xs font-black text-[#1DB584]">
+                    {account.displayName.charAt(0).toUpperCase()}
+                  </span>
+                  <span className="text-xs font-semibold text-gray-200 max-w-[140px] truncate" title={account.email}>
+                    {account.displayName}
+                  </span>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  disabled={signingOut}
+                  className="text-xs font-semibold text-gray-400 hover:text-white transition-colors cursor-pointer disabled:cursor-wait"
+                >
+                  {signingOut ? "Logging out…" : "Log out"}
+                </button>
+              </>
+            ) : (
+              <>
+                <a {...routeLink("login")} className="text-xs font-bold text-gray-200 hover:text-white transition-colors px-2 py-2.5">
+                  Log in
+                </a>
+                <a
+                  {...routeLink("signup")}
+                  className="text-xs font-bold text-white transition-all px-5 py-2.5 rounded-xl shadow-lg bg-gradient-to-r from-[#1DB584] to-[#10B981] hover:from-[#159a6f] hover:to-[#0d9668] shadow-[#1DB584]/25 hover:scale-105 active:scale-95"
+                >
+                  Sign up
+                </a>
+              </>
+            )}
           </div>
 
           {/* Mobile hamburger */}
@@ -112,15 +173,31 @@ export default function LandingPage({ onNavigate }: Props) {
               onClick={() => DEVELOPMENT_MODE.INTERVIEW_FLOW_ENABLED && (setMenuOpen(false), onNavigate("setup"))}
               disabled={!DEVELOPMENT_MODE.INTERVIEW_FLOW_ENABLED}
               title={DEVELOPMENT_MODE.INTERVIEW_FLOW_ENABLED ? undefined : INTERVIEW_FROZEN_MESSAGE}
-              className={`text-left text-sm font-semibold ${
-                DEVELOPMENT_MODE.INTERVIEW_FLOW_ENABLED ? "text-white" : "text-gray-500 cursor-not-allowed"
-              }`}
+              className={`text-left text-sm font-semibold ${DEVELOPMENT_MODE.INTERVIEW_FLOW_ENABLED ? "text-white" : "text-gray-500 cursor-not-allowed"
+                }`}
             >
               Start Interview
             </button>
             <button onClick={() => { setMenuOpen(false); startLearningTrail(); }} className="text-left text-sm font-semibold text-[#1DB584]">
               Explore Reagvis Trails
             </button>
+            {account ? (
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-sm text-gray-300 truncate">Signed in as {account.displayName}</span>
+                <button onClick={handleLogout} disabled={signingOut} className="text-sm font-semibold text-gray-400 hover:text-white">
+                  {signingOut ? "Logging out…" : "Log out"}
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-3">
+                <a {...routeLink("login")} className="flex-1 text-center text-sm font-bold text-white px-4 py-2.5 rounded-xl border border-white/15">
+                  Log in
+                </a>
+                <a {...routeLink("signup")} className="flex-1 text-center text-sm font-bold text-white px-4 py-2.5 rounded-xl bg-[#1DB584]">
+                  Sign up
+                </a>
+              </div>
+            )}
             <LanguageToggle variant="dark" />
           </div>
         )}
@@ -150,11 +227,10 @@ export default function LandingPage({ onNavigate }: Props) {
             onClick={() => DEVELOPMENT_MODE.INTERVIEW_FLOW_ENABLED && onNavigate("setup")}
             disabled={!DEVELOPMENT_MODE.INTERVIEW_FLOW_ENABLED}
             title={DEVELOPMENT_MODE.INTERVIEW_FLOW_ENABLED ? undefined : INTERVIEW_FROZEN_MESSAGE}
-            className={`w-full sm:w-auto inline-flex items-center justify-center gap-2.5 font-bold px-8 py-4 rounded-2xl text-base transition-all ${
-              DEVELOPMENT_MODE.INTERVIEW_FLOW_ENABLED
-                ? "bg-gradient-to-r from-[#1DB584] to-[#10B981] hover:from-[#159a6f] hover:to-[#0d9668] text-white shadow-xl shadow-[#1DB584]/35 hover:-translate-y-0.5 cursor-pointer"
-                : "bg-white/10 text-gray-500 cursor-not-allowed"
-            }`}
+            className={`w-full sm:w-auto inline-flex items-center justify-center gap-2.5 font-bold px-8 py-4 rounded-2xl text-base transition-all ${DEVELOPMENT_MODE.INTERVIEW_FLOW_ENABLED
+              ? "bg-gradient-to-r from-[#1DB584] to-[#10B981] hover:from-[#159a6f] hover:to-[#0d9668] text-white shadow-xl shadow-[#1DB584]/35 hover:-translate-y-0.5 cursor-pointer"
+              : "bg-white/10 text-gray-500 cursor-not-allowed"
+              }`}
           >
             <span>Begin Your Interview</span>
             <span>➔</span>

@@ -14,8 +14,6 @@ export const DEVELOPMENT_MODE = {
   COURSE_FIRST_MODE: true,
   /** Setup/Interview entry points are gated off while this is false. */
   INTERVIEW_FLOW_ENABLED: false,
-  /** Page the app boots into while COURSE_FIRST_MODE is active. */
-  DEFAULT_ENTRY: "reagvis-trail",
   /** TEMPORARY demo convenience — when true, CodeWorkspace shows an
    * "✨ Auto-fill Demo Answer" button that fills the editor with a canonical
    * correct solution (CodingActivityContent.demoSolution) for the current

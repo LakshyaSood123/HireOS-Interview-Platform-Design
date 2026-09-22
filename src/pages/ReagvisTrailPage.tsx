@@ -16,7 +16,7 @@ import { useAppState } from "../state/AppStateContext"
 import { libraryCourses, type TrailNode } from "../data/reagvisCourses"
 import { getCourseById, isCourseAvailable, getAllCheckpointsInOrder } from "../learning/courseRegistry"
 import { RoutingCodeRunner } from "../learning/services/pistonCodeRunner"
-import { notesRepository } from "../learning/services/learnerSession"
+import { learnerSession, notesRepository } from "../learning/services/learnerSession"
 
 // Module-level singletons — one code runner / notes repository for the whole
 // app, same pattern as AppStateContext's progressRepository. The notes
@@ -52,15 +52,40 @@ export default function ReagvisTrailPage({ onNavigateHireOS }: ReagvisTrailPageP
     failCheckpointAttempt,
     getCheckpointState,
     dsaModuleStates,
+    userXP,
+    userStreak,
+    simulatedReadinessScore,
+    activeModuleId,
   } = useAppState()
 
   const [previewNode, setPreviewNode] = useState<TrailNode | null>(null)
   const [previewModuleId, setPreviewModuleId] = useState<string | null>(null)
 
   const course = getCourseById(activeCourseId)
-  const viewedModule = course?.zones.flatMap(z => z.modules).find(m => m.id === viewedModuleId)
+  const courseModules = course?.zones.flatMap(z => z.modules) ?? []
+  const viewedModule = courseModules.find(m => m.id === viewedModuleId)
   const viewedCheckpoint = viewedModule?.checkpoints.find(cp => cp.id === viewedCheckpointId)
   const orderedCheckpoints = course ? getAllCheckpointsInOrder(course) : []
+
+  // Signed in, the intro shows the learner's own numbers — all zero on a new
+  // account — instead of the demo interview diagnosis.
+  const completedCheckpointCount = orderedCheckpoints.filter(cp => {
+    const state = getCheckpointState(cp.id)
+    return state === "completed" || state === "mastered"
+  }).length
+  const currentModuleTitle = courseModules.find(m => m.id === activeModuleId)?.title
+  const learnerStats = learnerSession.signedIn
+    ? [
+        { label: "Readiness", value: `${simulatedReadinessScore}%`, note: "Share of the course done" },
+        { label: "XP Earned", value: userXP.toLocaleString(), note: "From completed checkpoints" },
+        {
+          label: "Checkpoints",
+          value: `${completedCheckpointCount} / ${orderedCheckpoints.length}`,
+          note: currentModuleTitle ? `Now: ${currentModuleTitle}` : "Completed",
+        },
+        { label: "Streak", value: `${userStreak}d`, note: "Days in a row" },
+      ]
+    : null
 
   const handleSelectNode = (node: TrailNode) => {
     setPreviewNode(node)
@@ -89,7 +114,7 @@ export default function ReagvisTrailPage({ onNavigateHireOS }: ReagvisTrailPageP
       reagvisView === "map" ? "h-screen overflow-hidden bg-[#D2ECED]" : "min-h-screen bg-[#CFDFBA] overflow-x-hidden"
     }`}>
       {/* ── TOP NAV / HUD ── */}
-      <TrailHUD onNavigateHireOS={onNavigateHireOS} />
+      <TrailHUD />
 
       <main className={`relative z-10 ${reagvisView === "map" ? "flex-1 min-h-0 overflow-hidden" : "flex-1"}`}>
         {/* ══════════════════════════════════════════════════════
@@ -120,58 +145,74 @@ export default function ReagvisTrailPage({ onNavigateHireOS }: ReagvisTrailPageP
                 </div>
                 <div>
                   <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-[#5B8854]/15 text-[#2F6747] border border-[#5B8854]/30 mb-2">
-                    <span>🧭</span> Diagnostic Transfer Complete
+                    <span>🧭</span> {learnerStats ? "Your Trail" : "Diagnostic Transfer Complete"}
                   </div>
                   <h1 className="text-3xl sm:text-4xl font-black text-[#1B3F2B] tracking-tight">
                     Your Alpine DSA Trail Is Ready
                   </h1>
                   <p className="text-sm sm:text-base text-gray-600 mt-2 leading-relaxed">
-                    Based on your HireOS interview diagnosis, we synthesized an alpine trail targetting the exact technical skills that will elevate your technical score from 58 to Interview Ready (80+).
+                    {learnerStats
+                      ? "Work through the DSA course one checkpoint at a time, starting at Foundations. Your XP, streak and notes are saved to your account."
+                      : "Based on your HireOS interview diagnosis, we synthesized an alpine trail targetting the exact technical skills that will elevate your technical score from 58 to Interview Ready (80+)."}
                   </p>
                 </div>
               </div>
 
-              {/* Diagnostic Comparison Grid (Soft cream cards) */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 mb-8">
-                <div className="bg-white/80 rounded-2xl border border-[#CBDCC4] p-4 text-center shadow-2xs">
-                  <span className="text-xs text-gray-500 block mb-1">HireOS Score</span>
-                  <span className="text-2xl font-black text-[#E27D4C] font-mono">58 / 100</span>
-                  <span className="text-[10px] text-gray-500 block mt-0.5 font-medium">Struggle Area</span>
-                </div>
-                <div className="bg-white/80 rounded-2xl border border-[#CBDCC4] p-4 text-center shadow-2xs">
-                  <span className="text-xs text-gray-500 block mb-1">Current State</span>
-                  <span className="text-lg font-black text-[#D97706]">Developing</span>
-                  <span className="text-[10px] text-gray-500 block mt-0.5 font-medium">Foundational gaps</span>
-                </div>
-                <div className="bg-white/80 rounded-2xl border border-[#CBDCC4] p-4 text-center shadow-2xs">
-                  <span className="text-xs text-gray-500 block mb-1">Target Milestone</span>
-                  <span className="text-2xl font-black text-[#1DB584] font-mono">80+</span>
-                  <span className="text-[10px] text-[#1DB584] font-bold block mt-0.5">Interview Ready</span>
-                </div>
-                <div className="bg-white/80 rounded-2xl border border-[#CBDCC4] p-4 text-center shadow-2xs">
-                  <span className="text-xs text-gray-500 block mb-1">Estimated Trail</span>
-                  <span className="text-lg font-black text-[#1E3B2B]">~2h 30m</span>
-                  <span className="text-[10px] text-gray-500 block mt-0.5 font-medium">18 Alpine lessons</span>
-                </div>
-              </div>
-
-              {/* Calibrated Focus Skills */}
-              <div className="mb-8">
-                <h3 className="text-xs font-black uppercase tracking-wider text-gray-500 mb-3">
-                  Calibrated Focus Topics:
-                </h3>
-                <div className="flex flex-wrap gap-2.5">
-                  {courseData.weakSkills.map((skill, i) => (
-                    <span
-                      key={i}
-                      className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#E6F0DC] border border-[#BDD4B6] text-[#244F39] flex items-center gap-1.5 shadow-2xs"
-                    >
-                      <span className="w-2 h-2 rounded-full bg-[#1DB584]" />
-                      {skill}
-                    </span>
+              {learnerStats ? (
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 mb-8">
+                  {learnerStats.map(stat => (
+                    <div key={stat.label} className="bg-white/80 rounded-2xl border border-[#CBDCC4] p-4 text-center shadow-2xs">
+                      <span className="text-xs text-gray-500 block mb-1">{stat.label}</span>
+                      <span className="text-2xl font-black text-[#1E3B2B] font-mono">{stat.value}</span>
+                      <span className="text-[10px] text-gray-500 block mt-0.5 font-medium truncate">{stat.note}</span>
+                    </div>
                   ))}
                 </div>
-              </div>
+              ) : (
+                <>
+                  {/* Diagnostic Comparison Grid (Soft cream cards) */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 mb-8">
+                    <div className="bg-white/80 rounded-2xl border border-[#CBDCC4] p-4 text-center shadow-2xs">
+                      <span className="text-xs text-gray-500 block mb-1">HireOS Score</span>
+                      <span className="text-2xl font-black text-[#E27D4C] font-mono">58 / 100</span>
+                      <span className="text-[10px] text-gray-500 block mt-0.5 font-medium">Struggle Area</span>
+                    </div>
+                    <div className="bg-white/80 rounded-2xl border border-[#CBDCC4] p-4 text-center shadow-2xs">
+                      <span className="text-xs text-gray-500 block mb-1">Current State</span>
+                      <span className="text-lg font-black text-[#D97706]">Developing</span>
+                      <span className="text-[10px] text-gray-500 block mt-0.5 font-medium">Foundational gaps</span>
+                    </div>
+                    <div className="bg-white/80 rounded-2xl border border-[#CBDCC4] p-4 text-center shadow-2xs">
+                      <span className="text-xs text-gray-500 block mb-1">Target Milestone</span>
+                      <span className="text-2xl font-black text-[#1DB584] font-mono">80+</span>
+                      <span className="text-[10px] text-[#1DB584] font-bold block mt-0.5">Interview Ready</span>
+                    </div>
+                    <div className="bg-white/80 rounded-2xl border border-[#CBDCC4] p-4 text-center shadow-2xs">
+                      <span className="text-xs text-gray-500 block mb-1">Estimated Trail</span>
+                      <span className="text-lg font-black text-[#1E3B2B]">~2h 30m</span>
+                      <span className="text-[10px] text-gray-500 block mt-0.5 font-medium">18 Alpine lessons</span>
+                    </div>
+                  </div>
+
+                  {/* Calibrated Focus Skills */}
+                  <div className="mb-8">
+                    <h3 className="text-xs font-black uppercase tracking-wider text-gray-500 mb-3">
+                      Calibrated Focus Topics:
+                    </h3>
+                    <div className="flex flex-wrap gap-2.5">
+                      {courseData.weakSkills.map((skill, i) => (
+                        <span
+                          key={i}
+                          className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#E6F0DC] border border-[#BDD4B6] text-[#244F39] flex items-center gap-1.5 shadow-2xs"
+                        >
+                          <span className="w-2 h-2 rounded-full bg-[#1DB584]" />
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
 
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row items-center gap-4 pt-6 border-t border-[#CBDCC4]">

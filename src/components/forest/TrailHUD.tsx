@@ -1,14 +1,7 @@
 import { useAppState } from "../../state/AppStateContext"
 import OwlAvatar from "../OwlAvatar"
 
-interface TrailHUDProps {
-  /** App-level navigate (App.tsx's `handleNavigate`), so leaving Reagvis
-   * actually moves the top-level `page` state, not just the context's
-   * `activeProduct` flag. See PART 0 of the navigation-regression fix. */
-  onNavigateHireOS?: (page: string) => void
-}
-
-export default function TrailHUD({ onNavigateHireOS }: TrailHUDProps) {
+export default function TrailHUD() {
   const {
     reagvisView,
     setReagvisView,
@@ -18,11 +11,6 @@ export default function TrailHUD({ onNavigateHireOS }: TrailHUDProps) {
     simulatedReadinessScore,
   } = useAppState()
 
-  const handleReturnToHireOS = () => {
-    returnToHireOS()
-    onNavigateHireOS?.("results")
-  }
-
   return (
     <header className="sticky top-0 z-40 bg-[#E8EFE0]/95 backdrop-blur-md border-b border-[#C2D6B8] text-[#1E3B2B] px-4 sm:px-6 py-2.5 font-display shadow-2xs">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
@@ -30,8 +18,8 @@ export default function TrailHUD({ onNavigateHireOS }: TrailHUDProps) {
         {/* ── Left: Brand & Return to HireOS ── */}
         <div className="flex items-center gap-3">
           <button
-            onClick={handleReturnToHireOS}
-            title="Return to HireOS Interview"
+            onClick={returnToHireOS}
+            title="Back to the HireOS home page"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/80 hover:bg-white border border-[#BBD4B8]/70 text-xs font-bold text-[#234E35] transition-all group shadow-2xs cursor-pointer"
           >
             <svg

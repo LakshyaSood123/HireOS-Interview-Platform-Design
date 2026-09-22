@@ -1,5 +1,6 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import LandingPage from "./pages/LandingPage"
+import AuthPage from "./pages/AuthPage"
 import SetupPage from "./pages/SetupPage"
 import InterviewPage from "./pages/InterviewPage"
 import ResultsPage from "./pages/ResultsPage"
@@ -9,25 +10,17 @@ import PlacementFlowPage from "./pages/PlacementFlowPage"
 import ReagvisTrailPage from "./pages/ReagvisTrailPage"
 import TransitionPortal from "./components/forest/TransitionPortal"
 import { LanguageProvider } from "./i18n/LanguageContext"
-import { AppStateProvider, useAppState } from "./state/AppStateContext"
+import { AppStateProvider } from "./state/AppStateContext"
 import { DEVELOPMENT_MODE, isInterviewPage } from "./config/developmentMode"
+import { learnerSession } from "./learning/services/learnerSession"
+import { isRoute, navigate, useRoute, type Route } from "./router"
 
-type Page =
-  | "landing"
-  | "setup"
-  | "interview"
-  | "results"
-  | "placement-flow"
-  | "dashboard"
-  | "admin"
-  | "reagvis-trail"
-
-const navItems: { id: Page; label: string; emoji: string }[] = [
+const navItems: { id: Route; label: string; emoji: string }[] = [
   { id: "landing", label: "Landing", emoji: "🏠" },
   { id: "setup", label: "Setup", emoji: "📄" },
   { id: "interview", label: "Interview", emoji: "🎤" },
   { id: "results", label: "Results", emoji: "📊" },
-  { id: "reagvis-trail", label: "Reagvis Trails", emoji: "🌿" },
+  { id: "trails", label: "Reagvis Trails", emoji: "🌿" },
   { id: "placement-flow", label: "Placement", emoji: "📚" },
   { id: "dashboard", label: "Journey", emoji: "🎓" },
   { id: "admin", label: "Admin", emoji: "⚙️" },
@@ -39,55 +32,53 @@ const visibleNavItems = DEVELOPMENT_MODE.INTERVIEW_FLOW_ENABLED
   ? navItems
   : navItems.filter(item => !isInterviewPage(item.id))
 
+/** Where a request for `requested` actually lands — every guard in one place.
+ * Reagvis Trails is open to everyone: signed out it runs on the demo
+ * progress, signed in on the learner's account. The auth pages are pointless
+ * once signed in. */
+function resolveRoute(requested: Route | null, signedIn: boolean): Route {
+  if (requested === null) return "landing"
+  if (!DEVELOPMENT_MODE.INTERVIEW_FLOW_ENABLED && isInterviewPage(requested)) return "landing"
+  if ((requested === "login" || requested === "signup") && signedIn) return "landing"
+  return requested
+}
+
 function AppContent() {
-  // Course-First Development Mode: boot straight into the post-interview
-  // experience instead of Landing. See /COURSE_FIRST_DEVELOPMENT_MODE.md
-  const [page, setPage] = useState<Page>(DEVELOPMENT_MODE.DEFAULT_ENTRY as Page)
+  const requested = useRoute()
+  const route = resolveRoute(requested, learnerSession.account !== null)
   const [showDemoNav, setShowDemoNav] = useState(false)
-  const { activeProduct, setActiveProduct } = useAppState()
 
-  // Single guarded navigation entry point. Every onNavigate callback passed
-  // to a page ultimately calls this, so blocking frozen pages here is
-  // sufficient even if a component tries to navigate("setup"/"interview")
-  // directly.
-  const handleNavigate = (targetPage: string) => {
-    if (!DEVELOPMENT_MODE.INTERVIEW_FLOW_ENABLED && isInterviewPage(targetPage)) {
-      return
-    }
+  // A guarded or unknown address is replaced, so Back never returns to it.
+  useEffect(() => {
+    if (route !== requested) navigate(route, { replace: true })
+  }, [route, requested])
 
-    if (targetPage === "reagvis-trail") {
-      setActiveProduct("reagvis")
-      setPage("reagvis-trail")
-    } else {
-      setActiveProduct("hireos")
-      setPage(targetPage as Page)
-    }
+  // Pages navigate by page name (`onNavigate("results")`); "reagvis-trail" is
+  // the name they use for Trails. Frozen pages are ignored rather than
+  // redirected, so a disabled button does nothing.
+  const handleNavigate = (page: string) => {
+    const target = page === "reagvis-trail" ? "trails" : page
+    if (!isRoute(target)) return
+    if (!DEVELOPMENT_MODE.INTERVIEW_FLOW_ENABLED && isInterviewPage(target)) return
+    navigate(target)
   }
-
-  // When activeProduct is set to reagvis via card button / CTA
-  const isReagvis = activeProduct === "reagvis" || page === "reagvis-trail"
 
   return (
     <div className="relative font-display bg-[#071A14]">
       <TransitionPortal />
 
-      {/* Page content */}
-      {isReagvis ? (
-        <ReagvisTrailPage onNavigateHireOS={handleNavigate} />
-      ) : (
-        <>
-          {page === "landing" && <LandingPage onNavigate={handleNavigate} />}
-          {page === "setup" && <SetupPage onNavigate={handleNavigate} />}
-          {page === "interview" && <InterviewPage onNavigate={handleNavigate} />}
-          {page === "results" && <ResultsPage onNavigate={handleNavigate} />}
-          {page === "placement-flow" && <PlacementFlowPage onNavigate={handleNavigate} />}
-          {page === "dashboard" && <StudentDashboardPage onNavigate={handleNavigate} />}
-          {page === "admin" && <AdminPage onNavigate={handleNavigate} />}
-        </>
-      )}
+      {route === "landing" && <LandingPage onNavigate={handleNavigate} />}
+      {(route === "login" || route === "signup") && <AuthPage mode={route} />}
+      {route === "trails" && <ReagvisTrailPage onNavigateHireOS={handleNavigate} />}
+      {route === "setup" && <SetupPage onNavigate={handleNavigate} />}
+      {route === "interview" && <InterviewPage onNavigate={handleNavigate} />}
+      {route === "results" && <ResultsPage onNavigate={handleNavigate} />}
+      {route === "placement-flow" && <PlacementFlowPage onNavigate={handleNavigate} />}
+      {route === "dashboard" && <StudentDashboardPage onNavigate={handleNavigate} />}
+      {route === "admin" && <AdminPage onNavigate={handleNavigate} />}
 
       {/* Floating page navigator — discreet toggle on Reagvis Trails for scenic immersion */}
-      {isReagvis ? (
+      {route === "trails" ? (
         <div className="fixed bottom-3 right-4 z-50 pointer-events-auto">
           {showDemoNav ? (
             <nav
@@ -96,7 +87,7 @@ function AppContent() {
               aria-label="Demo page navigator"
             >
               {visibleNavItems.map(item => {
-                const isActive = item.id === "reagvis-trail"
+                const isActive = item.id === route
                 return (
                   <button
                     key={item.id}
@@ -141,7 +132,7 @@ function AppContent() {
           aria-label="Demo page navigator"
         >
           {visibleNavItems.map(item => {
-            const isActive = item.id === page
+            const isActive = item.id === route
 
             return (
               <button
