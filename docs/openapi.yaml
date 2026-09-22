@@ -1,0 +1,999 @@
+openapi: 3.0.3
+info:
+  title: Reagvis Trails API
+  version: 1.0.0
+  description: |
+    Backend Integration for Reagvis Trails (Node + Express + MongoDB).
+    The frontend owns all lesson content and visuals; this API owns accounts,
+    durable learner progress, notes, submissions, interview signals,
+    recommendations and analytics.
+
+    Every response is `{ data, meta }` or `{ error }`. Curriculum ids
+    (courseId / moduleId / checkpointId / lessonId) are the exact strings from
+    the frontend registry. Frontend baseline: frontend/dsa-world-v2 @ 99e1d72
+    ("Redesign lesson workspace for desktop learning").
+
+    Code execution runs in the self-hosted Piston service and supports
+    Python, C++ and Java.
+servers:
+  - url: http://localhost:4883/api/v1
+    description: Local development
+tags:
+  - name: System
+  - name: Auth
+  - name: Learning
+  - name: Notes
+  - name: Execution
+  - name: Interviews
+  - name: Recommendations
+  - name: Practice
+  - name: Analytics
+  - name: Assets
+
+security:
+  - bearerAuth: []
+
+paths:
+  /health:
+    get:
+      tags: [System]
+      summary: Liveness and database reachability
+      security: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                data: { status: "ok", db: "connected", uptimeSeconds: 1240 }
+                meta: { requestId: "req_01" }
+
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Create an account
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password, displayName]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string, minLength: 8, maxLength: 128 }
+                displayName: { type: string, minLength: 1, maxLength: 80 }
+            example: { email: "keshav@example.com", password: "correct-horse-battery", displayName: "Keshav" }
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AuthSuccess" }
+        "400": { $ref: "#/components/responses/ValidationError" }
+        "409":
+          description: Email already registered
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErrorEnvelope" }
+              example:
+                error:
+                  code: "EMAIL_ALREADY_REGISTERED"
+                  message: "That email address is already registered."
+                  requestId: "req_err"
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Exchange credentials for tokens
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string }
+            example: { email: "keshav@example.com", password: "correct-horse-battery" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AuthSuccess" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /auth/refresh:
+    post:
+      tags: [Auth]
+      summary: Rotate the refresh token and issue a new access token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refreshToken]
+              properties:
+                refreshToken: { type: string }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AuthSuccess" }
+        "400": { $ref: "#/components/responses/ValidationError" }
+        "401":
+          description: |
+            The refresh token is unknown, expired, already rotated or revoked.
+            Presenting an already-rotated token is treated as theft and revokes
+            every live session for that user.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErrorEnvelope" }
+              example:
+                error: { code: "UNAUTHENTICATED", message: "Invalid or expired refresh token.", requestId: "req_err" }
+
+  /auth/logout:
+    post:
+      tags: [Auth]
+      summary: Revoke a refresh token
+      description: Requires the access token in `Authorization`; the refresh token must belong to the same user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refreshToken]
+              properties:
+                refreshToken: { type: string }
+      responses:
+        "204": { description: Revoked. Repeating the call is harmless. }
+        "400": { $ref: "#/components/responses/ValidationError" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+
+  /users/me:
+    get:
+      tags: [Auth]
+      summary: Authenticated user profile
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                data: { id: "66f0aa", email: "keshav@example.com", displayName: "Keshav", role: "learner", createdAt: "2026-09-18T09:00:00Z" }
+                meta: { requestId: "req_02" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+
+  /me/courses/{courseId}/state:
+    get:
+      tags: [Learning]
+      summary: Full durable learner snapshot (used to hydrate the app on boot)
+      description: |
+        Enrolls on first call: a learner with no progress document gets one, starting at
+        the course's first checkpoint with 0 XP, 3 lives and no streak. Demo bootstrap
+        data is never imported.
+
+        `progress` is field-for-field the frontend's `LearnerProgressState`.
+        `moduleStates` and `zoneStates` are derived per request from the prerequisite
+        graph by the same rules as `src/learning/progressEngine.ts` — nothing derived is
+        stored. 404 means the course id is unknown, or no curriculum has been seeded.
+      parameters:
+        - $ref: "#/components/parameters/CourseId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/CourseStateSuccess" }
+              example:
+                data:
+                  courseId: "dsa-foundations"
+                  curriculumVersion: "2026-09-16"
+                  progress:
+                    activeCourseId: "dsa-foundations"
+                    activeZoneId: "recursive-forest"
+                    activeModuleId: "trees"
+                    activeCheckpointId: "trees-3"
+                    completedCheckpointIds: ["foundations-1", "foundations-2", "trees-1", "trees-2"]
+                    masteredCheckpointIds: ["foundations-5"]
+                    xp: 640
+                    lives: 3
+                    streak: 4
+                    lastActivityDate: "2026-09-19"
+                  moduleStates: { foundations: "completed", trees: "current", graphs: "locked" }
+                  zoneStates: { basecamp: "completed", recursive-forest: "current" }
+                meta: { requestId: "req_03" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /me/courses/{courseId}/active:
+    put:
+      tags: [Learning]
+      summary: Set the active module / checkpoint after checking availability
+      description: |
+        At least one of `moduleId` and `checkpointId` is required. Given both, the
+        checkpoint must belong to the module or the request is a VALIDATION_ERROR.
+        Given `moduleId` alone, the server points at that module's first unfinished
+        checkpoint. The active zone always follows the module.
+
+        A locked target is rejected: CHECKPOINT_LOCKED when a checkpoint was named,
+        MODULE_LOCKED when only a module was. Returns the full course state, so a
+        client needs one call rather than a set-then-refetch.
+      parameters:
+        - $ref: "#/components/parameters/CourseId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              minProperties: 1
+              properties:
+                moduleId: { type: string }
+                checkpointId: { type: string }
+            example: { moduleId: "trees", checkpointId: "trees-3" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/CourseStateSuccess" }
+        "400": { $ref: "#/components/responses/ValidationError" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409": { $ref: "#/components/responses/Locked" }
+
+  /me/modules/{moduleId}/start:
+    post:
+      tags: [Learning]
+      summary: Start an available module; locked modules are rejected server-side
+      parameters:
+        - $ref: "#/components/parameters/ModuleId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [courseId]
+              properties:
+                courseId: { type: string }
+            example: { courseId: "dsa-foundations" }
+      responses:
+        "200":
+          description: Started
+          content:
+            application/json:
+              example:
+                data:
+                  moduleId: "trees"
+                  state: "current"
+                  activeCheckpointId: "trees-1"
+                meta: { requestId: "req_04" }
+        "400": { $ref: "#/components/responses/ValidationError" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409":
+          description: Module is locked
+          content:
+            application/json:
+              example:
+                error:
+                  code: "MODULE_LOCKED"
+                  message: "Complete Recursion before starting Trees."
+                  details: { moduleId: "trees", missingPrerequisites: ["recursion-5"] }
+                  requestId: "req_04"
+
+  /me/modules/{moduleId}/progress:
+    get:
+      tags: [Learning]
+      summary: Module and checkpoint states, for a roadmap refresh
+      parameters:
+        - $ref: "#/components/parameters/ModuleId"
+        - { name: courseId, in: query, required: true, schema: { type: string } }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                data:
+                  moduleId: "trees"
+                  state: "current"
+                  checkpoints:
+                    - { id: "trees-1", state: "completed", attempts: 2, completedAt: "2026-09-19T10:40:00Z" }
+                    - { id: "trees-2", state: "completed", attempts: 3, completedAt: "2026-09-19T11:02:00Z" }
+                    - { id: "trees-3", state: "current", attempts: 1, completedAt: null }
+                    - { id: "trees-4", state: "locked", attempts: 0, completedAt: null }
+                meta: { requestId: "req_05" }
+        "400": { $ref: "#/components/responses/ValidationError" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /me/checkpoints/{checkpointId}/complete:
+    post:
+      tags: [Learning]
+      summary: Idempotently complete a checkpoint and return the resulting progress and rewards
+      description: |
+        Safe to retry. The reward ledger key `complete:<checkpointId>` is inserted first; a
+        duplicate key means the checkpoint was already completed, and the call returns
+        `alreadyCompleted: true` with zero XP. Reviewing a completed checkpoint takes this path.
+      parameters:
+        - $ref: "#/components/parameters/CheckpointId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [courseId]
+              properties:
+                courseId: { type: string }
+                source: { type: string, enum: [submit, quick-check, reading, manual, import], default: manual, description: "Recorded on the ledger row; does not change the reward. `import` marks a completion replayed from a browser's signed-out progress on first sign-in." }
+                submissionId: { type: string, description: "Day 4. The submission that earned it." }
+            example: { courseId: "dsa-foundations", source: "submit", submissionId: "66f1bb" }
+      responses:
+        "200":
+          description: Completed, or already completed
+          content:
+            application/json:
+              examples:
+                firstCompletion:
+                  summary: First completion
+                  value:
+                    data:
+                      alreadyCompleted: false
+                      rewards: { xpAwarded: 40, masteryAwarded: false, livesDelta: 0, streak: 5 }
+                      progress:
+                        activeCourseId: "dsa-foundations"
+                        activeZoneId: "recursive-forest"
+                        activeModuleId: "trees"
+                        activeCheckpointId: "trees-4"
+                        completedCheckpointIds: ["foundations-1", "foundations-2", "trees-1", "trees-2", "trees-3"]
+                        masteredCheckpointIds: ["foundations-5"]
+                        xp: 680
+                        lives: 3
+                        streak: 5
+                        lastActivityDate: "2026-09-19"
+                      unlocked: { checkpointIds: ["trees-4"], moduleIds: [] }
+                    meta: { requestId: "req_06" }
+                repeatCall:
+                  summary: Retry or review - no duplicate XP
+                  value:
+                    data:
+                      alreadyCompleted: true
+                      rewards: { xpAwarded: 0, masteryAwarded: false, livesDelta: 0, streak: 5 }
+                      progress:
+                        activeCourseId: "dsa-foundations"
+                        activeCheckpointId: "trees-4"
+                        xp: 680
+                        lives: 3
+                        streak: 5
+                        lastActivityDate: "2026-09-19"
+                      unlocked: { checkpointIds: [], moduleIds: [] }
+                    meta: { requestId: "req_07" }
+        "400": { $ref: "#/components/responses/ValidationError" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409": { $ref: "#/components/responses/Locked" }
+
+  /me/attempts:
+    post:
+      tags: [Learning]
+      summary: Record a quick-check or quiz attempt
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [courseId, checkpointId, activityId, attemptType, passed]
+              properties:
+                courseId: { type: string }
+                moduleId:
+                  type: string
+                  description: |
+                    Accepted for compatibility and IGNORED. The owning module is read from
+                    the curriculum, the same way the user id is read from the token.
+                checkpointId: { type: string }
+                activityId: { type: string, description: "Frontend-owned, stored as sent." }
+                attemptType: { type: string, enum: [quick-check, quiz, reading] }
+                passed: { type: boolean }
+                payload: { type: object, additionalProperties: true }
+            example:
+              courseId: "dsa-foundations"
+              moduleId: "trees"
+              checkpointId: "trees-3"
+              activityId: "trees-3-quick-check"
+              attemptType: "quick-check"
+              passed: true
+              payload: { selectedIndex: 2, correctIndex: 2 }
+      responses:
+        "201":
+          description: Recorded
+          content:
+            application/json:
+              example:
+                data: { attemptId: "66f4cc", passed: true }
+                meta: { requestId: "req_08" }
+        "400": { $ref: "#/components/responses/ValidationError" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /me/notes:
+    get:
+      tags: [Notes]
+      summary: List the authenticated user's notes in a course, oldest first, one page at a time
+      description: |
+        Paged by an opaque cursor: pass `meta.nextCursor` back as `cursor` for the
+        next page; it is null on the last one. Pages follow creation order, which
+        never changes, so editing a note while walking the pages cannot make it
+        appear twice or not at all.
+
+        404 means the course id is unknown, or no curriculum has been seeded.
+      parameters:
+        - { name: courseId, in: query, required: true, schema: { type: string } }
+        - { name: moduleId, in: query, schema: { type: string } }
+        - { name: lessonId, in: query, schema: { type: string }, description: "Checkpoint id - a checkpoint is the lesson" }
+        - { name: limit, in: query, schema: { type: integer, minimum: 1, maximum: 200, default: 100 } }
+        - { name: cursor, in: query, schema: { type: string }, description: "meta.nextCursor of the previous page" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/NoteListSuccess" }
+              example:
+                data:
+                  - { id: "note-1726900000000", courseId: "dsa-foundations", moduleId: "trees", lessonId: "trees-3", text: "Inorder = left, node, right.", createdAt: "2026-09-19T11:45:00Z", updatedAt: "2026-09-19T11:45:00Z" }
+                  - { id: "note-1726900042000", courseId: "dsa-foundations", moduleId: "trees", lessonId: "trees-3", text: "Postorder deletes a tree safely.", createdAt: "2026-09-19T11:46:00Z", updatedAt: "2026-09-19T11:46:00Z" }
+                meta: { requestId: "req_09", nextCursor: null }
+        "400": { $ref: "#/components/responses/ValidationError" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /me/notes/{noteId}:
+    put:
+      tags: [Notes]
+      summary: Create the note with this id, or replace it (idempotent upsert)
+      description: |
+        The Notes panel keeps several notes per lesson and mints each note's id
+        itself, so a note is addressed by that id. The same request twice leaves
+        one note — a retry, or a save queued offline and replayed, can never
+        duplicate a note.
+
+        Ids are unique per user, not globally: two learners can use the same id
+        and each gets their own note. `moduleId` is read from the curriculum when
+        `lessonId` is given, whatever the body says; the body's `id`,
+        `updatedAt` and `userId` are ignored. A course- or module-level note
+        leaves `lessonId` null.
+      parameters:
+        - $ref: "#/components/parameters/NoteId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/NoteInput" }
+            example: { courseId: "dsa-foundations", moduleId: "trees", lessonId: "trees-3", text: "Inorder = left, node, right." }
+      responses:
+        "200":
+          description: Saved — created or replaced
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/NoteSuccess" }
+        "400": { $ref: "#/components/responses/ValidationError" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "404": { $ref: "#/components/responses/NotFound" }
+    delete:
+      tags: [Notes]
+      summary: Delete one of the caller's notes
+      description: |
+        Another learner's note and a note that never existed get the same 404:
+        among the caller's notes there is no such id. A 403 would confirm that
+        someone else's note exists.
+      parameters:
+        - $ref: "#/components/parameters/NoteId"
+      responses:
+        "204": { description: Deleted }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /code/run:
+    post:
+      tags: [Execution]
+      summary: Run against visible tests only - never grants progress or XP
+      description: |
+        Nothing is persisted and `rewarded` is always false. Visible/sample tests only -
+        hidden fixtures are never used here.
+        v1 supports `python`, `cpp` and `java`. Execution happens in the self-hosted Piston
+        service, never in this process and never as a host child process.
+        `provider` in the response is `piston` (real execution) or `mock` (tests, offline,
+        infrastructure fallback).
+        Wrong answer, compile error, runtime error and timeout are real execution results
+        returned with HTTP 200. Only genuine runner unavailability returns 503
+        `RUNNER_UNAVAILABLE`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ExecutionInput" }
+            example:
+              courseId: "dsa-foundations"
+              checkpointId: "trees-3"
+              activityId: "trees-3-code"
+              language: "cpp"
+              code: "#include <vector>\nvoid inorder() {}"
+      responses:
+        "200":
+          description: Execution result (a compile or runtime failure is still a 200)
+          content:
+            application/json:
+              example:
+                data:
+                  status: "failed"
+                  testsPassed: 1
+                  testsTotal: 3
+                  runtimeMs: 42
+                  stdout: ""
+                  stderr: ""
+                  compileOutput: ""
+                  tests:
+                    - { id: "t1", description: "single node", status: "passed", input: "[1]", expected: "[1]", received: "[1]" }
+                    - { id: "t2", description: "left-skewed", status: "failed", input: "[2,1]", expected: "[1,2]", received: "[2]" }
+                  provider: "mock"
+                  rewarded: false
+                meta: { requestId: "req_10" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+        "503": { $ref: "#/components/responses/RunnerUnavailable" }
+
+  /code/submit:
+    post:
+      tags: [Execution]
+      summary: Run hidden tests, persist the submission, and complete the checkpoint when it passes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ExecutionInput" }
+      responses:
+        "200":
+          description: Submission result
+          content:
+            application/json:
+              examples:
+                passed:
+                  summary: All tests pass - checkpoint completed in the same call
+                  value:
+                    data:
+                      submissionId: "66f1bb"
+                      status: "passed"
+                      testsPassed: 6
+                      testsTotal: 6
+                      runtimeMs: 88
+                      provider: "mock"
+                      completion:
+                        checkpointId: "trees-3"
+                        alreadyCompleted: false
+                        rewards: { xpAwarded: 40, masteryAwarded: false, livesDelta: 0 }
+                    meta: { requestId: "req_11" }
+                compileError:
+                  summary: Compile error - costs a life, no completion
+                  value:
+                    data:
+                      submissionId: "66f1be"
+                      status: "compile-error"
+                      testsPassed: 0
+                      testsTotal: 6
+                      compileOutput: "error: expected ';' before '}' token"
+                      provider: "piston"
+                      completion: null
+                      livesDelta: -1
+                    meta: { requestId: "req_12" }
+        "400": { $ref: "#/components/responses/ValidationError" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+        "503": { $ref: "#/components/responses/RunnerUnavailable" }
+
+  /me/submissions:
+    get:
+      tags: [Execution]
+      summary: Submission history
+      parameters:
+        - { name: courseId, in: query, schema: { type: string } }
+        - { name: checkpointId, in: query, schema: { type: string } }
+        - { name: limit, in: query, schema: { type: integer, default: 20, maximum: 100 } }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                data:
+                  - { id: "66f1bb", checkpointId: "trees-3", language: "cpp", status: "passed", testsPassed: 6, testsTotal: 6, createdAt: "2026-09-19T11:44:00Z" }
+                meta: { requestId: "req_13", total: 18 }
+
+  /interviews/handoff:
+    post:
+      tags: [Interviews]
+      summary: Persist the HireOS interview result and its weak-skill signals
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [sourceSessionId, recommendedCourseId, weakSkills]
+              properties:
+                sourceSessionId: { type: string }
+                recommendedCourseId: { type: string }
+                weakSkills: { type: array, items: { type: string } }
+                startingModuleId: { type: string }
+                difficulty: { type: string, enum: [easy, normal, hard] }
+                targetCompanyIds: { type: array, items: { type: string } }
+            example:
+              sourceSessionId: "hireos-sess-8821"
+              recommendedCourseId: "dsa-foundations"
+              weakSkills: ["Trees & Binary Search Trees", "Graph Traversal (BFS / DFS)"]
+              startingModuleId: "trees"
+              difficulty: "normal"
+              targetCompanyIds: []
+      responses:
+        "201":
+          description: Stored
+          content:
+            application/json:
+              example:
+                data:
+                  interviewSessionId: "66f3ee"
+                  resolvedStartingModuleId: "trees"
+                  skillSignals:
+                    - { skillId: "trees", strength: "weak", score: 0.35 }
+                    - { skillId: "graphs", strength: "weak", score: 0.4 }
+                meta: { requestId: "req_14" }
+        "404":
+          description: Unknown course or module id
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErrorEnvelope" }
+
+  /me/recommendations:
+    get:
+      tags: [Recommendations]
+      summary: Explainable next steps, computed on request from progress and interview signals
+      parameters:
+        - { name: courseId, in: query, required: true, schema: { type: string } }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                data:
+                  - { key: "resume:trees-3", type: "resume", targetId: "trees-3", priority: 1, reasonCode: "CURRENT_MODULE_INCOMPLETE", reasonText: "You're partway through Trees - finish checkpoint 3 first." }
+                  - { key: "review:graphs", type: "review", targetId: "graphs", priority: 2, reasonCode: "WEAK_SKILL_FROM_INTERVIEW", reasonText: "Your interview showed graph traversal as a weak area." }
+                meta: { requestId: "req_15" }
+
+  /me/recommendations/{key}/dismiss:
+    post:
+      tags: [Recommendations]
+      summary: Hide one recommendation for this user
+      parameters:
+        - { name: key, in: path, required: true, schema: { type: string }, example: "review:graphs" }
+      responses:
+        "204": { description: Dismissed }
+
+  /practice:
+    get:
+      tags: [Practice]
+      summary: Practice item metadata, filterable
+      parameters:
+        - { name: moduleId, in: query, schema: { type: string } }
+        - { name: difficulty, in: query, schema: { type: string, enum: [easy, medium, hard] } }
+        - { name: companyId, in: query, schema: { type: string } }
+        - { name: limit, in: query, schema: { type: integer, default: 20, maximum: 100 } }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                data:
+                  - { id: "66f5aa", title: "Two Sum (pattern drill)", moduleId: "hashing", difficulty: "easy", role: "core", topics: ["hashing", "arrays"], sourceUrl: "https://leetcode.com/problems/two-sum/", authoredPrompt: "Given a list of numbers and a target..." }
+                meta: { requestId: "req_16" }
+
+  /me/analytics/summary:
+    get:
+      tags: [Analytics]
+      summary: Completion, XP, success rate, weak topics and review needs
+      parameters:
+        - { name: courseId, in: query, required: true, schema: { type: string } }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                data:
+                  completionPercent: 12.1
+                  checkpointsCompleted: 13
+                  checkpointsTotal: 107
+                  modulesCompleted: 2
+                  modulesTotal: 29
+                  xp: 680
+                  lives: 3
+                  streak: 5
+                  submissions: { total: 18, passed: 11, successRate: 0.61 }
+                  weakTopics:
+                    - { moduleId: "trees", failedSubmits: 4, source: "attempts" }
+                  needsReview: ["foundations-4"]
+                  lastActivityAt: "2026-09-19T11:45:00Z"
+                meta: { requestId: "req_17" }
+
+  /me/activity:
+    get:
+      tags: [Analytics]
+      summary: Recent learning activity / resume feed
+      parameters:
+        - { name: limit, in: query, schema: { type: integer, default: 20, maximum: 100 } }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                data:
+                  - { type: "checkpoint-completed", targetId: "trees-3", xpDelta: 40, at: "2026-09-19T11:45:00Z" }
+                  - { type: "note-saved", targetId: "trees-3", at: "2026-09-19T11:40:00Z" }
+                meta: { requestId: "req_18" }
+
+  /lesson-assets:
+    get:
+      tags: [Assets]
+      summary: Image paths for a module or checkpoint (paths only - never binaries)
+      parameters:
+        - { name: courseId, in: query, required: true, schema: { type: string } }
+        - { name: moduleId, in: query, schema: { type: string } }
+        - { name: checkpointId, in: query, schema: { type: string } }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                data:
+                  - { assetKey: "trees-3.traversal-diagram", kind: "image", location: "local", path: "/assets/lessons/trees/inorder-traversal.svg", alt: "In-order traversal visiting left, node, then right" }
+                meta: { requestId: "req_19" }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    CourseId:
+      name: courseId
+      in: path
+      required: true
+      schema: { type: string }
+      example: "dsa-foundations"
+    ModuleId:
+      name: moduleId
+      in: path
+      required: true
+      schema: { type: string }
+      example: "trees"
+    CheckpointId:
+      name: checkpointId
+      in: path
+      required: true
+      schema: { type: string }
+      example: "trees-3"
+    NoteId:
+      name: noteId
+      in: path
+      required: true
+      description: "Minted by the client — the Notes panel uses note-<timestamp>. Letters, digits, '-' and '_', at most 64."
+      schema: { type: string, pattern: "^[A-Za-z0-9][A-Za-z0-9_-]*$", maxLength: 64 }
+      example: "note-1726900000000"
+
+  schemas:
+    Meta:
+      type: object
+      properties:
+        requestId: { type: string }
+
+    ErrorEnvelope:
+      type: object
+      properties:
+        error:
+          type: object
+          required: [code, message, requestId]
+          properties:
+            code:
+              type: string
+              description: |
+                Every code the API can return, and only those. ALREADY_COMPLETED,
+                COMPILE_ERROR and EXECUTION_TIMEOUT are deliberately absent: they are
+                states inside a 200 response body, not HTTP errors.
+              enum: [UNAUTHENTICATED, FORBIDDEN, NOT_FOUND, VALIDATION_ERROR, EMAIL_ALREADY_REGISTERED, MODULE_LOCKED, CHECKPOINT_LOCKED, PAYLOAD_TOO_LARGE, RUNNER_UNAVAILABLE, RATE_LIMITED, INTERNAL_ERROR]
+            message: { type: string }
+            details: { type: object, additionalProperties: true }
+            requestId: { type: string }
+
+    ProgressState:
+      type: string
+      enum: [locked, available, current, completed, mastered]
+
+    LearnerProgressState:
+      description: Field-for-field the frontend's LearnerProgressState (src/learning/progressEngine.ts).
+      type: object
+      properties:
+        activeCourseId: { type: string }
+        activeZoneId: { type: string, nullable: true }
+        activeModuleId: { type: string, nullable: true }
+        activeCheckpointId: { type: string, nullable: true }
+        completedCheckpointIds: { type: array, items: { type: string } }
+        masteredCheckpointIds: { type: array, items: { type: string } }
+        xp: { type: integer }
+        lives: { type: integer, minimum: 0 }
+        streak: { type: integer }
+        lastActivityDate: { type: string, nullable: true, description: "YYYY-MM-DD" }
+
+    CourseStateSuccess:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            courseId: { type: string }
+            curriculumVersion: { type: string }
+            progress: { $ref: "#/components/schemas/LearnerProgressState" }
+            moduleStates:
+              type: object
+              additionalProperties: { $ref: "#/components/schemas/ProgressState" }
+            zoneStates:
+              type: object
+              additionalProperties: { $ref: "#/components/schemas/ProgressState" }
+        meta: { $ref: "#/components/schemas/Meta" }
+
+    AuthSuccess:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            accessToken: { type: string }
+            refreshToken: { type: string }
+            expiresIn: { type: integer, description: "access token lifetime in seconds" }
+            user:
+              type: object
+              properties:
+                id: { type: string }
+                email: { type: string }
+                displayName: { type: string }
+                role: { type: string, enum: [learner, admin] }
+        meta: { $ref: "#/components/schemas/Meta" }
+
+    NoteInput:
+      type: object
+      required: [courseId, text]
+      properties:
+        courseId: { type: string }
+        moduleId: { type: string, nullable: true, description: "For a module-level note. Ignored when lessonId is given - the curriculum says which module a lesson is in." }
+        lessonId: { type: string, nullable: true, description: "Checkpoint id" }
+        text: { type: string, minLength: 1, maxLength: 10000, description: "Not blank. Never written to a log." }
+
+    Note:
+      description: Field-for-field the frontend's NoteRecord (src/learning/services/notesRepository.ts), plus createdAt.
+      type: object
+      properties:
+        id: { type: string }
+        courseId: { type: string }
+        moduleId: { type: string, nullable: true }
+        lessonId: { type: string, nullable: true }
+        text: { type: string }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+
+    NoteSuccess:
+      type: object
+      properties:
+        data: { $ref: "#/components/schemas/Note" }
+        meta: { $ref: "#/components/schemas/Meta" }
+
+    NoteListSuccess:
+      type: object
+      properties:
+        data:
+          type: array
+          items: { $ref: "#/components/schemas/Note" }
+        meta:
+          type: object
+          properties:
+            requestId: { type: string }
+            nextCursor: { type: string, nullable: true }
+
+    ExecutionInput:
+      type: object
+      required: [courseId, checkpointId, activityId, language, code]
+      properties:
+        courseId: { type: string }
+        moduleId: { type: string }
+        checkpointId: { type: string }
+        activityId: { type: string }
+        language:
+          type: string
+          enum: [python, cpp, java]
+          description: "v1 supports Python, C++ and Java - the three languages the self-hosted Piston service really executes. `c` is not accepted."
+        code: { type: string, maxLength: 65536 }
+
+  responses:
+    Unauthenticated:
+      description: Missing or invalid access token
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ErrorEnvelope" }
+          example:
+            error: { code: "UNAUTHENTICATED", message: "Access token is missing or expired.", requestId: "req_err" }
+    Forbidden:
+      description: The resource belongs to another user
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ErrorEnvelope" }
+          example:
+            error: { code: "FORBIDDEN", message: "You do not own this resource.", requestId: "req_err" }
+    NotFound:
+      description: Unknown id
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ErrorEnvelope" }
+          example:
+            error: { code: "NOT_FOUND", message: "No such checkpoint in this curriculum version.", requestId: "req_err" }
+    ValidationError:
+      description: Request failed Zod validation
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ErrorEnvelope" }
+          example:
+            error:
+              code: "VALIDATION_ERROR"
+              message: "language must be one of: python, cpp, java"
+              details: { field: "language", received: "c" }
+              requestId: "req_err"
+    Locked:
+      description: Prerequisites are not met
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ErrorEnvelope" }
+          example:
+            error:
+              code: "CHECKPOINT_LOCKED"
+              message: "Complete trees-2 first."
+              details: { missingPrerequisites: ["trees-2"] }
+              requestId: "req_err"
+    RateLimited:
+      description: Too many requests
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ErrorEnvelope" }
+          example:
+            error: { code: "RATE_LIMITED", message: "Too many submissions. Try again in a minute.", requestId: "req_err" }
+    RunnerUnavailable:
+      description: The execution provider is unreachable
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ErrorEnvelope" }
+          example:
+            error: { code: "RUNNER_UNAVAILABLE", message: "Code runner is not available right now.", requestId: "req_err" }

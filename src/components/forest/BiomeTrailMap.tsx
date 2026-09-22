@@ -1,5 +1,6 @@
 import { useState } from "react"
 import type { TrailNode, BiomeZone } from "../../data/reagvisCourses"
+import type { ProgressState } from "../../learning/types"
 import OwlAvatar from "../OwlAvatar"
 import AlpineMountainRange from "./scenic/AlpineMountainRange"
 import AlpinePineTree from "./scenic/AlpinePineTree"
@@ -21,10 +22,45 @@ interface WorldModule {
   zoneNumber: number
   zoneId: string
   icon: string
-  status: "completed" | "current" | "locked"
+  status: "completed" | "current" | "available" | "locked"
   xPercent: number
   yPercent: number
   conceptSummary: string
+}
+
+type WorldModuleSpec = Omit<WorldModule, "status">
+
+function worldStatus(state: ProgressState | undefined): WorldModule["status"] {
+  if (state === "completed" || state === "mastered") return "completed"
+  if (state === "current" || state === "available") return state
+  return "locked"
+}
+
+/** The module the focused camera frames: the learner's active module while
+ * it is still open and on the map, otherwise the first one they can work on,
+ * otherwise the last one they finished. (The engine keeps a finished module
+ * active until the next checkpoint is entered, so "active" alone is not enough.) */
+function pickFocus(modules: WorldModule[], activeModuleId: string | null): WorldModule {
+  const isOpen = (m: WorldModule) => m.status === "current" || m.status === "available"
+  const active = modules.find(m => m.id === activeModuleId && isOpen(m))
+  if (active) return active
+  const open = modules.find(isOpen)
+  if (open) return open
+  return modules.filter(m => m.status === "completed").pop() ?? modules[0]
+}
+
+// Focused camera: zoom, and a shift that centres the focus module. The shift
+// is capped so the zoomed map still covers the viewport; the bias keeps the
+// original hand-tuned framing of Trees (translate -1.2%, 2.2%).
+const FOCUS_SCALE = 1.72
+const MAX_FOCUS_SHIFT = 50 - 50 / FOCUS_SCALE
+const FOCUS_BIAS = { x: -0.2, y: -1.8 }
+
+function focusTransform(module: WorldModule): string {
+  const clamp = (shift: number) => Math.max(-MAX_FOCUS_SHIFT, Math.min(MAX_FOCUS_SHIFT, shift))
+  const x = clamp(50 - module.xPercent + FOCUS_BIAS.x)
+  const y = clamp(50 - module.yPercent + FOCUS_BIAS.y)
+  return `scale(${FOCUS_SCALE}) translate(${x.toFixed(2)}%, ${y.toFixed(2)}%)`
 }
 
 interface CourseZone {
@@ -36,25 +72,122 @@ interface CourseZone {
   moduleRange: string
 }
 
+// The 7 core modules placed organically across the scenic landscape. Their
+// status is not part of the scenery: it comes from the learner's progress.
+const WORLD_MODULES: WorldModuleSpec[] = [
+  {
+    id: "foundations",
+    name: "Foundations",
+    subtitle: "Complexity & Two-Pointers",
+    zoneNumber: 1,
+    zoneId: "zone-1",
+    icon: "🌱",
+    xPercent: 16,
+    yPercent: 69,
+    conceptSummary: "Foundational asymptotic bounds, two-pointer scanning, and sliding windows.",
+  },
+  {
+    id: "linked-structures",
+    name: "Linked Structures",
+    subtitle: "Pointers, Lists & Stacks",
+    zoneNumber: 2,
+    zoneId: "zone-1",
+    icon: "🌊",
+    xPercent: 26,
+    yPercent: 61,
+    conceptSummary: "Dynamic memory pointers, cycle detection, and monotonic stacks.",
+  },
+  {
+    id: "recursion",
+    name: "Recursion",
+    subtitle: "Call Stacks & Backtracking",
+    zoneNumber: 3,
+    zoneId: "zone-1",
+    icon: "💎",
+    xPercent: 36,
+    yPercent: 53,
+    conceptSummary: "Call stack unwinding, recurrence relations, and combinatorial search trees.",
+  },
+  {
+    id: "trees",
+    name: "Trees",
+    subtitle: "BST & Traversal",
+    zoneNumber: 4,
+    zoneId: "zone-1",
+    icon: "🌳",
+    xPercent: 51,
+    yPercent: 46,
+    conceptSummary: "Binary search tree invariants, level/depth traversals, and balance factors.",
+  },
+  {
+    id: "graphs",
+    name: "Graphs",
+    subtitle: "BFS, DFS & Shortest Path",
+    zoneNumber: 5,
+    zoneId: "zone-2",
+    icon: "🕸️",
+    xPercent: 64,
+    yPercent: 42,
+    conceptSummary: "Adjacency structures, topological ordering, and breadth-first search.",
+  },
+  {
+    id: "dp",
+    name: "Dynamic Programming",
+    subtitle: "Memoization & Tabulation",
+    zoneNumber: 6,
+    zoneId: "zone-2",
+    icon: "⚡",
+    xPercent: 75,
+    yPercent: 32,
+    conceptSummary: "Overlapping subproblems, state memoization caches, and bottom-up tables.",
+  },
+  {
+    id: "summit",
+    name: "Algorithm Summit",
+    subtitle: "HireOS Full Assessment",
+    zoneNumber: 7,
+    zoneId: "zone-3",
+    icon: "⭐",
+    xPercent: 67,
+    yPercent: 17,
+    conceptSummary: "The comprehensive technical interview trial to reach 80+ readiness score.",
+  },
+]
+
 export default function BiomeTrailMap({ nodes, onSelectNode }: BiomeTrailMapProps) {
-  const { currentLessonId, simulatedReadinessScore, setActiveNode, setReagvisView, enterModule } = useAppState()
-  
+  const {
+    currentLessonId,
+    simulatedReadinessScore,
+    setActiveNode,
+    setReagvisView,
+    enterModule,
+    dsaModuleStates,
+    activeModuleId,
+  } = useAppState()
+
+  const dsaModules: WorldModule[] = WORLD_MODULES.map(spec => ({ ...spec, status: worldStatus(dsaModuleStates[spec.id]) }))
+  const focusModule = pickFocus(dsaModules, activeModuleId)
+  const focusIndex = dsaModules.indexOf(focusModule)
+
   // ── Camera View Mode: Default to "focused" on current active region ──
   const [cameraMode, setCameraMode] = useState<"focused" | "world">("focused")
-  const [selectedModuleId, setSelectedModuleId] = useState<string>("trees")
+  const [selectedModuleId, setSelectedModuleId] = useState<string>(focusModule.id)
   const [activeZoneId, setActiveZoneId] = useState<string>("zone-1")
   const [showCourseInfo, setShowCourseInfo] = useState(false)
 
   const activeNode = nodes.find(n => n.id === currentLessonId) || nodes[2]
 
-  const handleStartActiveLesson = () => {
+  const enterMapModule = (moduleId: string) => {
     if (enterModule) {
-      enterModule(selectedModuleId || "trees")
+      enterModule(moduleId)
     } else if (activeNode) {
       setActiveNode(activeNode)
       setReagvisView("lesson")
     }
   }
+
+  const handleStartActiveLesson = () => enterMapModule(selectedModuleId || focusModule.id)
+  const handleResume = () => enterMapModule(focusModule.id)
 
   // ── Multi-Zone Progression Concept: Scaling beyond a single mountain ──
   const courseZones: CourseZone[] = [
@@ -84,95 +217,7 @@ export default function BiomeTrailMap({ nodes, onSelectNode }: BiomeTrailMapProp
     },
   ]
 
-  // 7 Core Modules placed organically across the scenic landscape
-  const dsaModules: WorldModule[] = [
-    {
-      id: "foundations",
-      name: "Foundations",
-      subtitle: "Complexity & Two-Pointers",
-      zoneNumber: 1,
-      zoneId: "zone-1",
-      icon: "🌱",
-      status: "completed",
-      xPercent: 16,
-      yPercent: 69,
-      conceptSummary: "Foundational asymptotic bounds, two-pointer scanning, and sliding windows.",
-    },
-    {
-      id: "linked-structures",
-      name: "Linked Structures",
-      subtitle: "Pointers, Lists & Stacks",
-      zoneNumber: 2,
-      zoneId: "zone-1",
-      icon: "🌊",
-      status: "completed",
-      xPercent: 26,
-      yPercent: 61,
-      conceptSummary: "Dynamic memory pointers, cycle detection, and monotonic stacks.",
-    },
-    {
-      id: "recursion",
-      name: "Recursion",
-      subtitle: "Call Stacks & Backtracking",
-      zoneNumber: 3,
-      zoneId: "zone-1",
-      icon: "💎",
-      status: "completed",
-      xPercent: 36,
-      yPercent: 53,
-      conceptSummary: "Call stack unwinding, recurrence relations, and combinatorial search trees.",
-    },
-    {
-      id: "trees",
-      name: "Trees",
-      subtitle: "BST & Traversal (Active)",
-      zoneNumber: 4,
-      zoneId: "zone-1",
-      icon: "🌳",
-      status: "current",
-      xPercent: 51,
-      yPercent: 46,
-      conceptSummary: "Binary search tree invariants, level/depth traversals, and balance factors.",
-    },
-    {
-      id: "graphs",
-      name: "Graphs",
-      subtitle: "BFS, DFS & Shortest Path",
-      zoneNumber: 5,
-      zoneId: "zone-2",
-      icon: "🕸️",
-      status: "locked",
-      xPercent: 64,
-      yPercent: 42,
-      conceptSummary: "Adjacency structures, topological ordering, and breadth-first search.",
-    },
-    {
-      id: "dp",
-      name: "Dynamic Programming",
-      subtitle: "Memoization & Tabulation",
-      zoneNumber: 6,
-      zoneId: "zone-2",
-      icon: "⚡",
-      status: "locked",
-      xPercent: 75,
-      yPercent: 32,
-      conceptSummary: "Overlapping subproblems, state memoization caches, and bottom-up tables.",
-    },
-    {
-      id: "summit",
-      name: "Algorithm Summit",
-      subtitle: "HireOS Full Assessment",
-      zoneNumber: 7,
-      zoneId: "zone-3",
-      icon: "⭐",
-      status: "locked",
-      xPercent: 67,
-      yPercent: 17,
-      conceptSummary: "The comprehensive technical interview trial to reach 80+ readiness score.",
-    },
-  ]
-
-  const activeModule = dsaModules.find(m => m.id === selectedModuleId) || dsaModules[3]
+  const activeModule = dsaModules.find(m => m.id === selectedModuleId) || focusModule
   const completedCount = dsaModules.filter(m => m.status === "completed").length
 
   return (
@@ -187,7 +232,7 @@ export default function BiomeTrailMap({ nodes, onSelectNode }: BiomeTrailMapProp
         className="w-full h-full transition-transform duration-700 ease-out origin-center"
         style={{
           transform: cameraMode === "focused"
-            ? "scale(1.72) translate(-1.2%, 2.2%)"
+            ? focusTransform(focusModule)
             : "scale(1) translate(0%, 0%)",
         }}
       >
@@ -638,18 +683,20 @@ export default function BiomeTrailMap({ nodes, onSelectNode }: BiomeTrailMapProp
             4. THE 7 SCENIC COURSE DESTINATION PLACES (Grounded Micro-Architecture)
             ══════════════════════════════════════════════════════════════════ */}
         <div className="absolute inset-0 w-full h-full z-20 pointer-events-none">
-          {dsaModules.map(mod => {
+          {dsaModules.map((mod, index) => {
             const isSelected = selectedModuleId === mod.id
             const isCurrent = mod.status === "current"
             const isCompleted = mod.status === "completed"
-            // In focused view, show only active module and nearby previous (recursion) & next (graphs)
-            const isVisibleInCurrentView = cameraMode === "world" || mod.id === "trees" || mod.id === "recursion" || mod.id === "graphs"
+            // In focused view, show only the focus module and its neighbours on the trail
+            const isVisibleInCurrentView = cameraMode === "world" || Math.abs(index - focusIndex) <= 1
 
             return (
               <div
                 key={mod.id}
                 onClick={() => {
-                  if ((mod.id === "trees" && selectedModuleId === "trees") || (mod.id === "recursion" && selectedModuleId === "recursion")) {
+                  // First click selects; clicking the selected landmark enters it
+                  // (enterModule itself refuses a locked module).
+                  if (isSelected) {
                     enterModule?.(mod.id)
                   } else {
                     setSelectedModuleId(mod.id)
@@ -1062,7 +1109,7 @@ export default function BiomeTrailMap({ nodes, onSelectNode }: BiomeTrailMapProp
             {activeModule.conceptSummary}
           </p>
 
-          {activeModule.status === "current" ? (
+          {activeModule.status === "current" || activeModule.status === "available" ? (
             <button
               onClick={handleStartActiveLesson}
               className="w-full py-1.5 rounded-full bg-[#168E65] hover:bg-[#127956] text-white text-xs font-bold tracking-wide shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
@@ -1093,12 +1140,12 @@ export default function BiomeTrailMap({ nodes, onSelectNode }: BiomeTrailMapProp
         {/* ── Mobile Streamlined Bottom Pill Bar ── */}
         <div className="sm:hidden pointer-events-auto rounded-full bg-[#E2EED5]/94 backdrop-blur-md border border-white/70 p-1.5 shadow-[0_12px_28px_rgba(40,65,45,0.12)] flex items-center gap-2 max-w-[94vw]">
           <div className="flex items-center gap-1.5 pl-1.5">
-            <span className="text-sm">🌳</span>
-            <span className="text-[11px] font-black text-[#1B3F2B] truncate max-w-[80px]">Trees</span>
+            <span className="text-sm">{focusModule.icon}</span>
+            <span className="text-[11px] font-black text-[#1B3F2B] truncate max-w-[80px]">{focusModule.name}</span>
           </div>
-          
+
           <button
-            onClick={handleStartActiveLesson}
+            onClick={handleResume}
             className="px-3.5 py-1.5 rounded-full bg-[#168E65] hover:bg-[#127956] text-white text-[10.5px] font-bold shadow-xs flex items-center gap-1 cursor-pointer"
           >
             <span>Enter</span>
@@ -1121,13 +1168,13 @@ export default function BiomeTrailMap({ nodes, onSelectNode }: BiomeTrailMapProp
           <div className="flex items-center gap-1 pl-1">
             <button
               onClick={() => {
-                setSelectedModuleId("trees")
+                setSelectedModuleId(focusModule.id)
                 setCameraMode("focused")
               }}
               className={`w-7 h-7 rounded-full flex items-center justify-center text-xs transition-all cursor-pointer shadow-2xs ${
-                selectedModuleId === "trees" && cameraMode === "focused" ? "bg-[#168E65] text-white" : "bg-white/75 hover:bg-white text-gray-600"
+                selectedModuleId === focusModule.id && cameraMode === "focused" ? "bg-[#168E65] text-white" : "bg-white/75 hover:bg-white text-gray-600"
               }`}
-              title="Focus Active Area: Trees"
+              title={`Focus Active Area: ${focusModule.name}`}
             >
               🧭
             </button>
@@ -1159,10 +1206,10 @@ export default function BiomeTrailMap({ nodes, onSelectNode }: BiomeTrailMapProp
 
           {/* Primary Relay CTA */}
           <button
-            onClick={handleStartActiveLesson}
+            onClick={handleResume}
             className="px-5 py-1.5 rounded-full bg-[#168E65] hover:bg-[#127956] text-white text-xs font-bold tracking-wide shadow-xs flex items-center gap-1.5 cursor-pointer hover:scale-105 active:scale-95 transition-all"
           >
-            <span>Resume: Trees</span>
+            <span>Resume: {focusModule.name}</span>
             <span>➔</span>
           </button>
 
@@ -1183,7 +1230,7 @@ export default function BiomeTrailMap({ nodes, onSelectNode }: BiomeTrailMapProp
             ) : (
               <>
                 <span>🎯</span>
-                <span>Focus Active Area (Trees)</span>
+                <span>Focus Active Area ({focusModule.name})</span>
               </>
             )}
           </button>

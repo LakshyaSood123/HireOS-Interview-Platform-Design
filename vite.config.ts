@@ -42,6 +42,18 @@ export default defineConfig(({ mode }) => {
           target: 'http://127.0.0.1:8787',
           changeOrigin: true,
         },
+        // The Reagvis Trails API (backend/). Same-origin through this dev
+        // server, so a second laptop that opens the app over the LAN reaches
+        // the API too. The browser already kept the page same-origin; the
+        // Origin header is dropped so the API's CORS allowlist does not have
+        // to list every LAN address the app is opened from.
+        '/api/v1': {
+          target: process.env.REAGVIS_API_TARGET || 'http://localhost:4883',
+          changeOrigin: true,
+          configure: (proxy) => {
+            proxy.on('proxyReq', (proxyReq) => proxyReq.removeHeader('origin'))
+          },
+        },
       },
     },
     preview: {

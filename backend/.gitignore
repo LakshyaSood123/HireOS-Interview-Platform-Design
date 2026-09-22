@@ -1,0 +1,10 @@
+node_modules/
+dist/
+*.tsbuildinfo
+coverage/
+
+# Secrets stay out of the repo. The root .gitignore excludes `.env*`, which
+# would swallow the template too — this puts it back.
+.env
+.env.local
+!.env.example
