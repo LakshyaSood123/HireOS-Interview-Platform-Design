@@ -30,6 +30,19 @@ curl localhost:4883/api/v1/health
 
 Swagger UI: <http://localhost:4883/api/v1/docs>
 
+### Running the app against it
+
+From the repository root, `npm run dev` serves the frontend on 8443 and proxies `/api/v1` to this
+API (`vite.config.ts`; `REAGVIS_API_TARGET` points the proxy elsewhere, and `VITE_REAGVIS_API_URL`
+points the app at an API on another origin, where `CORS_ORIGINS` then applies). Signed out, the app
+behaves exactly as it always has and never calls the API. To use an account, in the browser console:
+
+```js
+await reagvis.register("demo@example.com", "correct-horse-battery")   // or reagvis.login(…)
+```
+
+See [How the frontend uses the API](#how-the-frontend-uses-the-api).
+
 ### Generating the JWT secrets
 
 ```bash
@@ -95,6 +108,8 @@ stops the process with a readable message — it never fails later on a request.
 | `npm run verify:day2` | 67 assertions — progress, XP, locks, streak, against a running server |
 | `npm run verify:parity` | Backend engine vs. the frontend's `progressEngine.ts`. No server, no database |
 | `npm run verify:ledger` | Reconciles stored XP against the reward ledger, for every user |
+| `npm run verify:day3` | 43 assertions — the notes API, then `verify:adapters` and `verify:ledger`, against a running server |
+| `npm run verify:adapters` | The **real frontend adapters** (`src/learning/…`) against a running server — two browsers, import, offline, renewal |
 
 ### Seeding the curriculum
 
@@ -118,7 +133,7 @@ boot and keeps it in memory.
 
 ---
 
-## What is live today (Days 1–2)
+## What is live today (Days 1–3)
 
 | Method | Path | Auth | Day |
 |---|---|---|---|
@@ -135,8 +150,11 @@ boot and keeps it in memory.
 | `GET` | `/api/v1/me/modules/{moduleId}/progress` | Bearer | 2 |
 | `POST` | `/api/v1/me/checkpoints/{checkpointId}/complete` | Bearer | 2 |
 | `POST` | `/api/v1/me/attempts` | Bearer | 2 |
+| `GET` | `/api/v1/me/notes` | Bearer | 3 |
+| `PUT` | `/api/v1/me/notes/{noteId}` | Bearer | 3 |
+| `DELETE` | `/api/v1/me/notes/{noteId}` | Bearer | 3 |
 
-Notes, execution, interviews, recommendations and analytics arrive on Days 3–6, per
+Execution, interviews, recommendations and analytics arrive on Days 4–6, per
 [`../docs/05-DAY-WISE-CHECKPOINTS.md`](../docs/05-DAY-WISE-CHECKPOINTS.md).
 
 ### Walking through the learning flow
@@ -218,16 +236,22 @@ src/
     auth/                routes · service · schema · user.model · refreshToken.model · tokens
     curriculum/          the seeded ID structure, and the in-memory prerequisite graph
     learning/            routes · service · schema · progress.engine · three models
+    notes/               routes · service · schema · note.model
     system/              health
   docs/swagger.ts        serves ../docs/openapi.yaml
-  shared/                envelope · errors · logger · dates · transaction
+  shared/                envelope · errors · logger · dates · transaction · ids
 scripts/
   lib/buildSnapshot.ts   registry → snapshot, with the structure-only rules
   seedCurriculum.ts      writes it to MongoDB
   verifyEngineParity.ts  backend engine vs. the frontend's
   verifyLedger.ts        stored XP vs. the ledger
-  verify-day1.sh · verify-day2.sh
+  verifyAdapters.ts      the frontend's API adapters vs. a running server
+  verify-day1.sh · verify-day2.sh · verify-day3.sh
 ```
+
+The frontend half of the integration lives in the repository's `src/learning/`:
+`progressRepository.ts` and `services/notesRepository.ts` (the adapters), `services/apiClient.ts`
+and `services/learnerSession.ts`.
 
 Each module folder keeps the same four files — `*.routes.ts`, `*.service.ts`, `*.model.ts`,
 `*.schema.ts`. Nothing clever.
@@ -296,6 +320,61 @@ differs only on DST fall-back days; the server is the authority and is the corre
 
 ---
 
+## How notes work
+
+**Several per lesson, keyed by the note's own id.** The Notes panel mints each note's id itself
+(`note-<timestamp>`), so a save is `PUT /me/notes/{noteId}` — create, or replace if the id exists.
+The same request twice leaves one note, which is what makes a retry, or a save replayed after an
+outage, safe. Ids are unique per user, not globally; every query carries the user from the token,
+so two learners with the same id each have their own note, and one learner asking for another's
+gets `404` — never `403`, which would confirm it exists.
+
+`GET /me/notes?courseId=…` returns a page (`limit` ≤ 200) oldest first, with `meta.nextCursor` for
+the next. `lessonId` is the checkpoint id; when it is set, `moduleId` comes from the curriculum.
+Text is capped at 10,000 characters and never written to a log.
+
+---
+
+## How the frontend uses the API
+
+`src/learning/services/learnerSession.ts` decides at boot, before the first render, which
+repositories the app gets. `main.tsx` waits for it, because `AppStateContext` reads progress
+synchronously as it mounts.
+
+| Signed in? | API | The app runs on |
+|---|---|---|
+| No | — | the local repositories, exactly as before. **No request is made** |
+| Yes | reachable | `ApiProgressRepository` / `ApiNotesRepository`, filled from the server |
+| Yes | unreachable | the same, on the last copy this browser synced — or the local ones if it has none |
+
+The repository interfaces are synchronous, so the API adapters answer from a copy of the server's
+state kept in the browser. `save()` still receives the whole progress object after every change;
+the adapter sends only what the learner did — one completion (`POST …/complete`) or a moved pointer
+(`PUT …/active`) — and the server derives XP, mastery and the streak itself. Writes go through a
+persistent outbox: kept across reloads, retried while the API is down, and every call idempotent,
+so sending one twice changes nothing. The server is the authority, and the next boot always shows
+exactly what it holds.
+
+**First sign-in on a browser** imports that browser's signed-out progress **once**, only if the
+account has none: its completions are replayed with `source: "import"`, so the server re-checks every
+lock and re-derives every reward. The demo bootstrap's fifteen checkpoints are never sent, and
+neither is work that only they unlocked. Signed-out notes come along under the same rule.
+
+There is no sign-in screen yet — the frontend designs one — so the console is the way in:
+
+| Command | Does |
+|---|---|
+| `reagvis.register(email, password, name?)` | creates the account, signs in, reloads |
+| `reagvis.login(email, password)` | signs in, reloads |
+| `reagvis.logout()` | sends anything unsent, revokes the session, removes the learner's data from this browser, reloads |
+| `reagvis.status()` | the mode, the user and how many changes are unsent |
+| `reagvis.sync()` | sends unsent changes now |
+
+Access tokens renew themselves on a `401`, once per tab and serialised across tabs with a Web Lock
+— the server treats a reused refresh token as theft and would sign the learner out everywhere.
+
+---
+
 ## Rate limits
 
 From the contract. Disabled under `NODE_ENV=test` so suites are not throttled.
@@ -304,6 +383,9 @@ From the contract. Disabled under `NODE_ENV=test` so suites are not throttled.
 |---|---|
 | `/auth/login`, `/auth/register` | 10 per 15 min per IP |
 | everything else | 120 per minute per user (per IP when unauthenticated) |
+
+`verify:day3` uses 7 of the 10 sign-ins; `verify:day2` uses 2, `verify:day1` most of them. Run them
+one at a time and restart the API in between, and the limit never gets in the way.
 
 ---
 
@@ -322,3 +404,8 @@ From the contract. Disabled under `NODE_ENV=test` so suites are not throttled.
 | Seeded, but the server still serves the old structure | The snapshot is loaded at boot; restart the API |
 | `Refusing to seed — the snapshot is not structure-only` | Something non-structural reached the draft. The message names the field |
 | `db: this deployment does not support transactions` | Not Atlas / not a replica set. Completions still cannot double-award; the unique ledger key is the guard |
+| Your server logs show no requests, or old code keeps answering | Another server holds the port — often a leftover `npm run dev` from an earlier session, which `tsx watch` restarts on every file save. `lsof -nP -iTCP:4883 -sTCP:LISTEN` names it |
+| Signed in, but the app shows the demo | The API was unreachable at boot and this browser had no copy of your progress yet. The console says so; reload once the API is up |
+| `reagvis is not defined` in the console | Wrong tab, or the app has not finished booting |
+| The app cannot reach the API from another device | Open the app through the Vite dev server (it proxies `/api/v1`), not the API port directly |
+| `The server refused completing …` in the browser console | The server's lock check disagreed with the tab — usually a stale tab. Reload: the app shows what the server holds |

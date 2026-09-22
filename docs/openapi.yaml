@@ -340,7 +340,7 @@ paths:
               required: [courseId]
               properties:
                 courseId: { type: string }
-                source: { type: string, enum: [submit, quick-check, reading, manual], default: manual, description: "Recorded on the ledger row; does not change the reward." }
+                source: { type: string, enum: [submit, quick-check, reading, manual, import], default: manual, description: "Recorded on the ledger row; does not change the reward. `import` marks a completion replayed from a browser's signed-out progress on first sign-in." }
                 submissionId: { type: string, description: "Day 4. The submission that earned it." }
             example: { courseId: "dsa-foundations", source: "submit", submissionId: "66f1bb" }
       responses:
@@ -434,23 +434,52 @@ paths:
   /me/notes:
     get:
       tags: [Notes]
-      summary: List the authenticated user's notes
+      summary: List the authenticated user's notes in a course, oldest first, one page at a time
+      description: |
+        Paged by an opaque cursor: pass `meta.nextCursor` back as `cursor` for the
+        next page; it is null on the last one. Pages follow creation order, which
+        never changes, so editing a note while walking the pages cannot make it
+        appear twice or not at all.
+
+        404 means the course id is unknown, or no curriculum has been seeded.
       parameters:
         - { name: courseId, in: query, required: true, schema: { type: string } }
         - { name: moduleId, in: query, schema: { type: string } }
         - { name: lessonId, in: query, schema: { type: string }, description: "Checkpoint id - a checkpoint is the lesson" }
+        - { name: limit, in: query, schema: { type: integer, minimum: 1, maximum: 200, default: 100 } }
+        - { name: cursor, in: query, schema: { type: string }, description: "meta.nextCursor of the previous page" }
       responses:
         "200":
           description: OK
           content:
             application/json:
+              schema: { $ref: "#/components/schemas/NoteListSuccess" }
               example:
                 data:
-                  - { id: "66f2dd", courseId: "dsa-foundations", moduleId: "trees", lessonId: "trees-3", text: "Inorder = left, node, right.", updatedAt: "2026-09-19T11:45:00Z" }
-                meta: { requestId: "req_09" }
+                  - { id: "note-1726900000000", courseId: "dsa-foundations", moduleId: "trees", lessonId: "trees-3", text: "Inorder = left, node, right.", createdAt: "2026-09-19T11:45:00Z", updatedAt: "2026-09-19T11:45:00Z" }
+                  - { id: "note-1726900042000", courseId: "dsa-foundations", moduleId: "trees", lessonId: "trees-3", text: "Postorder deletes a tree safely.", createdAt: "2026-09-19T11:46:00Z", updatedAt: "2026-09-19T11:46:00Z" }
+                meta: { requestId: "req_09", nextCursor: null }
+        "400": { $ref: "#/components/responses/ValidationError" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /me/notes/{noteId}:
     put:
       tags: [Notes]
-      summary: Create or update the note for one lesson scope (upsert)
+      summary: Create the note with this id, or replace it (idempotent upsert)
+      description: |
+        The Notes panel keeps several notes per lesson and mints each note's id
+        itself, so a note is addressed by that id. The same request twice leaves
+        one note — a retry, or a save queued offline and replayed, can never
+        duplicate a note.
+
+        Ids are unique per user, not globally: two learners can use the same id
+        and each gets their own note. `moduleId` is read from the curriculum when
+        `lessonId` is given, whatever the body says; the body's `id`,
+        `updatedAt` and `userId` are ignored. A course- or module-level note
+        leaves `lessonId` null.
+      parameters:
+        - $ref: "#/components/parameters/NoteId"
       requestBody:
         required: true
         content:
@@ -459,21 +488,25 @@ paths:
             example: { courseId: "dsa-foundations", moduleId: "trees", lessonId: "trees-3", text: "Inorder = left, node, right." }
       responses:
         "200":
-          description: Saved
+          description: Saved — created or replaced
           content:
             application/json:
               schema: { $ref: "#/components/schemas/NoteSuccess" }
         "400": { $ref: "#/components/responses/ValidationError" }
-
-  /me/notes/{noteId}:
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "404": { $ref: "#/components/responses/NotFound" }
     delete:
       tags: [Notes]
-      summary: Delete a note the caller owns
+      summary: Delete one of the caller's notes
+      description: |
+        Another learner's note and a note that never existed get the same 404:
+        among the caller's notes there is no such id. A 403 would confirm that
+        someone else's note exists.
       parameters:
-        - { name: noteId, in: path, required: true, schema: { type: string } }
+        - $ref: "#/components/parameters/NoteId"
       responses:
         "204": { description: Deleted }
-        "403": { $ref: "#/components/responses/Forbidden" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
         "404": { $ref: "#/components/responses/NotFound" }
 
   /code/run:
@@ -767,6 +800,13 @@ components:
       required: true
       schema: { type: string }
       example: "trees-3"
+    NoteId:
+      name: noteId
+      in: path
+      required: true
+      description: "Minted by the client — the Notes panel uses note-<timestamp>. Letters, digits, '-' and '_', at most 64."
+      schema: { type: string, pattern: "^[A-Za-z0-9][A-Za-z0-9_-]*$", maxLength: 64 }
+      example: "note-1726900000000"
 
   schemas:
     Meta:
@@ -851,23 +891,39 @@ components:
       required: [courseId, text]
       properties:
         courseId: { type: string }
-        moduleId: { type: string, nullable: true }
+        moduleId: { type: string, nullable: true, description: "For a module-level note. Ignored when lessonId is given - the curriculum says which module a lesson is in." }
         lessonId: { type: string, nullable: true, description: "Checkpoint id" }
-        text: { type: string, maxLength: 10000 }
+        text: { type: string, minLength: 1, maxLength: 10000, description: "Not blank. Never written to a log." }
+
+    Note:
+      description: Field-for-field the frontend's NoteRecord (src/learning/services/notesRepository.ts), plus createdAt.
+      type: object
+      properties:
+        id: { type: string }
+        courseId: { type: string }
+        moduleId: { type: string, nullable: true }
+        lessonId: { type: string, nullable: true }
+        text: { type: string }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
 
     NoteSuccess:
       type: object
       properties:
+        data: { $ref: "#/components/schemas/Note" }
+        meta: { $ref: "#/components/schemas/Meta" }
+
+    NoteListSuccess:
+      type: object
+      properties:
         data:
+          type: array
+          items: { $ref: "#/components/schemas/Note" }
+        meta:
           type: object
           properties:
-            id: { type: string }
-            courseId: { type: string }
-            moduleId: { type: string, nullable: true }
-            lessonId: { type: string, nullable: true }
-            text: { type: string }
-            updatedAt: { type: string, format: date-time }
-        meta: { $ref: "#/components/schemas/Meta" }
+            requestId: { type: string }
+            nextCursor: { type: string, nullable: true }
 
     ExecutionInput:
       type: object

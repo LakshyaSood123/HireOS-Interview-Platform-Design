@@ -16,13 +16,12 @@ import {
 } from "../learning/progressEngine"
 import { getCourseById, isCourseAvailable, findCheckpoint } from "../learning/courseRegistry"
 import { deriveLegacyCourseData } from "../learning/legacyAdapter"
-import { LocalProgressRepository } from "../learning/progressRepository"
+import { learnerSession, progressRepository } from "../learning/services/learnerSession"
 import { MockRecommendationProvider } from "../learning/services/recommendationProvider"
 
 export type ActiveProduct = "hireos" | "reagvis"
 export type ReagvisView = "intro" | "map" | "library" | "lesson" | "challenge" | "complete" | "roadmap" | "workspace"
 
-const progressRepository = new LocalProgressRepository()
 const recommendationProvider = new MockRecommendationProvider()
 
 function todayIso(): string {
@@ -154,12 +153,16 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const [reagvisView, setReagvisView] = useState<ReagvisView>("map")
 
   // Learning-engine progress snapshot — the single source of truth for
-  // course/zone/module/checkpoint state. Loaded from LocalProgressRepository
-  // on first mount (falls back to the demo bootstrap), persisted on every
-  // change. See LEARNING_ENGINE_ARCHITECTURE.md.
+  // course/zone/module/checkpoint state. Loaded on first mount from the
+  // repository learnerSession.ts chose (the learner's account when signed in,
+  // this browser otherwise — falling back to the demo bootstrap), persisted
+  // on every change. See LEARNING_ENGINE_ARCHITECTURE.md.
   const [progress, setProgress] = useState<LearnerProgressState>(() => {
     const defaultCourseId = dsaCourseData.id
     const loaded = progressRepository.load(defaultCourseId)
+    // Signed in: the learner's real progress, owned by the server — shown as
+    // it is, never swapped for the demo bootstrap below.
+    if (loaded && learnerSession.signedIn) return loaded
     if (loaded && (!loaded.activeCheckpointId || !loaded.completedCheckpointIds.includes("recursion-5"))) {
       return buildDemoLearnerBootstrap(defaultCourseId)
     }

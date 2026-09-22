@@ -48,7 +48,7 @@ back inside a 200 as `alreadyCompleted: true` or as a submission `status`.
 | GET | `/me/modules/{moduleId}/progress` | states for a roadmap refresh |
 | POST | `/me/checkpoints/{checkpointId}/complete` | complete + rewards, safe to repeat |
 | POST | `/me/attempts` | record a quick-check or quiz answer |
-| GET / PUT / DELETE | `/me/notes` · `/me/notes/{noteId}` | notes |
+| GET · PUT / DELETE | `/me/notes` · `/me/notes/{noteId}` | list notes · save or delete one note |
 | POST | `/code/run` | visible tests only — never rewards |
 | POST | `/code/submit` | server-side hidden fixtures, stored, may complete the checkpoint |
 | GET | `/me/submissions` | history |
@@ -112,6 +112,10 @@ backend does not rename the frontend's world.
 ### Completing a checkpoint
 
 `POST /me/checkpoints/trees-3/complete` → `{ "courseId": "dsa-foundations", "source": "submit" }`
+
+`source` is `submit`, `quick-check`, `reading`, `manual` (the default) or `import` — the last marks
+a completion replayed from a browser's signed-out progress on first sign-in. It is written to the
+ledger row and never changes the reward.
 
 ```json
 {
@@ -216,17 +220,36 @@ bundled into the frontend — those ship to the browser and are readable by any 
 A failed hidden test returns its `id`, `description` and `status` only. Its `input` and `expected`
 are never serialized into a response.
 
-### Notes (upsert by scope)
+### Notes (upsert by the note's own id)
 
-`PUT /me/notes`
+`PUT /me/notes/note-1726900000000`
 
 ```json
 { "courseId": "dsa-foundations", "moduleId": "trees", "lessonId": "trees-3",
   "text": "Inorder = left, node, right." }
 ```
 
-Returns the saved note with its `id` and `updatedAt`, matching the frontend's `NoteRecord`.
-`lessonId` is the checkpoint id.
+```json
+{ "data": { "id": "note-1726900000000", "courseId": "dsa-foundations", "moduleId": "trees",
+            "lessonId": "trees-3", "text": "Inorder = left, node, right.",
+            "createdAt": "2026-09-19T11:45:00Z", "updatedAt": "2026-09-19T11:45:00Z" },
+  "meta": { "requestId": "req_08" } }
+```
+
+Creates the note, or replaces it if the id exists — the same request twice leaves one note. The
+Notes panel keeps several notes per lesson and mints each id itself, so the id, not the lesson, is
+what a save is keyed on. Ids are unique per user: every query carries the token's user, so two
+learners with the same id each have their own note. `lessonId` is the checkpoint id; when it is
+set, `moduleId` is read from the curriculum. `DELETE /me/notes/{noteId}` is `204`, then `404` —
+and `404` too for an id that belongs to someone else, never `403`, which would confirm it exists.
+
+`GET /me/notes?courseId=dsa-foundations` lists the caller's notes in a course, oldest first, up to
+`limit` (default 100, max 200) per page. `meta.nextCursor` fetches the next page and is `null` on
+the last. `moduleId` and `lessonId` narrow it.
+
+**Changed at Day 3** from `PUT /me/notes`, an upsert by lesson. That shape assumed one note per
+lesson; the Notes panel has many, and under it every second note on a lesson would have replaced
+the first. The endpoint count is unchanged.
 
 ### Interview result
 

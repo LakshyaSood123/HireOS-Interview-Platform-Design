@@ -16,14 +16,15 @@ import { useAppState } from "../state/AppStateContext"
 import { libraryCourses, type TrailNode } from "../data/reagvisCourses"
 import { getCourseById, isCourseAvailable, getAllCheckpointsInOrder } from "../learning/courseRegistry"
 import { RoutingCodeRunner } from "../learning/services/pistonCodeRunner"
-import { LocalNotesRepository } from "../learning/services/notesRepository"
+import { notesRepository } from "../learning/services/learnerSession"
 
-// Module-level singletons — one code runner / local notes repository for
-// the whole app, same pattern as AppStateContext's progressRepository.
+// Module-level singletons — one code runner / notes repository for the whole
+// app, same pattern as AppStateContext's progressRepository. The notes
+// repository is the one learnerSession.ts chose at boot: the learner's
+// account when signed in, this browser otherwise.
 // RoutingCodeRunner sends only the MVP-enabled activity (foundations-4) to
 // real Piston execution; every other activity still uses MockCodeRunner.
 const codeRunner = new RoutingCodeRunner()
-const notesRepository = new LocalNotesRepository()
 
 interface ReagvisTrailPageProps {
   onNavigateHireOS?: (page: string) => void

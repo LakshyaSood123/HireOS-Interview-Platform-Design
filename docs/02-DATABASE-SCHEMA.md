@@ -23,7 +23,7 @@ model and built on boot, `lean()` for read-only queries, projections instead of 
 | `refreshTokens` | login sessions | `tokenHash` unique, TTL on `expiresAt` |
 | `courseProgress` | the whole learner state, one doc per user per course | `{ userId, courseId }` unique |
 | `rewardEvents` | XP / lives ledger | `{ userId, courseId, eventKey }` unique |
-| `notes` | one note per lesson | `{ userId, courseId, lessonId }` unique |
+| `notes` | a learner's notes — several per lesson | `{ userId, noteId }` unique |
 | `learningAttempts` | quick-check and quiz answers | `{ userId, checkpointId, createdAt }` |
 | `codeSubmissions` | submitted code + results | `{ userId, createdAt }` |
 | `interviewSessions` | interview result + weak skills | `sourceSessionId` unique |
@@ -118,9 +118,28 @@ rows, every completion matched to one row, every mastery entry to its bonus.
 
 ## 5. `notes`
 
-`userId`, `courseId`, `moduleId`, `lessonId` (= the checkpoint id), `text` (max 10,000 chars),
-`createdAt`, `updatedAt`. One note per lesson scope, so the Notes panel can upsert.
-Matches the frontend's `NoteRecord`.
+`userId`, `noteId`, `courseId`, `moduleId`, `lessonId` (= the checkpoint id), `text` (max 10,000
+chars), `createdAt`, `updatedAt`. Matches the frontend's `NoteRecord`, whose `id` is `noteId`.
+
+**Several notes per lesson, keyed by the client's id.** The Notes panel keeps as many notes on a
+lesson as the learner writes, and mints each one's id itself (`note-<timestamp>`). So a note is
+addressed by that id: `PUT /me/notes/{noteId}` creates the note or replaces it, and the same
+request twice leaves one note. That is what lets the frontend retry a save, or replay one it
+queued offline, without ever duplicating a note.
+
+| Index | Why |
+|---|---|
+| `{ userId, noteId }` unique | Ids are minted by clients, so they are unique per user, not globally. Two learners who pick the same id each get their own note |
+| `{ userId, courseId, _id }` | `GET /me/notes?courseId=…`, paged by `_id` — creation order, which never changes, so editing a note mid-listing cannot skip or repeat it |
+
+`moduleId` is read from the curriculum when `lessonId` is set, the way `/me/attempts` reads it.
+Note text is never written to a log — the save log line carries its length.
+
+**Corrected at Day 3.** This section said *one note per lesson scope, unique `{ userId, courseId,
+lessonId }`*. The Notes panel has never worked that way: every "Save Note" that is not an edit
+creates a new note. Under a one-per-lesson key the second note on a lesson would have silently
+replaced the first on the server — and the panel is a component, so it does not change to fit the
+database. The key moved to the note's own id instead.
 
 ## 6. `learningAttempts`
 
@@ -266,7 +285,7 @@ trusted for judging. This collection is where the real ones live.
 | One progress doc per user per course | unique `{ userId, courseId }` |
 | No duplicate XP | unique `{ userId, courseId, eventKey }`, written before the XP update |
 | No conflicting module / checkpoint rows | impossible — they are fields in one document |
-| One note per lesson | unique `{ userId, courseId, lessonId }` |
+| A note saved twice is still one note | unique `{ userId, noteId }`, and `PUT` is an upsert on it |
 | No cross-user reads | `userId` from the token injected into every query |
 | UTC everywhere | all dates UTC; `lastActivityDate` is a plain `"YYYY-MM-DD"` string |
 | Curriculum traceability | `curriculumVersion` on every progress document |
@@ -288,3 +307,6 @@ place deletes fan out.
   the correct one; `npm run verify:parity` prints the affected dates.
 - `checkpointStats` grows with the curriculum. Fine at 107; it would move to its own collection if
   a course ever reached thousands.
+- Nothing yet bounds how many notes or attempts one account can store — only the per-minute rate
+  limit and the 10,000-character note cap. Per-user storage bounds belong to Day 6's security pass,
+  alongside the other caps.

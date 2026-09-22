@@ -10,7 +10,7 @@
 | My branch | `backend/keshav-current-baseline` (branched from that exact commit) |
 | Merge plan | Smaller reviewable pull requests into the frontend branch — **not** one large merge at the end |
 | Backend code | [`backend/`](../backend) — a self-contained npm workspace, because the repo root `src/` is the frontend app |
-| Progress | Days 0, 1 and 2 complete. Day 3 (notes + the frontend adapters) is next. |
+| Progress | Days 0–3 complete. Day 4 (code execution through Piston) is next. |
 
 ---
 
@@ -68,8 +68,8 @@ future scope, along with the CMS.
 `courseProgress` is shaped exactly like the frontend's `LearnerProgressState`, so the frontend can
 use the response directly.
 
-Six are live as of Day 2 — `users` and `refreshTokens` from Day 1, plus `courseProgress`,
-`rewardEvents`, `learningAttempts` and `curriculumSnapshots`. The snapshot holds 7 zones, 29
+Seven are live as of Day 3 — `users` and `refreshTokens` from Day 1; `courseProgress`,
+`rewardEvents`, `learningAttempts` and `curriculumSnapshots` from Day 2; `notes` from Day 3. The snapshot holds 7 zones, 29
 modules and 107 checkpoints: ids, order, XP and prerequisites only, enforced by a field allowlist
 in the seeder rather than left to good intentions.
 
@@ -94,16 +94,20 @@ Every response is `{ data, meta }` or `{ error: { code, message, details } }`.
 
 ## The four integration points
 
-Only four frontend files gain a new class. No component is touched.
+Four frontend files gain a new class. No UI component's rendering or behaviour changes.
 
-| Today | Becomes | Backed by |
-|---|---|---|
-| `LocalProgressRepository` | `ApiProgressRepository` | `GET /me/courses/{id}/state` |
-| `LocalNotesRepository` | `ApiNotesRepository` | `/me/notes` |
-| `MockCodeRunner` | `ApiCodeRunner` | `/code/run`, `/code/submit` |
-| `MockRecommendationProvider` | `ApiRecommendationProvider` | `/me/recommendations` |
+| Today | Becomes | Backed by | |
+|---|---|---|---|
+| `LocalProgressRepository` | `ApiProgressRepository` | `/me/courses/{id}/state`, `…/complete`, `…/active` | ✅ Day 3 |
+| `LocalNotesRepository` | `ApiNotesRepository` | `/me/notes` | ✅ Day 3 |
+| `MockCodeRunner` | `ApiCodeRunner` | `/code/run`, `/code/submit` | Day 4 |
+| `MockRecommendationProvider` | `ApiRecommendationProvider` | `/me/recommendations` | Day 5 |
 
-The local versions stay in the code as the offline fallback.
+The local versions stay in the code as the offline fallback, and are exactly what a signed-out
+visitor gets. Wiring the adapters in took a few lines in three places that construct or boot them —
+`main.tsx`, `AppStateContext.tsx` and `ReagvisTrailPage.tsx` — because the repository interfaces
+are synchronous and the network is not ([Day 3](./05-DAY-WISE-CHECKPOINTS.md#day-3--notes-and-the-frontend-adapters-)).
+There is no sign-in screen yet; until the frontend designs one, the browser console signs in.
 
 ---
 
@@ -129,8 +133,8 @@ The local versions stay in the code as the offline fallback.
 | 0 | These documents, revised against the final handoff SHA | ✅ **Done** |
 | 1 | Server skeleton, MongoDB, login, health check | ✅ **Done** |
 | 2 | Progress, XP, lives, streak, locked/available logic | ✅ **Done** |
-| 3 | Notes + the frontend adapters — progress survives logout | ▶ Next |
-| 4 | Code run/submit endpoints on **Piston**, server-side hidden fixtures | ⬜ |
+| 3 | Notes + the frontend adapters — progress survives logout | ✅ **Done** |
+| 4 | Code run/submit endpoints on **Piston**, server-side hidden fixtures | ▶ Next |
 | 5 | Interview result + recommendations | ⬜ |
 | 6 | Analytics + security pass | ⬜ |
 | 7 | Tests, docs, demo data, bug fixes | ⬜ |

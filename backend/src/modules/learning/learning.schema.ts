@@ -1,20 +1,9 @@
 import { z } from "zod";
 
+import { curriculumId } from "../../shared/ids.js";
 import { ATTEMPT_TYPES } from "./learningAttempt.model.js";
 
 /** Request shapes for the learning endpoints — mirrors docs/openapi.yaml. */
-
-/**
- * Curriculum ids come from the frontend registry: lowercase, digits and
- * hyphens. Constraining the shape here means an id can never carry a `$` or a
- * `.` into a MongoDB dotted path or query operator, whatever a caller sends.
- */
-const curriculumId = z
-  .string()
-  .trim()
-  .min(1)
-  .max(64)
-  .regex(/^[a-z0-9][a-z0-9-]*$/, "Must be a curriculum id (lowercase letters, digits and hyphens).");
 
 export const courseIdParams = z.object({ courseId: curriculumId });
 export const moduleIdParams = z.object({ moduleId: curriculumId });
@@ -34,7 +23,9 @@ export const setActiveSchema = z
 
 export const startModuleSchema = z.object({ courseId: curriculumId });
 
-export const COMPLETION_SOURCES = ["submit", "quick-check", "reading", "manual"] as const;
+/** `import` marks a completion replayed from a browser's local progress on
+ *  first sign-in (Day 3) — the ledger says where every point came from. */
+export const COMPLETION_SOURCES = ["submit", "quick-check", "reading", "manual", "import"] as const;
 
 export const completeCheckpointSchema = z.object({
   courseId: curriculumId,

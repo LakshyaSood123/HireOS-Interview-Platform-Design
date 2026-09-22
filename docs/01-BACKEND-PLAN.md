@@ -175,7 +175,7 @@ compiler left to write, wait for, or defer.
 | 0 | These documents | Reviewed and approved ✅ |
 | 1 | Express skeleton, MongoDB connection, env config, `/health`, register/login/refresh/logout, `/users/me` | A clean machine boots by following the README ✅ |
 | 2 | Curriculum seeder, enrollment, course state, start module, complete checkpoint, reward ledger, XP / lives / streak | Completed, current, available and locked all persist correctly ✅ |
-| 3 | Notes API, `ApiProgressRepository`, `ApiNotesRepository`, localStorage import path | Logout and login restore progress and notes exactly |
+| 3 | Notes API, `ApiProgressRepository`, `ApiNotesRepository`, localStorage import path | Logout and login restore progress and notes exactly ✅ |
 | 4 | `/code/run`, `/code/submit`, submission storage, rate and size limits, server-side hidden fixtures, the `mock` and `piston` providers | CodeWorkspace works against the API with no UI change, on real Python/C++/Java |
 | 5 | Interview result endpoint, skill signals, rule-based recommendations, practice metadata | Weak skills produce an explainable next step |
 | 6 | Analytics summary, activity feed, authorization audit, rate limits, logging | Security checklist passes |
@@ -246,7 +246,8 @@ boundary** so hidden fixtures and judging stop living in the browser. The coding
 
 ---
 
-**Status:** Days 0, 1 and 2 are complete — planning and baseline, the server skeleton with
-authentication, and durable learner progress with server-side locks and an idempotent reward
-ledger. Day 3 (notes and the frontend adapters) is next. Day-by-day checkpoints, goals and
+**Status:** Days 0–3 are complete — planning and baseline, the server skeleton with
+authentication, durable learner progress with server-side locks and an idempotent reward ledger,
+and notes plus the frontend adapters that put the app on the API. Day 4 (code execution through
+Piston) is next. Day-by-day checkpoints, goals and
 verification steps are tracked in [05-DAY-WISE-CHECKPOINTS.md](./05-DAY-WISE-CHECKPOINTS.md).

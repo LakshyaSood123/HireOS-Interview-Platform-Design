@@ -18,7 +18,9 @@
     "verify:day1": "bash scripts/verify-day1.sh",
     "verify:parity": "tsx scripts/verifyEngineParity.ts",
     "verify:ledger": "tsx scripts/verifyLedger.ts",
-    "verify:day2": "bash scripts/verify-day2.sh"
+    "verify:day2": "bash scripts/verify-day2.sh",
+    "verify:adapters": "tsx scripts/verifyAdapters.ts",
+    "verify:day3": "bash scripts/verify-day3.sh"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",

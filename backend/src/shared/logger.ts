@@ -5,7 +5,8 @@ import { env } from "../config/env.js";
 /**
  * Redaction is not cosmetic — checkpoint 1.x requires that a password, a token
  * or a password hash never reaches a log line. Anything added here must stay
- * in sync with new request shapes (Day 4 adds `sourceCode`).
+ * in sync with new request shapes (Day 4 adds `sourceCode`). Note text is the
+ * learner's own writing and is kept out the same way.
  */
 const REDACT_PATHS = [
   "req.headers.authorization",
@@ -16,6 +17,7 @@ const REDACT_PATHS = [
   "req.body.refreshToken",
   "req.body.code",
   "req.body.sourceCode",
+  "req.body.text",
   "res.headers['set-cookie']",
   "password",
   "passwordHash",

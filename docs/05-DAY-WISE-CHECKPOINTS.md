@@ -9,8 +9,8 @@
 | **0** | Planning, baseline, approval | ✅ **Done** |
 | **1** | Server skeleton + auth | ✅ **Done** |
 | **2** | Progress, XP, lives, streak | ✅ **Done** |
-| 3 | Notes + frontend adapters | ▶ **Next** |
-| 4 | Code execution via Piston | ⬜ Not started |
+| **3** | Notes + frontend adapters | ✅ **Done** |
+| 4 | Code execution via Piston | ▶ **Next** |
 | 5 | Interview handoff + recommendations | ⬜ Not started |
 | 6 | Analytics + security pass | ⬜ Not started |
 | 7 | Tests, docs, demo data | ⬜ Not started |
@@ -259,36 +259,182 @@ Graphs — the server says no."
 
 ---
 
-## Day 3 — Notes and the frontend adapters
+## Day 3 — Notes and the frontend adapters ✅
 
 **Goal:** the frontend talks to the API instead of `localStorage`, and progress survives logout —
 with no component touched.
 
 ### Checkpoints
 
-| # | Checkpoint | Done when |
+| # | Checkpoint | Done when | Status |
+|---|---|---|---|
+| 3.1 | `notes` model — unique `{ userId, noteId }` (see *Documentation corrected*) | Several notes per lesson; a note saved twice is one note | ✅ |
+| 3.2 | `GET /me/notes` · `PUT` / `DELETE /me/notes/{noteId}` — upsert by the note's id | Paginated; ten parallel saves of one new note leave one | ✅ |
+| 3.3 | `ApiProgressRepository` implements the existing `ProgressRepository` | What browser A completes is what browser B loads | ✅ |
+| 3.4 | `ApiNotesRepository` implements the existing `NotesRepository` | Browser B's Notes panel shows browser A's note | ✅ |
+| 3.5 | localStorage import path — `migrateLegacyCheckpointIds()`, uploaded **only** if the server has no progress | Demo bootstrap data is never imported | ✅ |
+| 3.6 | Local repositories kept as the offline fallback | With the API stopped, the app still runs | ✅ |
+
+### How it fits together
+
+The notes API is `backend/src/modules/notes/`. The frontend side is four files in `src/learning/`:
+
+| File | What it holds |
+|---|---|
+| `progressRepository.ts` | `ApiProgressRepository`, beside the untouched `LocalProgressRepository` |
+| `services/notesRepository.ts` | `ApiNotesRepository`, beside the untouched `LocalNotesRepository` |
+| `services/apiClient.ts` | *new* — HTTP client, the session and its silent renewal, and a persistent outbox |
+| `services/learnerSession.ts` | *new* — picks the repositories at boot; the `reagvis.*` console commands |
+
+Both repository interfaces are **synchronous** — `load()` and `list()` return values, not promises
+— so the session is restored **before the first render** and the adapters answer from a copy of the
+server's state kept in the browser. Writes update that copy at once and reach the API through the
+outbox, which survives a reload and retries while the API is down. Every call it makes is
+idempotent on the server, so resending after an unclear failure is always safe. The server stays
+the authority: whatever a tab shows mid-session, the next boot shows exactly what the server holds.
+
+| At boot | Repositories | Requests |
 |---|---|---|
-| 3.1 | `notes` model, unique `{ userId, courseId, lessonId }` | |
-| 3.2 | `GET` / `PUT` / `DELETE /me/notes` — upsert by scope | |
-| 3.3 | `ApiProgressRepository` implements the existing `ProgressRepository` | |
-| 3.4 | `ApiNotesRepository` implements the existing `NotesRepository` | |
-| 3.5 | localStorage import path — `migrateLegacyCheckpointIds()`, uploaded **only** if the server has no progress | Demo bootstrap data is never imported |
-| 3.6 | Local repositories kept as the offline fallback | |
+| Signed out | the local ones — **exactly today's app**, demo bootstrap included | none |
+| Signed in, API reachable | the API ones, filled from the server | `state` + `notes` |
+| Signed in, API unreachable, used this browser before | the API ones, on the last synced copy; changes queue | retries in the background |
+| Signed in, API unreachable, new browser | the local ones | retries in the background |
+
+`save()` is still handed the whole snapshot after every change. The adapter works out what the
+learner just did — one checkpoint completed, or the pointer moved — and sends *that*:
+`POST …/complete` or `PUT …/active`. XP, mastery and the streak are never sent; the server derives
+them. A save that completes more than one checkpoint at once is not something the app does, so the
+adapter refuses it, and a swapped-in demo snapshot cannot reach the server even by accident.
+
+There is no sign-in screen — that is the frontend's to design — so the browser console signs in:
+
+```js
+await reagvis.register("demo@example.com", "correct-horse-battery")   // or reagvis.login(…)
+reagvis.status()     // { mode: "api", user: "demo@example.com", unsent: { progress: 0, notes: 0 } }
+await reagvis.logout()
+```
 
 ### Verification
 
-**Passes when:**
+```bash
+cd backend
+npm run dev                  # terminal 1
+npm run verify:day3          # terminal 2 — 43 checks, the adapter suite and the ledger included
+```
+
+| Command | What it proves | Result |
+|---|---|---|
+| `npm run verify:day3` | The notes API behaves — 41 HTTP assertions over two fresh accounts — then runs the two below | 43/43 ✅ |
+| `npm run verify:adapters` | The **real frontend adapter files**, driven the way `AppStateContext` and `NotesPanel` drive them, do what the checkpoints ask. Each "browser" is its own storage | 63/63 ✅ |
+| `npm run verify:ledger` | Imported completions reconcile like any other | reconciles ✅ |
+| A real Chrome run, once | The same Day 3 script through the actual UI: two isolated browser profiles, clicks and typing only | 17/17 ✅ |
+| `verify:day1` · `verify:day2` · `verify:parity` | Nothing earlier moved | 47/47 · 67/67 · 16,005 ✅ |
+
+**Passes when:** ✅ all verified — 21 Sep 2026, against Atlas.
 
 - Log in, complete two checkpoints, write a note, log out, log in **in a different browser** — the
-  same XP, the same progress and the same note come back.
+  same XP, the same progress and the same note come back. ✅ Twice over: `verify:adapters` does it
+  with two separate storages, and the Chrome run did it through the UI — 60 XP and a 1-day streak
+  in the HUD, ✓ ✓ on the Foundations roadmap, the note in the Notes panel of the second browser.
+  Logging out leaves nothing of the learner in the first browser's storage.
 - A returning user with existing localStorage progress keeps it; it uploads once and then the
-  server is authoritative.
-- A user who already has server progress does **not** have it overwritten by a stale local copy.
-- **Zero component files changed.** `git diff --stat` on the frontend touches only the four
-  adapter files.
-- With the API stopped, the app still runs on the local fallback.
+  server is authoritative. ✅ First sign-in replays the learner's completed checkpoints through
+  `POST …/complete` with `source: "import"`, in an order the locks accept, so the server re-checks
+  every prerequisite and computes every reward: a snapshot of three completions that claimed 999 XP
+  and a 9-day streak arrives as 90 XP and a streak of 1. The pointer goes back where the learner
+  was, signed-out notes come along, the local copy is cleared, and the next boot imports nothing.
+- A user who already has server progress does **not** have it overwritten by a stale local copy. ✅
+  The import is skipped outright — nothing merged, pointer untouched, verified field for field — and
+  the stale copy is cleared.
+- **Zero component files changed.** ✅ with a correction: no UI component's markup, styling or
+  behaviour changed. `git diff --stat` on the frontend is the four adapter files above plus three
+  wiring sites and the dev proxy — see *Documentation corrected* for why each one had to move.
+- With the API stopped, the app still runs on the local fallback. ✅ Stopped mid-session in the
+  Chrome run, the reload came up on the learner's last synced progress with no page error. A
+  completion and a note made while it was down were queued, and reached the server at the next
+  boot. Signed out, the app is today's app and makes **no request at all**.
 
-**Demo line:** "Same account, different laptop, same progress. And the UI diff is four files."
+**Demo bootstrap — never imported, and what that means in practice.** The bootstrap's fifteen
+pre-completed checkpoints are set aside whenever a signed-out snapshot contains all of them, and so
+is any of the learner's own work that is only reachable through them: the server's locks would
+refuse it. Today's `AppStateContext` builds *every* signed-out snapshot on the bootstrap, so in
+practice a returning demo user brings nothing across and starts their account at Foundations. That
+is what the rule says, and it is the honest outcome — their "progress" beyond Foundations was
+unlocked by demo data. The import path is real for everything else (verified with a snapshot the
+bootstrap never touched, and with legacy `"1"`–`"8"` ids).
+
+**Also done, beyond the checkpoint list:**
+
+- **An outbox**, so an offline change is not a lost change: ordered, persisted, retried with back-off
+  to once a minute, and every call idempotent. A refusal that can never succeed (400/404/409) is
+  dropped with a console warning; five 5xx in a row for one call drop it too, so it cannot block
+  the queue.
+- **Silent token renewal** — once per tab, and serialised across tabs with a Web Lock. The server
+  treats a reused refresh token as theft and signs the learner out everywhere, so two tabs must
+  never spend the same one. Verified with two requests racing one renewal.
+- **Sign-out forgets the learner.** Their copy and anything queued are removed from the browser;
+  sign-out refuses (unless told to discard) while changes are still unsent.
+- **Notes are paginated** (`limit` ≤ 200, opaque cursor over `_id`, which never changes) and capped
+  at 10,000 characters. Note text never reaches a log: the service logs its length, and
+  `req.body.text` is on the redaction list. Checked by grepping a full run's log for every note text.
+- **The ledger says where points came from**: `source: "import"` for replayed completions.
+- `src/shared/ids.ts` — the curriculum-id and client-id validators, now shared by learning and notes.
+- **The Vite dev server proxies `/api/v1`** to the backend, so the app reaches the API same-origin
+  from any device that can open it — a second laptop on the LAN included.
+
+**Contract drift fixed:** `PUT /me/notes` (upsert by lesson) became `PUT /me/notes/{noteId}`
+(upsert by the note's id) — still 25 endpoints. `DELETE /me/notes/{noteId}` answers `404` for
+another learner's note rather than `403`, so the API never confirms it exists. `GET /me/notes`
+documents `limit`, `cursor` and `meta.nextCursor`. The completion `source` enum gains `import`.
+A note's `text` must not be blank, and a note carries `createdAt`.
+
+**Documentation corrected:**
+
+- *"One note per lesson scope, unique `{ userId, courseId, lessonId }`"* — schema §5, the
+  collections table, the integrity rules and checkpoint 3.1 all said it. The Notes panel has never
+  worked that way: every "Save Note" that is not an edit makes a new note. Under that key the
+  second note on a lesson would have silently replaced the first on the server, and the panel is a
+  component, so it does not change to suit the database. The key is now the note's own id.
+- *"`git diff --stat` on the frontend touches only the four adapter files."* The adapters do live
+  in four files. Three other places had to move by a few lines, because the plan assumed things
+  the code does not do:
+
+  | File | Lines | Why |
+  |---|---|---|
+  | `src/main.tsx` | +12 −5 | `load()` is synchronous and the network is not: the session must be restored before `AppStateContext` first reads progress |
+  | `src/state/AppStateContext.tsx` | +8 −5 | It replaces any progress without `recursion-5` with the demo bootstrap. For a real account that would show fake progress — or, saved back, push the demo to the server. One line skips it when signed in; the rest is the import and a comment |
+  | `src/pages/ReagvisTrailPage.tsx` | +5 −4 | It constructs `new LocalNotesRepository()` itself; now it imports the one boot chose |
+  | `vite.config.ts` | +12 | Proxies `/api/v1` to the backend, beside the existing code-runner proxy |
+
+- *Checklist §4, "uploads it"* — there is no endpoint that accepts a progress snapshot, and the
+  server should not trust one. The upload is a replay of completions; §4 now says so.
+
+**Found, not fixed — for the frontend owner:**
+
+- **The world map is a fixed picture of the demo story.** `BiomeTrailMap.tsx` hardcodes every
+  module's status — Foundations, Linked Structures and Recursion completed, Trees current — and
+  never reads `dsaModuleStates`, which `AppStateContext` already exposes for exactly this. Signed
+  out, that matched the bootstrap. Signed in, a fresh account's map reads "3 / 7 Modules Completed"
+  beside a HUD that correctly reads 0 XP; its focus also defaults to Trees, which is locked for a
+  new account. The module roadmaps, the lesson workspace, the HUD and the Notes panel all read real
+  state and are right. Wiring the map to `dsaModuleStates` is a component change, so it is theirs.
+- **A sign-in screen.** It should call the same `learnerSession.ts` functions the console does.
+
+**Carried to Day 4:** a lost life is not sent to the server — nothing records a failed submit until
+`/code/submit` does. A life lost in the browser is restored at the next reload. XP, completions and
+notes are unaffected.
+
+**Carried to Day 6:** per-user storage bounds on notes and attempts (today only the rate limit and
+the 10,000-character cap bound them); whether the refresh token should leave `localStorage` for an
+`httpOnly` cookie.
+
+**Carried to Day 7:** still no automated tests in `npm test`; the verify commands stand in.
+
+**Demo line:** "Same account, different laptop, same progress — and the server re-derived every
+point of it. No screen was redesigned to get there."
+
+**Demo script and a reviewer's manual verification walkthrough:**
+[08-DAY-3-DEMO-AND-VERIFICATION.md](./08-DAY-3-DEMO-AND-VERIFICATION.md).
 
 ---
 

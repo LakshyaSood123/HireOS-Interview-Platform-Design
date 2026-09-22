@@ -11,6 +11,7 @@ import { generalRateLimit } from "./middleware/rateLimit.js";
 import { requestId } from "./middleware/requestId.js";
 import { authRouter } from "./modules/auth/auth.routes.js";
 import { learningRouter } from "./modules/learning/learning.routes.js";
+import { notesRouter } from "./modules/notes/notes.routes.js";
 import { healthRouter } from "./modules/system/health.routes.js";
 import { ApiError } from "./shared/errors.js";
 
@@ -62,6 +63,7 @@ export function createApp(): Express {
   api.use(generalRateLimit);
   api.use(authRouter);
   api.use(learningRouter);
+  api.use(notesRouter);
 
   app.use(env.API_PREFIX, api);
 

@@ -6,10 +6,11 @@ import { CurriculumSnapshot } from "../modules/curriculum/curriculum.model.js";
 import { CourseProgress } from "../modules/learning/courseProgress.model.js";
 import { LearningAttempt } from "../modules/learning/learningAttempt.model.js";
 import { RewardEvent } from "../modules/learning/rewardEvent.model.js";
+import { Note } from "../modules/notes/note.model.js";
 
 /**
  * Every model, in one list, so `connect.ts` can build indexes on boot.
- * Day 3 onwards appends here as collections are added.
+ * Each day appends here as its collections are added.
  */
 export const models: Model<any>[] = [
   User,
@@ -18,4 +19,5 @@ export const models: Model<any>[] = [
   CourseProgress,
   RewardEvent,
   LearningAttempt,
+  Note,
 ];

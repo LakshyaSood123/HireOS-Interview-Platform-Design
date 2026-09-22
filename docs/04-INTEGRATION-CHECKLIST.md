@@ -23,6 +23,16 @@ On first login the adapter runs the existing `migrateLegacyCheckpointIds()` on t
 and uploads it **only if the server has no progress for that user**. Otherwise the server wins and
 the local copy is cleared. Demo bootstrap data is not imported.
 
+*As built (Day 3):* the upload is not a bulk write — there is no endpoint that accepts a progress
+snapshot. It replays the learner's completions through `POST /me/checkpoints/{id}/complete` with
+`source: "import"`, in an order the server's locks accept, so the server re-checks every
+prerequisite and computes XP, mastery and the streak itself; the browser's own numbers are never
+sent. A snapshot that contains all fifteen demo bootstrap checkpoints has them set aside, and any
+of the learner's work that was only reachable through them is set aside too, because the server
+would refuse it. In today's app every signed-out snapshot is built on the bootstrap, so in practice
+nothing from the demo reaches an account. Signed-out notes follow the same rule: uploaded only if
+the account has no notes in that course; otherwise they stay where they were.
+
 **5. How do review and preview avoid XP changes?**
 Review takes the idempotent path above. Preview never calls the backend — `ReagvisTrailPage.tsx`
 already replaces `onComplete` and `onFailedSubmit` with no-ops while previewing.
@@ -31,13 +41,21 @@ already replaces `onComplete` and `onFailedSubmit` with no-ops while previewing.
 
 | Interface | Method | Call |
 |---|---|---|
-| `ProgressRepository` | `load` | `GET /me/courses/{id}/state` → return `data.progress` |
-| | `save` | debounced `PUT /me/courses/{id}/active` + the completion calls |
-| `NotesRepository` | `list` / `save` / `delete` | `GET` / `PUT` / `DELETE /me/notes` |
+| `ProgressRepository` | `load` | the copy of `GET /me/courses/{id}/state` → `data.progress` taken at boot |
+| | `save` | the one new completion → `POST /me/checkpoints/{id}/complete`; a moved pointer → `PUT /me/courses/{id}/active` |
+| `NotesRepository` | `list` | the copy of `GET /me/notes` taken at boot |
+| | `save` / `delete` | `PUT` / `DELETE /me/notes/{noteId}` |
 | `CodeRunner` | `run` / `submit` | `POST /code/run` / `POST /code/submit` |
 | `RecommendationProvider` | `getHandoff` | `GET /me/recommendations` |
 
 The response bodies were designed around these interfaces, not the other way round.
+
+*As built (Day 3):* both interfaces are synchronous — `load()` and `list()` return values, not
+promises — so `src/learning/services/learnerSession.ts` restores the session before the first
+render (`main.tsx` awaits it), and the adapters answer from a copy of the server's state kept in
+the browser. Writes change that copy at once and go to the API through a small persistent outbox
+that survives reloads and retries while the API is down; every call it makes is idempotent on the
+server. Signed out, the app uses the local repositories exactly as before and makes no request.
 
 **7. How are locked module starts rejected outside the UI?**
 `POST /me/modules/{id}/start` checks the module's first checkpoint's prerequisites against the
