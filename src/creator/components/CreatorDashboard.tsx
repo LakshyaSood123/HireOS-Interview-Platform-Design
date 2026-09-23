@@ -1,13 +1,42 @@
 import { useState, useMemo } from "react"
 import type { CourseAuthoringRepository } from "../courseAuthoringRepository"
 import type { CreatorCourse } from "../types"
+import { peekDsaDashboardSummary } from "../dsa/dsaDraftRepository"
 import CourseDetailsModal from "./CourseDetailsModal"
 
 interface CreatorDashboardProps {
   repository: CourseAuthoringRepository
   onOpenCourse: (id: string) => void
+  onOpenDsa: () => void
   onCourseCreated: (course: CreatorCourse) => void
   onExit: () => void
+}
+
+function DsaCourseCard({ onOpen }: { onOpen: () => void }) {
+  const summary = useMemo(() => peekDsaDashboardSummary(), [])
+  return (
+    <button
+      onClick={onOpen}
+      className="text-left w-full rounded-2xl bg-[#0F2A20] border border-[#38BDF8]/30 hover:border-[#38BDF8]/60 p-5 transition-all cursor-pointer shadow-lg hover:shadow-[#38BDF8]/10 group"
+    >
+      <div className="flex items-start justify-between gap-3 mb-3">
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0 bg-[#38BDF8]/15 border border-[#38BDF8]/40">
+          🏔️
+        </div>
+        <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider shrink-0 bg-[#38BDF8]/15 text-[#7DD3FC] border border-[#38BDF8]/40">
+          Structured DSA Course
+        </span>
+      </div>
+      <h3 className="text-sm font-bold text-white mb-1 truncate group-hover:text-[#7DD3FC] transition-colors">DSA Interview Trail</h3>
+      <p className="text-xs text-gray-400 leading-relaxed line-clamp-2 mb-3 min-h-[2.2em]">
+        The real Data Structures &amp; Algorithms curriculum, editable as an isolated local draft.
+      </p>
+      <div className="flex items-center justify-between text-[10.5px] text-gray-500 pt-3 border-t border-white/10">
+        <span>{summary.zones} zones • {summary.modules} modules • {summary.checkpoints} checkpoints</span>
+        <span>{summary.hasDraft ? "Draft saved" : "Not yet opened"}</span>
+      </div>
+    </button>
+  )
 }
 
 function formatDate(iso: string): string {
@@ -52,7 +81,7 @@ function CourseCard({ course, onOpen }: { course: CreatorCourse; onOpen: () => v
   )
 }
 
-export default function CreatorDashboard({ repository, onOpenCourse, onCourseCreated, onExit }: CreatorDashboardProps) {
+export default function CreatorDashboard({ repository, onOpenCourse, onOpenDsa, onCourseCreated, onExit }: CreatorDashboardProps) {
   const [courses, setCourses] = useState<CreatorCourse[]>(() => repository.listCourses())
   const [showCreateModal, setShowCreateModal] = useState(false)
 
@@ -108,9 +137,19 @@ export default function CreatorDashboard({ repository, onOpenCourse, onCourseCre
           <span>Local persistence only — not connected to a real backend</span>
         </div>
 
+        <section className="mb-8">
+          <h2 className="text-xs font-black uppercase tracking-wider text-[#A7CE65] mb-3">Courses ({courses.length + 1})</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <DsaCourseCard onOpen={onOpenDsa} />
+            {courses.map(c => (
+              <CourseCard key={c.id} course={c} onOpen={() => onOpenCourse(c.id)} />
+            ))}
+          </div>
+        </section>
+
         {courses.length === 0 && (
-          <div className="rounded-2xl border border-dashed border-white/15 bg-[#0F2A20]/50 p-14 text-center">
-            <p className="text-sm text-gray-400 mb-4">No courses yet. Start building your first trail.</p>
+          <div className="rounded-2xl border border-dashed border-white/15 bg-[#0F2A20]/50 p-14 text-center mb-8">
+            <p className="text-sm text-gray-400 mb-4">No standard courses yet. Start building your first trail.</p>
             <button
               onClick={() => setShowCreateModal(true)}
               className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-[#1DB584] hover:bg-[#159a6f] transition-all cursor-pointer"
@@ -122,15 +161,6 @@ export default function CreatorDashboard({ repository, onOpenCourse, onCourseCre
 
         {courses.length > 0 && (
           <>
-            <section className="mb-8">
-              <h2 className="text-xs font-black uppercase tracking-wider text-[#A7CE65] mb-3">My Courses ({courses.length})</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {courses.map(c => (
-                  <CourseCard key={c.id} course={c} onOpen={() => onOpenCourse(c.id)} />
-                ))}
-              </div>
-            </section>
-
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <section>
                 <h2 className="text-xs font-black uppercase tracking-wider text-amber-300/90 mb-3">Drafts ({drafts.length})</h2>

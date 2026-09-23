@@ -16,6 +16,17 @@ import type { Course, Zone, Module, Checkpoint } from "../../learning/types"
 import type { CreatorCourse } from "../types"
 import type { CmsDsaZone, CmsDsaModule, CmsDsaCheckpoint } from "./dsaCmsTypes"
 
+interface AdaptOptions {
+  /** When true, archived zones/modules/checkpoints are dropped instead of
+   * rendered — used by DsaDraftPreview.tsx so "Preview Draft" reflects
+   * what a future publish would actually show. Defaults to false so the
+   * lossless round-trip verifier (dsaCmsVerify.ts, which never passes this
+   * option) keeps comparing against the CMS model's full contents exactly
+   * as documented — archiving is out of scope for that comparison since
+   * the importer only ever produces "active" entities. */
+  activeOnly?: boolean
+}
+
 function byOrder<T extends { order: number }>(items: T[]): T[] {
   return items.slice().sort((a, b) => a.order - b.order)
 }
@@ -37,25 +48,30 @@ function adaptCheckpoint(cp: CmsDsaCheckpoint): Checkpoint {
   return checkpoint
 }
 
-function adaptModule(module: CmsDsaModule): Module {
+function adaptModule(module: CmsDsaModule, options: AdaptOptions): Module {
+  const checkpoints = byOrder(module.checkpoints)
+    .filter(cp => !options.activeOnly || cp.state === "active")
+    .map(adaptCheckpoint)
   const result: Module = {
     id: module.id,
     title: module.title,
     description: module.description,
     icon: module.icon,
     accentColor: module.accentColor,
-    checkpoints: byOrder(module.checkpoints).map(adaptCheckpoint),
+    checkpoints,
   }
   if (module.contentKind !== undefined) result.contentKind = module.contentKind
   return result
 }
 
-function adaptZone(zone: CmsDsaZone): Zone {
+function adaptZone(zone: CmsDsaZone, options: AdaptOptions): Zone {
   return {
     id: zone.id,
     title: zone.title,
     description: zone.description,
-    modules: byOrder(zone.modules).map(adaptModule),
+    modules: byOrder(zone.modules)
+      .filter(m => !options.activeOnly || m.state === "active")
+      .map(m => adaptModule(m, options)),
   }
 }
 
@@ -64,7 +80,7 @@ function adaptZone(zone: CmsDsaZone): Zone {
  * this adapter is DSA-specific by design (PART 2: "do not create a second
  * DSA learner renderer" cuts both ways, this must never silently accept
  * non-DSA CMS content and produce something that looks like it). */
-export function cmsDsaCourseToLearnerCourse(cmsCourse: CreatorCourse): Course {
+export function cmsDsaCourseToLearnerCourse(cmsCourse: CreatorCourse, options: AdaptOptions = {}): Course {
   if (cmsCourse.courseType !== "structured-dsa" || !cmsCourse.dsaZones) {
     throw new Error("cmsDsaCourseToLearnerCourse: course is not a structured-dsa course with dsaZones")
   }
@@ -74,6 +90,8 @@ export function cmsDsaCourseToLearnerCourse(cmsCourse: CreatorCourse): Course {
     title: cmsCourse.title,
     description: cmsCourse.description ?? cmsCourse.shortDescription,
     provider: cmsCourse.instructor,
-    zones: byOrder(cmsCourse.dsaZones).map(adaptZone),
+    zones: byOrder(cmsCourse.dsaZones)
+      .filter(z => !options.activeOnly || z.state === "active")
+      .map(z => adaptZone(z, options)),
   }
 }
