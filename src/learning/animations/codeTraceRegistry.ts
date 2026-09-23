@@ -1,4 +1,4 @@
-// Static registry of the 29 approved Code Trace specifications, one per
+// Static registry of the approved Code Trace specifications, one per
 // AlgorithmAnimationId. This is authored content, not logic — every trace's
 // `states` array aligns 1:1 with that animation's own semantic-state array
 // (src/learning/animations/*States.ts / advancedAnimationStates.ts), which
@@ -8,7 +8,7 @@
 // the caller (see the disposable audit script referenced in the hardening
 // report — this file has no browser/React dependency itself).
 //
-// All 29 use TRACE_VISIBILITY = ALWAYS_VISIBLE — every animation here is
+// All current traces use TRACE_VISIBILITY = ALWAYS_VISIBLE — every animation here is
 // attached to a "lesson"-type checkpoint, never a coding challenge.
 
 import type { AlgorithmAnimationId } from "../types"
@@ -74,6 +74,26 @@ export const codeTraceRegistry: CodeTraceRegistryShape = {
       { activeLines: [1], changes: [{ name: "key", to: "\"pear\"", status: "info" }], note: "Start with the key you want to count." },
       { activeLines: [2], executedLines: [1], changes: [{ name: "bucket", to: "1", status: "info" }], note: "The hash function maps the key to a bucket." },
       { activeLines: [4, 5, 6], executedLines: [1, 2], changes: [{ name: "counts[1]", from: "1", to: "2", status: "changed" }], status: { label: "VALID", tone: "valid" }, note: "A repeat key updates the count instead of rescanning." },
+    ],
+  },
+
+  "hashing-complement-lookup": {
+    title: "One-pass complement lookup",
+    visibility: "ALWAYS_VISIBLE",
+    pseudocode: [
+      "seen = {}",
+      "for i, n in enumerate(nums):",
+      "    complement = target - n",
+      "    if complement in seen:",
+      "        return [seen[complement], i]",
+      "    seen[n] = i",
+    ],
+    states: [
+      { activeLines: [1], changes: [{ name: "seen", to: "{}", status: "info" }], note: "Begin with no previously seen values." },
+      { activeLines: [2, 3, 4], executedLines: [1], changes: [{ name: "n", to: "2", status: "info" }, { name: "complement", to: "7", status: "info" }], status: { label: "NOT SEEN", tone: "neutral" }, note: "Seven has not appeared yet." },
+      { activeLines: [6], executedLines: [2, 3, 4], changes: [{ name: "seen", from: "{}", to: "{2: 0}", status: "changed" }], note: "Store value 2 with its index." },
+      { activeLines: [2, 3, 4], executedLines: [6], changes: [{ name: "n", from: "2", to: "7", status: "changed" }, { name: "complement", from: "7", to: "2", status: "changed" }], status: { label: "FOUND", tone: "valid" }, note: "Two is already in seen at index 0." },
+      { activeLines: [5], executedLines: [2, 3, 4], changes: [{ name: "result", to: "[0, 1]", status: "valid" }], status: { label: "RETURN", tone: "valid" }, note: "Return the two indices whose values sum to the target." },
     ],
   },
 
@@ -175,6 +195,30 @@ export const codeTraceRegistry: CodeTraceRegistryShape = {
     ],
   },
 
+  "binary-search-monotonic-condition": {
+    title: "First true value in a monotonic answer range",
+    visibility: "ALWAYS_VISIBLE",
+    pseudocode: [
+      "low, high, answer = 1, 10, None",
+      "while low <= high:",
+      "    mid = (low + high) // 2",
+      "    if mid * mid >= 30:",
+      "        answer = mid",
+      "        high = mid - 1",
+      "    else:",
+      "        low = mid + 1",
+      "return answer",
+    ],
+    states: [
+      { activeLines: [2, 3, 4, 7, 8], executedLines: [1], changes: [{ name: "mid", to: "5", status: "info" }, { name: "5² >= 30", to: "false", status: "invalid" }], status: { label: "FALSE", tone: "warning" }, note: "Everything at or below 5 can be discarded." },
+      { activeLines: [8, 3], executedLines: [4, 7], changes: [{ name: "low", from: "1", to: "6", status: "changed" }, { name: "mid", from: "5", to: "8", status: "changed" }], note: "Search the remaining right-hand answer range." },
+      { activeLines: [4, 5], executedLines: [3], changes: [{ name: "8² >= 30", to: "true", status: "valid" }, { name: "answer", from: "None", to: "8", status: "changed" }], status: { label: "CANDIDATE", tone: "valid" }, note: "Eight works, but a smaller valid answer may exist." },
+      { activeLines: [6, 3], executedLines: [4, 5], changes: [{ name: "high", from: "10", to: "7", status: "changed" }, { name: "mid", from: "8", to: "6", status: "changed" }], note: "Move left while preserving candidate 8." },
+      { activeLines: [4, 5], executedLines: [3], changes: [{ name: "6² >= 30", to: "true", status: "valid" }, { name: "answer", from: "8", to: "6", status: "changed" }], status: { label: "BETTER", tone: "valid" }, note: "Six is a smaller valid candidate." },
+      { activeLines: [6, 9], executedLines: [4, 5], changes: [{ name: "high", from: "7", to: "5", status: "changed" }], status: { label: "FIRST TRUE = 6", tone: "valid" }, note: "The range is exhausted; return the smallest valid answer." },
+    ],
+  },
+
   "intervals-merge-overlap": {
     title: "Merge overlapping intervals",
     visibility: "ALWAYS_VISIBLE",
@@ -215,6 +259,27 @@ export const codeTraceRegistry: CodeTraceRegistryShape = {
       { activeLines: [5], executedLines: [4], changes: [{ name: "curr.next", to: "prev", status: "changed" }], note: "Flip curr.next backward so node 1 points to prev." },
       { activeLines: [6, 7], executedLines: [5], changes: [{ name: "prev", from: "null", to: "1", status: "changed" }, { name: "curr", from: "1", to: "2", status: "changed" }], note: "Advance prev and curr forward." },
       { activeLines: [3, 8], executedLines: [4, 5, 6, 7], changes: [{ name: "curr", from: "2", to: "null", status: "changed" }], status: { label: "VALID", tone: "valid" }, note: "curr is null — prev is the new head." },
+    ],
+  },
+
+  "linked-list-fast-slow-cycle": {
+    title: "Floyd cycle detection",
+    visibility: "ALWAYS_VISIBLE",
+    pseudocode: [
+      "slow = head",
+      "fast = head",
+      "while fast and fast.next:",
+      "    slow = slow.next",
+      "    fast = fast.next.next",
+      "    if slow == fast:",
+      "        return true",
+      "return false",
+    ],
+    states: [
+      { activeLines: [1, 2], changes: [{ name: "slow", to: "1", status: "info" }, { name: "fast", to: "1", status: "info" }], note: "Start both pointers at the head." },
+      { activeLines: [3, 4, 5], executedLines: [1, 2], changes: [{ name: "slow", from: "1", to: "2", status: "changed" }, { name: "fast", from: "1", to: "3", status: "changed" }], note: "Slow moves one edge; fast moves two." },
+      { activeLines: [3, 4, 5], executedLines: [4, 5], changes: [{ name: "slow", from: "2", to: "3", status: "changed" }, { name: "fast", from: "3", to: "5", status: "changed" }], note: "Fast continues gaining one node per iteration inside the cycle." },
+      { activeLines: [3, 4, 5, 6, 7], executedLines: [4, 5], changes: [{ name: "slow", from: "3", to: "4", status: "changed" }, { name: "fast", from: "5", to: "4", status: "changed" }], status: { label: "CYCLE", tone: "valid" }, note: "The pointers meet at node 4, proving a cycle exists." },
     ],
   },
 

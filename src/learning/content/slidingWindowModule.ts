@@ -88,6 +88,10 @@ const windowState: Checkpoint = {
         body: "For variable windows: expand right by one, and while the window violates your constraint, shrink from the left until it's valid again — then record the answer.",
       },
     ],
+    animation: {
+      id: "sliding-window-variable",
+      title: "Track the running window state without rescanning",
+    },
     learnMore: "This 'expand right, shrink left while invalid' loop is the single template behind almost every variable-window problem, from longest-substring questions to minimum-window-substring style problems.",
   },
 }

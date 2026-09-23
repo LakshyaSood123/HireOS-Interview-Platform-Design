@@ -134,6 +134,10 @@ const fastSlowPointer: Checkpoint = {
         body: "The same trick finds the middle of a list in one pass: when the fast pointer reaches the end, the slow pointer is sitting at the midpoint.",
       },
     ],
+    animation: {
+      id: "linked-list-fast-slow-cycle",
+      title: "Fast and slow pointers meet inside a cycle",
+    },
     quickCheck: {
       question: "In a list with a cycle, what happens to a fast pointer moving 2 steps for every 1 step of a slow pointer?",
       options: [

@@ -86,6 +86,10 @@ const lookupVsBrute: Checkpoint = {
         body: "A hash map costs O(n) extra space to hold what you've seen — almost always worth it to drop an O(n²) brute force down to O(n).",
       },
     ],
+    animation: {
+      id: "hashing-complement-lookup",
+      title: "One-pass complement lookup on [2, 7, 11, 15]",
+    },
     quickCheck: {
       question: "Checking every pair of elements for a matching sum is what complexity?",
       options: ["O(n)", "O(n log n)", "O(n²)", "O(1)"],

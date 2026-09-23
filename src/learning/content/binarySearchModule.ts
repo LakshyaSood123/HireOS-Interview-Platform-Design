@@ -52,6 +52,10 @@ const searchBoundaries: Checkpoint = {
         body: "Using < instead of <=, or forgetting the +1/-1 when narrowing, are the most common binary-search bugs — trace through a 2-element array by hand if you're unsure your boundaries are right.",
       },
     ],
+    animation: {
+      id: "binary-search-decision",
+      title: "Trace left, right, and mid without off-by-one mistakes",
+    },
     codeExamples: [
       {
         language: "python",
@@ -89,7 +93,15 @@ const searchOnCondition: Checkpoint = {
         heading: "The shape of the search",
         body: "Define a check(x) that's monotonic (true for all x below some threshold, false above — or the reverse), then binary search over x itself to find that threshold.",
       },
+      {
+        heading: "Concrete threshold example",
+        body: "Search x from 1 through 10 for the smallest value whose square is at least 30. The predicate is false through 5 and true from 6 onward, so binary search can find the first true value.",
+      },
     ],
+    animation: {
+      id: "binary-search-monotonic-condition",
+      title: "Find the first true value of a monotonic condition",
+    },
     learnMore: "This 'search on the answer' framing is what makes binary search applicable to problems that don't look like searching at all — minimizing a maximum, or finding the smallest value that satisfies a constraint.",
   },
 }

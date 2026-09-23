@@ -14,8 +14,12 @@ import {
 } from "../../learning/animations/patternBasicsStates"
 import { recursionFactorialStates } from "../../learning/animations/recursionFactorialStates"
 import { slidingWindowStates } from "../../learning/animations/slidingWindowStates"
+import { fastSlowPointerStates, hashingComplementStates, monotonicSearchStates } from "../../learning/animations/studyExpansionStates"
 import { treePreorderStates } from "../../learning/animations/treePreorderStates"
 import AdvancedConceptAnimation from "./AdvancedConceptAnimation"
+import ComplementLookupAnimation from "./ComplementLookupAnimation"
+import FastSlowPointerAnimation from "./FastSlowPointerAnimation"
+import MonotonicConditionAnimation from "./MonotonicConditionAnimation"
 import ArrayTraversalVisual from "./ArrayTraversalVisual"
 import BinarySearchAnimation from "./BinarySearchAnimation"
 import LinkedListAnimation from "./LinkedListAnimation"
@@ -46,6 +50,11 @@ const animations = {
     states: hashingStates,
     render: (title, states) => <PatternBasicsAnimation title={title} states={states} kind="hashing" />,
   },
+  "hashing-complement-lookup": {
+    title: "Complement lookup replaces pair-by-pair scanning",
+    states: hashingComplementStates,
+    render: (title, states) => <ComplementLookupAnimation title={title} states={states} />,
+  },
   "two-pointers-opposite-sum": {
     title: "Move the pointer justified by the current sum",
     states: twoPointersStates,
@@ -66,6 +75,11 @@ const animations = {
     states: binarySearchStates,
     render: (title, states) => <BinarySearchAnimation title={title} states={states} />,
   },
+  "binary-search-monotonic-condition": {
+    title: "Search a monotonic condition for the first valid answer",
+    states: monotonicSearchStates,
+    render: (title, states) => <MonotonicConditionAnimation title={title} states={states} />,
+  },
   "intervals-merge-overlap": {
     title: "Merge overlapping intervals",
     states: intervalsStates,
@@ -75,6 +89,11 @@ const animations = {
     title: "Reverse a linked list with prev, curr, and next",
     states: linkedListReversalStates,
     render: (title, states) => <LinkedListAnimation title={title} states={states} />,
+  },
+  "linked-list-fast-slow-cycle": {
+    title: "Fast and slow pointers meet inside a cycle",
+    states: fastSlowPointerStates,
+    render: (title, states) => <FastSlowPointerAnimation title={title} states={states} />,
   },
   "stack-queue-lifo-fifo": {
     title: "LIFO stack versus FIFO queue",
