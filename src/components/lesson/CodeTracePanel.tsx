@@ -1,4 +1,19 @@
-import type { AlgorithmCodeTrace, CodeTraceVariableChange, TraceStatusTone } from "../../learning/animations/codeTraceTypes"
+import type { AlgorithmAnimationId } from "../../learning/types"
+import {
+  TRACE_LANGUAGES,
+  TRACE_LANGUAGE_LABELS,
+  type AlgorithmCodeTrace,
+  type CodeTraceVariableChange,
+  type TraceLanguage,
+  type TraceStatusTone,
+} from "../../learning/animations/codeTraceTypes"
+import {
+  effectiveTraceLanguage,
+  getTraceVariants,
+  resolveTraceLines,
+  tallestTraceListing,
+} from "../../learning/animations/codeTraceVariants"
+import { useTraceLanguage } from "../../learning/traceLanguagePreference"
 
 interface CodeTracePanelProps {
   trace: AlgorithmCodeTrace
@@ -6,6 +21,9 @@ interface CodeTracePanelProps {
    * never owns or advances its own step. See AnimationPlayback.tsx /
    * ArrayTraversalVisual.tsx, the only two callers. */
   currentStep: number
+  /** Animation id, used only to look up optional Python/C++/Java views.
+   * Omit it and the panel is pseudocode-only. */
+  traceId?: AlgorithmAnimationId
 }
 
 const STATUS_TONE_CLASSES: Record<TraceStatusTone, string> = {
@@ -29,70 +47,91 @@ const CHANGE_STATUS_CLASSES: Record<NonNullable<CodeTraceVariableChange["status"
  * which is the SAME index driving the animation's own visual, so the two
  * surfaces can never desynchronize (see codeTraceTypes.ts). One generic
  * component renders all 29 approved traces — no per-module variants. */
-export default function CodeTracePanel({ trace, currentStep }: CodeTracePanelProps) {
+export default function CodeTracePanel({ trace, currentStep, traceId }: CodeTracePanelProps) {
+  const [preferred, setPreferred] = useTraceLanguage()
   const state = trace.states[currentStep] ?? trace.states[0]
   if (!state) return null
 
-  const activeSet = new Set(state.activeLines)
-  const executedSet = new Set(state.executedLines ?? [])
+  // Language is DISPLAY ONLY: `currentStep` and the state above are untouched
+  // by it. Only which listing is shown, and which of its lines light up for
+  // the current semantic step, depends on the language.
+  const variants = getTraceVariants(traceId)
+  const language = effectiveTraceLanguage(preferred, variants)
+  const lines = resolveTraceLines(trace, state, language, variants)
+  const spacerLines = tallestTraceListing(trace, variants)
 
   return (
     <div className="flex h-full flex-col gap-3 rounded-2xl border border-[#1DB584]/25 bg-[#092218] p-4 w-full max-w-full min-w-0 box-border">
       <div className="flex items-center justify-between gap-2 min-w-0">
         <p className="text-[11px] font-black uppercase tracking-wider text-[#A7CE65] shrink-0">Code Trace</p>
-        <span className="shrink-0 rounded-full border border-white/10 bg-black/30 px-2.5 py-1 text-[10px] font-bold text-gray-300">
-          Step {currentStep + 1} / {trace.states.length}
-        </span>
+        <div className="flex items-center gap-2 min-w-0">
+          {variants && <LanguageSelect value={language} onChange={setPreferred} />}
+          <span className="shrink-0 rounded-full border border-white/10 bg-black/30 px-2.5 py-1 text-[10px] font-bold text-gray-300">
+            Step {currentStep + 1} / {trace.states.length}
+          </span>
+        </div>
       </div>
 
       {/* Pseudocode line viewer: strict 3-column grid (line-number | minmax(0, code) | status) */}
       <div className="overflow-hidden rounded-xl border border-white/10 bg-black/30 p-2 font-mono text-[12px] leading-relaxed w-full min-w-0">
-        <div className="space-y-0.5 w-full min-w-0">
-          {trace.pseudocode.map((line, i) => {
-            const lineNumber = i + 1
-            const isActive = activeSet.has(lineNumber)
-            const isExecuted = !isActive && executedSet.has(lineNumber)
-            return (
+        <div className="grid w-full min-w-0">
+          <div className="col-start-1 row-start-1 space-y-0.5 w-full min-w-0">
+            {lines.map(line => (
               <div
-                key={lineNumber}
+                key={line.displayNumber}
                 className={`grid grid-cols-[24px_minmax(0,1fr)_auto] items-center gap-2 rounded-md px-2 py-1 min-w-0 w-full transition-colors ${
-                  isActive
+                  line.active
                     ? "border-l-2 border-[#1DB584] bg-[#1DB584]/20"
-                    : isExecuted
+                    : line.executed
                       ? "border-l-2 border-white/20 bg-white/5"
                       : "border-l-2 border-transparent"
                 }`}
               >
                 {/* 1. Line number column */}
-                <span className="shrink-0 text-right text-gray-500 select-none text-[11px]">{lineNumber}</span>
+                <span className="shrink-0 text-right text-gray-500 select-none text-[11px]">{line.displayNumber}</span>
 
                 {/* 2. Code column: shrink-safe with internal horizontal scroll for long lines */}
                 <div className="min-w-0 overflow-x-auto overflow-y-hidden py-0.5">
                   <span
                     className={`whitespace-pre font-mono text-[11.5px] block ${
-                      isActive ? "font-bold text-white" : isExecuted ? "text-gray-300" : "text-gray-500"
+                      line.active ? "font-bold text-white" : line.executed ? "text-gray-300" : "text-gray-500"
                     }`}
                   >
-                    {line || " "}
+                    {line.text || " "}
                   </span>
                 </div>
 
                 {/* 3. Status badge column: fixed min-width, never pushed off-screen */}
                 <div className="shrink-0 text-right min-w-[72px] pl-1">
-                  {isActive && (
+                  {line.active && (
                     <span className="inline-block px-1.5 py-0.5 rounded text-[9px] font-black tracking-wider bg-[#1DB584]/30 text-[#4FD8A8] border border-[#1DB584]/50">
                       CURRENT
                     </span>
                   )}
-                  {isExecuted && (
+                  {line.executed && (
                     <span className="inline-block px-1.5 py-0.5 rounded text-[9px] font-black tracking-wider bg-white/5 text-gray-400 border border-white/10">
                       EXECUTED
                     </span>
                   )}
                 </div>
               </div>
-            )
-          })}
+            ))}
+          </div>
+          {/* Invisible copy of the tallest available listing, stacked in the
+              same grid cell, so the panel keeps one height in every language. */}
+          {variants && (
+            <div aria-hidden="true" className="col-start-1 row-start-1 invisible space-y-0.5 w-full min-w-0 pointer-events-none">
+              {spacerLines.map((text, i) => (
+                <div key={i} className="grid grid-cols-[24px_minmax(0,1fr)_auto] items-center gap-2 px-2 py-1 border-l-2 border-transparent">
+                  <span className="text-[11px]">{i + 1}</span>
+                  <div className="py-0.5">
+                    <span className="whitespace-pre font-mono text-[11.5px] block">{text || " "}</span>
+                  </div>
+                  <div className="min-w-[72px] pl-1" />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
@@ -128,5 +167,29 @@ export default function CodeTracePanel({ trace, currentStep }: CodeTracePanelPro
 
       {state.note && <p className="text-[11px] leading-relaxed text-gray-400 break-words">{state.note}</p>}
     </div>
+  )
+}
+
+function LanguageSelect({ value, onChange }: { value: TraceLanguage; onChange: (language: TraceLanguage) => void }) {
+  return (
+    <label className="relative inline-flex items-center shrink-0">
+      <span className="sr-only">Code Trace language</span>
+      <select
+        value={value}
+        onChange={event => onChange(event.target.value as TraceLanguage)}
+        aria-label="Code Trace language"
+        className="h-6 cursor-pointer appearance-none rounded-full border border-white/10 bg-black/30 pl-2.5 pr-6 text-[10px] font-bold text-gray-200 outline-none transition-colors hover:border-[#1DB584]/50 focus-visible:border-[#1DB584] focus-visible:ring-1 focus-visible:ring-[#1DB584]"
+        style={{ colorScheme: "dark" }}
+      >
+        {TRACE_LANGUAGES.map(language => (
+          <option key={language} value={language} className="bg-[#092218] text-gray-100">
+            {TRACE_LANGUAGE_LABELS[language]}
+          </option>
+        ))}
+      </select>
+      <span aria-hidden="true" className="pointer-events-none absolute right-2 text-[10px] leading-none text-[#A7CE65]">
+        ▾
+      </span>
+    </label>
   )
 }

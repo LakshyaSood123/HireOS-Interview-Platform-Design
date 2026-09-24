@@ -59,3 +59,37 @@ export interface AlgorithmCodeTrace {
 }
 
 export type CodeTraceRegistryShape = Partial<Record<AlgorithmAnimationId, AlgorithmCodeTrace>>
+
+// ── Optional language views (DISPLAY ONLY) ──────────────────────────────
+//
+// The semantic key is unchanged: a trace state's `activeLines` /
+// `executedLines` name lines of the canonical pseudocode listing. Those
+// pseudocode line numbers are the trace's stable SEMANTIC SEGMENTS. A
+// language variant is a hand-authored listing in which every displayed line
+// declares which segment(s) it implements, so one segment may span several
+// displayed lines (e.g. a Java swap) and highlighting follows the segment,
+// never a raw line number. Nothing here is executed, translated at runtime,
+// or stored with learner progress.
+
+export type TraceLanguage = "pseudocode" | "python" | "cpp" | "java"
+
+export type TraceSourceLanguage = Exclude<TraceLanguage, "pseudocode">
+
+export const TRACE_LANGUAGES: readonly TraceLanguage[] = ["pseudocode", "python", "cpp", "java"]
+
+export const TRACE_LANGUAGE_LABELS: Record<TraceLanguage, string> = {
+  pseudocode: "Pseudocode",
+  python: "Python",
+  cpp: "C++",
+  java: "Java",
+}
+
+export interface TraceSourceLine {
+  code: string
+  /** Pseudocode line numbers (semantic segments) this displayed line
+   * implements. Empty for blank lines and structural lines such as a closing
+   * brace, which are never highlighted. */
+  implements: number[]
+}
+
+export type TraceLanguageVariants = Record<TraceSourceLanguage, TraceSourceLine[]>

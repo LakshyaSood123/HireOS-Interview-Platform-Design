@@ -131,7 +131,7 @@ export default function AnimationPlayback<TState>({
         {/* 2. Code Trace Action directly beneath animation */}
         {trace && (
           <div className="min-w-0 w-full">
-            <CodeTracePanel trace={trace} currentStep={index} />
+            <CodeTracePanel trace={trace} currentStep={index} traceId={traceId} />
           </div>
         )}
       </div>

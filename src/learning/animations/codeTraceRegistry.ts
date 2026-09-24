@@ -13,6 +13,7 @@
 
 import type { AlgorithmAnimationId } from "../types"
 import type { AlgorithmCodeTrace, CodeTraceRegistryShape } from "./codeTraceTypes"
+import { codeTraceVariants, validateTraceVariants } from "./codeTraceVariants"
 
 export const codeTraceRegistry: CodeTraceRegistryShape = {
   // ── BASECAMP ─────────────────────────────────────────────────────────
@@ -683,6 +684,7 @@ export function validateCodeTraces(
     }
     if (trace.pseudocode.length === 0) errors.push(`"${id}": pseudocode listing is empty.`)
     if (trace.states.length === 0) errors.push(`"${id}": trace has no states.`)
+    errors.push(...validateTraceVariants(id, trace))
 
     const expectedCount = animationStateCounts[id]
     if (expectedCount !== undefined && trace.states.length !== expectedCount) {
@@ -707,6 +709,10 @@ export function validateCodeTraces(
         }
       }
     })
+  }
+
+  for (const id of Object.keys(codeTraceVariants)) {
+    if (!codeTraceRegistry[id as AlgorithmAnimationId]) errors.push(`Language variants exist for "${id}", which has no trace.`)
   }
 
   const knownIds = new Set(productionAnimationIds as string[])

@@ -115,7 +115,7 @@ export default function ArrayTraversalVisual({ title, states }: ArrayTraversalVi
         {/* 2. Code Trace Action directly beneath animation */}
         {TRACE && (
           <div className="min-w-0 w-full">
-            <CodeTracePanel trace={TRACE} currentStep={index} />
+            <CodeTracePanel trace={TRACE} currentStep={index} traceId="arrays-in-place-reversal" />
           </div>
         )}
       </div>
