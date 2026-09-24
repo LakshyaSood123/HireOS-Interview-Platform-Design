@@ -17,26 +17,30 @@ const bigO: Checkpoint = {
     title: "Big-O & Cost of Operations",
     theory: [
       {
-        heading: "What Big-O measures",
-        body: "Big-O describes how an algorithm's cost grows as the input size n grows — not the exact runtime on any one machine.",
+        heading: "Growth, not stopwatch time",
+        body: "Big-O describes how the amount of work grows as the input size n grows. The same code runs at different speeds on different machines, so we ignore seconds and look at the pattern of growth instead.",
       },
       {
-        heading: "The common growth rates",
-        body: "O(1) constant, O(log n) logarithmic (halving each step), O(n) linear, O(n log n) linearithmic (typical of sorting), O(n²) quadratic (nested loops over the same input).",
+        heading: "Compare the growth",
+        body: "With n = 10, an O(n) solution does about 10 steps and an O(n²) solution about 100. With n = 1,000, that becomes 1,000 versus 1,000,000. These numbers show how fast the work grows; they are not predicted run times. When the input gets 10 times bigger, O(n) work grows about 10 times and O(n²) work about 100 times.",
       },
       {
-        heading: "Space complexity",
-        body: "Memory grows too — count the extra structures you allocate (arrays, hash maps, recursion stack), not the input you were already given.",
+        heading: "The rates you will meet",
+        body: "O(1) does the same work whatever n is. O(log n) grows very slowly, because each step throws away half of what is left. O(n) is one pass over the input. O(n log n) is typical of efficient sorting. O(n²) usually means a loop inside a loop over the same input.",
+      },
+      {
+        heading: "Space, and what to watch",
+        body: "Space complexity counts the extra memory you allocate, not the input you were given. Copying n numbers into a new array costs O(n) extra space; one running-maximum variable costs O(1). In the animation, watch the gap between the O(n) line and the O(n²) line at each of the three input sizes.",
       },
     ],
     animation: {
       id: "complexity-growth",
     },
     quickCheck: {
-      question: "Which complexity best describes a single loop over n items?",
-      options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
+      question: "A solution takes about 100 steps when n = 10 and about 10,000 steps when n = 100. Which growth rate fits best?",
+      options: ["O(n)", "O(n log n)", "O(n²)", "O(1)"],
       correctIndex: 2,
-      explanation: "One pass through n items, doing constant work each time, is O(n) — linear in the input size.",
+      explanation: "The input grew 10 times and the work grew 100 times, which is 10². Linear growth would have given only about 1,000 steps, O(n log n) grows much more slowly than O(n²), and O(1) would not have grown at all.",
     },
   },
 }
@@ -52,23 +56,28 @@ const readingConstraints: Checkpoint = {
     title: "Reading Constraints",
     theory: [
       {
-        heading: "Constraints tell you the budget",
-        body: "If n is up to 10^5, roughly O(n log n) is safe. If n is up to 10^8 or higher, you likely need O(n) or better.",
+        heading: "Limits hint at the work you can afford",
+        body: "Problems state limits such as \"n ≤ 10^5\". Read that number as a hint about how much work your program can afford. As a very rough mental estimate, ideas that need far more than about 10^8 simple steps often run into trouble, but this is a guide and not a threshold.",
       },
       {
-        heading: "Nested loops multiply",
-        body: "A loop inside a loop over the same input is O(n²) — easy to write by accident when you're checking every pair.",
+        heading: "One n, three costs",
+        body: "Suppose n = 10^6. An O(n) solution takes about 10^6 steps and an O(n log n) solution about 2×10^7. Both are often plausible under typical interview limits. An O(n²) solution takes about 10^12, which is very likely too much. Nested loops over the same input are where O(n²) usually comes from.",
       },
       {
-        heading: "Extra space is a choice",
-        body: "A hash map trades memory for speed (O(n) space for O(1) average lookups); sorting trades a little time for useful structure.",
+        heading: "A guide, not a law",
+        body: "What is actually feasible also depends on the language, the constant factors hidden inside Big-O, how expensive each step is, and the time limit. Use limits to rule out ideas early, not to memorize cut-offs. When n is tiny, say 20, even a slow idea can be fine.",
       },
     ],
     quickCheck: {
-      question: "An interviewer says n can be up to 10^6. Which approach is safest?",
-      options: ["O(n²)", "O(n log n)", "O(2^n)", "Time complexity doesn't matter here"],
-      correctIndex: 1,
-      explanation: "At n = 10^6, O(n²) is around 10^12 operations — far too slow. O(n log n) (~2×10^7) comfortably fits.",
+      question: "A problem says n can be up to 200,000, and your first idea compares every pair of elements. What should the limit make you think?",
+      options: [
+        "That is about 2×10^10 pairs, so look for a faster approach before coding",
+        "Comparing every pair is fine, because it is the simplest approach that is correct",
+        "The limit only tells you how much memory you may use, not how much time",
+        "Even an O(n log n) idea would be too slow at this size, so give up on speed",
+      ],
+      correctIndex: 0,
+      explanation: "With n = 200,000 there are roughly n²/2 = 2×10^10 pairs, well beyond the rough 10^8 mark. An O(n log n) approach would take only about 3.5×10^6 steps. This is only a mental estimate, but it is enough to tell you the pairwise idea needs a rethink.",
     },
   },
 }
@@ -76,7 +85,7 @@ const readingConstraints: Checkpoint = {
 const problemSolvingPattern: Checkpoint = {
   id: "foundations-3",
   title: "Problem-Solving Pattern",
-  subtitle: "Brute force first, then optimize",
+  subtitle: "From a simple approach to a better one",
   type: "lesson",
   xp: 30,
   prerequisites: [readingConstraints.id],
@@ -84,24 +93,29 @@ const problemSolvingPattern: Checkpoint = {
     title: "Problem-Solving Pattern",
     theory: [
       {
-        heading: "Start brute force",
-        body: "Get a working O(n²) (or worse) solution first — it proves you understand the problem before you try to optimize it.",
+        heading: "A repeatable order",
+        body: "On a new problem, understand it first and trace a small example by hand. Then describe a simple approach that is correct, work out its time and space cost, and look for repeated work. Improve it only if the constraints call for it. A simple approach is a useful baseline and a fallback, but you do not have to code it first if you can already see a better correct one.",
       },
       {
-        heading: "Look for repeated work",
-        body: "If you're recomputing the same thing inside a loop, that's usually your signal to cache it (memoization) or restructure the loop (two pointers, a hash map).",
+        heading: "What repeated work looks like",
+        body: "Say you want the running total at each position of [2, 5, 1]. Recomputing each total from scratch adds 2, then 2 + 5, then 2 + 5 + 1, so 2 + 5 is calculated twice. Keeping one running total removes the repetition. When a loop keeps redoing the same calculation, store the result or track a value as you go.",
       },
       {
-        heading: "Name the pattern",
-        body: "Most interview problems are a known pattern in disguise — two pointers, sliding window, hashing, binary search. Recognizing the pattern is most of the battle.",
+        heading: "Then name the pattern",
+        body: "The fix often matches a known pattern: hashing for repeated lookups, two pointers for repeated pair checks on sorted data, binary search for repeated scans of sorted data. The next modules teach these one at a time.",
       },
     ],
-    learnMore: "This same brute-force-then-optimize rhythm is exactly what the rest of this course practices — every Code Lab starts from 'get it working' before 'make it fast.'",
+    learnMore: "Every Code Lab in this course follows this rhythm: understand a small example, get a correct approach, find what it repeats, then improve it. Starting from a simple correct approach helps when you are stuck. When you can already see the better one, go straight to it.",
     quickCheck: {
-      question: "What's usually the safest first step on a new problem?",
-      options: ["Optimize immediately", "Write a brute-force solution first", "Guess the time complexity", "Skip straight to code"],
-      correctIndex: 1,
-      explanation: "A brute-force solution proves your understanding and gives you something correct to optimize from — and something to fall back to if you run out of time.",
+      question: "Your correct solution compares every pair in an array, and n can reach 10^5. What is the most useful next step?",
+      options: [
+        "Submit it, because a correct answer matters more than its speed",
+        "Rewrite it with a fancier data structure right away, whatever the problem is",
+        "Look for repeated work in those comparisons and ask what could be stored instead",
+        "Check it on a few small inputs and move on to the next problem",
+      ],
+      correctIndex: 2,
+      explanation: "With n = 10^5 there are about 5×10^9 pairs, which is probably too slow. Finding what those comparisons repeat tells you what to store or restructure. Reaching for a tool before you know what is repeated is guessing, not analysis.",
     },
   },
 }
@@ -117,8 +131,12 @@ const miniAnalysisChallenge: Checkpoint = {
     title: "Mini Analysis Challenge",
     theory: [
       {
-        heading: "One pass, one answer",
-        body: "A surprising number of 'find the X' problems only need a single linear pass, keeping track of the best answer seen so far as you go.",
+        heading: "Keep the best value so far",
+        body: "Many \"find the biggest or smallest\" problems need only one pass and one variable. Take [3, 7, 2, 9]. Start with best = 3, the first value. See 7: it is larger, so best = 7. See 2: it is smaller, so best stays 7. See 9: larger, so best = 9. Each number is looked at once, so the time is O(n), and one variable means O(1) extra space.",
+      },
+      {
+        heading: "Where to start",
+        body: "Start best at the first element, not at 0. If every value is negative, a starting best of 0 would beat all of them and give the wrong answer.",
       },
     ],
     codingActivity: {
@@ -143,7 +161,7 @@ const miniAnalysisChallenge: Checkpoint = {
         { id: "h3", description: "Repeated max values", input: "[4,4,4]", expected: "4" },
       ],
       hint: "Keep a running 'best so far' variable, start it at the first element, and update it whenever you see something larger.",
-      mistakeFeedback: "You're comparing values but not updating a running maximum as you scan — keep the best value seen so far in a variable and update it inside the loop.",
+      mistakeFeedback: "If a result is wrong, check where best starts. Starting at 0 fails when every value is negative. Also make sure best is updated inside the loop, and only when the current value is larger.",
       demoSolution: {
         python: "def findMax(nums):\n    if not nums:\n        return None\n    best = nums[0]\n    for n in nums:\n        if n > best:\n            best = n\n    return best\n",
         cpp: "int findMax(vector<int>& nums) {\n    int best = nums[0];\n    for (int n : nums) {\n        if (n > best) best = n;\n    }\n    return best;\n}\n",
@@ -166,12 +184,16 @@ const foundationsMastery: Checkpoint = {
     title: "Foundations Mastery",
     theory: [
       {
-        heading: "Trading space for time",
-        body: "Checking every pair for a duplicate is O(n²). Remembering what you've already seen — in a hash set — turns it into a single O(n) pass.",
+        heading: "Trade a little memory for time",
+        body: "Comparing every pair to find a duplicate costs O(n²). Instead, remember the values you have already seen and ask one question for each new value: is it already in there? That is one pass, at the price of O(n) extra space.",
+      },
+      {
+        heading: "A preview of hashing",
+        body: "Take nums = [4, 2, 7, 2] and an empty collection called seen. 4 is not in seen, so add it. 2 is not in seen, so add it. 7, add it. Then 2 arrives and is already in seen, so a duplicate exists. We are borrowing one idea from the Hashing module here: a set answers \"is this value in here?\" quickly, in about constant time on average. That module explains why, and when to use sets and maps.",
       },
     ],
     codingActivity: {
-      prompt: "Implement hasDuplicate(nums) that returns true if any value appears more than once, in O(n) time using a hash set — not an O(n²) pairwise comparison.",
+      prompt: "Implement hasDuplicate(nums) that returns true if any value appears more than once. Aim for one pass in O(n) expected time by remembering seen values in a set, instead of comparing every pair.",
       constraints: ["0 ≤ length of nums ≤ 10^5"],
       functionName: "hasDuplicate",
       requiredKeywords: ["set", "for"],
@@ -191,8 +213,8 @@ const foundationsMastery: Checkpoint = {
         { id: "h2", description: "All identical", input: "[3,3,3]", expected: "true" },
         { id: "h3", description: "Empty list", input: "[]", expected: "false" },
       ],
-      hint: "Add each value to a set as you scan — if a value is already in the set before you add it, you've found your duplicate.",
-      mistakeFeedback: "This looks like it's comparing every pair of elements (O(n²)) instead of tracking seen values in a set (O(n)) — that's the exact trade-off this module has been building toward.",
+      hint: "Add each value to a set as you scan. If a value is already in the set before you add it, you have found a duplicate.",
+      mistakeFeedback: "Comparing every pair also finds duplicates, but it costs O(n²); this checkpoint practices the set version. If your result is wrong, check that you test whether the value is already in the set before you add it, and that an empty list returns false.",
       demoSolution: {
         python: "def hasDuplicate(nums):\n    if not nums:\n        return False\n    seen = set()\n    for n in nums:\n        if n in seen:\n            return True\n        seen.add(n)\n    return False\n",
         cpp: "bool hasDuplicate(vector<int>& nums) {\n    if (nums.empty()) return false;\n    unordered_set<int> seen;\n    for (int n : nums) {\n        if (seen.count(n)) return true;\n        seen.insert(n);\n    }\n    return false;\n}\n",
@@ -205,7 +227,7 @@ const foundationsMastery: Checkpoint = {
 export const foundationsModule: Module = {
   id: "foundations",
   title: "Complexity & Problem Solving",
-  description: "Big-O reasoning, reading constraints, and the brute-force-then-optimize pattern that drives every problem in this course.",
+  description: "Big-O reasoning, reading constraints, and a repeatable way to move from a simple correct approach to a better one.",
   icon: "🌱",
   accentColor: "#79A84B",
   contentKind: "workspace",

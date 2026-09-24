@@ -17,19 +17,28 @@ const recognizing: Checkpoint = {
     title: "Recognizing Two Pointers",
     theory: [
       {
-        heading: "The recognition cues",
-        body: "Sorted array, looking for a pair, checking a palindrome, or removing/moving elements in place — these are the signals that two pointers might replace a nested loop.",
+        heading: "A family of techniques",
+        body: "Here a pointer is just an index that you move. Two pointers coordinate two moving positions while you process a sequence. Depending on the problem, they can narrow a search, compare opposite positions, compact data in place, or avoid repeating work. It is a family of techniques, not one algorithm, and it has two common shapes.",
       },
       {
-        heading: "Two shapes",
-        body: "Opposite-end pointers start at both ends and move toward each other. Same-direction pointers start together and let one race ahead — different problems call for different shapes.",
+        heading: "Shape 1: opposite ends",
+        body: "Start one pointer at each end and move them toward each other. This fits checking a palindrome, where you compare each character with its mirror, and finding a pair with a given sum in a sorted array.",
+      },
+      {
+        heading: "Shape 2: same direction",
+        body: "Start both pointers at the left. One scans ahead reading values while the other marks where the next kept value should be written. This fits removing duplicates from a sorted array in place, which you already did in Arrays & Strings.",
       },
     ],
     quickCheck: {
-      question: "Which of these is the strongest signal to consider two pointers?",
-      options: ["The input is a linked list", "The array is sorted and you need a pair", "The input has duplicates", "The array is very large"],
-      correctIndex: 1,
-      explanation: "A sorted array plus 'find a pair' is the classic two-pointers setup — moving pointers toward each other lets you skip large chunks of the search space.",
+      question: "Which task fits opposite-end pointers, rather than a read and write pair moving in the same direction?",
+      options: [
+        "Removing duplicates from a sorted array in place",
+        "Counting how many times each word appears",
+        "Checking whether a string reads the same backward",
+        "Finding the largest value in an array",
+      ],
+      correctIndex: 2,
+      explanation: "A palindrome check compares mirrored positions, so one pointer starts at each end and they move inward. Removing duplicates in place is the read and write shape. Counting words is a job for a hash map, and finding the largest value needs only a single pass with one variable.",
     },
   },
 }
@@ -45,20 +54,35 @@ const oppositeEnd: Checkpoint = {
     title: "Opposite-End Pointers",
     theory: [
       {
-        heading: "Start at both ends",
-        body: "left = 0, right = length - 1. Compare, then move whichever side needs to change — left forward or right backward — until the pointers meet.",
+        heading: "Pair search needs sorted data",
+        body: "Set left = 0 and right = length - 1, and find two values that add to a target. This only works because the array is sorted. Take [1, 2, 4, 6, 10] with target 8. 1 + 10 = 11 is too high. Since the array is sorted, 10 plus any other remaining value is at least 1 + 10 = 11, so 10 cannot be in any pair. Move right inward.",
       },
       {
-        heading: "Why it's O(n)",
-        body: "Each step moves one pointer at least one position, and the pointers can only move toward each other n times total before they meet.",
+        heading: "Each move discards a value",
+        body: "Now 1 + 6 = 7 is too low. Every other remaining value is at most 6, so 1 + anything is at most 7, and 1 cannot be in any pair. Move left forward. Then 2 + 6 = 8: found. The rule is: too high, move right; too low, move left. Each step throws one value away for good, so the search takes at most n steps.",
+      },
+      {
+        heading: "What to watch",
+        body: "The moving strip is a simplified picture of two markers closing in; in a real search only one pointer moves per step. The step-through animation shows the actual decisions. Before each step, decide which pointer should move, then check.",
       },
     ],
     twoPointerVisual: {
-      values: [3, 8, 2, 9, 4, 1, 7],
+      values: [1, 2, 4, 6, 10],
       mode: "opposite",
     },
     animation: {
       id: "two-pointers-opposite-sum",
+    },
+    quickCheck: {
+      question: "In a sorted array, left points at 1 and right at 10. The sum is 11 and the target is 8. Why is it safe to move right inward?",
+      options: [
+        "Because the largest value never belongs to any pair",
+        "Because 10 plus any other remaining value is at least 11, so 10 cannot be in a valid pair",
+        "It is not really safe; 10 should first be tried against every remaining value",
+        "Because moving right is always faster than moving left",
+      ],
+      correctIndex: 1,
+      explanation: "The array is sorted, so every other remaining value is at least 1, and 10 + 1 = 11 already overshoots 8. That means 10 cannot be part of any answer and can be discarded without checking. The largest value can belong to a pair when the target is larger, and neither pointer is faster than the other.",
     },
   },
 }
@@ -74,16 +98,20 @@ const sameDirection: Checkpoint = {
     title: "Same-Direction Pointers",
     theory: [
       {
-        heading: "One pointer marks a boundary",
-        body: "A 'slow' pointer marks where the next valid value should go; a 'fast' pointer scans ahead looking for it — this is how in-place compaction (like removing duplicates) works.",
+        heading: "Read and write compaction",
+        body: "You already used this idea in Arrays & Strings. A read pointer scans every element. A write pointer marks where the next kept value goes, and it moves only when a value is kept. Take [1, 1, 1, 2, 3, 3] and keep each value that differs from the one before it. The first 1 is kept. The next two 1s match the value before them, so they are skipped and write stays put. Read 2: new, copy it to slot 1, write becomes 2. Read 3: new, copy it to slot 2, write becomes 3. The last 3 is skipped. The front is [1, 2, 3], and write, 3, is how many values were kept.",
       },
       {
-        heading: "Related to sliding window",
-        body: "When the same-direction gap between the two pointers represents a contiguous range you're tracking, you've stepped into sliding window territory — the next module.",
+        heading: "The rule can change",
+        body: "Here the keep rule is \"differs from the previous value\". Other problems use other rules, such as keeping only nonzero values. The pointers behave the same way: read always moves forward, and write moves only when a value is kept. In the strip, watch R visit every position while W advances only on a kept value.",
+      },
+      {
+        heading: "A preview",
+        body: "When the stretch between two pointers is a range you are tracking, the technique is called a sliding window. That is the next module; for now you only need the read and write idea.",
       },
     ],
     twoPointerVisual: {
-      values: [3, 8, 2, 9, 4, 1, 7],
+      values: [1, 1, 1, 2, 3, 3],
       mode: "same-direction",
     },
   },
@@ -100,8 +128,12 @@ const codeLab: Checkpoint = {
     title: "Two Pointers Code Lab",
     theory: [
       {
-        heading: "Compare from both ends",
-        body: "A string is a palindrome exactly when every character matches its mirror — check left against right and converge.",
+        heading: "Compare mirrored characters",
+        body: "A string is a palindrome when each character matches its mirror: first with last, second with second-to-last, and so on. Put left at the start and right at the end, compare, and move both inward. Take \"A man, a plan, a canal: Panama\". Left is A and right is a, which match once case is ignored, so move both inward. Left lands on a space, which is skipped. It moves on to m. Right moves in to m. They match.",
+      },
+      {
+        heading: "The rules",
+        body: "Skip anything that is not a letter or a digit, and compare lowercase versions. Stop when left meets right. An empty string counts as a palindrome. You never copy the string, so the extra space is O(1) and the time is O(n).",
       },
     ],
     codingActivity: {
@@ -125,8 +157,8 @@ const codeLab: Checkpoint = {
         { id: "h2", description: "Numbers included", input: "'0P'", expected: "false" },
         { id: "h3", description: "Empty string", input: "''", expected: "true" },
       ],
-      hint: "Move left forward and right backward, skipping non-alphanumeric characters, and compare lowercase letters at each step.",
-      mistakeFeedback: "This looks like it's comparing the raw string to its reverse without skipping punctuation/case — that fails on anything with spaces or symbols in it.",
+      hint: "Move left forward and right backward, skipping characters that are not letters or digits, and compare lowercase versions at each step.",
+      mistakeFeedback: "Building a cleaned lowercase copy and comparing it with its reverse also works, using O(n) extra space; this checkpoint practices the two-pointer version. If a result is wrong, check that punctuation and spaces are skipped on both sides and that letters are compared ignoring case. Digits count as characters too.",
       demoSolution: {
         python: "def isPalindrome(s):\n    if not s:\n        return True\n    left, right = 0, len(s) - 1\n    while left < right:\n        while left < right and not s[left].isalnum():\n            left += 1\n        while left < right and not s[right].isalnum():\n            right -= 1\n        if s[left].lower() != s[right].lower():\n            return False\n        left += 1\n        right -= 1\n    return True\n",
         cpp: "bool isPalindrome(string s) {\n    if (s.empty()) return true;\n    int left = 0, right = (int)s.size() - 1;\n    while (left < right) {\n        while (left < right && !isalnum(s[left])) left++;\n        while (left < right && !isalnum(s[right])) right--;\n        if (tolower(s[left]) != tolower(s[right])) return false;\n        left++;\n        right--;\n    }\n    return true;\n}\n",
@@ -149,12 +181,20 @@ const mastery: Checkpoint = {
     title: "Two Pointers Interview Challenge",
     theory: [
       {
-        heading: "Why moving the shorter wall works",
-        body: "The container's area is limited by the shorter of its two walls — moving the taller wall inward can only shrink the width without any chance of a taller wall, so it's always safe to move the shorter one instead.",
+        heading: "Area from two walls",
+        body: "Two walls hold water up to the height of the shorter wall, across the distance between them: area = shorter height × distance. Take heights [1, 8, 6, 2, 5, 4, 8, 3, 7]. The widest container uses the two end walls, 1 and 7, at distance 8. Its area is 1 × 8 = 8.",
+      },
+      {
+        heading: "Why move the shorter wall",
+        body: "The wall of height 1 limits that container. Any other container using it is capped at height 1 and has a closer partner, so its distance is at most 7 and its area at most 7, no better than the 8 we measured. That wall has no future, so drop it. Moving the taller wall instead could skip the best container, because the short wall would still cap the height while the width shrank.",
+      },
+      {
+        heading: "Then repeat",
+        body: "Record the best area each step, move the pointer at the shorter wall, and stop when they meet. If the two walls are equal, either pointer may move. As in pair search, you discard the side that cannot be part of a better answer.",
       },
     ],
     codingActivity: {
-      prompt: "Implement maxArea(heights) that returns the maximum water a container can hold, given wall heights at each index — the container is formed by any two walls and the shorter one's height.",
+      prompt: "Implement maxArea(heights) that returns the maximum water a container can hold. Heights are given by index; a container is formed by any two walls, and its area is the height of the shorter wall multiplied by the distance (index difference) between them.",
       constraints: ["2 ≤ length of heights ≤ 10^5"],
       functionName: "maxArea",
       requiredKeywords: ["left", "right"],
@@ -175,7 +215,7 @@ const mastery: Checkpoint = {
         { id: "h3", description: "Tall walls at the ends", input: "[9,1,1,1,9]", expected: "36" },
       ],
       hint: "Start left and right at the two ends, track the best area seen, and always move the pointer at the shorter wall inward.",
-      mistakeFeedback: "This looks like it's checking every pair of walls (O(n²)) instead of narrowing from both ends and always moving the shorter wall inward (O(n)).",
+      mistakeFeedback: "Checking every pair of walls gives the right answer at O(n²), and this checkpoint asks for the O(n) pointer version. If a result is wrong, check that the area is the shorter height times the index distance, and that you move the pointer at the shorter wall. Moving the taller wall can skip the best container.",
       demoSolution: {
         python: "def maxArea(heights):\n    if not heights:\n        return 0\n    left, right = 0, len(heights) - 1\n    best = 0\n    while left < right:\n        area = min(heights[left], heights[right]) * (right - left)\n        best = max(best, area)\n        if heights[left] < heights[right]:\n            left += 1\n        else:\n            right -= 1\n    return best\n",
         cpp: "int maxArea(vector<int>& heights) {\n    if (heights.empty()) return 0;\n    int left = 0, right = (int)heights.size() - 1, best = 0;\n    while (left < right) {\n        int area = min(heights[left], heights[right]) * (right - left);\n        best = max(best, area);\n        if (heights[left] < heights[right]) left++; else right--;\n    }\n    return best;\n}\n",
