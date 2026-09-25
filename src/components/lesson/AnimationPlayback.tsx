@@ -1,6 +1,8 @@
 import { type ReactNode, useEffect, useState } from "react"
 import { getCodeTrace } from "../../learning/animations/codeTraceRegistry"
 import type { AlgorithmAnimationId } from "../../learning/types"
+import type { TraceExperimentPanelProps } from "../../learning/experiments/useTraceExperiment"
+import type { CodeTraceState } from "../../learning/animations/codeTraceTypes"
 import CodeTracePanel from "./CodeTracePanel"
 import { useTrailGuide } from "../../assistant/TrailGuideContext"
 
@@ -8,6 +10,11 @@ const AUTOPLAY_INTERVAL_MS = 2000
 
 interface AnimationPlaybackProps<TState> {
   title: string
+  /** The states to actually play — pass `experiment.states` when the caller
+   * uses Experiment Mode (already authored-or-generated); pass the authored
+   * array directly otherwise. Either way, this array's IDENTITY changing is
+   * what resets playback to step 1 below — that's how Run Changes' "reset
+   * to step 1" requirement is satisfied, with no separate reset path. */
   states: TState[]
   getOperation: (state: TState) => string
   getMessage: (state: TState) => string
@@ -16,6 +23,13 @@ interface AnimationPlaybackProps<TState> {
    * visual, reading THIS SAME playback's `index` — no separate timeline,
    * no duplicated Previous/Play/Pause/Next/Restart controls. */
   traceId?: AlgorithmAnimationId
+  /** Experiment Mode wiring — from `useTraceExperiment()`. Omit entirely for
+   * an animation Experiment Mode doesn't support; CodeTracePanel then shows
+   * no Experiment button. */
+  experiment?: TraceExperimentPanelProps
+  /** Non-null while `experiment.mode === "running"` — the Code Trace states
+   * for the custom run, same length as `states`. */
+  experimentTraceStates?: CodeTraceState[] | null
 }
 
 export default function AnimationPlayback<TState>({
@@ -25,6 +39,8 @@ export default function AnimationPlayback<TState>({
   getMessage,
   children,
   traceId,
+  experiment,
+  experimentTraceStates,
 }: AnimationPlaybackProps<TState>) {
   const [index, setIndex] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -76,7 +92,10 @@ export default function AnimationPlayback<TState>({
 
   if (!current) return null
 
-  const trace = traceId ? getCodeTrace(traceId) : undefined
+  const baseTrace = traceId ? getCodeTrace(traceId) : undefined
+  // Custom-run Code Trace states, same pseudocode/language listings — only
+  // which lines are current/executed changes.
+  const trace = baseTrace && experimentTraceStates ? { ...baseTrace, states: experimentTraceStates } : baseTrace
 
   const goPrevious = () => {
     setIsPlaying(false)
@@ -109,9 +128,16 @@ export default function AnimationPlayback<TState>({
           <p className="text-[11px] font-black uppercase tracking-wider text-[#A7CE65]">Algorithm Animation</p>
           <h3 className="mt-1 text-sm font-bold text-white break-words">{title}</h3>
         </div>
-        <span className="shrink-0 rounded-full border border-white/10 bg-black/30 px-2.5 py-1 text-[10px] font-bold text-gray-300">
-          Step {index + 1}/{states.length}
-        </span>
+        <div className="flex shrink-0 items-center gap-2">
+          {experiment?.mode === "running" && (
+            <span className="rounded-full border border-amber-400/40 bg-amber-400/10 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-amber-200">
+              Custom Run
+            </span>
+          )}
+          <span className="rounded-full border border-white/10 bg-black/30 px-2.5 py-1 text-[10px] font-bold text-gray-300">
+            Step {index + 1}/{states.length}
+          </span>
+        </div>
       </div>
 
       {/* Sequential Teaching Hierarchy: VISUAL ACTION -> PSEUDOCODE ACTION -> STATE CHANGE */}
@@ -131,7 +157,7 @@ export default function AnimationPlayback<TState>({
         {/* 2. Code Trace Action directly beneath animation */}
         {trace && (
           <div className="min-w-0 w-full">
-            <CodeTracePanel trace={trace} currentStep={index} traceId={traceId} />
+            <CodeTracePanel trace={trace} currentStep={index} traceId={traceId} experiment={experiment} />
           </div>
         )}
       </div>

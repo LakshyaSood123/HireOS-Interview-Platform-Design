@@ -6,6 +6,8 @@ import type {
   TwoPointersState,
 } from "../../learning/animations/patternBasicsStates"
 import type { AlgorithmAnimationId } from "../../learning/types"
+import { useTraceExperiment } from "../../learning/experiments/useTraceExperiment"
+import { useTraceLanguage } from "../../learning/traceLanguagePreference"
 import AnimationPlayback from "./AnimationPlayback"
 
 type PatternState = ComplexityState | HashingState | TwoPointersState | PrefixSumState | IntervalsState
@@ -34,13 +36,23 @@ export default function PatternBasicsAnimation<TState extends PatternState>({
   states,
   kind,
 }: PatternBasicsAnimationProps<TState>) {
+  const traceId = KIND_TO_TRACE_ID[kind]
+  const [language] = useTraceLanguage()
+  // Only "two-pointers" is in EXPERIMENT_SUPPORTED_IDS today — the hook
+  // itself reports `supported: false` for every other kind's traceId, so
+  // this stays a plain no-op passthrough for complexity/hashing/prefix-sum/
+  // intervals without a second code path here.
+  const experiment = useTraceExperiment<TState>(traceId, states, language)
+
   return (
     <AnimationPlayback
       title={title}
-      states={states}
+      states={experiment.states}
       getOperation={state => state.operation}
       getMessage={state => state.message}
-      traceId={KIND_TO_TRACE_ID[kind]}
+      traceId={traceId}
+      experiment={experiment}
+      experimentTraceStates={experiment.traceStatesOverride}
     >
       {state => renderPatternState(kind, state)}
     </AnimationPlayback>

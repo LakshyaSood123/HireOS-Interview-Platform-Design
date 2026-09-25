@@ -3,6 +3,9 @@ import {
   SLIDING_WINDOW_VALUES,
   type SlidingWindowState,
 } from "../../learning/animations/slidingWindowStates"
+import { useTraceExperiment } from "../../learning/experiments/useTraceExperiment"
+import { useTraceLanguage } from "../../learning/traceLanguagePreference"
+import type { SlidingWindowConfig } from "../../learning/experiments/traceExperimentTypes"
 import AnimationPlayback from "./AnimationPlayback"
 
 interface SlidingWindowAnimationProps {
@@ -11,13 +14,21 @@ interface SlidingWindowAnimationProps {
 }
 
 export default function SlidingWindowAnimation({ title, states }: SlidingWindowAnimationProps) {
+  const [language] = useTraceLanguage()
+  const experiment = useTraceExperiment<SlidingWindowState>("sliding-window-variable", states, language)
+  const activeConfig = experiment.activeConfig as SlidingWindowConfig | undefined
+  const values = activeConfig?.values ?? SLIDING_WINDOW_VALUES
+  const limit = activeConfig?.limit ?? SLIDING_WINDOW_TARGET
+
   return (
     <AnimationPlayback
       title={title}
-      states={states}
+      states={experiment.states}
       getOperation={state => state.operation}
       getMessage={state => state.message}
       traceId="sliding-window-variable"
+      experiment={experiment}
+      experimentTraceStates={experiment.traceStatesOverride}
     >
       {state => {
         const hasWindow = state.right >= state.left
@@ -25,7 +36,7 @@ export default function SlidingWindowAnimation({ title, states }: SlidingWindowA
           <div>
             <div className="mb-3 flex flex-wrap gap-2 text-[11px] font-bold text-gray-300">
               <span className="rounded-full border border-white/10 bg-black/20 px-2.5 py-1">
-                limit {"<="} {SLIDING_WINDOW_TARGET}
+                limit {"<="} {limit}
               </span>
               <span className="rounded-full border border-white/10 bg-black/20 px-2.5 py-1">
                 sum {state.sum}
@@ -44,7 +55,7 @@ export default function SlidingWindowAnimation({ title, states }: SlidingWindowA
 
             <div className="overflow-x-auto pb-1">
               <div className="inline-flex min-w-max gap-2">
-                {SLIDING_WINDOW_VALUES.map((value, cellIndex) => {
+                {values.map((value, cellIndex) => {
                   const inWindow = hasWindow && cellIndex >= state.left && cellIndex <= state.right
                   const isIncoming = cellIndex === state.incomingIndex
                   const isOutgoing = cellIndex === state.outgoingIndex

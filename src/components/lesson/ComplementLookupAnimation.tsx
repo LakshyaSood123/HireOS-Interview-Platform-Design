@@ -1,4 +1,6 @@
 import type { HashingComplementState } from "../../learning/animations/studyExpansionStates"
+import { useTraceExperiment } from "../../learning/experiments/useTraceExperiment"
+import { useTraceLanguage } from "../../learning/traceLanguagePreference"
 import AnimationPlayback from "./AnimationPlayback"
 
 interface ComplementLookupAnimationProps {
@@ -7,13 +9,18 @@ interface ComplementLookupAnimationProps {
 }
 
 export default function ComplementLookupAnimation({ title, states }: ComplementLookupAnimationProps) {
+  const [language] = useTraceLanguage()
+  const experiment = useTraceExperiment<HashingComplementState>("hashing-complement-lookup", states, language)
+
   return (
     <AnimationPlayback
       title={title}
-      states={states}
+      states={experiment.states}
       getOperation={state => state.operation}
       getMessage={state => state.message}
       traceId="hashing-complement-lookup"
+      experiment={experiment}
+      experimentTraceStates={experiment.traceStatesOverride}
     >
       {state => <ComplementFrame state={state} />}
     </AnimationPlayback>

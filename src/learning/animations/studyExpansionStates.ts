@@ -6,7 +6,10 @@ export const HASHING_COMPLEMENT_VALUES = [2, 7, 11, 15]
 export const HASHING_COMPLEMENT_TARGET = 9
 
 export interface HashingComplementState {
-  operation: "INIT" | "CHECK_COMPLEMENT" | "STORE_CURRENT" | "FOUND"
+  /** NOT_FOUND is additive — see the note on BinarySearchState in
+   * binarySearchStates.ts; Experiment Mode's simulator can produce it when
+   * no pair in the learner's input sums to the target. */
+  operation: "INIT" | "CHECK_COMPLEMENT" | "STORE_CURRENT" | "FOUND" | "NOT_FOUND"
   values: number[]
   target: number
   activeIndex: number | null

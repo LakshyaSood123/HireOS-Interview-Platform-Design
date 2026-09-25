@@ -13,7 +13,10 @@ export interface HashingState {
 }
 
 export interface TwoPointersState {
-  operation: "COMPARE" | "FOUND"
+  /** NOT_FOUND is additive — see the note on BinarySearchState in
+   * binarySearchStates.ts; Experiment Mode's simulator can produce it for
+   * learner input with no matching pair. */
+  operation: "COMPARE" | "FOUND" | "NOT_FOUND"
   values: number[]
   target: number
   left: number

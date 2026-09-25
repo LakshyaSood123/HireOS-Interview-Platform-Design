@@ -3,6 +3,9 @@ import {
   BINARY_SEARCH_VALUES,
   type BinarySearchState,
 } from "../../learning/animations/binarySearchStates"
+import { useTraceExperiment } from "../../learning/experiments/useTraceExperiment"
+import { useTraceLanguage } from "../../learning/traceLanguagePreference"
+import type { BinarySearchConfig } from "../../learning/experiments/traceExperimentTypes"
 import AnimationPlayback from "./AnimationPlayback"
 
 interface BinarySearchAnimationProps {
@@ -11,19 +14,27 @@ interface BinarySearchAnimationProps {
 }
 
 export default function BinarySearchAnimation({ title, states }: BinarySearchAnimationProps) {
+  const [language] = useTraceLanguage()
+  const experiment = useTraceExperiment<BinarySearchState>("binary-search-decision", states, language)
+  const activeConfig = experiment.activeConfig as BinarySearchConfig | undefined
+  const values = activeConfig?.values ?? BINARY_SEARCH_VALUES
+  const target = activeConfig?.target ?? BINARY_SEARCH_TARGET
+
   return (
     <AnimationPlayback
       title={title}
-      states={states}
+      states={experiment.states}
       getOperation={state => state.operation}
       getMessage={state => state.message}
       traceId="binary-search-decision"
+      experiment={experiment}
+      experimentTraceStates={experiment.traceStatesOverride}
     >
       {state => (
         <div>
           <div className="mb-3 flex flex-wrap gap-2 text-[11px] font-bold text-gray-300">
             <span className="rounded-full border border-white/10 bg-black/20 px-2.5 py-1">
-              target {BINARY_SEARCH_TARGET}
+              target {target}
             </span>
             <span className="rounded-full border border-white/10 bg-black/20 px-2.5 py-1">low {state.low}</span>
             <span className="rounded-full border border-white/10 bg-black/20 px-2.5 py-1">mid {state.mid}</span>
@@ -32,7 +43,7 @@ export default function BinarySearchAnimation({ title, states }: BinarySearchAni
 
           <div className="overflow-x-auto pb-1">
             <div className="inline-flex min-w-max gap-2">
-              {BINARY_SEARCH_VALUES.map((value, cellIndex) => {
+              {values.map((value, cellIndex) => {
                 const discarded = state.discarded.includes(cellIndex)
                 const inRange = cellIndex >= state.low && cellIndex <= state.high
                 const isMid = cellIndex === state.mid

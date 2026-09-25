@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import type { ArrayTraversalState } from "../../learning/animations/arraysInPlaceStates"
 import { getCodeTrace } from "../../learning/animations/codeTraceRegistry"
+import { useTraceExperiment } from "../../learning/experiments/useTraceExperiment"
+import { useTraceLanguage } from "../../learning/traceLanguagePreference"
 import CodeTracePanel from "./CodeTracePanel"
 
 interface ArrayTraversalVisualProps {
@@ -10,13 +12,20 @@ interface ArrayTraversalVisualProps {
 
 const TRACE = getCodeTrace("arrays-in-place-reversal")
 
-export default function ArrayTraversalVisual({ title, states }: ArrayTraversalVisualProps) {
+export default function ArrayTraversalVisual({ title, states: authoredStates }: ArrayTraversalVisualProps) {
+  const [language] = useTraceLanguage()
+  const experiment = useTraceExperiment<ArrayTraversalState>("arrays-in-place-reversal", authoredStates, language)
+  const states = experiment.states
+
   const [index, setIndex] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
   const current = states[index] ?? states[0]
   const isFirst = index === 0
   const isLast = index === states.length - 1
 
+  // `states` here is `experiment.states` — its identity changes exactly when
+  // Run Changes / Reset to Lesson swap in a different array, which is what
+  // resets playback to step 1. A language switch never touches it.
   useEffect(() => {
     setIndex(0)
     setIsPlaying(false)
@@ -68,9 +77,16 @@ export default function ArrayTraversalVisual({ title, states }: ArrayTraversalVi
           <p className="text-[11px] font-black uppercase tracking-wider text-[#A7CE65]">Algorithm Animation</p>
           <h3 className="text-sm font-bold text-white mt-1 break-words">{title}</h3>
         </div>
-        <span className="shrink-0 rounded-full bg-black/30 border border-white/10 px-2.5 py-1 text-[10px] font-bold text-gray-300">
-          Step {index + 1}/{states.length}
-        </span>
+        <div className="flex shrink-0 items-center gap-2">
+          {experiment.mode === "running" && (
+            <span className="rounded-full border border-amber-400/40 bg-amber-400/10 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-amber-200">
+              Custom Run
+            </span>
+          )}
+          <span className="shrink-0 rounded-full bg-black/30 border border-white/10 px-2.5 py-1 text-[10px] font-bold text-gray-300">
+            Step {index + 1}/{states.length}
+          </span>
+        </div>
       </div>
 
       {/* Sequential Teaching Hierarchy: VISUAL ACTION -> PSEUDOCODE ACTION -> STATE CHANGE */}
@@ -115,7 +131,12 @@ export default function ArrayTraversalVisual({ title, states }: ArrayTraversalVi
         {/* 2. Code Trace Action directly beneath animation */}
         {TRACE && (
           <div className="min-w-0 w-full">
-            <CodeTracePanel trace={TRACE} currentStep={index} traceId="arrays-in-place-reversal" />
+            <CodeTracePanel
+              trace={experiment.traceStatesOverride ? { ...TRACE, states: experiment.traceStatesOverride } : TRACE}
+              currentStep={index}
+              traceId="arrays-in-place-reversal"
+              experiment={experiment}
+            />
           </div>
         )}
       </div>

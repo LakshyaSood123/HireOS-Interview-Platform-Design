@@ -2,7 +2,12 @@ export const BINARY_SEARCH_VALUES = [-1, 0, 3, 5, 9, 12]
 export const BINARY_SEARCH_TARGET = 9
 
 export interface BinarySearchState {
-  operation: "COMPARE_MID" | "MOVE_LOW" | "FOUND"
+  /** MOVE_HIGH and NOT_FOUND are additive — the authored lesson demo only
+   * ever narrows low and always finds its target, but Experiment Mode's
+   * simulator (traceExperimentSimulators.ts) generates both branches for
+   * arbitrary learner input. Nothing pattern-matches this union
+   * exhaustively; both display it only via getOperation()/state.decision. */
+  operation: "COMPARE_MID" | "MOVE_LOW" | "MOVE_HIGH" | "FOUND" | "NOT_FOUND"
   low: number
   high: number
   mid: number
