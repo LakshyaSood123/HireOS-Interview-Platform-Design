@@ -71,6 +71,48 @@ export interface Checkpoint {
   questionIds?: string[]
 }
 
+// ── Module Mastery Quiz ─────────────────────────────────────────────────
+// A module-level assessment, separate from checkpoint Quick Checks. Plain
+// serializable data (no React, no functions) so it can live inside the DSA
+// CMS module record later without a schema redesign. V1 is assessment-only:
+// nothing here gates progression, awards XP, or is persisted anywhere.
+
+export type QuizQuestionType = "single-select" | "multi-select"
+
+export interface QuizOption {
+  /** Stable within its question, e.g. "a" | "b" | "c" | "d". */
+  id: string
+  text: string
+}
+
+export interface ModuleQuizQuestion {
+  /** Stable across edits, e.g. "binary-search-q4". */
+  id: string
+  type: QuizQuestionType
+  prompt: string
+  /** Optional code shown in a monospaced block under the prompt, for trace
+   * and bug-spotting questions. Display only — never executed. */
+  code?: string
+  options: QuizOption[]
+  /** Exactly one id for "single-select"; two or more for "multi-select". */
+  correctOptionIds: string[]
+  /** Why the answer is right — shown only in review, after submission. */
+  explanation: string
+  /** Short concept tag. The result screen's "Strong areas" / "Review" lists
+   * are derived from these, so keep them consistent within a quiz. */
+  concept: string
+  difficulty?: "foundation" | "application" | "challenge"
+}
+
+export interface ModuleMasteryQuiz {
+  id: string
+  moduleId: string
+  title: string
+  /** Recommended pass mark, as a whole-number percentage. Advisory in V1. */
+  passPercentage: number
+  questions: ModuleQuizQuestion[]
+}
+
 export interface Module {
   id: string
   title: string
@@ -78,6 +120,9 @@ export interface Module {
   icon: string
   accentColor: string
   checkpoints: Checkpoint[]
+  /** Optional Module Mastery Quiz. Absent for every module that hasn't had
+   * one authored yet — the UI simply shows no Module Mastery station. */
+  quiz?: ModuleMasteryQuiz
   /** Which UI renders this module's checkpoints. "legacy" = the original
    * LessonReader/ChallengeStage pages (reagvisView "lesson"/"challenge").
    * "workspace" = the new generic Lesson Workspace (reagvisView

@@ -4,6 +4,7 @@
 // existing tile in BiomeTrailMap.tsx keeps resolving it correctly.
 
 import type { Checkpoint, Module } from "../types"
+import { linkedListsQuiz } from "./quizzes/linkedListsQuiz"
 
 const fundamentals: Checkpoint = {
   id: "linked-structures-1",
@@ -271,4 +272,5 @@ export const linkedListsModule: Module = {
   accentColor: "#38BDF8",
   contentKind: "workspace",
   checkpoints: [fundamentals, traversalAndPointers, fastSlowPointer, codeLab, mastery],
+  quiz: linkedListsQuiz,
 }

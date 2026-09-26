@@ -5,6 +5,7 @@
 // correctly — see LEARNING_ENGINE_ARCHITECTURE.md's module-id note.
 
 import type { Checkpoint, Module } from "../types"
+import { complexityQuiz } from "./quizzes/complexityQuiz"
 
 const bigO: Checkpoint = {
   id: "foundations-1",
@@ -232,4 +233,5 @@ export const foundationsModule: Module = {
   accentColor: "#79A84B",
   contentKind: "workspace",
   checkpoints: [bigO, readingConstraints, problemSolvingPattern, miniAnalysisChallenge, foundationsMastery],
+  quiz: complexityQuiz,
 }

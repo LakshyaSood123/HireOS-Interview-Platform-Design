@@ -3,6 +3,7 @@
 // "Course World vs Module Roadmap" note) — reached via the Course Library.
 
 import type { Checkpoint, Module } from "../types"
+import { arraysStringsQuiz } from "./quizzes/arraysStringsQuiz"
 
 const essentials: Checkpoint = {
   id: "arrays-strings-1",
@@ -220,4 +221,5 @@ export const arraysStringsModule: Module = {
   accentColor: "#79A84B",
   contentKind: "workspace",
   checkpoints: [essentials, traversalInPlace, commonPatterns, codeLab, mastery],
+  quiz: arraysStringsQuiz,
 }

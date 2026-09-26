@@ -1,6 +1,7 @@
 // Binary Search — Pattern Meadows.
 
 import type { Checkpoint, Module } from "../types"
+import { binarySearchQuiz } from "./quizzes/binarySearchQuiz"
 
 const mentalModel: Checkpoint = {
   id: "binary-search-1",
@@ -267,4 +268,5 @@ export const binarySearchModule: Module = {
   accentColor: "#38BDF8",
   contentKind: "workspace",
   checkpoints: [mentalModel, searchBoundaries, searchOnCondition, codeLab, mastery],
+  quiz: binarySearchQuiz,
 }

@@ -20,7 +20,7 @@
 // Feedback, Trail Guide) may still reference historically. No archive UI is
 // built in this phase — only the schema seam.
 
-import type { CheckpointType, Lesson, LessonWorkspaceContent } from "../../learning/types"
+import type { CheckpointType, Lesson, LessonWorkspaceContent, ModuleMasteryQuiz } from "../../learning/types"
 
 /** Never hard-delete a published DSA entity — see PART 11 of the task.
  * "archived" is a seam only; no archive UX exists yet, and the importer/
@@ -79,6 +79,10 @@ export interface CmsDsaModule {
   icon: string
   accentColor: string
   contentKind?: "legacy" | "workspace"
+  /** Optional Module Mastery Quiz — plain data, carried through the
+   * importer/adapter unchanged. Frontend draft model only for now; the
+   * backend CMS content contract does not carry it yet. */
+  quiz?: ModuleMasteryQuiz
   checkpoints: CmsDsaCheckpoint[]
   state: CmsEntityState
 }

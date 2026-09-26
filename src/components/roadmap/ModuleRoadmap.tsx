@@ -1,10 +1,13 @@
 import type { Module, ProgressState } from "../../learning/types"
+import ModuleMasteryCard from "./ModuleMasteryCard"
 
 interface ModuleRoadmapProps {
   module: Module
   checkpointStates: Record<string, ProgressState>
   onEnterCheckpoint: (checkpointId: string) => void
   onBack: () => void
+  /** Optional: opens the module's Mastery Quiz when the module has one. */
+  onStartQuiz?: () => void
 }
 
 const STATE_BADGE: Record<ProgressState, { label: string; className: string }> = {
@@ -22,7 +25,7 @@ const STATE_BADGE: Record<ProgressState, { label: string; className: string }> =
  * scenic map's SVG art — this is a focused reading/navigation screen, not a
  * second scenic world (see PART 27: "clean, not another scenic-map
  * redesign"). */
-export default function ModuleRoadmap({ module, checkpointStates, onEnterCheckpoint, onBack }: ModuleRoadmapProps) {
+export default function ModuleRoadmap({ module, checkpointStates, onEnterCheckpoint, onBack, onStartQuiz }: ModuleRoadmapProps) {
   return (
     <div className="min-h-screen bg-[#CFDFBA] font-display text-[#1E3B2B]">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8">
@@ -105,6 +108,14 @@ export default function ModuleRoadmap({ module, checkpointStates, onEnterCheckpo
               </li>
             )
           })}
+          {module.quiz && onStartQuiz && (
+            <ModuleMasteryCard
+              title={module.quiz.title}
+              questionCount={module.quiz.questions.length}
+              ready={module.checkpoints.every(cp => checkpointStates[cp.id] === "completed" || checkpointStates[cp.id] === "mastered")}
+              onStart={onStartQuiz}
+            />
+          )}
         </ol>
       </div>
     </div>

@@ -6,6 +6,7 @@ import LessonReader from "../components/forest/LessonReader"
 import ChallengeStage from "../components/forest/ChallengeStage"
 import UnlockCelebration from "../components/forest/UnlockCelebration"
 import ModuleRoadmap from "../components/roadmap/ModuleRoadmap"
+import ModuleMasteryQuizView from "../components/quiz/ModuleMasteryQuizView"
 import LessonWorkspace from "../components/lesson/LessonWorkspace"
 import OwlAvatar from "../components/OwlAvatar"
 import AlpineMountainRange from "../components/forest/scenic/AlpineMountainRange"
@@ -58,6 +59,8 @@ export default function ReagvisTrailPage({ onNavigateHireOS }: ReagvisTrailPageP
 
   const [previewNode, setPreviewNode] = useState<TrailNode | null>(null)
   const [previewModuleId, setPreviewModuleId] = useState<string | null>(null)
+  // Module Mastery Quiz is an overlay on the roadmap; state lives only in React.
+  const [quizOpen, setQuizOpen] = useState(false)
   const unifiedLibraryCourses = getUnifiedLibraryCourses()
 
   const course = getCourseById(activeCourseId)
@@ -245,7 +248,15 @@ export default function ReagvisTrailPage({ onNavigateHireOS }: ReagvisTrailPageP
         {/* ══════════════════════════════════════════════════════
             MODULE ROADMAP VIEW (new Lesson Workspace model — Trees today)
             ══════════════════════════════════════════════════════ */}
-        {reagvisView === "roadmap" && viewedModule && (
+        {reagvisView === "roadmap" && viewedModule && quizOpen && viewedModule.quiz && (
+          <ModuleMasteryQuizView
+            key={viewedModule.id}
+            quiz={viewedModule.quiz}
+            moduleTitle={viewedModule.title}
+            onReturn={() => setQuizOpen(false)}
+          />
+        )}
+        {reagvisView === "roadmap" && viewedModule && !(quizOpen && viewedModule.quiz) && (
           <div className="animate-fade-up">
             <ModuleRoadmap
               module={viewedModule}
@@ -257,7 +268,9 @@ export default function ReagvisTrailPage({ onNavigateHireOS }: ReagvisTrailPageP
                     )
               }
               onEnterCheckpoint={enterCheckpoint}
+              onStartQuiz={viewedModule.quiz ? () => setQuizOpen(true) : undefined}
               onBack={() => {
+                setQuizOpen(false)
                 setPreviewModuleId(null)
                 setReagvisView("map")
               }}

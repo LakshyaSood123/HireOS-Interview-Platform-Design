@@ -10,6 +10,7 @@
 // buildDsaCourse(). Keep it that way until a module is deliberately migrated.
 
 import type { Checkpoint, Module, TraversalVisual } from "../types"
+import { treesQuiz } from "./quizzes/treesQuiz"
 
 const EXAMPLE_TREE: TraversalVisual = {
   tree: {
@@ -287,4 +288,5 @@ export const treesModule: Module = {
   accentColor: "#1DB584",
   contentKind: "workspace",
   checkpoints: [treeFoundations, traversals, dfsBfsCodeLab, binarySearchTrees, interviewChallenge],
+  quiz: treesQuiz,
 }

@@ -76,6 +76,7 @@ function compareModule(path: string, original: Module, roundTrip: Module, mismat
   compareField(`${path}.icon`, original.icon, roundTrip.icon, mismatches)
   compareField(`${path}.accentColor`, original.accentColor, roundTrip.accentColor, mismatches)
   compareField(`${path}.contentKind`, original.contentKind, roundTrip.contentKind, mismatches)
+  compareField(`${path}.quiz`, original.quiz, roundTrip.quiz, mismatches)
   compareField(`${path}.checkpoints.length`, original.checkpoints.length, roundTrip.checkpoints.length, mismatches)
 
   const maxLen = Math.max(original.checkpoints.length, roundTrip.checkpoints.length)

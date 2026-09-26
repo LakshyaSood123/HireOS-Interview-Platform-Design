@@ -3,6 +3,7 @@
 // than teaching.
 
 import type { Checkpoint, Module } from "../types"
+import { intervalsQuiz } from "./quizzes/intervalsQuiz"
 
 const understandingIntervals: Checkpoint = {
   id: "intervals-1",
@@ -176,4 +177,5 @@ export const intervalsModule: Module = {
   accentColor: "#38BDF8",
   contentKind: "workspace",
   checkpoints: [understandingIntervals, sortingAndOverlap, codeLab, mastery],
+  quiz: intervalsQuiz,
 }

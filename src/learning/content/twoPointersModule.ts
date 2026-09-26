@@ -5,6 +5,7 @@
 // each other, since none of them depends on the others pedagogically.
 
 import type { Checkpoint, Module } from "../types"
+import { twoPointersQuiz } from "./quizzes/twoPointersQuiz"
 
 const recognizing: Checkpoint = {
   id: "two-pointers-1",
@@ -234,4 +235,5 @@ export const twoPointersModule: Module = {
   accentColor: "#38BDF8",
   contentKind: "workspace",
   checkpoints: [recognizing, oppositeEnd, sameDirection, codeLab, mastery],
+  quiz: twoPointersQuiz,
 }

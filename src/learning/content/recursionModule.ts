@@ -4,6 +4,7 @@
 // map's tile id, no remapping needed.
 
 import type { Checkpoint, Module } from "../types"
+import { recursionQuiz } from "./quizzes/recursionQuiz"
 
 const mentalModel: Checkpoint = {
   id: "recursion-1",
@@ -248,4 +249,5 @@ export const recursionModule: Module = {
   accentColor: "#A855F7",
   contentKind: "workspace",
   checkpoints: [mentalModel, baseAndRecursiveCase, callStack, codeLab, mastery],
+  quiz: recursionQuiz,
 }

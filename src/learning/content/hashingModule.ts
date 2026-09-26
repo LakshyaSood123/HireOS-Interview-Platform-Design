@@ -3,6 +3,7 @@
 // checkpoint.
 
 import type { Checkpoint, Module } from "../types"
+import { hashingQuiz } from "./quizzes/hashingQuiz"
 
 const whyHashingHelps: Checkpoint = {
   id: "hashing-1",
@@ -238,4 +239,5 @@ export const hashingModule: Module = {
   accentColor: "#79A84B",
   contentKind: "workspace",
   checkpoints: [whyHashingHelps, frequencyMapsSets, lookupVsBrute, codeLab, mastery],
+  quiz: hashingQuiz,
 }

@@ -61,6 +61,7 @@ function adaptModule(module: CmsDsaModule, options: AdaptOptions): Module {
     checkpoints,
   }
   if (module.contentKind !== undefined) result.contentKind = module.contentKind
+  if (module.quiz !== undefined) result.quiz = module.quiz
   return result
 }
 

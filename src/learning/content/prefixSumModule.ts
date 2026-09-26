@@ -4,6 +4,7 @@
 // to back — checkpoint count follows learning need, not a fixed template.
 
 import type { Checkpoint, Module } from "../types"
+import { prefixSumQuiz } from "./quizzes/prefixSumQuiz"
 
 const repeatedRangeWork: Checkpoint = {
   id: "prefix-sum-1",
@@ -173,4 +174,5 @@ export const prefixSumModule: Module = {
   accentColor: "#38BDF8",
   contentKind: "workspace",
   checkpoints: [repeatedRangeWork, buildingPrefixInfo, codeLab, mastery],
+  quiz: prefixSumQuiz,
 }

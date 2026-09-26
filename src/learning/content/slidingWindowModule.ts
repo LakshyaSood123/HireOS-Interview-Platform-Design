@@ -3,6 +3,7 @@
 // same as the other Pattern Meadows modules.
 
 import type { Checkpoint, Module } from "../types"
+import { slidingWindowQuiz } from "./quizzes/slidingWindowQuiz"
 
 const whenAWindowApplies: Checkpoint = {
   id: "sliding-window-1",
@@ -200,4 +201,5 @@ export const slidingWindowModule: Module = {
   accentColor: "#38BDF8",
   contentKind: "workspace",
   checkpoints: [whenAWindowApplies, fixedVsVariable, windowState, codeLab, mastery],
+  quiz: slidingWindowQuiz,
 }

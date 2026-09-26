@@ -57,6 +57,7 @@ function importModule(module: Module, zoneId: string, order: number): CmsDsaModu
     icon: module.icon,
     accentColor: module.accentColor,
     contentKind: module.contentKind,
+    quiz: module.quiz,
     checkpoints: module.checkpoints.map((cp, i) => importCheckpoint(cp, module.id, i)),
     state: "active",
   }
