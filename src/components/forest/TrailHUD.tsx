@@ -1,4 +1,5 @@
 import { useAppState } from "../../state/AppStateContext"
+import { useAuth } from "../../auth/AuthContext"
 import OwlAvatar from "../OwlAvatar"
 
 interface TrailHUDProps {
@@ -17,6 +18,7 @@ export default function TrailHUD({ onNavigateHireOS }: TrailHUDProps) {
     userStreak,
     simulatedReadinessScore,
   } = useAppState()
+  const { user, logout } = useAuth()
 
   const handleReturnToHireOS = () => {
     returnToHireOS()
@@ -132,6 +134,19 @@ export default function TrailHUD({ onNavigateHireOS }: TrailHUDProps) {
           >
             <OwlAvatar size={24} state="listening" />
           </button>
+
+          {/* Signed-in account / logout — auth is session-only in this phase */}
+          {user && (
+            <button
+              onClick={() => void logout()}
+              title={`Signed in as ${user.email}. Log out.`}
+              className="hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/80 hover:bg-white border border-[#BBD4B8]/70 text-[10px] font-bold text-[#234E35] transition-all cursor-pointer shadow-2xs"
+            >
+              <span className="max-w-[90px] truncate">{user.displayName}</span>
+              <span className="text-gray-400">·</span>
+              <span>Log Out</span>
+            </button>
+          )}
         </div>
 
       </div>
