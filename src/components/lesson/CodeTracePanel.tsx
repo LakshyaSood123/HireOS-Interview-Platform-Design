@@ -15,6 +15,8 @@ import {
 } from "../../learning/animations/codeTraceVariants"
 import { useTraceLanguage } from "../../learning/traceLanguagePreference"
 import type { TraceExperimentPanelProps } from "../../learning/experiments/useTraceExperiment"
+import { getConceptCodeLab, type LabLanguage } from "../../learning/codeLab/conceptCodeLabs"
+import { useCodeLabLauncher } from "../codelab/CodeLabContext"
 
 interface CodeTracePanelProps {
   trace: AlgorithmCodeTrace
@@ -54,6 +56,7 @@ const CHANGE_STATUS_CLASSES: Record<NonNullable<CodeTraceVariableChange["status"
  * component renders all 29 approved traces — no per-module variants. */
 export default function CodeTracePanel({ trace, currentStep, traceId, experiment }: CodeTracePanelProps) {
   const [preferred, setPreferred] = useTraceLanguage()
+  const openCodeLab = useCodeLabLauncher()
   const state = trace.states[currentStep] ?? trace.states[0]
   if (!state) return null
 
@@ -74,6 +77,15 @@ export default function CodeTracePanel({ trace, currentStep, traceId, experiment
         <div className="flex items-center gap-2 min-w-0">
           <p className="text-[11px] font-black uppercase tracking-wider text-[#A7CE65] shrink-0">Code Trace</p>
           {experiment?.supported && <ExperimentToggle mode={experiment.mode} onStart={experiment.startEditing} />}
+          {openCodeLab && traceId && getConceptCodeLab(traceId) && (
+            <button
+              type="button"
+              onClick={() => openCodeLab({ animationId: traceId, language: labLanguageFor(language) })}
+              className="shrink-0 rounded-full border border-[#E2B44A]/40 bg-[#E2B44A]/10 px-2.5 py-1 text-[10px] font-bold text-[#F3D98B] hover:bg-[#E2B44A]/20 cursor-pointer transition-colors"
+            >
+              &lt;/&gt; Code Lab
+            </button>
+          )}
         </div>
         <div className="flex items-center gap-2 min-w-0">
           {variants && <LanguageSelect value={language} onChange={setPreferred} />}
@@ -198,6 +210,11 @@ export default function CodeTracePanel({ trace, currentStep, traceId, experiment
       {state.note && <p className="text-[11px] leading-relaxed text-gray-400 break-words">{state.note}</p>}
     </div>
   )
+}
+
+/** Pseudocode is not executable, so it opens the Code Lab in Python. */
+function labLanguageFor(language: TraceLanguage): LabLanguage {
+  return language === "cpp" || language === "java" ? language : "python"
 }
 
 /** Reset to Lesson is intentionally always its own explicit button elsewhere

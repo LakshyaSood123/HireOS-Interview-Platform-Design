@@ -7,6 +7,9 @@ import ChallengeStage from "../components/forest/ChallengeStage"
 import UnlockCelebration from "../components/forest/UnlockCelebration"
 import ModuleRoadmap from "../components/roadmap/ModuleRoadmap"
 import ModuleMasteryQuizView from "../components/quiz/ModuleMasteryQuizView"
+import ConceptCodeLabView from "../components/codelab/ConceptCodeLabView"
+import { CodeLabLauncherProvider, useCodeLabNavigation } from "../components/codelab/CodeLabContext"
+import { getConceptCodeLab } from "../learning/codeLab/conceptCodeLabs"
 import LessonWorkspace from "../components/lesson/LessonWorkspace"
 import OwlAvatar from "../components/OwlAvatar"
 import AlpineMountainRange from "../components/forest/scenic/AlpineMountainRange"
@@ -61,6 +64,10 @@ export default function ReagvisTrailPage({ onNavigateHireOS }: ReagvisTrailPageP
   const [previewModuleId, setPreviewModuleId] = useState<string | null>(null)
   // Module Mastery Quiz is an overlay on the roadmap; state lives only in React.
   const [quizOpen, setQuizOpen] = useState(false)
+  // Concept Code Lab: a focused page opened from a Code Trace panel. The lesson
+  // stays mounted (hidden) underneath so its state is untouched on return.
+  const codeLab = useCodeLabNavigation(reagvisView === "workspace")
+  const activeLab = getConceptCodeLab(codeLab.request?.animationId)
   const unifiedLibraryCourses = getUnifiedLibraryCourses()
 
   const course = getCourseById(activeCourseId)
@@ -282,7 +289,8 @@ export default function ReagvisTrailPage({ onNavigateHireOS }: ReagvisTrailPageP
             LESSON WORKSPACE VIEW (new Lesson Workspace model — Trees today)
             ══════════════════════════════════════════════════════ */}
         {reagvisView === "workspace" && viewedCheckpoint && viewedModule && (
-          <div className="animate-fade-up">
+          <CodeLabLauncherProvider open={codeLab.open}>
+          <div className={activeLab ? "hidden" : "animate-fade-up"}>
             <LessonWorkspace
               key={viewedCheckpoint.id}
               checkpoint={viewedCheckpoint}
@@ -308,6 +316,15 @@ export default function ReagvisTrailPage({ onNavigateHireOS }: ReagvisTrailPageP
               onBack={backToRoadmap}
             />
           </div>
+          {activeLab && codeLab.request && (
+            <ConceptCodeLabView
+              key={activeLab.animationId}
+              lab={activeLab}
+              initialLanguage={codeLab.request.language}
+              onBack={codeLab.close}
+            />
+          )}
+          </CodeLabLauncherProvider>
         )}
 
         {/* ══════════════════════════════════════════════════════

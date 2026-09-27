@@ -624,6 +624,115 @@ async function handleExecute(req, res) {
   })
 }
 
+// ── Concept Code Lab (POST /api/code-runner/lab) ─────────────────────────
+// A separate, deliberately narrow execution path for the learning sandbox.
+// Trust model differs from graded execution above: the learner's source runs
+// AS WRITTEN (no harness, no activity id, no fixtures), so this path accepts
+// ONLY { language, code } and pins everything else here — Piston runtime
+// version, file name, stdin, args, and every resource limit. It never touches
+// ALLOWED_ACTIVITY_IDS/ACTIVITIES, never grades, and never returns Piston's
+// raw response, versions, or paths.
+const LAB_MAX_SOURCE_BYTES = 20 * 1024
+const LAB_MAX_OUTPUT_CHARS = 8_000
+
+function labTruncate(text) {
+  if (!text) return ""
+  return text.length > LAB_MAX_OUTPUT_CHARS ? text.slice(0, LAB_MAX_OUTPUT_CHARS) + "\n... (output truncated)" : text
+}
+
+function classifyLabResponse(piston) {
+  if (piston.compile && piston.compile.code !== 0) {
+    return { status: "compile_error", stdout: "", stderr: labTruncate(piston.compile.stderr || piston.compile.output || "Compile failed.") }
+  }
+  const run = piston.run
+  if (!run) return null
+  const stdout = labTruncate(run.stdout ?? "")
+  let stderr = labTruncate(run.stderr ?? "")
+  // Piston's own output cap (about 1,000 characters) kills the sandbox with an
+  // opaque message (in stderr or output); give the learner something they can
+  // act on instead.
+  if (/Sandbox keeper received fatal signal/.test(`${run.stderr ?? ""}${run.output ?? ""}`)) {
+    stderr = "The program was stopped. It probably printed more than the Code Lab allows (about 1,000 characters), or ran out of memory."
+  }
+  if (run.status === "TO") return { status: "time_limit_exceeded", stdout, stderr }
+  if (run.status === "RE" || run.signal || run.code !== 0) {
+    const looksLikeJavaCompileError = /error: compilation failed/.test(stderr) || /\.java:\d+: error:/.test(stderr)
+    return { status: looksLikeJavaCompileError ? "compile_error" : "runtime_error", stdout: looksLikeJavaCompileError ? "" : stdout, stderr: stderr || labTruncate(run.output ?? "") || "Runtime error." }
+  }
+  return { status: "ok", stdout, stderr }
+}
+
+async function handleLab(req, res) {
+  let body = ""
+  let tooLarge = false
+  req.on("data", chunk => {
+    if (tooLarge) return
+    body += chunk
+    if (Buffer.byteLength(body, "utf8") > LAB_MAX_SOURCE_BYTES + 4096) {
+      tooLarge = true
+      body = ""
+    }
+  })
+  req.on("end", async () => {
+    try {
+      if (tooLarge) return sendJson(res, 413, { ok: false, infrastructure_failure: false, unsupported: true, reason: "source_too_large" })
+      let payload
+      try {
+        payload = JSON.parse(body)
+      } catch {
+        return sendJson(res, 400, { ok: false, infrastructure_failure: false, unsupported: true, reason: "invalid_json" })
+      }
+      const language = payload?.language
+      const code = payload?.code
+      if (typeof language !== "string" || !ALLOWED_LANGUAGES.has(language)) {
+        return sendJson(res, 200, { ok: false, infrastructure_failure: false, unsupported: true, reason: "unsupported_language" })
+      }
+      if (typeof code !== "string" || code.trim() === "") {
+        return sendJson(res, 200, { ok: false, infrastructure_failure: false, unsupported: true, reason: "empty_source" })
+      }
+      if (Buffer.byteLength(code, "utf8") > LAB_MAX_SOURCE_BYTES) {
+        return sendJson(res, 200, { ok: false, infrastructure_failure: false, unsupported: true, reason: "source_too_large" })
+      }
+
+      const { language: pistonLanguage, version } = PISTON_LANGUAGE[language]
+      if (!(await isRuntimeInstalled(pistonLanguage, version))) {
+        return sendJson(res, 200, { ok: false, infrastructure_failure: true, reason: "runtime_unavailable" })
+      }
+
+      const pistonRequest = {
+        language: pistonLanguage,
+        version,
+        files: [pistonFileFor(language, code)],
+        stdin: "",
+        args: [],
+        compile_timeout: COMPILE_TIMEOUT_MS,
+        run_timeout: RUN_TIMEOUT_MS,
+        compile_cpu_time: COMPILE_CPU_TIME_MS,
+        run_cpu_time: RUN_CPU_TIME_MS,
+        compile_memory_limit: COMPILE_MEMORY_LIMIT_BYTES,
+        run_memory_limit: RUN_MEMORY_LIMIT_BYTES,
+      }
+      const started = Date.now()
+      let pistonRes
+      try {
+        pistonRes = await fetch(`${PISTON_BASE_URL}/api/v2/execute`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(pistonRequest),
+        })
+      } catch {
+        return sendJson(res, 200, { ok: false, infrastructure_failure: true, reason: "piston_unreachable" })
+      }
+      if (!pistonRes.ok) return sendJson(res, 200, { ok: false, infrastructure_failure: true, reason: "piston_unreachable" })
+      const classified = classifyLabResponse(await pistonRes.json())
+      if (!classified) return sendJson(res, 200, { ok: false, infrastructure_failure: true, reason: "gateway_system_error" })
+      return sendJson(res, 200, { ok: true, result: { ...classified, runtimeMs: Date.now() - started } })
+    } catch {
+      return sendJson(res, 200, { ok: false, infrastructure_failure: true, reason: "gateway_system_error" })
+    }
+  })
+}
+
 function sendJson(res, status, obj) {
   const body = JSON.stringify(obj)
   res.writeHead(status, { "Content-Type": "application/json", "Content-Length": Buffer.byteLength(body) })
@@ -656,6 +765,7 @@ const server = http.createServer((req, res) => {
   // Only ever the gateway's own execute route — never proxies or exposes
   // Piston's package/management endpoints.
   if (req.method === "POST" && url === "/api/code-runner/execute") return handleExecute(req, res)
+  if (req.method === "POST" && url === "/api/code-runner/lab") return handleLab(req, res)
 
   sendJson(res, 404, { ok: false, reason: "not_found" })
 })
