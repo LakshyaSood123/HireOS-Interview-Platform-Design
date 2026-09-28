@@ -18,6 +18,15 @@ import { getCourseById, isCourseAvailable, findCheckpoint } from "../learning/co
 import { deriveLegacyCourseData } from "../learning/legacyAdapter"
 import { LocalProgressRepository } from "../learning/progressRepository"
 import { MockRecommendationProvider } from "../learning/services/recommendationProvider"
+import { completeCheckpointOnBackend, fetchCourseState } from "../learning/services/progressApi"
+import { ApiUnavailableError, SessionExpiredError } from "../learning/services/apiClient"
+import { useAuth } from "../auth/AuthContext"
+
+/** The one course wired to backend progress in this phase. Every other
+ * course id keeps behaving exactly as it did before (local-only). */
+const BACKEND_COURSE_ID = "dsa-foundations"
+
+export type ProgressSyncStatus = "idle" | "loading" | "synced" | "error"
 
 export type ActiveProduct = "hireos" | "reagvis"
 export type ReagvisView =
@@ -141,6 +150,11 @@ interface AppStateValue {
    * course — used by ModuleRoadmap/LessonWorkspace so they don't need to
    * import the engine directly. */
   getCheckpointState: (checkpointId: string) => ProgressState
+  /** Backend reconciliation status for `dsa-foundations` progress only —
+   * "loading" while the initial `GET .../state` is in flight, "error" if it
+   * failed (the locally-cached/demo progress above stays authoritative on
+   * screen either way; nothing is blocked or rolled back on this). */
+  progressSyncStatus: ProgressSyncStatus
 
   // Transition & Action helpers
   isTransitioning: boolean
@@ -189,6 +203,45 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     progressRepository.save(progress)
   }, [progress])
+
+  // Backend reconciliation for dsa-foundations only (see BACKEND_COURSE_ID).
+  // The local/demo state above renders immediately, exactly as before this
+  // integration — this effect then quietly replaces it with the backend's
+  // authoritative record once the request resolves, so a signed-in learner
+  // never has to trust a browser's local cache over the server. A genuinely
+  // new account is a normal empty enrollment (backend auto-enrolls on first
+  // read), not an error, so it reconciles to that just the same.
+  const { client, reportSessionExpired } = useAuth()
+  const [progressSyncStatus, setProgressSyncStatus] = useState<ProgressSyncStatus>("idle")
+
+  useEffect(() => {
+    let cancelled = false
+    setProgressSyncStatus("loading")
+    fetchCourseState(client, BACKEND_COURSE_ID)
+      .then(state => {
+        if (cancelled) return
+        setProgress(state.progress)
+        setProgressSyncStatus("synced")
+      })
+      .catch(error => {
+        if (cancelled) return
+        if (error instanceof SessionExpiredError) {
+          reportSessionExpired()
+          return
+        }
+        // Unreachable API, or a genuine server error: keep whatever progress
+        // is already on screen (local cache or demo bootstrap) rather than
+        // show a broken/empty state or clear a valid local session.
+        setProgressSyncStatus("error")
+        if (!(error instanceof ApiUnavailableError)) console.error("[reagvis] progress load failed", error)
+      })
+    return () => {
+      cancelled = true
+    }
+    // Deliberately once per mount (per signed-in session) — AppStateProvider
+    // itself only ever mounts while authenticated (see AuthGate).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const [activeNode, setActiveNode] = useState<TrailNode | null>(
     dsaCourseData.nodes.find(n => String(n.id) === progress.activeCheckpointId) ?? dsaCourseData.nodes[3],
@@ -283,6 +336,27 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       ? dsaCourseData.nodes.find(n => String(n.id) === nextProgress.activeCheckpointId)
       : null
     if (nextNode) setActiveNode(nextNode)
+
+    // Persist the same completion to the backend for dsa-foundations. Fire
+    // and reconcile — the local update above already applied, synchronously,
+    // so the learner is never blocked on this. The backend call is itself
+    // idempotent (a retry/double-click/second tab all land on
+    // `alreadyCompleted: true` with no further effect), so nothing here
+    // needs its own de-duplication. A failure here is logged and leaves the
+    // local completion exactly as it already stands — it does not roll
+    // anything back, and it does not touch the auth session unless the
+    // session itself is what actually expired.
+    if (course.id === BACKEND_COURSE_ID) {
+      completeCheckpointOnBackend(client, BACKEND_COURSE_ID, checkpointId)
+        .then(result => setProgress(result.progress))
+        .catch(error => {
+          if (error instanceof SessionExpiredError) {
+            reportSessionExpired()
+            return
+          }
+          if (!(error instanceof ApiUnavailableError)) console.error("[reagvis] checkpoint completion did not reach the backend", error)
+        })
+    }
 
     return true
   }
@@ -395,6 +469,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       enterCheckpoint,
       backToRoadmap,
       getCheckpointState,
+      progressSyncStatus,
       viewedCmsCourseId,
       viewedCmsModuleId,
       viewedCmsActivityId,

@@ -15,6 +15,14 @@ import {
   SessionExpiredError,
   type SessionUser,
 } from "../learning/services/apiClient"
+import { LocalProgressRepository } from "../learning/progressRepository"
+
+/** The one course wired to backend progress in this phase — see
+ * AppStateContext.tsx's own `dsa-foundations` usage. Clearing only this
+ * cached key (never the whole of localStorage) keeps a shared browser from
+ * flashing one account's cached progress at the next signed-in account. */
+const DSA_COURSE_ID = "dsa-foundations"
+const progressCache = new LocalProgressRepository()
 
 export type AuthStatus = "booting" | "authenticated" | "unauthenticated"
 
@@ -28,6 +36,16 @@ export interface AuthContextValue {
   login: (email: string, password: string) => Promise<void>
   register: (email: string, password: string, displayName: string) => Promise<void>
   logout: () => Promise<void>
+  /** The same ApiClient instance auth uses — reused by other authenticated
+   * features (progress) instead of each standing up its own. */
+  client: ApiClient
+  /** Called by any later authenticated request that discovers the session is
+   * actually dead (refresh already failed once at the ApiClient level and
+   * threw `SessionExpiredError`) — flips the app back to the Auth screen
+   * instead of leaving it stuck "authenticated" against a token that no
+   * longer works. Boot itself doesn't need this; it handles its own
+   * SessionExpiredError inline. */
+  reportSessionExpired: () => void
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null)
@@ -74,6 +92,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       })
       .catch(error => {
         if (error instanceof SessionExpiredError) {
+          progressCache.reset(DSA_COURSE_ID)
           setStatus("unauthenticated")
           return
         }
@@ -84,8 +103,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       })
   }, [client])
 
+  // A browser can go from one signed-in account straight to another (tab
+  // closed without Logout, then a different learner signs in on the same
+  // machine) without ever passing through `logout()`/`reportSessionExpired()`
+  // below. Clearing the cached dsa-foundations progress here too — on every
+  // successful login/register, not only on the way out — closes that window
+  // completely: whoever is about to be signed in never renders through a
+  // stale previous account's cached completions/XP, even for the single
+  // React commit before AppStateContext's own backend fetch resolves.
   const login = async (email: string, password: string) => {
     const signedInUser = await client.signIn(email, password)
+    progressCache.reset(DSA_COURSE_ID)
     setUser(signedInUser)
     setBootProblem(null)
     setStatus("authenticated")
@@ -93,6 +121,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const register = async (email: string, password: string, displayName: string) => {
     const registeredUser = await client.register(email, password, displayName)
+    progressCache.reset(DSA_COURSE_ID)
     setUser(registeredUser)
     setBootProblem(null)
     setStatus("authenticated")
@@ -100,10 +129,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = async () => {
     await client.signOut()
+    progressCache.reset(DSA_COURSE_ID)
     setUser(null)
     setStatus("unauthenticated")
   }
 
-  const value: AuthContextValue = { status, user, bootProblem, login, register, logout }
+  const reportSessionExpired = () => {
+    progressCache.reset(DSA_COURSE_ID)
+    setUser(null)
+    setStatus("unauthenticated")
+  }
+
+  const value: AuthContextValue = { status, user, bootProblem, login, register, logout, client, reportSessionExpired }
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
