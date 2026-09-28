@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import type { NotesRepository, NoteRecord } from "../../learning/services/notesRepository"
 
 interface NotesPanelProps {
@@ -10,22 +10,44 @@ interface NotesPanelProps {
 }
 
 /** Compact notes drawer (PART 16) — create/edit/delete, persisted via
- * whatever `NotesRepository` is passed in (LocalNotesRepository today).
- * Not a full notes application: one drawer, scoped to the checkpoint
- * currently open in the Lesson Workspace. */
+ * whatever `NotesRepository` is passed in (LocalNotesRepository or, for a
+ * signed-in learner on dsa-foundations, ApiNotesRepository). Not a full
+ * notes application: one drawer, scoped to the checkpoint currently open in
+ * the Lesson Workspace. */
 export default function NotesPanel({ repository, courseId, moduleId, lessonId, onClose }: NotesPanelProps) {
   const [notes, setNotes] = useState<NoteRecord[]>([])
   const [draft, setDraft] = useState("")
   const [editingId, setEditingId] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [saving, setSaving] = useState(false)
+  // Guards a slower, earlier list() response from clobbering a newer one —
+  // e.g. reopening the drawer quickly, or a save's own refresh racing a
+  // load that was already in flight.
+  const requestToken = useRef(0)
+
+  const refresh = () => {
+    const token = ++requestToken.current
+    repository
+      .list(courseId)
+      .then(all => {
+        if (token !== requestToken.current) return
+        setNotes(all.filter(n => n.lessonId === lessonId))
+      })
+      .catch(() => {
+        if (token !== requestToken.current) return
+        setError("Couldn't load your notes right now.")
+      })
+  }
 
   useEffect(() => {
-    setNotes(repository.list(courseId).filter(n => n.lessonId === lessonId))
+    refresh()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repository, courseId, lessonId])
 
-  const refresh = () => setNotes(repository.list(courseId).filter(n => n.lessonId === lessonId))
-
-  const handleSave = () => {
-    if (!draft.trim()) return
+  const handleSave = async () => {
+    if (!draft.trim() || saving) return
+    setSaving(true)
+    setError(null)
     const note: NoteRecord = {
       id: editingId ?? `note-${Date.now()}`,
       courseId,
@@ -34,10 +56,16 @@ export default function NotesPanel({ repository, courseId, moduleId, lessonId, o
       text: draft.trim(),
       updatedAt: new Date().toISOString(),
     }
-    repository.save(note)
-    setDraft("")
-    setEditingId(null)
-    refresh()
+    try {
+      await repository.save(note)
+      setDraft("")
+      setEditingId(null)
+      refresh()
+    } catch {
+      setError("Couldn't save that note — it hasn't been kept. Try again.")
+    } finally {
+      setSaving(false)
+    }
   }
 
   const handleEdit = (note: NoteRecord) => {
@@ -45,8 +73,14 @@ export default function NotesPanel({ repository, courseId, moduleId, lessonId, o
     setEditingId(note.id)
   }
 
-  const handleDelete = (id: string) => {
-    repository.delete(id)
+  const handleDelete = async (id: string) => {
+    setError(null)
+    try {
+      await repository.delete(courseId, id)
+    } catch {
+      // A note that's already gone (e.g. deleted from another tab) is not a
+      // failure worth surfacing — refresh() below will reflect reality either way.
+    }
     if (editingId === id) {
       setDraft("")
       setEditingId(null)
@@ -70,6 +104,7 @@ export default function NotesPanel({ repository, courseId, moduleId, lessonId, o
           placeholder="Write something you want to remember about this lesson..."
           className="w-full min-h-[90px] bg-black/30 text-gray-100 text-sm rounded-xl border border-white/10 p-3 outline-none resize-none placeholder-gray-600 focus:border-[#1DB584]/50"
         />
+        {error && <p className="mt-2 text-[11px] text-amber-300">{error}</p>}
         <div className="flex items-center justify-end gap-2 mt-2">
           {editingId && (
             <button
@@ -84,10 +119,10 @@ export default function NotesPanel({ repository, courseId, moduleId, lessonId, o
           )}
           <button
             onClick={handleSave}
-            disabled={!draft.trim()}
+            disabled={!draft.trim() || saving}
             className="px-4 py-1.5 rounded-lg text-xs font-bold bg-[#1DB584] hover:bg-[#159a6f] text-white disabled:opacity-40 disabled:cursor-not-allowed transition-all"
           >
-            {editingId ? "Update Note" : "Save Note"}
+            {saving ? "Saving…" : editingId ? "Update Note" : "Save Note"}
           </button>
         </div>
       </div>

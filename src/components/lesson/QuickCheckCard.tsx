@@ -1,10 +1,25 @@
 import { useState } from "react"
 import type { QuickCheckContent } from "../../learning/types"
 
+export interface QuickCheckAnswer {
+  selectedIndex: number
+  correctIndex: number
+  passed: boolean
+}
+
+interface QuickCheckCardProps {
+  quickCheck: QuickCheckContent
+  /** Called once, when the learner confirms an answer (not on every option
+   * click) — the caller decides what to do with it (e.g. record an
+   * attempt). Optional so this card works exactly as before wherever
+   * nothing needs to observe the answer. */
+  onAnswered?: (answer: QuickCheckAnswer) => void
+}
+
 /** Reusable MCQ card (PART 15 — used sparingly, at most once per checkpoint).
  * Same interaction pattern as the legacy LessonReader's inline quick check,
  * extracted so the new Lesson Workspace doesn't duplicate it. */
-export default function QuickCheckCard({ quickCheck }: { quickCheck: QuickCheckContent }) {
+export default function QuickCheckCard({ quickCheck, onAnswered }: QuickCheckCardProps) {
   const [selected, setSelected] = useState<number | null>(null)
   const [submitted, setSubmitted] = useState(false)
   const isCorrect = selected === quickCheck.correctIndex
@@ -42,7 +57,10 @@ export default function QuickCheckCard({ quickCheck }: { quickCheck: QuickCheckC
 
       {!submitted ? (
         <button
-          onClick={() => setSubmitted(true)}
+          onClick={() => {
+            setSubmitted(true)
+            if (selected !== null) onAnswered?.({ selectedIndex: selected, correctIndex: quickCheck.correctIndex, passed: isCorrect })
+          }}
           disabled={selected === null}
           className="px-5 py-2 rounded-xl font-bold text-xs bg-[#1DB584] hover:bg-[#159a6f] text-white disabled:opacity-40 disabled:cursor-not-allowed transition-all"
         >

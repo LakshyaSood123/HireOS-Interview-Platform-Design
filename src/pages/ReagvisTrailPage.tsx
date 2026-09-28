@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import TrailHUD from "../components/forest/TrailHUD"
 import BiomeTrailMap from "../components/forest/BiomeTrailMap"
 import LessonModal from "../components/forest/LessonModal"
@@ -20,16 +20,21 @@ import { useAppState } from "../state/AppStateContext"
 import { type TrailNode } from "../data/reagvisCourses"
 import { getCourseById, isCourseAvailable, getAllCheckpointsInOrder } from "../learning/courseRegistry"
 import { RoutingCodeRunner } from "../learning/services/pistonCodeRunner"
-import { LocalNotesRepository } from "../learning/services/notesRepository"
+import { LocalNotesRepository, type NotesRepository } from "../learning/services/notesRepository"
+import { ApiNotesRepository } from "../learning/services/apiNotesRepository"
 import { getUnifiedLibraryCourses } from "../learning/libraryCourseSource"
 import CmsCourseRuntime from "../components/cms/CmsCourseRuntime"
+import { useAuth } from "../auth/AuthContext"
 
-// Module-level singletons — one code runner / local notes repository for
-// the whole app, same pattern as AppStateContext's progressRepository.
+// Module-level singletons — one code runner for the whole app.
 // RoutingCodeRunner sends only the MVP-enabled activity (foundations-4) to
 // real Piston execution; every other activity still uses MockCodeRunner.
 const codeRunner = new RoutingCodeRunner()
-const notesRepository = new LocalNotesRepository()
+// One course wired to the backend notes endpoint in this phase — matches
+// AppStateContext.tsx's BACKEND_COURSE_ID. Any other course keeps using the
+// local-only repository exactly as before.
+const BACKEND_COURSE_ID = "dsa-foundations"
+const localNotesRepository = new LocalNotesRepository()
 
 interface ReagvisTrailPageProps {
   onNavigateHireOS?: (page: string) => void
@@ -69,6 +74,10 @@ export default function ReagvisTrailPage({ onNavigateHireOS }: ReagvisTrailPageP
   const codeLab = useCodeLabNavigation(reagvisView === "workspace")
   const activeLab = getConceptCodeLab(codeLab.request?.animationId)
   const unifiedLibraryCourses = getUnifiedLibraryCourses()
+
+  const { client } = useAuth()
+  const apiNotesRepository = useMemo<NotesRepository>(() => new ApiNotesRepository(client), [client])
+  const notesRepository = activeCourseId === BACKEND_COURSE_ID ? apiNotesRepository : localNotesRepository
 
   const course = getCourseById(activeCourseId)
   const viewedModule = course?.zones.flatMap(z => z.modules).find(m => m.id === viewedModuleId)

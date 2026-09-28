@@ -8,10 +8,17 @@ import TwoPointerVisual from "./TwoPointerVisual"
 import AlgorithmAnimation from "./AlgorithmAnimation"
 import CodeExampleTabs from "./CodeExampleTabs"
 import CodeWorkspace from "./CodeWorkspace"
-import QuickCheckCard from "./QuickCheckCard"
+import QuickCheckCard, { type QuickCheckAnswer } from "./QuickCheckCard"
 import NotesPanel from "./NotesPanel"
 import LessonCampBackdrop from "./camp/LessonCampBackdrop"
 import LessonQuickFeedback from "../feedback/LessonQuickFeedback"
+import { useAuth } from "../../auth/AuthContext"
+import { recordAttempt } from "../../learning/services/attemptsApi"
+import { ApiUnavailableError, SessionExpiredError } from "../../learning/services/apiClient"
+
+/** The one course wired to the backend in this phase — matches
+ * AppStateContext.tsx's BACKEND_COURSE_ID. */
+const BACKEND_COURSE_ID = "dsa-foundations"
 
 interface LessonWorkspaceProps {
   checkpoint: Checkpoint
@@ -71,6 +78,31 @@ export default function LessonWorkspace({
   const [activitySatisfied, setActivitySatisfied] = useState(false)
   const [outOfLives, setOutOfLives] = useState(false)
   const [celebrating, setCelebrating] = useState(false)
+
+  // Recording a Quick Check answer as a learner attempt — the one meaningful
+  // attempt semantic the backend's LearningAttempt model actually supports
+  // (see attemptsApi.ts). Never in preview: previewing is inspection only,
+  // exactly like it never touches completion/XP. A failure here is logged
+  // and otherwise invisible — the Quick Check UI, and the rest of the
+  // checkpoint, behave exactly as they did before this existed.
+  const { client, reportSessionExpired } = useAuth()
+  const handleQuickCheckAnswered = (answer: QuickCheckAnswer) => {
+    if (isPreview || courseId !== BACKEND_COURSE_ID) return
+    recordAttempt(client, {
+      courseId,
+      checkpointId: checkpoint.id,
+      activityId: `${checkpoint.id}-quick-check`,
+      attemptType: "quick-check",
+      passed: answer.passed,
+      payload: { selectedIndex: answer.selectedIndex, correctIndex: answer.correctIndex },
+    }).catch(error => {
+      if (error instanceof SessionExpiredError) {
+        reportSessionExpired()
+        return
+      }
+      if (!(error instanceof ApiUnavailableError)) console.error("[reagvis] quick check attempt did not reach the backend", error)
+    })
+  }
 
   if (!content) {
     return (
@@ -357,7 +389,7 @@ export default function LessonWorkspace({
               <div className="space-y-4 min-w-0 w-full max-w-full lg:col-span-2 xl:col-span-1">
                 {content.quickCheck ? (
                   <div className="min-w-0">
-                    <QuickCheckCard quickCheck={content.quickCheck} />
+                    <QuickCheckCard quickCheck={content.quickCheck} onAnswered={handleQuickCheckAnswered} />
                     <button
                       onClick={() => setActivitySatisfied(true)}
                       className="mt-2.5 text-[11px] text-gray-500 hover:text-gray-300 underline underline-offset-2 block text-center w-full cursor-pointer"
@@ -469,7 +501,7 @@ export default function LessonWorkspace({
                 {/* Quick Check MCQ Card */}
                 {content.quickCheck && (
                   <div className="min-w-0">
-                    <QuickCheckCard quickCheck={content.quickCheck} />
+                    <QuickCheckCard quickCheck={content.quickCheck} onAnswered={handleQuickCheckAnswered} />
                     <button
                       onClick={() => setActivitySatisfied(true)}
                       className="mt-2.5 text-[11px] text-gray-500 hover:text-gray-300 underline underline-offset-2 block text-center w-full cursor-pointer"
