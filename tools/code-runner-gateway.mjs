@@ -2,12 +2,18 @@
 // Local execution gateway: Browser -> (Vite proxy) -> this gateway -> self-hosted
 // Piston (127.0.0.1:2000). Node built-ins + native fetch only, no npm deps.
 //
-// Scope: real execution is allowed ONLY for the "Family A" activity ids in
-// ALLOWED_ACTIVITY_IDS below (scalar/array-in, scalar/bool-out — no lists,
-// trees, tries, or graph objects). Every other activity/language is rejected
-// as unsupported so the frontend falls back to MockCodeRunner. This process
+// Scope: real execution is allowed ONLY for the activity ids in
+// ALLOWED_ACTIVITY_IDS below. Every other activity/language is rejected as
+// unsupported so the frontend falls back to MockCodeRunner. This process
 // owns all Piston resource/timeout/version policy — the browser can never
 // influence it, and never sees Piston's management/package endpoints.
+//
+// Two families:
+//  - Family A: scalar/array-in, scalar-out (int/long/bool). The original 14.
+//  - Family B: adds int[]/int[][] RETURN types (and int[][] params) — still
+//    no linked lists, trees, tries or graph objects. Everything in Family B
+//    was verified to have genuine, curriculum-authored test fixtures (not
+//    the generic-seed placeholder block) before being added here.
 
 import http from "node:http"
 
@@ -38,6 +44,11 @@ const ALLOWED_ACTIVITY_IDS = new Set([
   "binary-search-5",
   "recursion-4",
   "recursion-5",
+  // Family B — array-returning activities, real curriculum fixtures.
+  "arrays-strings-4",
+  "hashing-5",
+  "intervals-3",
+  "intervals-4",
 ])
 const ALLOWED_LANGUAGES = new Set(["python", "cpp", "java"])
 const MAX_SOURCE_BYTES = 50 * 1024
@@ -304,6 +315,84 @@ const ACTIVITIES = {
       { id: "h3", description: "Both zero", inputDisplay: "base=0, exp=0", expectedDisplay: "1", args: [0, 0], expectedValue: 1 },
     ],
   },
+
+  // ── Family B — array-returning activities ──────────────────────────────
+  // src/learning/content/arraysStringsModule.ts — codeLab. Same int-return
+  // shape as Family A (just documented here as part of the Family B batch
+  // it was migrated alongside); the mutated array's own contents are not
+  // checked, matching the curriculum's own test fixtures (they only assert
+  // the returned count).
+  "arrays-strings-4": {
+    functionName: "removeDuplicates",
+    paramTypes: ["int[]"],
+    returnType: "int",
+    visible: [
+      { id: "v1", description: "Some duplicates", inputDisplay: "[1,1,2]", expectedDisplay: "2", args: [[1, 1, 2]], expectedValue: 2 },
+      { id: "v2", description: "Many duplicates", inputDisplay: "[0,0,1,1,1,2,2,3,3,4]", expectedDisplay: "5", args: [[0, 0, 1, 1, 1, 2, 2, 3, 3, 4]], expectedValue: 5 },
+      { id: "v3", description: "No duplicates", inputDisplay: "[1,2,3]", expectedDisplay: "3", args: [[1, 2, 3]], expectedValue: 3 },
+    ],
+    hidden: [
+      { id: "h1", description: "All identical", inputDisplay: "[2,2,2,2]", expectedDisplay: "1", args: [[2, 2, 2, 2]], expectedValue: 1 },
+      { id: "h2", description: "Single element", inputDisplay: "[5]", expectedDisplay: "1", args: [[5]], expectedValue: 1 },
+      { id: "h3", description: "Empty array", inputDisplay: "[]", expectedDisplay: "0", args: [[]], expectedValue: 0 },
+    ],
+  },
+  // src/learning/content/hashingModule.ts — mastery
+  "hashing-5": {
+    functionName: "twoSum",
+    paramTypes: ["int[]", "int"],
+    returnType: "int[]",
+    visible: [
+      { id: "v1", description: "Standard case", inputDisplay: "nums=[2,7,11,15], target=9", expectedDisplay: "[0,1]", args: [[2, 7, 11, 15], 9], expectedValue: [0, 1] },
+      { id: "v2", description: "Match not adjacent", inputDisplay: "nums=[3,2,4], target=6", expectedDisplay: "[1,2]", args: [[3, 2, 4], 6], expectedValue: [1, 2] },
+      { id: "v3", description: "Duplicate values", inputDisplay: "nums=[3,3], target=6", expectedDisplay: "[0,1]", args: [[3, 3], 6], expectedValue: [0, 1] },
+    ],
+    hidden: [
+      { id: "h1", description: "Negative numbers", inputDisplay: "nums=[-1,-2,-3,-4,-5], target=-8", expectedDisplay: "[2,4]", args: [[-1, -2, -3, -4, -5], -8], expectedValue: [2, 4] },
+      { id: "h2", description: "Target at the start", inputDisplay: "nums=[5,1,2], target=6", expectedDisplay: "[0,1]", args: [[5, 1, 2], 6], expectedValue: [0, 1] },
+      { id: "h3", description: "Larger list", inputDisplay: "nums=[1,2,3,4,5,6], target=11", expectedDisplay: "[4,5]", args: [[1, 2, 3, 4, 5, 6], 11], expectedValue: [4, 5] },
+    ],
+  },
+  // src/learning/content/intervalsModule.ts — codeLab
+  "intervals-3": {
+    functionName: "mergeIntervals",
+    paramTypes: ["int[][]"],
+    returnType: "int[][]",
+    visible: [
+      { id: "v1", description: "Two overlapping pairs", inputDisplay: "[[1,3],[2,6],[8,10],[15,18]]", expectedDisplay: "[[1,6],[8,10],[15,18]]", args: [[[1, 3], [2, 6], [8, 10], [15, 18]]], expectedValue: [[1, 6], [8, 10], [15, 18]] },
+      { id: "v2", description: "Adjacent, touching intervals", inputDisplay: "[[1,4],[4,5]]", expectedDisplay: "[[1,5]]", args: [[[1, 4], [4, 5]]], expectedValue: [[1, 5]] },
+      { id: "v3", description: "No overlaps", inputDisplay: "[[1,2],[3,4]]", expectedDisplay: "[[1,2],[3,4]]", args: [[[1, 2], [3, 4]]], expectedValue: [[1, 2], [3, 4]] },
+    ],
+    hidden: [
+      { id: "h1", description: "Unsorted input", inputDisplay: "[[5,6],[1,2],[3,4]]", expectedDisplay: "[[1,2],[3,4],[5,6]]", args: [[[5, 6], [1, 2], [3, 4]]], expectedValue: [[1, 2], [3, 4], [5, 6]] },
+      { id: "h2", description: "Fully nested interval", inputDisplay: "[[1,10],[2,3]]", expectedDisplay: "[[1,10]]", args: [[[1, 10], [2, 3]]], expectedValue: [[1, 10]] },
+      { id: "h3", description: "Single interval", inputDisplay: "[[1,5]]", expectedDisplay: "[[1,5]]", args: [[[1, 5]]], expectedValue: [[1, 5]] },
+      // Added for real-Piston grading (not in the curriculum's own hiddenTests
+      // display data): the lesson's own overlap rule is a.start <= b.end AND
+      // b.start <= a.end (intervals-2's theory; also tested by the Module
+      // Mastery quiz's intervals-q6), so touching endpoints must merge. The
+      // three curriculum-authored hidden cases above don't exercise this —
+      // a `<` vs `<=` bug at the merge boundary passed Submit grading
+      // against them alone (see the migration report's negative-test QA).
+      { id: "h4", description: "Touching endpoints merge", inputDisplay: "[[1,4],[4,5]]", expectedDisplay: "[[1,5]]", args: [[[1, 4], [4, 5]]], expectedValue: [[1, 5]] },
+    ],
+  },
+  // src/learning/content/intervalsModule.ts — mastery
+  "intervals-4": {
+    functionName: "insertInterval",
+    paramTypes: ["int[][]", "int[]"],
+    returnType: "int[][]",
+    visible: [
+      { id: "v1", description: "Overlaps one interval", inputDisplay: "intervals=[[1,3],[6,9]], new=[2,5]", expectedDisplay: "[[1,5],[6,9]]", args: [[[1, 3], [6, 9]], [2, 5]], expectedValue: [[1, 5], [6, 9]] },
+      { id: "v2", description: "Overlaps several intervals", inputDisplay: "intervals=[[1,2],[3,5],[6,7],[8,10],[12,16]], new=[4,8]", expectedDisplay: "[[1,2],[3,10],[12,16]]", args: [[[1, 2], [3, 5], [6, 7], [8, 10], [12, 16]], [4, 8]], expectedValue: [[1, 2], [3, 10], [12, 16]] },
+      { id: "v3", description: "No overlap, inserted between", inputDisplay: "intervals=[[1,2],[5,6]], new=[3,4]", expectedDisplay: "[[1,2],[3,4],[5,6]]", args: [[[1, 2], [5, 6]], [3, 4]], expectedValue: [[1, 2], [3, 4], [5, 6]] },
+    ],
+    hidden: [
+      { id: "h1", description: "Empty interval list", inputDisplay: "intervals=[], new=[5,7]", expectedDisplay: "[[5,7]]", args: [[], [5, 7]], expectedValue: [[5, 7]] },
+      { id: "h2", description: "New interval before all others", inputDisplay: "intervals=[[3,5],[6,7]], new=[1,2]", expectedDisplay: "[[1,2],[3,5],[6,7]]", args: [[[3, 5], [6, 7]], [1, 2]], expectedValue: [[1, 2], [3, 5], [6, 7]] },
+      { id: "h3", description: "New interval covers everything", inputDisplay: "intervals=[[2,3],[4,5]], new=[1,6]", expectedDisplay: "[[1,6]]", args: [[[2, 3], [4, 5]], [1, 6]], expectedValue: [[1, 6]] },
+    ],
+  },
 }
 
 let runtimeCache = null
@@ -329,6 +418,19 @@ async function isRuntimeInstalled(language, version) {
   }
 }
 
+function safeJsonParse(text) {
+  try {
+    return JSON.parse(text)
+  } catch {
+    return undefined
+  }
+}
+
+function arraysDeepEqual(a, b) {
+  if (!Array.isArray(a) || !Array.isArray(b) || a.length !== b.length) return false
+  return a.every((v, i) => (Array.isArray(v) ? arraysDeepEqual(v, b[i]) : v === b[i]))
+}
+
 function truncate(text, max = 4000) {
   if (!text) return ""
   return text.length > max ? text.slice(0, max) + "\n... (truncated)" : text
@@ -347,39 +449,60 @@ function stringLiteral(value) {
 function pyArgExpr(type, value) {
   if (type === "int") return String(value)
   if (type === "int[]") return `[${value.join(", ")}]`
+  if (type === "int[][]") return `[${value.map(row => `[${row.join(", ")}]`).join(", ")}]`
   if (type === "string") return stringLiteral(value)
-  throw new Error(`unsupported Family-A paramType for python: ${type}`)
+  throw new Error(`unsupported paramType for python: ${type}`)
 }
 
 function cppDecl(type, varName, value) {
   if (type === "int") return `int ${varName} = ${value};`
   if (type === "int[]") return `vector<int> ${varName} = {${value.join(", ")}};`
+  if (type === "int[][]") return `vector<vector<int>> ${varName} = {${value.map(row => `{${row.join(", ")}}`).join(", ")}};`
   if (type === "string") return `string ${varName} = ${stringLiteral(value)};`
-  throw new Error(`unsupported Family-A paramType for cpp: ${type}`)
+  throw new Error(`unsupported paramType for cpp: ${type}`)
 }
 
 function javaDecl(type, varName, value) {
   if (type === "int") return `int ${varName} = ${value};`
   if (type === "int[]") return `int[] ${varName} = {${value.join(", ")}};`
+  if (type === "int[][]") return `int[][] ${varName} = {${value.map(row => `{${row.join(", ")}}`).join(", ")}};`
   if (type === "string") return `String ${varName} = ${stringLiteral(value)};`
-  throw new Error(`unsupported Family-A paramType for java: ${type}`)
+  throw new Error(`unsupported paramType for java: ${type}`)
+}
+
+/** True for the two Family B array return types. */
+function isArrayReturnType(returnType) {
+  return returnType === "int[]" || returnType === "int[][]"
 }
 
 /** One generic scalar/bool-return harness path for all Family A activities
  * (int[]/int/string params in any combination, int/long/bool return) — the
  * gateway knows functionName/paramTypes/returnType per activity; the
  * browser only ever sends activityId/language/source/mode. */
+// Canonical, JSON-parseable array formatting ("[1,2]", "[[1,2],[3,4]]" — no
+// spaces) so the gateway can compare a Family B result by parsing it back
+// with JSON.parse and deep-equal, rather than by fragile string matching.
+const PY_FORMATTER =
+  "def __reagvis_fmt(v):\n    if isinstance(v, (list, tuple)):\n        return \"[\" + \",\".join(__reagvis_fmt(x) for x in v) + \"]\"\n    return str(v)\n\n"
+
 function buildPythonSource(activity, learnerCode, cases) {
   const driverLines = cases
     .map((c, i) => {
       const argExprs = activity.paramTypes.map((t, idx) => pyArgExpr(t, c.args[idx])).join(", ")
       const call = `${activity.functionName}(${argExprs})`
-      const resultExpr = activity.returnType === "bool" ? `("true" if (${call}) else "false")` : `str(${call})`
+      const resultExpr = activity.returnType === "bool" ? `("true" if (${call}) else "false")` : isArrayReturnType(activity.returnType) ? `__reagvis_fmt(${call})` : `str(${call})`
       return `    try:\n        print("${CASE_MARKER}${i}\\t" + ${resultExpr})\n    except Exception as __reagvis_e:\n        print("__REAGVIS_ERROR__${i}\\t" + str(__reagvis_e))`
     })
     .join("\n")
-  return `${learnerCode.replace(/\s+$/, "")}\n\ndef __reagvis_run_cases():\n${driverLines}\n\n__reagvis_run_cases()\n`
+  const formatter = isArrayReturnType(activity.returnType) ? PY_FORMATTER : ""
+  return `${formatter}${learnerCode.replace(/\s+$/, "")}\n\ndef __reagvis_run_cases():\n${driverLines}\n\n__reagvis_run_cases()\n`
 }
+
+// Same canonical, no-space bracket format as Python's — see PY_FORMATTER.
+const CPP_FORMATTER =
+  "string __reagvis_fmt(int v) { return to_string(v); }\n" +
+  "string __reagvis_fmt(const vector<int>& v) {\n    string out = \"[\";\n    for (size_t i = 0; i < v.size(); i++) { if (i) out += \",\"; out += to_string(v[i]); }\n    return out + \"]\";\n}\n" +
+  "string __reagvis_fmt(const vector<vector<int>>& v) {\n    string out = \"[\";\n    for (size_t i = 0; i < v.size(); i++) { if (i) out += \",\"; out += __reagvis_fmt(v[i]); }\n    return out + \"]\";\n}\n\n"
 
 function buildCppSource(activity, learnerCode, cases) {
   const caseBlocks = cases
@@ -387,7 +510,8 @@ function buildCppSource(activity, learnerCode, cases) {
       const paramNames = activity.paramTypes.map((_, idx) => `p${idx}`)
       const decls = activity.paramTypes.map((t, idx) => "        " + cppDecl(t, paramNames[idx], c.args[idx])).join("\n")
       const call = `${activity.functionName}(${paramNames.join(", ")})`
-      return `    {\n${decls}\n        cout << "${CASE_MARKER}${i}" << "\\t" << (${call}) << "\\n";\n    }`
+      const printExpr = isArrayReturnType(activity.returnType) ? `__reagvis_fmt(${call})` : `(${call})`
+      return `    {\n${decls}\n        cout << "${CASE_MARKER}${i}" << "\\t" << ${printExpr} << "\\n";\n    }`
     })
     .join("\n")
   // Targeted includes rather than <bits/stdc++.h>: the umbrella header measured
@@ -404,8 +528,19 @@ function buildCppSource(activity, learnerCode, cases) {
   // boolalpha prints "true"/"false" instead of 1/0 — set once, persists for
   // the whole stream regardless of the per-case { } scoping below.
   const boolalphaLine = activity.returnType === "bool" ? "    cout << boolalpha;\n" : ""
-  return `${includes}${learnerCode.trim()}\n\nint main() {\n${boolalphaLine}${caseBlocks}\n    return 0;\n}\n`
+  const formatter = isArrayReturnType(activity.returnType) ? CPP_FORMATTER : ""
+  return `${includes}${formatter}${learnerCode.trim()}\n\nint main() {\n${boolalphaLine}${caseBlocks}\n    return 0;\n}\n`
 }
+
+// Same canonical, no-space bracket format as Python's/C++'s. Three overloads
+// because the existing curriculum demoSolutions for this shape are not
+// consistent about int[][] vs List<int[]> (both are valid Java return types
+// for the same starter contract) — resolving the right overload at compile
+// time means neither has to be rewritten to migrate.
+const JAVA_FORMATTER =
+  "static String __reagvisFmt(int[] v) {\n        StringBuilder sb = new StringBuilder(\"[\");\n        for (int i = 0; i < v.length; i++) { if (i > 0) sb.append(\",\"); sb.append(v[i]); }\n        return sb.append(\"]\").toString();\n    }\n" +
+  "    static String __reagvisFmt(int[][] v) {\n        StringBuilder sb = new StringBuilder(\"[\");\n        for (int i = 0; i < v.length; i++) { if (i > 0) sb.append(\",\"); sb.append(__reagvisFmt(v[i])); }\n        return sb.append(\"]\").toString();\n    }\n" +
+  "    static String __reagvisFmt(List<int[]> v) {\n        StringBuilder sb = new StringBuilder(\"[\");\n        for (int i = 0; i < v.size(); i++) { if (i > 0) sb.append(\",\"); sb.append(__reagvisFmt(v.get(i))); }\n        return sb.append(\"]\").toString();\n    }\n"
 
 function buildJavaSource(activity, learnerCode, cases) {
   const caseBlocks = cases
@@ -415,14 +550,18 @@ function buildJavaSource(activity, learnerCode, cases) {
       const call = `${activity.functionName}(${paramNames.join(", ")})`
       // Java's string concatenation calls String.valueOf on a boolean/long/int
       // result automatically (lowercase true/false for booleans) — no extra
-      // formatting needed.
-      return `        {\n${decls}\n            System.out.println("${CASE_MARKER}${i}" + "\\t" + (${call}));\n        }`
+      // formatting needed for scalars. Array/List returns go through the
+      // overloaded formatter above so the printed shape matches Python/C++.
+      const printExpr = isArrayReturnType(activity.returnType) ? `__reagvisFmt(${call})` : `(${call})`
+      return `        {\n${decls}\n            System.out.println("${CASE_MARKER}${i}" + "\\t" + ${printExpr});\n        }`
     })
     .join("\n")
+  const formatter = isArrayReturnType(activity.returnType) ? `    ${JAVA_FORMATTER}\n` : ""
   return [
     "import java.util.*;",
     "",
     "public class Main {",
+    formatter.trimEnd(),
     `    static ${learnerCode.trim()}`,
     "",
     "    public static void main(String[] args) {",
@@ -550,11 +689,18 @@ async function runAgainstFixtures(activityId, language, code, testSet) {
     // Boolean results compare as normalized "true"/"false" text (Python's
     // driver already emits lowercase — see buildPythonSource — and C++/Java
     // natively print lowercase true/false); numeric (int/long) results
-    // compare as JS numbers, never as fragile formatted-string equality.
+    // compare as JS numbers; array results (Family B) are parsed back with
+    // JSON.parse (the three formatters above all emit plain, no-space,
+    // JSON-compatible brackets) and deep-equal compared, order-sensitive —
+    // never as fragile formatted-string equality.
     const passed =
       !!p &&
       p.ok &&
-      (activity.returnType === "bool" ? p.value === (c.expectedValue ? "true" : "false") : Number(p.value) === c.expectedValue)
+      (activity.returnType === "bool"
+        ? p.value === (c.expectedValue ? "true" : "false")
+        : isArrayReturnType(activity.returnType)
+          ? arraysDeepEqual(safeJsonParse(p.value), c.expectedValue)
+          : Number(p.value) === c.expectedValue)
     return {
       id: c.id,
       description: c.description,
