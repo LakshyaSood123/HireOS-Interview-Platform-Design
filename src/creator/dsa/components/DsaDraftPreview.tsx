@@ -23,7 +23,7 @@
 // heard of). This lightweight list is the "appropriate DSA entry" for a
 // draft that doesn't yet have scenic coordinates.
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import type { CreatorCourse } from "../../types"
 import type { PreviewTarget } from "./DsaEditorShell"
 import { cmsDsaCourseToLearnerCourse } from "../dsaCmsAdapter"
@@ -32,6 +32,9 @@ import { LocalNotesRepository } from "../../../learning/services/notesRepository
 import ModuleRoadmap from "../../../components/roadmap/ModuleRoadmap"
 import LessonWorkspace from "../../../components/lesson/LessonWorkspace"
 import type { ProgressState } from "../../../learning/types"
+import { useAuth } from "../../../auth/AuthContext"
+import { getAnimationPackageRevision, type CmsAnimationPackage } from "../animationPackageClient"
+import CustomAnimationHost, { type CustomAnimationHostHandle } from "./CustomAnimationHost"
 
 const previewRunner = new DisabledCodeRunner()
 const previewNotesRepository = new LocalNotesRepository()
@@ -44,6 +47,41 @@ interface DsaDraftPreviewProps {
 
 export default function DsaDraftPreview({ course, target, onTargetChange }: DsaDraftPreviewProps) {
   const [error, setError] = useState<string | null>(null)
+  const { client } = useAuth()
+  const [customPkg, setCustomPkg] = useState<CmsAnimationPackage | null>(null)
+  // Creator Studio's simple Desktop/Tablet preview toggle (Part 2 of the
+  // layout task) — not real device emulation, just a width-constrained
+  // wrapper around the same LessonWorkspace render path, using the
+  // existing preview shell rather than a second tool. ~1440 / ~820 per the
+  // task's own suggested widths.
+  const [previewWidth, setPreviewWidth] = useState<"desktop" | "tablet">("desktop")
+
+  // The adapter (dsaCmsAdapter.ts) deliberately drops "custom" animation
+  // sources when building the learner-shape Checkpoint for LessonWorkspace
+  // (there's no AlgorithmAnimationId for uploaded HTML) — find the RAW CMS
+  // checkpoint to check for one, and render it via CustomAnimationHost
+  // as a panel above LessonWorkspace rather than inside it.
+  const rawCheckpoint = course.dsaZones
+    ?.find(z => z.id === target.zoneId)
+    ?.modules.find(m => m.id === target.moduleId)
+    ?.checkpoints.find(cp => cp.id === target.checkpointId)
+  const customAnimation = rawCheckpoint?.workspace?.animation?.kind === "custom" ? rawCheckpoint.workspace.animation : null
+  const cmsTraceSteps = rawCheckpoint?.workspace?.traceSource?.kind === "cms" ? (rawCheckpoint.workspace.traceSource.steps ?? []) : []
+  const [currentStepId, setCurrentStepId] = useState<string | null>(null)
+  const activeTraceStep = currentStepId ? cmsTraceSteps.find(s => s.animationEvent === currentStepId) : null
+  const animationHostRef = useRef<CustomAnimationHostHandle>(null)
+
+  useEffect(() => {
+    setCustomPkg(null)
+    if (!customAnimation) return
+    let cancelled = false
+    getAnimationPackageRevision(client, customAnimation.packageId, customAnimation.revisionId)
+      .then(pkg => !cancelled && setCustomPkg(pkg))
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [client, customAnimation?.packageId, customAnimation?.revisionId])
 
   let learnerCourse
   try {
@@ -76,6 +114,64 @@ export default function DsaDraftPreview({ course, target, onTargetChange }: DsaD
     return (
       <div className="relative">
         <PreviewBadge />
+        <div className="sticky top-[41px] z-20 bg-[#071A14]/95 backdrop-blur border-b border-white/10 px-6 py-2 flex items-center justify-center gap-2">
+          {(["desktop", "tablet"] as const).map(w => (
+            <button
+              key={w}
+              onClick={() => setPreviewWidth(w)}
+              className={`px-3 py-1 rounded-lg text-[10.5px] font-bold uppercase tracking-wide cursor-pointer transition-all ${
+                previewWidth === w ? "bg-[#1DB584] text-white" : "bg-white/5 text-gray-400 hover:bg-white/10 border border-white/10"
+              }`}
+            >
+              {w === "desktop" ? "Desktop (~1440)" : "Tablet / Narrow (~820)"}
+            </button>
+          ))}
+        </div>
+        <div style={previewWidth === "tablet" ? { width: 820, margin: "0 auto" } : undefined}>
+        {customAnimation && (
+          <div className="max-w-3xl mx-auto px-6 pt-6">
+            <div className="rounded-2xl border border-[#38BDF8]/30 bg-[#0F2A20] p-4">
+              <p className="text-[10.5px] font-black uppercase tracking-wider text-[#7DD3FC] mb-3">
+                Custom HTML Animation Preview ({customAnimation.revisionId === "draft" ? "editable draft" : `frozen ${customAnimation.revisionId}`})
+              </p>
+              {customPkg ? (
+                <CustomAnimationHost ref={animationHostRef} pkg={customPkg} bridgeMode={customAnimation.bridgeMode} onStepChanged={setCurrentStepId} />
+              ) : (
+                <p className="text-xs text-gray-500">Loading animation package…</p>
+              )}
+              {customAnimation.bridgeMode === "synchronized" && (
+                <div className="mt-3 pt-3 border-t border-white/10">
+                  <p className="text-[10.5px] font-black uppercase tracking-wider text-gray-400 mb-1.5">Code Trace sync</p>
+                  {activeTraceStep ? (
+                    <div className="rounded-lg bg-black/25 p-3">
+                      <p className="text-xs font-bold text-white mb-1">{activeTraceStep.label || activeTraceStep.stepId}</p>
+                      <pre className="text-[11px] text-gray-300 font-mono whitespace-pre-wrap">{activeTraceStep.pseudocode}</pre>
+                    </div>
+                  ) : (
+                    <p className="text-[10.5px] text-gray-500">{currentStepId ? `No trace step maps to animation event "${currentStepId}".` : "Waiting for the animation to report a step…"}</p>
+                  )}
+                  {cmsTraceSteps.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 mt-2">
+                      {cmsTraceSteps
+                        .filter(s => s.animationEvent)
+                        .map(s => (
+                          <button
+                            key={s.stepId}
+                            onClick={() => animationHostRef.current?.gotoStep(s.animationEvent!)}
+                            className={`px-2.5 py-1 rounded-lg text-[10.5px] font-bold cursor-pointer transition-all ${
+                              s.animationEvent === currentStepId ? "bg-[#38BDF8]/20 text-[#7DD3FC] border border-[#38BDF8]/40" : "bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10"
+                            }`}
+                          >
+                            {s.label || s.stepId}
+                          </button>
+                        ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
         <LessonWorkspace
           key={checkpoint.id}
           checkpoint={checkpoint}
@@ -87,6 +183,7 @@ export default function DsaDraftPreview({ course, target, onTargetChange }: DsaD
           courseId={`${learnerCourse.id}__draft-preview`}
           moduleId={module.id}
           isPreview
+          forceNarrow={previewWidth === "tablet"}
           onFailedSubmit={() => {}}
           onComplete={() => false}
           onContinue={() => {
@@ -96,6 +193,7 @@ export default function DsaDraftPreview({ course, target, onTargetChange }: DsaD
           }}
           onBack={() => onTargetChange({ zoneId: zone!.id, moduleId: module.id, checkpointId: null })}
         />
+        </div>
       </div>
     )
   }

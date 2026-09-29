@@ -239,10 +239,17 @@ async function main(): Promise<void> {
     return;
   }
 
-  const actorId = await resolveActorId(adminEmail);
-
+  // Connect BEFORE resolveActorId's own User.findOne() — it was previously
+  // called first, so every real (non-dry-run) invocation failed with
+  // "Operation `users.findOne()` buffering timed out" (Mongoose queues an
+  // operation issued before the connection opens, and only times out
+  // instead of erroring immediately). Found while wiring Creator Studio to
+  // this same bootstrap path; smallest fix is this reordering — nothing
+  // about resolveActorId's own logic changed.
   await mongoose.connect(env.MONGO_URI, { dbName: env.MONGO_DB_NAME, autoIndex: false });
   await Promise.all([CmsCourse.createIndexes(), CmsCourseVersion.createIndexes(), CurriculumSnapshot.createIndexes()]);
+
+  const actorId = await resolveActorId(adminEmail);
 
   const result = await bootstrapCourse({
     courseId: COURSE_ID,

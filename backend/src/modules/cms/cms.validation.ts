@@ -9,6 +9,7 @@
 
 import { isKnownAnimationId } from "./animationIds.js";
 import { isApprovedPistonHarnessKey } from "./pistonHarnessKeys.js";
+import { normalizeAnimationSource } from "./cms.types.js";
 import type { CmsVersionContent } from "./cms.types.js";
 
 export interface CmsValidationIssue {
@@ -77,8 +78,42 @@ export function validateCmsVersionContent(content: CmsVersionContent): CmsValida
           const ws = checkpoint.workspace;
           if (!ws.title.trim()) issues.push({ entityType: "checkpoint", entityId: checkpoint.id, field: "workspace.title", message: "Workspace title is required." });
 
-          if (ws.animation && !isKnownAnimationId(ws.animation.id)) {
-            issues.push({ entityType: "checkpoint", entityId: checkpoint.id, field: "workspace.animation.id", message: `Unknown animation id "${ws.animation.id}".` });
+          if (ws.animation) {
+            const anim = normalizeAnimationSource(ws.animation);
+            if (!anim) {
+              issues.push({ entityType: "checkpoint", entityId: checkpoint.id, field: "workspace.animation", message: "Animation source is malformed." });
+            } else if (anim.kind === "registered") {
+              if (!isKnownAnimationId(anim.id)) {
+                issues.push({ entityType: "checkpoint", entityId: checkpoint.id, field: "workspace.animation.id", message: `Unknown animation id "${anim.id}".` });
+              }
+            } else {
+              // Custom package: structural checks only here — actual
+              // existence of `packageId`/`revisionId` in Mongo is enforced
+              // at publish time by `freezePackageRevisionIfNeeded`
+              // (cms.service.ts), which throws a clear not-found error
+              // rather than duplicating a DB read inside this otherwise
+              // synchronous, DB-free validation pass.
+              if (!anim.packageId.trim()) {
+                issues.push({ entityType: "checkpoint", entityId: checkpoint.id, field: "workspace.animation.packageId", message: "Custom animation is missing a packageId." });
+              }
+              if (!anim.revisionId.trim()) {
+                issues.push({ entityType: "checkpoint", entityId: checkpoint.id, field: "workspace.animation.revisionId", message: "Custom animation is missing a revisionId." });
+              }
+            }
+          }
+
+          if (ws.traceSource?.kind === "cms") {
+            const steps = ws.traceSource.steps ?? [];
+            const stepIds = new Set<string>();
+            for (const step of steps) {
+              if (stepIds.has(step.stepId)) {
+                issues.push({ entityType: "checkpoint", entityId: checkpoint.id, field: "workspace.traceSource.steps", message: `Duplicate trace step id "${step.stepId}".` });
+              }
+              stepIds.add(step.stepId);
+              if (!step.pseudocode.trim()) {
+                issues.push({ entityType: "checkpoint", entityId: checkpoint.id, field: "workspace.traceSource.steps", message: `Trace step "${step.stepId}" is missing required pseudocode.` });
+              }
+            }
           }
 
           if (ws.quickCheck) {
@@ -114,6 +149,29 @@ export function validateCmsVersionContent(content: CmsVersionContent): CmsValida
         for (const prereqId of checkpoint.prerequisites) {
           if (prereqId === checkpoint.id) {
             issues.push({ entityType: "checkpoint", entityId: checkpoint.id, field: "prerequisites", message: "A checkpoint cannot be its own prerequisite." });
+          }
+        }
+
+        if (checkpoint.layout) {
+          if (checkpoint.layout.version !== 1) {
+            issues.push({ entityType: "checkpoint", entityId: checkpoint.id, field: "layout.version", message: `Unknown layout version ${checkpoint.layout.version}.` });
+          }
+          const seenBlockTypes = new Set<string>();
+          for (const row of checkpoint.layout.rows) {
+            let rowSpan = 0;
+            for (const block of row.blocks) {
+              if (seenBlockTypes.has(block.type)) {
+                issues.push({ entityType: "checkpoint", entityId: checkpoint.id, field: "layout", message: `Block type "${block.type}" appears more than once in the layout.` });
+              }
+              seenBlockTypes.add(block.type);
+              if (block.span < 1 || block.span > 12) {
+                issues.push({ entityType: "checkpoint", entityId: checkpoint.id, field: "layout", message: `Block "${block.type}" has an invalid span ${block.span} (must be 1-12).` });
+              }
+              rowSpan += block.hidden ? 0 : block.span;
+            }
+            if (rowSpan > 12) {
+              issues.push({ entityType: "checkpoint", entityId: checkpoint.id, field: "layout", message: `A layout row's visible block spans sum to ${rowSpan}, exceeding the 12-column grid.` });
+            }
           }
         }
       }

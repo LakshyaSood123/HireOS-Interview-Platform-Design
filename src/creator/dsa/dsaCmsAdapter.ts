@@ -12,7 +12,7 @@
 // the importer turned position into `order` on the way in — so id/order
 // pairs round-trip losslessly even if a CMS edit reorders entries.
 
-import type { Course, Zone, Module, Checkpoint } from "../../learning/types"
+import type { Course, Zone, Module, Checkpoint, AlgorithmAnimationId } from "../../learning/types"
 import type { CreatorCourse } from "../types"
 import type { CmsDsaZone, CmsDsaModule, CmsDsaCheckpoint } from "./dsaCmsTypes"
 
@@ -43,7 +43,24 @@ function adaptCheckpoint(cp: CmsDsaCheckpoint): Checkpoint {
   if (cp.masteryXp !== undefined) checkpoint.masteryXp = cp.masteryXp
   if (cp.legacyNodeId !== undefined) checkpoint.legacyNodeId = cp.legacyNodeId
   if (cp.lesson !== undefined) checkpoint.lesson = cp.lesson
-  if (cp.workspace !== undefined) checkpoint.workspace = cp.workspace
+  if (cp.layout !== undefined) checkpoint.layout = cp.layout
+  if (cp.workspace !== undefined) {
+    // A "custom" animation source has no learner-runtime equivalent — there
+    // is no `AlgorithmAnimationId` for uploaded HTML, so it can't round-trip
+    // through `AlgorithmAnimationSpec`. It's dropped here (not rendered via
+    // this adapted-Checkpoint path); DsaDraftPreview.tsx renders custom
+    // animations itself, directly from the CMS checkpoint, via
+    // CustomAnimationHost — see its own animation-source branch. The static
+    // importer (dsaImporter.ts) never PRODUCES a "custom" source, so this
+    // never affects the lossless round-trip verifier's actual test domain.
+    const { animation, ...rest } = cp.workspace
+    // The cast to `AlgorithmAnimationId` mirrors what this whole adapter
+    // already does implicitly for every other id-like field (ids are
+    // copied verbatim, never re-validated here) — actual id validity is
+    // checked separately by dsaDraftValidation.ts's registered-animation-id
+    // check, not by this adapter.
+    checkpoint.workspace = { ...rest, animation: animation?.kind === "registered" ? { id: animation.id as AlgorithmAnimationId, title: animation.title } : undefined }
+  }
   if (cp.questionIds !== undefined) checkpoint.questionIds = [...cp.questionIds]
   return checkpoint
 }

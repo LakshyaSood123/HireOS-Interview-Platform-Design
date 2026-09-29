@@ -76,9 +76,12 @@ export function validateDsaDraft(course: CreatorCourse): DsaValidationIssue[] {
             issues.push({ severity: "error", message: `Checkpoint "${checkpoint.title}" workspace content is missing a title.`, ...loc })
           }
 
-          const animationId = checkpoint.workspace.animation?.id
-          if (animationId && !VALID_ANIMATION_IDS.has(animationId)) {
-            issues.push({ severity: "error", message: `Checkpoint "${checkpoint.title}" references unknown animation id "${animationId}".`, ...loc })
+          const animation = checkpoint.workspace.animation
+          if (animation?.kind === "registered" && !VALID_ANIMATION_IDS.has(animation.id)) {
+            issues.push({ severity: "error", message: `Checkpoint "${checkpoint.title}" references unknown animation id "${animation.id}".`, ...loc })
+          }
+          if (animation?.kind === "custom" && (!animation.packageId.trim() || !animation.revisionId.trim())) {
+            issues.push({ severity: "error", message: `Checkpoint "${checkpoint.title}" has a custom animation missing its package reference.`, ...loc })
           }
 
           const qc = checkpoint.workspace.quickCheck

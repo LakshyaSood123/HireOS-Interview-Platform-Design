@@ -6,8 +6,7 @@
 // instead of each screen inventing its own slightly-different version.
 
 import type { CreatorCourse } from "../types"
-import type { CmsDsaZone, CmsDsaModule, CmsDsaCheckpoint } from "./dsaCmsTypes"
-import type { LessonWorkspaceContent } from "../../learning/types"
+import type { CmsDsaZone, CmsDsaModule, CmsDsaCheckpoint, CmsDsaWorkspace } from "./dsaCmsTypes"
 import { generateDsaZoneId, generateDsaModuleId, generateDsaCheckpointId } from "./dsaId"
 
 function zones(course: CreatorCourse): CmsDsaZone[] {
@@ -120,7 +119,7 @@ export function moveModule(course: CreatorCourse, zoneId: string, moduleId: stri
 
 // ── Checkpoints ──────────────────────────────────────────────────────────
 
-const EMPTY_WORKSPACE: LessonWorkspaceContent = { title: "New Checkpoint", theory: [] }
+const EMPTY_WORKSPACE: CmsDsaWorkspace = { title: "New Checkpoint", theory: [] }
 
 export function addCheckpoint(course: CreatorCourse, zoneId: string, moduleId: string, title: string): CreatorCourse {
   const id = generateDsaCheckpointId(course, title)

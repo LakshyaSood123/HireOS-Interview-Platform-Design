@@ -58,7 +58,15 @@ const envSchema = z
     // `.default()` supplies the parsed output, so this is the list, not a CSV string.
     CORS_ORIGINS: csv.default(["http://localhost:8443", "http://localhost:5173", "http://localhost:3000", "http://localhost:4883"]),
     TRUST_PROXY: z.string().default("loopback"),
-    JSON_BODY_LIMIT: z.string().default("128kb"),
+    // 128kb was too small for the CMS's own whole-tree draft save (PATCH
+    // /cms/courses/:courseId/draft) — the bootstrapped dsa-foundations
+    // draft alone serializes to ~178KB (107 checkpoints), so every real
+    // save 413'd before ever reaching the route handler. Found while wiring
+    // Creator Studio to this route. 2mb keeps real headroom for curriculum
+    // growth while staying far below anything DoS-relevant, and every
+    // route this limit applies to is already behind `requireAuth` (most of
+    // them additionally `requireRole("admin")`).
+    JSON_BODY_LIMIT: z.string().default("2mb"),
 
     // Logging
     LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"]).default("info"),

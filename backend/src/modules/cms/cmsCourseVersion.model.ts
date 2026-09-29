@@ -1,6 +1,6 @@
 import { model, Schema, type InferSchemaType } from "mongoose";
 
-import { CMS_CHECKPOINT_TYPES, CMS_COURSE_TYPES, CMS_ENTITY_STATES, CMS_EXECUTION_MODES, CMS_LANGUAGES } from "./cms.types.js";
+import { CMS_CHECKPOINT_TYPES, CMS_COURSE_TYPES, CMS_ENTITY_STATES, CMS_EXECUTION_MODES, CMS_LANGUAGES, CMS_LAYOUT_BLOCK_TYPES } from "./cms.types.js";
 
 /**
  * `cmsCourseVersions` — one document per course version, PUBLISHED ones
@@ -58,7 +58,15 @@ const codingActivitySchema = new Schema(
   { _id: false },
 );
 
-const animationRefSchema = new Schema({ id: { type: String, required: true }, title: { type: String, default: null } }, { _id: false });
+// `Mixed` rather than a strict subdocument schema: this field is now a
+// discriminated union (registered vs. custom animation source — see
+// `CmsAnimationSource` in cms.types.ts), and a fixed Mongoose subdocument
+// schema would silently strip whichever branch's fields it wasn't declared
+// with. The zod schema (`cms.schema.ts`) is what actually enforces shape on
+// every write; storage just holds whatever validated object was given,
+// same reasoning `starterCode` and `tree` already use above for
+// similarly-shaped flexible content.
+const animationRefSchema = Schema.Types.Mixed;
 
 const theoryBlockSchema = new Schema({ heading: { type: String, required: true }, body: { type: String, required: true } }, { _id: false });
 
@@ -98,9 +106,21 @@ const workspaceSchema = new Schema(
     quickCheck: { type: quickCheckSchema, default: undefined },
     codingActivity: { type: codingActivitySchema, default: undefined },
     animation: { type: animationRefSchema, default: undefined },
+    // `Mixed` for the same reason as `animationRefSchema` above —
+    // `traceSource` is a union (`registered | cms | package | none`) and
+    // only the `"cms"` branch has a `steps` array; a fixed subdocument
+    // schema would fight that.
+    traceSource: { type: Schema.Types.Mixed, default: undefined },
   },
   { _id: false },
 );
+
+const layoutBlockSchema = new Schema(
+  { type: { type: String, enum: CMS_LAYOUT_BLOCK_TYPES, required: true }, span: { type: Number, required: true }, hidden: { type: Boolean, default: undefined } },
+  { _id: false },
+);
+const layoutRowSchema = new Schema({ blocks: { type: [layoutBlockSchema], required: true, default: [] } }, { _id: false });
+const layoutSchema = new Schema({ version: { type: Number, required: true }, rows: { type: [layoutRowSchema], required: true, default: [] } }, { _id: false });
 
 const checkpointSchema = new Schema(
   {
@@ -115,6 +135,7 @@ const checkpointSchema = new Schema(
     prerequisites: { type: [String], required: true, default: [] },
     legacyNodeId: { type: Number, default: null },
     workspace: { type: workspaceSchema, default: undefined },
+    layout: { type: layoutSchema, default: undefined },
     state: { type: String, enum: CMS_ENTITY_STATES, required: true, default: "active" },
   },
   { _id: false },

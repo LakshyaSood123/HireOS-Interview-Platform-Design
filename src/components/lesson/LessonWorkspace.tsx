@@ -1,5 +1,5 @@
-import { useState } from "react"
-import type { Checkpoint, ProgressState } from "../../learning/types"
+import { useEffect, useState, type ReactNode } from "react"
+import type { Checkpoint, LessonWorkspaceLayoutBlockType, ProgressState } from "../../learning/types"
 import type { CodeRunner } from "../../learning/services/codeRunner"
 import type { NotesRepository } from "../../learning/services/notesRepository"
 import BinaryTreeDiagram from "./BinaryTreeDiagram"
@@ -34,6 +34,14 @@ interface LessonWorkspaceProps {
    * mutating. Changes the completion button to an honest "End Preview"
    * instead of pretending to complete/award XP. */
   isPreview?: boolean
+  /** Creator Studio's Preview Draft "Tablet / Narrow" mode — forces the
+   * custom-layout renderer's responsive stacking regardless of the actual
+   * browser viewport, since the preview is rendered inline in the page
+   * (not a real emulated device) and `window.innerWidth` alone wouldn't
+   * reflect an author-chosen preview width. No effect when this checkpoint
+   * has no custom `layout` (the three original per-type branches don't
+   * read this prop at all). */
+  forceNarrow?: boolean
   onFailedSubmit: () => void
   /** Performs the actual engine completion (AppStateContext's
    * completeCheckpointById) — synchronous, called once. Returns whether the
@@ -67,6 +75,7 @@ export default function LessonWorkspace({
   courseId,
   moduleId,
   isPreview = false,
+  forceNarrow = false,
   onFailedSubmit,
   onComplete,
   onContinue,
@@ -147,6 +156,177 @@ export default function LessonWorkspace({
   const isCoding = Boolean(content.codingActivity)
   const isAnimation = Boolean(content.animation || content.visual || content.callStackVisual || content.twoPointerVisual)
   const isConceptOnly = !isCoding && !isAnimation
+
+  // ══════════════════════════════════════════════════════════════════════
+  // CMS-authored custom layout — see `LessonWorkspaceLayout` (learning/types.ts).
+  // A checkpoint without a valid `layout` (every checkpoint that existed
+  // before this subsystem, and any new one an author hasn't customized)
+  // renders through the three ORIGINAL branches below, completely
+  // untouched — this block only ever intercepts when `layout` is present
+  // and structurally sound.
+  // ══════════════════════════════════════════════════════════════════════
+  const layout = checkpoint.layout
+  const hasValidCustomLayout = Boolean(layout && layout.version === 1 && Array.isArray(layout.rows) && layout.rows.length > 0)
+
+  const [narrowByViewport, setNarrowByViewport] = useState(false)
+  useEffect(() => {
+    if (!hasValidCustomLayout) return
+    const check = () => setNarrowByViewport(window.innerWidth < 900)
+    check()
+    window.addEventListener("resize", check)
+    return () => window.removeEventListener("resize", check)
+  }, [hasValidCustomLayout])
+  const isNarrow = forceNarrow || narrowByViewport
+
+  // Each of these renders the EXACT SAME components/state as the original
+  // three branches below — never a second CodeWorkspace/QuickCheckCard
+  // instance, never re-derived data. `null` means "this block type has no
+  // content for this checkpoint" (coding/quickCheck are conditional) or
+  // "this block type isn't independently renderable" (codeTrace — see its
+  // comment) — either way, the custom-layout loop below skips it
+  // gracefully rather than leaving a visible gap.
+  const renderConceptsBlock = () => (
+    <div className="rounded-2xl bg-[#082017]/95 backdrop-blur-md border border-[#1DB584]/25 p-5 shadow-xl min-w-0 h-full">
+      <div className="flex items-center gap-2 mb-3 pb-2 border-b border-white/10">
+        <span className="text-base">💡</span>
+        <h3 className="text-xs font-black uppercase tracking-wider text-[#A7CE65]">Concept Foundations</h3>
+      </div>
+      <div className="space-y-3.5 min-w-0">
+        {content.theory.map((block, i) => (
+          <div key={i} className="rounded-xl bg-black/25 border border-white/5 p-3.5 min-w-0">
+            <h4 className="text-xs font-bold text-[#A7CE65] mb-1">{block.heading}</h4>
+            <p className="text-xs text-gray-300 leading-relaxed break-words">{block.body}</p>
+          </div>
+        ))}
+      </div>
+      {content.learnMore && (
+        <div className="mt-4 pt-3 border-t border-white/10">
+          <button
+            onClick={() => setLearnMoreOpen(v => !v)}
+            className="text-xs font-bold text-[#1DB584] hover:text-[#4FD8A8] transition-colors flex items-center justify-between w-full cursor-pointer"
+          >
+            <span>{learnMoreOpen ? "Hide Details" : "Learn More Details ›"}</span>
+            <span>{learnMoreOpen ? "▲" : "▼"}</span>
+          </button>
+          {learnMoreOpen && <p className="mt-2 text-xs text-gray-400 leading-relaxed bg-black/30 rounded-xl p-3 border border-white/5 break-words">{content.learnMore}</p>}
+        </div>
+      )}
+      {content.codeExamples && (
+        <div className="mt-4 pt-3.5 border-t border-white/10">
+          <h4 className="text-xs font-bold text-gray-300 mb-2.5 flex items-center gap-1.5">
+            <span>💻</span>
+            <span>Implementation Example</span>
+          </h4>
+          <CodeExampleTabs examples={content.codeExamples} />
+        </div>
+      )}
+    </div>
+  )
+
+  const renderAnimationBlock = () => (
+    <div className="rounded-2xl bg-[#04100C] border border-[#1DB584]/35 shadow-2xl overflow-hidden p-1 min-w-0 w-full max-w-full box-border h-full">
+      {content.animation && <AlgorithmAnimation animation={content.animation} />}
+      {content.visual && <BinaryTreeDiagram visual={content.visual} />}
+      {content.callStackVisual && <CallStackVisual frames={content.callStackVisual.frames} />}
+      {content.twoPointerVisual && <TwoPointerVisual values={content.twoPointerVisual.values} mode={content.twoPointerVisual.mode} />}
+    </div>
+  )
+
+  const renderQuickCheckBlock = () => (
+    <div className="min-w-0">
+      <QuickCheckCard quickCheck={content.quickCheck!} onAnswered={handleQuickCheckAnswered} />
+      <button
+        onClick={() => setActivitySatisfied(true)}
+        className="mt-2.5 text-[11px] text-gray-500 hover:text-gray-300 underline underline-offset-2 block text-center w-full cursor-pointer"
+      >
+        Mark quick check reviewed and continue
+      </button>
+    </div>
+  )
+
+  const renderCodingBlock = () => (
+    <CodeWorkspace
+      activity={content.codingActivity!}
+      activityId={checkpoint.id}
+      theory={content.theory}
+      learnMore={content.learnMore}
+      runner={runner}
+      onFailedSubmit={handleFailedSubmit}
+      onSuccessfulSubmit={() => setActivitySatisfied(true)}
+    />
+  )
+
+  // `codeTrace` has no independently renderable content of its own for a
+  // REGISTERED animation — CodeTracePanel is rendered from INSIDE
+  // AnimationPlayback.tsx (nested under `animation`), not as a sibling
+  // LessonWorkspace controls directly. Splitting them apart would mean
+  // restructuring AnimationPlayback itself, which is a larger change than
+  // this composition-only pass covers. A layout that places `codeTrace` as
+  // its own block therefore skips it gracefully here (its content already
+  // appears wherever `animation` renders) rather than showing an empty box
+  // or a fabricated duplicate.
+  const blockRenderers: Partial<Record<LessonWorkspaceLayoutBlockType, () => ReactNode>> = {
+    concepts: renderConceptsBlock,
+    animation: isAnimation ? renderAnimationBlock : undefined,
+    quickCheck: content.quickCheck ? renderQuickCheckBlock : undefined,
+    coding: content.codingActivity ? renderCodingBlock : undefined,
+  }
+
+  const renderCompletionBar = () => (
+    <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between gap-4 flex-wrap">
+      <div className="flex flex-col gap-2 min-w-0">
+        <span className="text-xs text-gray-400">
+          {isReview
+            ? "You've reviewed this checkpoint. Return to the roadmap whenever you're ready."
+            : canComplete
+              ? "Ready to record progress!"
+              : "Complete the activity above to unlock this button."}
+        </span>
+        <LessonQuickFeedback checkpointTitle={content.title} />
+      </div>
+      <button
+        onClick={handleCompleteAction}
+        disabled={!canComplete}
+        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-[#1DB584] to-[#10B981] hover:from-[#159a6f] hover:to-[#0d9668] shadow-lg shadow-[#1DB584]/30 hover:scale-[1.02] transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
+      >
+        <span>{isReview ? "Return to Roadmap" : isPreview ? "End Preview" : "Complete Checkpoint"}</span>
+        <span>➔</span>
+      </button>
+    </div>
+  )
+
+  const renderCustomLayout = () => {
+    const renderedTypes = new Set<LessonWorkspaceLayoutBlockType>()
+    return (
+      <div className="flex-1 flex flex-col justify-between min-w-0 w-full max-w-full">
+        <div className="space-y-4 w-full max-w-full min-w-0">
+          {layout!.rows.map((row, rowIdx) => (
+            <div key={rowIdx} className="grid gap-4 items-stretch w-full max-w-full min-w-0" style={{ gridTemplateColumns: "repeat(12, minmax(0, 1fr))" }}>
+              {row.blocks.map((block, blockIdx) => {
+                if (block.hidden) return null
+                // Singleton guard — a block type already rendered earlier
+                // in this layout (e.g. authored twice by mistake) never
+                // renders a second time; there is exactly one QuickCheckCard/
+                // CodeWorkspace/etc. instance regardless of how many times
+                // its type appears in the configured rows.
+                if (renderedTypes.has(block.type)) return null
+                const renderer = blockRenderers[block.type]
+                if (!renderer) return null // unavailable for this checkpoint, or structurally merged (codeTrace) — skip gracefully, no empty hole
+                renderedTypes.add(block.type)
+                const span = isNarrow ? 12 : Math.min(12, Math.max(1, block.span))
+                return (
+                  <div key={block.type + blockIdx} className="min-w-0" style={{ gridColumn: `span ${span} / span ${span}` }}>
+                    {renderer()}
+                  </div>
+                )
+              })}
+            </div>
+          ))}
+        </div>
+        {renderCompletionBar()}
+      </div>
+    )
+  }
 
   return (
     <div className="relative min-h-screen bg-[#071A14] font-display text-white overflow-x-hidden">
@@ -277,8 +457,16 @@ export default function LessonWorkspace({
 
         {/* ══════════════════════════════════════════════════════════════════
             3. WORKSPACE LAYOUTS (INTENTIONALLY DESIGNED PER CHECKPOINT TYPE)
+            — unless a valid CMS custom layout is configured, in which case
+            renderCustomLayout() takes over instead of all three branches
+            below. Every branch from here down is completely unchanged from
+            before the layout subsystem existed.
             ══════════════════════════════════════════════════════════════════ */}
 
+        {hasValidCustomLayout && renderCustomLayout()}
+
+        {!hasValidCustomLayout && (
+          <>
         {/* ── TYPE 1: CODING CHECKPOINT (3-COLUMN WORKSTATION) ── */}
         {isCoding && content.codingActivity && (
           <div className="flex-1 flex flex-col justify-between">
@@ -542,6 +730,8 @@ export default function LessonWorkspace({
 
             </div>
           </div>
+        )}
+          </>
         )}
 
       </div>

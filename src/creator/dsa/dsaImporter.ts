@@ -18,7 +18,7 @@
 import { getCourseById } from "../../learning/courseRegistry"
 import type { Checkpoint, Module, Zone } from "../../learning/types"
 import type { CreatorCourse } from "../types"
-import type { CmsDsaZone, CmsDsaModule, CmsDsaCheckpoint } from "./dsaCmsTypes"
+import type { CmsDsaZone, CmsDsaModule, CmsDsaCheckpoint, CmsDsaAnimationSource } from "./dsaCmsTypes"
 
 const IMPORT_TIMESTAMP = "2026-01-01T00:00:00.000Z"
 
@@ -41,7 +41,14 @@ function importCheckpoint(checkpoint: Checkpoint, moduleId: string, order: numbe
     prerequisites: [...checkpoint.prerequisites],
     legacyNodeId: checkpoint.legacyNodeId,
     lesson: checkpoint.lesson,
-    workspace: checkpoint.workspace,
+    workspace: checkpoint.workspace
+      ? {
+          ...checkpoint.workspace,
+          animation: checkpoint.workspace.animation
+            ? ({ kind: "registered", id: checkpoint.workspace.animation.id, title: checkpoint.workspace.animation.title } satisfies CmsDsaAnimationSource)
+            : undefined,
+        }
+      : undefined,
     questionIds: checkpoint.questionIds ? [...checkpoint.questionIds] : undefined,
     state: "active",
   }

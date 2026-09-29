@@ -86,7 +86,9 @@ export default function DsaModuleEditor({ course, zone, module, onChange, onOpen
                     <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-black uppercase border shrink-0 ${TYPE_BADGE[checkpoint.type] ?? "bg-white/5 text-gray-400 border-white/10"}`}>{checkpoint.type}</span>
                     <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-white/5 text-gray-400 border border-white/10 shrink-0">{kind}</span>
                     {checkpoint.workspace?.animation && (
-                      <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-[#38BDF8]/10 text-[#7DD3FC] border border-[#38BDF8]/25 shrink-0">🎬 {checkpoint.workspace.animation.id}</span>
+                      <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-[#38BDF8]/10 text-[#7DD3FC] border border-[#38BDF8]/25 shrink-0">
+                        🎬 {checkpoint.workspace.animation.kind === "custom" ? `custom: ${checkpoint.workspace.animation.title ?? checkpoint.workspace.animation.packageId}` : checkpoint.workspace.animation.id}
+                      </span>
                     )}
                     {archived && <span className="px-1.5 py-0.5 rounded-full text-[9px] font-black uppercase bg-gray-500/15 text-gray-400 border border-gray-500/25 shrink-0">Archived</span>}
                   </div>

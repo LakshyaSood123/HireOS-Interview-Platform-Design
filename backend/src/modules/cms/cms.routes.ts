@@ -4,7 +4,21 @@ import { currentUserId, requireAuth, requireRole } from "../../middleware/auth.j
 import { body, params, validate } from "../../middleware/validate.js";
 import { sendData } from "../../shared/envelope.js";
 import * as cmsService from "./cms.service.js";
+import * as animationPackageService from "./animationPackage.service.js";
 import { courseIdParams, saveDraftSchema, versionIdParams, type CourseIdParams, type SaveDraftInput, type VersionIdParams } from "./cms.schema.js";
+import {
+  createPackageSchema,
+  packageIdParams,
+  packageRevisionParams,
+  savePackageContentSchema,
+  uploadZipPackageSchema,
+  type CreatePackageInput,
+  type PackageIdParams,
+  type PackageRevisionParams,
+  type SavePackageContentInput,
+  type UploadZipPackageInput,
+} from "./animationPackage.schema.js";
+import { ANIMATION_PACKAGE_LIMITS, CMS_PACKAGE_CAPABILITIES, type CmsPackageCapability } from "./animationPackage.types.js";
 
 /**
  * `/api/v1/cms/**` — course-authoring endpoints, every one `requireRole("admin")`
@@ -95,6 +109,111 @@ cmsRouter.post(
     const { courseId, versionId } = params<VersionIdParams>(req);
     await cmsService.activateVersion(courseId, versionId);
     sendData(res, { activated: versionId });
+  },
+);
+
+/**
+ * `/api/v1/cms/animation-packages/**` — the custom HTML animation authoring
+ * subsystem's storage API, admin-only like the rest of `/cms/**`. See
+ * animationPackage.types.ts's header comment for the draft/frozen revision
+ * model. ZIP uploads travel as base64 JSON (see animationPackage.schema.ts)
+ * rather than multipart, so they're gated by the same JSON_BODY_LIMIT as
+ * every other route plus this schema's own `zipBase64` presence check —
+ * `extractZipPackage` in the service layer enforces the real byte limits
+ * once decoded.
+ */
+cmsRouter.post("/cms/animation-packages", requireAuth, requireRole("admin"), validate({ body: createPackageSchema }), async (req, res) => {
+  const { title } = body<CreatePackageInput>(req);
+  sendData(res, await animationPackageService.createDraftPackage(currentUserId(req), title));
+});
+
+cmsRouter.get("/cms/animation-packages", requireAuth, requireRole("admin"), async (_req, res) => {
+  sendData(res, await animationPackageService.listPackages());
+});
+
+cmsRouter.get(
+  "/cms/animation-packages/:packageId",
+  requireAuth,
+  requireRole("admin"),
+  validate({ params: packageIdParams }),
+  async (req, res) => {
+    const { packageId } = params<PackageIdParams>(req);
+    sendData(res, await animationPackageService.getDraftPackage(packageId));
+  },
+);
+
+/** Fetches a SPECIFIC revision — `"draft"` (the mutable working copy) or a
+ * frozen `"r1"`, `"r2"`, … . Needed for Preview Draft and Code Trace
+ * authoring to render a checkpoint's animation exactly as it's actually
+ * referenced (which may be a frozen revision if the course draft hasn't
+ * been re-pointed at "draft" since a previous publish), not just whatever
+ * the package's current mutable draft happens to say right now. */
+cmsRouter.get(
+  "/cms/animation-packages/:packageId/revisions/:revisionId",
+  requireAuth,
+  requireRole("admin"),
+  validate({ params: packageRevisionParams }),
+  async (req, res) => {
+    const { packageId, revisionId } = params<PackageRevisionParams>(req);
+    sendData(res, await animationPackageService.getPackageRevision(packageId, revisionId));
+  },
+);
+
+cmsRouter.patch(
+  "/cms/animation-packages/:packageId",
+  requireAuth,
+  requireRole("admin"),
+  validate({ params: packageIdParams, body: savePackageContentSchema }),
+  async (req, res) => {
+    const { packageId } = params<PackageIdParams>(req);
+    const input = body<SavePackageContentInput>(req);
+    sendData(res, await animationPackageService.savePackageDraftContent(packageId, currentUserId(req), input, "html", []));
+  },
+);
+
+cmsRouter.post(
+  "/cms/animation-packages/:packageId/upload-zip",
+  requireAuth,
+  requireRole("admin"),
+  validate({ params: packageIdParams, body: uploadZipPackageSchema }),
+  async (req, res) => {
+    const { packageId } = params<PackageIdParams>(req);
+    const input = body<UploadZipPackageInput>(req);
+    const zipBuffer = Buffer.from(input.zipBase64, "base64");
+    if (zipBuffer.byteLength === 0) {
+      res.status(400).json({ error: { code: "VALIDATION_ERROR", message: "zipBase64 did not decode to any bytes." } });
+      return;
+    }
+    if (zipBuffer.byteLength > ANIMATION_PACKAGE_LIMITS.maxZipCompressedBytes) {
+      res.status(400).json({
+        error: { code: "VALIDATION_ERROR", message: `ZIP exceeds the ${ANIMATION_PACKAGE_LIMITS.maxZipCompressedBytes}-byte compressed size limit.` },
+      });
+      return;
+    }
+    const extracted = await animationPackageService.extractZipPackage(zipBuffer);
+    animationPackageService.assertAssetContentTypesAllowed(extracted.assets);
+    // manifest.json's `capabilities` isn't trusted as-is — only entries that
+    // are actually valid CMS_PACKAGE_CAPABILITY values survive; anything
+    // else is silently dropped rather than rejecting the whole upload.
+    const knownCapabilities = new Set(CMS_PACKAGE_CAPABILITIES as readonly string[]);
+    const capabilities = (extracted.manifestFromZip?.capabilities ?? []).filter((c) => knownCapabilities.has(c)) as CmsPackageCapability[];
+    sendData(
+      res,
+      await animationPackageService.savePackageDraftContent(
+        packageId,
+        currentUserId(req),
+        {
+          title: input.title,
+          manifest: { heightPx: extracted.manifestFromZip?.heightPx ?? 420, capabilities, traceEvents: extracted.manifestFromZip?.traceEvents ?? [] },
+          html: extracted.html,
+          css: extracted.css,
+          js: extracted.js,
+          expectedRevision: input.expectedRevision,
+        },
+        "zip",
+        extracted.assets,
+      ),
+    );
   },
 );
 

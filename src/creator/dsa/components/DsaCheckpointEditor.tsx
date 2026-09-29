@@ -1,11 +1,14 @@
 import type { CreatorCourse } from "../../types"
-import type { CmsDsaZone, CmsDsaModule, CmsDsaCheckpoint } from "../dsaCmsTypes"
-import type { CheckpointType, LessonWorkspaceContent } from "../../../learning/types"
+import type { CmsDsaZone, CmsDsaModule, CmsDsaCheckpoint, CmsDsaWorkspace } from "../dsaCmsTypes"
+import type { CheckpointType } from "../../../learning/types"
 import { updateCheckpoint } from "../dsaDraftMutations"
 import { DsaTheoryBlocksEditor, DsaCodeExamplesEditor } from "./DsaTheoryEditor"
 import DsaQuickCheckSubEditor from "./DsaQuickCheckSubEditor"
 import DsaCodingActivitySubEditor from "./DsaCodingActivitySubEditor"
-import DsaAnimationSelector from "./DsaAnimationSelector"
+import DsaAnimationSourceEditor from "./DsaAnimationSourceEditor"
+import DsaCodeTraceSourceEditor from "./DsaCodeTraceSourceEditor"
+import DsaLayoutEditor from "./DsaLayoutEditor"
+import { useState } from "react"
 
 interface DsaCheckpointEditorProps {
   course: CreatorCourse
@@ -22,11 +25,12 @@ const LABEL_CLASS = "text-[11px] font-bold uppercase tracking-wider text-gray-40
 const CHECKPOINT_TYPES: CheckpointType[] = ["lesson", "checkpoint", "challenge", "boss"]
 
 export default function DsaCheckpointEditor({ course, zone, module, checkpoint, onChange, onPreview }: DsaCheckpointEditorProps) {
+  const [editLayout, setEditLayout] = useState(false)
   const commit = (patch: Partial<CmsDsaCheckpoint>) => {
     onChange(updateCheckpoint(course, zone.id, module.id, checkpoint.id, { ...checkpoint, ...patch }))
   }
-  const commitWorkspace = (patch: Partial<LessonWorkspaceContent>) => {
-    const workspace: LessonWorkspaceContent = { ...(checkpoint.workspace ?? { title: checkpoint.title, theory: [] }), ...patch }
+  const commitWorkspace = (patch: Partial<CmsDsaWorkspace>) => {
+    const workspace: CmsDsaWorkspace = { ...(checkpoint.workspace ?? { title: checkpoint.title, theory: [] }), ...patch }
     commit({ workspace })
   }
 
@@ -141,7 +145,35 @@ export default function DsaCheckpointEditor({ course, zone, module, checkpoint, 
 
           <div className="rounded-2xl bg-[#0F2A20] border border-white/10 p-6">
             <h3 className="text-xs font-black uppercase tracking-wider text-[#A7CE65] mb-4">Study Animation</h3>
-            <DsaAnimationSelector animation={checkpoint.workspace.animation} onChange={animation => commitWorkspace({ animation })} />
+            <DsaAnimationSourceEditor animation={checkpoint.workspace.animation} onChange={animation => commitWorkspace({ animation })} />
+          </div>
+
+          <div className="rounded-2xl bg-[#0F2A20] border border-white/10 p-6">
+            <h3 className="text-xs font-black uppercase tracking-wider text-[#A7CE65] mb-4">Code Trace</h3>
+            <DsaCodeTraceSourceEditor
+              traceSource={checkpoint.workspace.traceSource}
+              animation={checkpoint.workspace.animation}
+              onChange={traceSource => commitWorkspace({ traceSource })}
+            />
+          </div>
+
+          <div className="rounded-2xl bg-[#0F2A20] border border-white/10 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xs font-black uppercase tracking-wider text-[#A7CE65]">Preview Draft Layout</h3>
+              <button
+                onClick={() => setEditLayout(v => !v)}
+                className={`px-3.5 py-1.5 rounded-xl text-[11px] font-bold cursor-pointer transition-all ${
+                  editLayout ? "bg-[#1DB584] text-white" : "bg-white/5 text-gray-400 hover:bg-white/10 border border-white/10"
+                }`}
+              >
+                {editLayout ? "Editing Layout" : "Edit Layout"}
+              </button>
+            </div>
+            {editLayout ? (
+              <DsaLayoutEditor layout={checkpoint.layout} onChange={layout => commit({ layout })} />
+            ) : (
+              <p className="text-[10.5px] text-gray-500">{checkpoint.layout ? "Custom layout configured." : "Default layout (unchanged)."} Click "Edit Layout" to modify.</p>
+            )}
           </div>
         </>
       )}

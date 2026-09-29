@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Reagvis Trails backend \u2014 accounts, learner progress, notes, submissions, recommendations.",
+  "description": "Reagvis Trails backend — accounts, learner progress, notes, submissions, recommendations.",
   "engines": {
     "node": ">=20"
   },
@@ -33,6 +33,7 @@
     "express-rate-limit": "^8.2.1",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
+    "jszip": "^3.10.2",
     "mongoose": "^8.20.1",
     "pino": "^9.13.1",
     "pino-http": "^10.5.0",

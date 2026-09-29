@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { curriculumId } from "../../shared/ids.js";
-import { CMS_CHECKPOINT_TYPES, CMS_ENTITY_STATES, CMS_EXECUTION_MODES, CMS_LANGUAGES } from "./cms.types.js";
+import { CMS_CHECKPOINT_TYPES, CMS_CUSTOM_BRIDGE_MODES, CMS_ENTITY_STATES, CMS_EXECUTION_MODES, CMS_LANGUAGES } from "./cms.types.js";
 import type { CmsTreeVizNode } from "./cms.types.js";
 
 /** Request shapes for `/api/v1/cms/**` — mirrors `cms.types.ts`. Every
@@ -39,9 +39,55 @@ const codingActivitySchema = z.object({
   hint: z.string().max(2000).default(""),
   mistakeFeedback: z.string().max(2000).default(""),
   executionMode: z.enum(CMS_EXECUTION_MODES).default("disabled"),
-  harnessKey: z.string().max(64).optional(),
+  // `.nullable()` alongside `.optional()`: the Mongoose model stores this
+  // (and the other fields marked the same way below) with `default: null`,
+  // so a GET of an untouched draft serializes it as `null`, not omitted.
+  // `.optional()` alone rejects `null`, which broke the basic load-then-save
+  // round trip — PATCHing back an unmodified draft 400'd. Found while wiring
+  // Creator Studio to this route.
+  harnessKey: z.string().max(64).nullable().optional(),
 });
-const animationRefSchema = z.object({ id: z.string().min(1).max(64), title: z.string().max(200).optional() });
+const registeredAnimationSourceSchema = z.object({
+  kind: z.literal("registered"),
+  id: z.string().min(1).max(64),
+  title: z.string().max(200).nullable().optional(),
+});
+const customAnimationSourceSchema = z.object({
+  kind: z.literal("custom"),
+  packageId: z.string().min(1).max(64),
+  revisionId: z.string().min(1).max(32),
+  title: z.string().max(200).nullable().optional(),
+  bridgeMode: z.enum(CMS_CUSTOM_BRIDGE_MODES),
+});
+/** `z.preprocess` injects `kind: "registered"` when it's absent — a draft
+ * created before this discriminated union existed still holds the old bare
+ * `{ id, title? }` shape (see cms.types.ts's `normalizeAnimationSource`,
+ * the same fallback at the TS-type level). Without this, PATCHing back a
+ * pre-existing draft's OWN unmodified data would 400 — the exact
+ * load-then-save bug class already fixed once for masteryXp/legacyNodeId/
+ * etc., here for a field this change itself introduces. New data written
+ * by the frontend always sends `kind` explicitly; this only widens what's
+ * ACCEPTED, not what's produced. */
+const traceStepSchema = z.object({
+  stepId: z.string().min(1).max(64),
+  label: z.string().max(200),
+  pseudocode: z.string().min(1).max(2000),
+  python: z.string().max(2000).nullable().optional(),
+  cpp: z.string().max(2000).nullable().optional(),
+  java: z.string().max(2000).nullable().optional(),
+  animationEvent: z.string().max(64).nullable().optional(),
+});
+const traceSourceSchema = z.object({
+  kind: z.enum(["registered", "cms", "package", "none"]),
+  steps: z.array(traceStepSchema).max(200).optional(),
+});
+
+const animationSourceSchema = z.preprocess((value) => {
+  if (value && typeof value === "object" && !("kind" in value) && "id" in value) {
+    return { kind: "registered", ...value };
+  }
+  return value;
+}, z.discriminatedUnion("kind", [registeredAnimationSourceSchema, customAnimationSourceSchema]));
 
 const treeVizNodeSchema: z.ZodType<CmsTreeVizNode> = z.lazy(() =>
   z.object({
@@ -59,7 +105,7 @@ const traversalVisualSchema = z.object({
 const callStackFrameSchema = z.object({
   label: z.string().max(200),
   kind: z.enum(["call", "base-case", "return"]),
-  detail: z.string().max(500).optional(),
+  detail: z.string().max(500).nullable().optional(),
 });
 const callStackVisualSchema = z.object({ frames: z.array(callStackFrameSchema).default([]) });
 const twoPointerVisualSchema = z.object({ values: z.array(z.number()), mode: z.enum(["opposite", "same-direction"]) });
@@ -67,15 +113,24 @@ const twoPointerVisualSchema = z.object({ values: z.array(z.number()), mode: z.e
 const workspaceSchema = z.object({
   title: z.string().min(1).max(200),
   theory: z.array(theoryBlockSchema).default([]),
-  learnMore: z.string().max(4000).optional(),
+  learnMore: z.string().max(4000).nullable().optional(),
   visual: traversalVisualSchema.optional(),
   callStackVisual: callStackVisualSchema.optional(),
   twoPointerVisual: twoPointerVisualSchema.optional(),
   codeExamples: z.array(codeExampleSchema).optional(),
   quickCheck: quickCheckSchema.optional(),
   codingActivity: codingActivitySchema.optional(),
-  animation: animationRefSchema.optional(),
+  animation: animationSourceSchema.optional(),
+  traceSource: traceSourceSchema.optional(),
 });
+
+const layoutBlockSchema = z.object({
+  type: z.enum(["concepts", "animation", "codeTrace", "quickCheck", "coding"]),
+  span: z.number().int().min(1).max(12),
+  hidden: z.boolean().optional(),
+});
+const layoutRowSchema = z.object({ blocks: z.array(layoutBlockSchema).min(1).max(4) });
+const layoutSchema = z.object({ version: z.literal(1), rows: z.array(layoutRowSchema).max(8) });
 
 const checkpointSchema = z.object({
   id: z.string().min(1).max(64),
@@ -85,10 +140,11 @@ const checkpointSchema = z.object({
   subtitle: z.string().max(300).default(""),
   type: z.enum(CMS_CHECKPOINT_TYPES),
   xp: z.number().int().min(0),
-  masteryXp: z.number().int().min(0).optional(),
+  masteryXp: z.number().int().min(0).nullable().optional(),
   prerequisites: z.array(z.string().min(1).max(64)).default([]),
-  legacyNodeId: z.number().int().optional(),
+  legacyNodeId: z.number().int().nullable().optional(),
   workspace: workspaceSchema.optional(),
+  layout: layoutSchema.optional(),
   state: z.enum(CMS_ENTITY_STATES),
 });
 

@@ -10,7 +10,36 @@ import { CmsCourse } from "./cmsCourse.model.js";
 import { CmsCourseVersion, type CmsCourseVersionAttributes } from "./cmsCourseVersion.model.js";
 import { validateCmsVersionContent, type CmsValidationIssue } from "./cms.validation.js";
 import { buildSnapshotFromCmsVersion } from "./snapshotFromCmsVersion.js";
-import type { CmsCourseType, CmsZone } from "./cms.types.js";
+import { normalizeAnimationSource, type CmsCourseType, type CmsZone } from "./cms.types.js";
+import { freezePackageRevisionIfNeeded } from "./animationPackage.service.js";
+
+/**
+ * A pre-existing `CmsCourseVersion` document may hold the old, bare
+ * `{ id, title? }` animation shape (no `kind`) — see cms.types.ts's
+ * `normalizeAnimationSource`. Applied here, once, whenever content is
+ * copied from an existing published version into a (new or reset) draft,
+ * so the draft this function returns/stores always has `kind`-tagged
+ * animation sources and can be PATCHed straight back without re-triggering
+ * the same "load-then-save of unmodified data fails validation" class of
+ * bug fixed for `masteryXp`/`legacyNodeId`/etc. Deep-clones rather than
+ * mutating the input, since `active.zones` may still be referenced by the
+ * caller (e.g. `resetDraft` also uses it for `createFromVersion`).
+ */
+function normalizeZonesAnimationSources(zones: CmsZone[]): CmsZone[] {
+  return zones.map((zone) => ({
+    ...zone,
+    modules: zone.modules.map((mod) => ({
+      ...mod,
+      checkpoints: mod.checkpoints.map((checkpoint) => {
+        if (!checkpoint.workspace?.animation) return checkpoint;
+        return {
+          ...checkpoint,
+          workspace: { ...checkpoint.workspace, animation: normalizeAnimationSource(checkpoint.workspace.animation) },
+        };
+      }),
+    })),
+  }));
+}
 
 /** The draft document's `versionId` is always this literal string — it is
  * not a numbered version until it's published (Phase 3B plan §14: "Publishing
@@ -75,10 +104,51 @@ export async function getDraft(courseId: string): Promise<CmsCourseVersionAttrib
     revision: 1,
     title: active.title,
     courseType: active.courseType,
-    zones: active.zones,
+    zones: normalizeZonesAnimationSources(active.zones as CmsZone[]),
   });
   await CmsCourse.updateOne({ courseId }, { $set: { latestDraftVersion: DRAFT_VERSION_ID } });
   return draft.toObject();
+}
+
+/** See the call site in `publishDraft` — freezes every referenced custom
+ * package's current draft content and returns a deep copy of `zones` with
+ * those references rewritten to the frozen revision id. Registered-animation
+ * checkpoints and custom ones already pointing at a frozen revision (e.g.
+ * unchanged since a previous publish that already froze it) pass through
+ * untouched. */
+async function freezeCustomAnimationReferences(zones: CmsZone[], session: ClientSession | undefined): Promise<CmsZone[]> {
+  const frozenIdCache = new Map<string, string>();
+
+  return Promise.all(
+    zones.map(async (zone) => ({
+      ...zone,
+      modules: await Promise.all(
+        zone.modules.map(async (mod) => ({
+          ...mod,
+          checkpoints: await Promise.all(
+            mod.checkpoints.map(async (checkpoint) => {
+              const animation = checkpoint.workspace?.animation;
+              if (!animation || animation.kind !== "custom" || animation.revisionId !== "draft") return checkpoint;
+
+              let frozenRevisionId = frozenIdCache.get(animation.packageId);
+              if (!frozenRevisionId) {
+                frozenRevisionId = await freezePackageRevisionIfNeeded(animation.packageId, session);
+                frozenIdCache.set(animation.packageId, frozenRevisionId);
+              }
+
+              return {
+                ...checkpoint,
+                workspace: {
+                  ...checkpoint.workspace!,
+                  animation: { ...animation, revisionId: frozenRevisionId },
+                },
+              };
+            }),
+          ),
+        })),
+      ),
+    })),
+  );
 }
 
 export async function saveDraft(
@@ -119,7 +189,7 @@ export async function resetDraft(courseId: string, actorId: string): Promise<Cms
       $set: {
         title: active.title,
         courseType: active.courseType,
-        zones: active.zones,
+        zones: normalizeZonesAnimationSources(active.zones as CmsZone[]),
         createdFromVersion: active.versionId,
         updatedBy: actorId,
       },
@@ -162,6 +232,16 @@ export async function publishDraft(courseId: string, actorId: string): Promise<P
   return withTransaction(async (session) => {
     const versionId = await nextVersionId(courseId, session);
 
+    // Freeze every custom-animation package this draft references at its
+    // mutable "draft" revision — the PUBLISHED copy of `zones` gets
+    // rewritten to point at the frozen revision id, so `version N` keeps
+    // referencing exact package content even after the author later edits
+    // the animation and republishes (see animationPackage.service.ts's
+    // freezePackageRevisionIfNeeded). The draft document itself (`draft.zones`,
+    // used above for nothing further) is left untouched — it keeps pointing
+    // at "draft" so editing continues to work normally after publish.
+    const frozenZones = await freezeCustomAnimationReferences(draft.zones as CmsZone[], session);
+
     const created = await CmsCourseVersion.create(
       [
         {
@@ -175,7 +255,7 @@ export async function publishDraft(courseId: string, actorId: string): Promise<P
           revision: draft.revision,
           title: draft.title,
           courseType: draft.courseType,
-          zones: draft.zones,
+          zones: frozenZones,
         },
       ],
       { session },

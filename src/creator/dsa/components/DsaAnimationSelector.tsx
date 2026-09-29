@@ -7,13 +7,13 @@
 // or is needed (PART 12 of the task).
 
 import { codeTraceRegistry } from "../../../learning/animations/codeTraceRegistry"
-import type { AlgorithmAnimationSpec } from "../../../learning/types"
+import type { CmsDsaRegisteredAnimationSource } from "../dsaCmsTypes"
 
 const REGISTERED_ANIMATION_IDS = Object.keys(codeTraceRegistry).sort()
 
 interface DsaAnimationSelectorProps {
-  animation: AlgorithmAnimationSpec | undefined
-  onChange: (animation: AlgorithmAnimationSpec | undefined) => void
+  animation: CmsDsaRegisteredAnimationSource | undefined
+  onChange: (animation: CmsDsaRegisteredAnimationSource | undefined) => void
 }
 
 export default function DsaAnimationSelector({ animation, onChange }: DsaAnimationSelectorProps) {
@@ -23,7 +23,7 @@ export default function DsaAnimationSelector({ animation, onChange }: DsaAnimati
         value={animation?.id ?? ""}
         onChange={e => {
           const id = e.target.value
-          onChange(id ? { id: id as AlgorithmAnimationSpec["id"], title: animation?.title } : undefined)
+          onChange(id ? { kind: "registered", id, title: animation?.title } : undefined)
         }}
         className="w-full rounded-xl bg-black/25 border border-white/10 focus:border-[#1DB584]/60 px-3.5 py-2.5 text-sm text-white outline-none transition-colors"
       >
@@ -37,7 +37,7 @@ export default function DsaAnimationSelector({ animation, onChange }: DsaAnimati
       {animation && (
         <input
           value={animation.title ?? ""}
-          onChange={e => onChange({ id: animation.id, title: e.target.value || undefined })}
+          onChange={e => onChange({ kind: "registered", id: animation.id, title: e.target.value || undefined })}
           placeholder="Optional checkpoint-specific animation title override"
           className="w-full rounded-xl bg-black/25 border border-white/10 focus:border-[#1DB584]/60 px-3.5 py-2.5 text-xs text-white placeholder-gray-500 outline-none transition-colors"
         />

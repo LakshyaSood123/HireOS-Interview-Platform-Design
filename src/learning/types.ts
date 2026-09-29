@@ -69,6 +69,33 @@ export interface Checkpoint {
    * when a `questionIds` entry names the canonical problem they're modeled
    * after. */
   questionIds?: string[]
+  /** Optional CMS-authored structured layout for LessonWorkspace's
+   * rendering — see LessonWorkspace.tsx's `renderCustomLayout` and
+   * `LessonWorkspaceLayout` below. Absent (the case for every checkpoint
+   * that existed before the Creator Studio CMS layout-authoring subsystem,
+   * and any new one an author hasn't customized) means "render exactly as
+   * before this field existed" — LessonWorkspace's original three
+   * type-specific branches, byte-for-byte unchanged. */
+  layout?: LessonWorkspaceLayout
+}
+
+/** Mirrors the backend's `CmsLayout` (cms.types.ts) and the CMS draft's own
+ * `CmsDsaLayout` (dsaCmsTypes.ts) exactly — kept as its own small type here
+ * rather than imported, matching how every other content shape in this file
+ * is the frontend's own copy, never a re-export of a CMS-side type. */
+export const LESSON_WORKSPACE_LAYOUT_BLOCK_TYPES = ["concepts", "animation", "codeTrace", "quickCheck", "coding"] as const
+export type LessonWorkspaceLayoutBlockType = (typeof LESSON_WORKSPACE_LAYOUT_BLOCK_TYPES)[number]
+export interface LessonWorkspaceLayoutBlock {
+  type: LessonWorkspaceLayoutBlockType
+  span: number
+  hidden?: boolean
+}
+export interface LessonWorkspaceLayoutRow {
+  blocks: LessonWorkspaceLayoutBlock[]
+}
+export interface LessonWorkspaceLayout {
+  version: number
+  rows: LessonWorkspaceLayoutRow[]
 }
 
 // ── Module Mastery Quiz ─────────────────────────────────────────────────
