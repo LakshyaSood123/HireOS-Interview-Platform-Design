@@ -12,11 +12,13 @@ import {
   CMS_BRIDGE_VERSION,
   type CmsAnimationPackageContent,
   type CmsPackageAsset,
+  type CmsPackageTrace,
 } from "./animationPackage.types.js";
+import { packageTraceSchema } from "./animationPackage.schema.js";
 
 const DRAFT_REVISION_ID = "draft";
 
-function contentHash(content: Pick<CmsAnimationPackageContent, "title" | "manifest" | "html" | "css" | "js" | "assets">): string {
+function contentHash(content: Pick<CmsAnimationPackageContent, "title" | "manifest" | "html" | "css" | "js" | "assets" | "packageTrace">): string {
   return createHash("sha256")
     .update(
       JSON.stringify({
@@ -26,9 +28,34 @@ function contentHash(content: Pick<CmsAnimationPackageContent, "title" | "manife
         css: content.css ?? null,
         js: content.js ?? null,
         assets: content.assets.map((a) => ({ path: a.path, contentType: a.contentType, dataBase64: a.dataBase64 })),
+        // Included so a trace-only edit (html/css/js/manifest unchanged)
+        // still produces a different hash — see PART "DEDUPLICATION": same
+        // animation + different trace.json MUST mint a new frozen revision.
+        packageTrace: content.packageTrace ?? null,
       }),
     )
     .digest("hex");
+}
+
+/**
+ * Cross-field check: every `animationEvent` a trace step declares must be
+ * one of the package manifest's own declared `traceEvents` — WHEN the
+ * manifest declares any at all (an empty/undeclared `traceEvents` list
+ * means the author hasn't wired semantic events yet, so there's nothing to
+ * validate against, and rejecting on that basis would just be noise).
+ * Silently ignoring a mismatch here would mean the trace step to
+ * animation-event wiring silently never fires at playback time.
+ */
+export function validatePackageTraceAgainstManifest(trace: CmsPackageTrace, manifestTraceEvents: readonly string[]): void {
+  if (manifestTraceEvents.length === 0) return;
+  const declared = new Set(manifestTraceEvents);
+  for (const step of trace.steps) {
+    if (step.animationEvent && !declared.has(step.animationEvent)) {
+      throw ApiError.validation(
+        `Trace step "${step.id}" references animation event "${step.animationEvent}", which is not declared in the package manifest's traceEvents (${manifestTraceEvents.join(", ") || "none"}).`,
+      );
+    }
+  }
 }
 
 export async function createDraftPackage(actorId: string, title: string): Promise<CmsAnimationPackageAttributes> {
@@ -47,6 +74,7 @@ export async function createDraftPackage(actorId: string, title: string): Promis
     css: null,
     js: null,
     assets: [],
+    packageTrace: null,
   });
   return doc.toObject();
 }
@@ -68,7 +96,17 @@ export async function listPackages(): Promise<CmsAnimationPackageAttributes[]> {
 export async function savePackageDraftContent(
   packageId: string,
   actorId: string,
-  input: { title: string; manifest: Omit<CmsAnimationPackageContent["manifest"], "bridgeVersion">; html: string; css?: string | null; js?: string | null; expectedRevision: number },
+  input: {
+    title: string;
+    manifest: Omit<CmsAnimationPackageContent["manifest"], "bridgeVersion">;
+    html: string;
+    css?: string | null;
+    js?: string | null;
+    /** Whole-tree-replace like every other field — see the schema comment
+     * on `savePackageContentSchema.packageTrace`. */
+    packageTrace?: CmsPackageTrace | null;
+    expectedRevision: number;
+  },
   sourceKind: "html" | "zip" = "html",
   assets: CmsPackageAsset[] = [],
 ): Promise<CmsAnimationPackageAttributes> {
@@ -82,6 +120,14 @@ export async function savePackageDraftContent(
     });
   }
 
+  if (input.packageTrace) {
+    const parsed = packageTraceSchema.safeParse(input.packageTrace);
+    if (!parsed.success) {
+      throw ApiError.validation("Invalid trace.json content.", { issues: parsed.error.issues });
+    }
+    validatePackageTraceAgainstManifest(input.packageTrace, input.manifest.traceEvents);
+  }
+
   draft.title = input.title;
   draft.manifest = { bridgeVersion: CMS_BRIDGE_VERSION, heightPx: input.manifest.heightPx, capabilities: input.manifest.capabilities, traceEvents: input.manifest.traceEvents } as CmsAnimationPackageAttributes["manifest"];
   draft.sourceKind = sourceKind;
@@ -89,6 +135,7 @@ export async function savePackageDraftContent(
   draft.css = input.css ?? null;
   draft.js = input.js ?? null;
   draft.assets = assets as CmsAnimationPackageAttributes["assets"];
+  draft.packageTrace = (input.packageTrace ?? null) as CmsAnimationPackageAttributes["packageTrace"];
   draft.updatedBy = actorId as unknown as CmsAnimationPackageAttributes["updatedBy"];
   draft.revision += 1;
   await draft.save();
@@ -134,6 +181,13 @@ export interface ExtractedZipPackage {
   js: string | null;
   assets: CmsPackageAsset[];
   manifestFromZip: { heightPx?: number; capabilities?: string[]; traceEvents?: string[] } | null;
+  /** Parsed, schema-validated `trace.json` — `null` if the ZIP didn't
+   * include one (still a fully valid package, per PART 1's "existing
+   * animation ZIPs WITHOUT trace.json remain valid"). Cross-checked against
+   * `manifestFromZip.traceEvents` by the caller once both are known (see
+   * cms.routes.ts's upload-zip handler), not here, since this function
+   * parses files independently of each other in one pass. */
+  packageTrace: CmsPackageTrace | null;
 }
 
 /**
@@ -168,6 +222,7 @@ export async function extractZipPackage(zipBuffer: Buffer): Promise<ExtractedZip
   let css: string | null = null;
   let js: string | null = null;
   let manifestFromZip: ExtractedZipPackage["manifestFromZip"] = null;
+  let packageTrace: CmsPackageTrace | null = null;
   const assets: CmsPackageAsset[] = [];
   let totalUncompressedBytes = 0;
   let totalAssetBytes = 0;
@@ -215,6 +270,24 @@ export async function extractZipPackage(zipBuffer: Buffer): Promise<ExtractedZip
         } catch {
           throw ApiError.validation("manifest.json is not valid JSON.");
         }
+      } else if (kind === "json" && isTopLevel && /^trace\.json$/i.test(path)) {
+        if (Buffer.byteLength(text, "utf8") > ANIMATION_PACKAGE_LIMITS.packageTraceJsonMaxBytes) {
+          throw ApiError.validation(`trace.json exceeds the ${ANIMATION_PACKAGE_LIMITS.packageTraceJsonMaxBytes}-byte limit.`);
+        }
+        let rawTrace: unknown;
+        try {
+          rawTrace = JSON.parse(text);
+        } catch {
+          throw ApiError.validation("trace.json is not valid JSON.");
+        }
+        const parsedTrace = packageTraceSchema.safeParse(rawTrace);
+        if (!parsedTrace.success) {
+          const firstIssue = parsedTrace.error.issues[0];
+          throw ApiError.validation(`trace.json failed validation: ${firstIssue ? `${firstIssue.path.join(".")}: ${firstIssue.message}` : "invalid shape"}.`, {
+            issues: parsedTrace.error.issues,
+          });
+        }
+        packageTrace = parsedTrace.data;
       } else {
         // FAIL CLOSED rather than silently drop. This matters even for an
         // entry that arrives here with an already-harmless name: JSZip
@@ -229,7 +302,7 @@ export async function extractZipPackage(zipBuffer: Buffer): Promise<ExtractedZip
         // upload — found via a genuinely hostile ZIP fixture built with
         // Python's zipfile (whose writer does not path-normalize), sent to
         // this real endpoint.
-        throw ApiError.validation(`Unexpected file in ZIP: "${path}". Only animation.html, animation.css, animation.js, manifest.json (all top-level), and images under assets/ are allowed.`);
+        throw ApiError.validation(`Unexpected file in ZIP: "${path}". Only animation.html, animation.css, animation.js, manifest.json, trace.json (all top-level), and images under assets/ are allowed.`);
       }
       continue;
     }
@@ -265,7 +338,7 @@ export async function extractZipPackage(zipBuffer: Buffer): Promise<ExtractedZip
     throw ApiError.validation("The ZIP archive must contain animation.html at its root.");
   }
 
-  return { html, css, js, assets, manifestFromZip };
+  return { html, css, js, assets, manifestFromZip, packageTrace };
 }
 
 const contentTypeAllowed = new Set<string>(ANIMATION_PACKAGE_ASSET_CONTENT_TYPES);
@@ -302,6 +375,7 @@ export async function freezePackageRevisionIfNeeded(packageId: string, session: 
     css: draft.css ?? null,
     js: draft.js ?? null,
     assets: (draft.assets ?? []) as CmsPackageAsset[],
+    packageTrace: (draft.packageTrace ?? null) as CmsPackageTrace | null,
   });
 
   if (draft.lastFrozenContentHash === hash && draft.lastFrozenRevisionId) {
@@ -327,6 +401,7 @@ export async function freezePackageRevisionIfNeeded(packageId: string, session: 
         css: draft.css,
         js: draft.js,
         assets: draft.assets,
+        packageTrace: draft.packageTrace ?? null,
       },
     ],
     { session },

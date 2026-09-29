@@ -97,7 +97,15 @@ export function parseBridgeEvent(data: unknown): BridgeEventMessage | null {
  * package that never asked for PLAY should never receive it even if some
  * future caller forgets to check. */
 export function buildBridgeCommand(type: BridgeCommand, declaredCapabilities: readonly string[], stepId?: string): BridgeCommandMessage | null {
-  const capabilityKey = type.toLowerCase() === "gotostep" ? "gotoStep" : (type.toLowerCase() as string)
+  // `"GOTO_STEP".toLowerCase()` is `"goto_step"` (the underscore survives
+  // lowercasing) — comparing that against the literal `"gotostep"` never
+  // matched, so this fell through to the `else` branch and always looked
+  // up a `"goto_step"` capability that no manifest ever declares (the real
+  // key is `"gotoStep"`, camelCase — see CMS_PACKAGE_CAPABILITIES above).
+  // GOTO_STEP has never actually been sendable through this function.
+  // Found via a literal end-to-end round-trip test (an independently
+  // authored package clicking a real trace-step jump button).
+  const capabilityKey = type === "GOTO_STEP" ? "gotoStep" : (type.toLowerCase() as string)
   if (!declaredCapabilities.includes(capabilityKey)) return null
   if (type === "GOTO_STEP") {
     if (!stepId || !STEP_ID_PATTERN.test(stepId)) return null

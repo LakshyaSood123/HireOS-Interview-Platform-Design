@@ -18,18 +18,22 @@ import {
 import { CmsRevisionConflictError } from "../dsaCmsClient"
 import CustomAnimationHost from "./CustomAnimationHost"
 import type { CmsDsaBridgeMode } from "../dsaCmsTypes"
+import type { PromptContext } from "../promptGenerator"
+import PromptGeneratorModal from "./PromptGeneratorModal"
+import PackageRequirementsModal from "./PackageRequirementsModal"
 
 interface CustomAnimationEditorProps {
   packageId: string
   bridgeMode: CmsDsaBridgeMode
   onBridgeModeChange: (mode: CmsDsaBridgeMode) => void
+  promptContext: PromptContext
 }
 
 const FIELD_CLASS =
   "w-full rounded-xl bg-black/25 border border-white/10 focus:border-[#1DB584]/60 px-3.5 py-2.5 text-sm text-white placeholder-gray-500 outline-none transition-colors font-mono"
 const LABEL_CLASS = "text-[11px] font-bold uppercase tracking-wider text-gray-400 block mb-1.5"
 
-export default function CustomAnimationEditor({ packageId, bridgeMode, onBridgeModeChange }: CustomAnimationEditorProps) {
+export default function CustomAnimationEditor({ packageId, bridgeMode, onBridgeModeChange, promptContext }: CustomAnimationEditorProps) {
   const { client } = useAuth()
   const [pkg, setPkg] = useState<CmsAnimationPackage | null>(null)
   const [loadError, setLoadError] = useState<string | null>(null)
@@ -40,6 +44,9 @@ export default function CustomAnimationEditor({ packageId, bridgeMode, onBridgeM
   const [conflict, setConflict] = useState(false)
   const [uploadError, setUploadError] = useState<string | null>(null)
   const [showPreview, setShowPreview] = useState(false)
+  const [showPrompt, setShowPrompt] = useState(false)
+  const [showRequirements, setShowRequirements] = useState(false)
+  const [showFullPrompt, setShowFullPrompt] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -82,6 +89,11 @@ export default function CustomAnimationEditor({ packageId, bridgeMode, onBridgeM
         html: draft.html,
         css: draft.css || null,
         js: draft.js || null,
+        // Preserve whatever package trace is currently loaded — a plain
+        // HTML/CSS/JS edit-and-save must never silently wipe a trace.json
+        // that came from an earlier ZIP upload (only re-uploading a ZIP
+        // actually changes this).
+        packageTrace: pkg.packageTrace,
         expectedRevision: pkg.revision,
       })
       setPkg(saved)
@@ -107,6 +119,7 @@ export default function CustomAnimationEditor({ packageId, bridgeMode, onBridgeM
             html: await file.text(),
             css: null,
             js: null,
+            packageTrace: pkg.packageTrace, // a single-.html upload has no trace.json mechanism — preserve whatever's already there
             expectedRevision: pkg.revision,
           })
       setPkg(saved)
@@ -175,7 +188,18 @@ export default function CustomAnimationEditor({ packageId, bridgeMode, onBridgeM
           className="block w-full text-xs text-gray-300 file:mr-3 file:px-3.5 file:py-2 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-[#1DB584] file:text-white hover:file:bg-[#159a6f] file:cursor-pointer cursor-pointer"
         />
         {uploadError && <p className="text-[11px] text-red-400 mt-1.5">{uploadError}</p>}
-        <p className="text-[10.5px] text-gray-500 mt-1.5">A single .html file, or a .zip containing animation.html (required) plus optional animation.css, animation.js, manifest.json, and assets/*.png|jpg|gif|webp.</p>
+        <p className="text-[10.5px] text-gray-500 mt-1.5">A single .html file, or a .zip containing animation.html (required) plus optional animation.css, animation.js, manifest.json, trace.json, and assets/*.png|jpg|gif|webp.</p>
+        <div className="flex flex-wrap gap-1.5 mt-2.5">
+          <button onClick={() => setShowPrompt(true)} className="px-3 py-1.5 rounded-lg text-[10.5px] font-bold text-[#7DD3FC] bg-[#38BDF8]/10 hover:bg-[#38BDF8]/20 border border-[#38BDF8]/25 cursor-pointer transition-all">
+            ✨ Generate AI Package Prompt
+          </button>
+          <button onClick={() => setShowRequirements(true)} className="px-3 py-1.5 rounded-lg text-[10.5px] font-bold text-gray-300 bg-white/5 hover:bg-white/10 border border-white/10 cursor-pointer transition-all">
+            View Package Requirements
+          </button>
+          <button onClick={() => setShowFullPrompt(true)} className="px-3 py-1.5 rounded-lg text-[10.5px] font-bold text-[#A7CE65] bg-[#A7CE65]/10 hover:bg-[#A7CE65]/20 border border-[#A7CE65]/25 cursor-pointer transition-all">
+            ✨ Generate Full Animation + Trace Prompt
+          </button>
+        </div>
       </div>
 
       <div>
@@ -265,6 +289,26 @@ export default function CustomAnimationEditor({ packageId, bridgeMode, onBridgeM
           <CustomAnimationHost pkg={{ html: draft.html, css: draft.css || null, js: draft.js || null, assets: pkg.assets, manifest: { bridgeVersion: 1, heightPx: draft.heightPx, capabilities: draft.capabilities, traceEvents: [] } }} bridgeMode={bridgeMode} />
         </div>
       )}
+
+      {showPrompt && (
+        <PromptGeneratorModal
+          initialMode="animation"
+          availableModes={["animation"]}
+          context={{ ...promptContext, animationTitle: draft.title, heightPx: draft.heightPx }}
+          defaultBridgeMode={bridgeMode}
+          onClose={() => setShowPrompt(false)}
+        />
+      )}
+      {showFullPrompt && (
+        <PromptGeneratorModal
+          initialMode="full"
+          availableModes={["full"]}
+          context={{ ...promptContext, animationTitle: draft.title, heightPx: draft.heightPx }}
+          defaultBridgeMode={bridgeMode}
+          onClose={() => setShowFullPrompt(false)}
+        />
+      )}
+      {showRequirements && <PackageRequirementsModal focus="package" onClose={() => setShowRequirements(false)} />}
     </div>
   )
 }

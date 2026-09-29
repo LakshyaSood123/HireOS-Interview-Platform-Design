@@ -9,13 +9,15 @@ import { createAnimationPackage } from "../animationPackageClient"
 import DsaAnimationSelector from "./DsaAnimationSelector"
 import CustomAnimationEditor from "./CustomAnimationEditor"
 import type { CmsDsaAnimationSource, CmsDsaBridgeMode } from "../dsaCmsTypes"
+import type { PromptContext } from "../promptGenerator"
 
 interface DsaAnimationSourceEditorProps {
   animation: CmsDsaAnimationSource | undefined
   onChange: (animation: CmsDsaAnimationSource | undefined) => void
+  promptContext: PromptContext
 }
 
-export default function DsaAnimationSourceEditor({ animation, onChange }: DsaAnimationSourceEditorProps) {
+export default function DsaAnimationSourceEditor({ animation, onChange, promptContext }: DsaAnimationSourceEditorProps) {
   const { client } = useAuth()
   const [creating, setCreating] = useState(false)
   const [createError, setCreateError] = useState<string | null>(null)
@@ -77,6 +79,7 @@ export default function DsaAnimationSourceEditor({ animation, onChange }: DsaAni
               packageId={animation.packageId}
               bridgeMode={animation.bridgeMode}
               onBridgeModeChange={(bridgeMode: CmsDsaBridgeMode) => onChange({ ...animation, bridgeMode })}
+              promptContext={promptContext}
             />
           )}
         </>

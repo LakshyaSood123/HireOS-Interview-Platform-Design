@@ -166,6 +166,8 @@ cmsRouter.patch(
   validate({ params: packageIdParams, body: savePackageContentSchema }),
   async (req, res) => {
     const { packageId } = params<PackageIdParams>(req);
+    // `input.packageTrace` (whole-tree-replace, like every other field
+    // here — see the schema's own comment) flows straight through.
     const input = body<SavePackageContentInput>(req);
     sendData(res, await animationPackageService.savePackageDraftContent(packageId, currentUserId(req), input, "html", []));
   },
@@ -197,6 +199,14 @@ cmsRouter.post(
     // else is silently dropped rather than rejecting the whole upload.
     const knownCapabilities = new Set(CMS_PACKAGE_CAPABILITIES as readonly string[]);
     const capabilities = (extracted.manifestFromZip?.capabilities ?? []).filter((c) => knownCapabilities.has(c)) as CmsPackageCapability[];
+    const traceEvents = extracted.manifestFromZip?.traceEvents ?? [];
+    // Cross-field check once BOTH manifest and trace.json are known — see
+    // `validatePackageTraceAgainstManifest`'s own doc comment. Rejects the
+    // whole upload (never a partial save) if trace.json references a
+    // semantic event the manifest never declared.
+    if (extracted.packageTrace) {
+      animationPackageService.validatePackageTraceAgainstManifest(extracted.packageTrace, traceEvents);
+    }
     sendData(
       res,
       await animationPackageService.savePackageDraftContent(
@@ -204,10 +214,11 @@ cmsRouter.post(
         currentUserId(req),
         {
           title: input.title,
-          manifest: { heightPx: extracted.manifestFromZip?.heightPx ?? 420, capabilities, traceEvents: extracted.manifestFromZip?.traceEvents ?? [] },
+          manifest: { heightPx: extracted.manifestFromZip?.heightPx ?? 420, capabilities, traceEvents },
           html: extracted.html,
           css: extracted.css,
           js: extracted.js,
+          packageTrace: extracted.packageTrace,
           expectedRevision: input.expectedRevision,
         },
         "zip",

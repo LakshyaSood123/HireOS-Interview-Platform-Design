@@ -23,6 +23,28 @@ export interface CmsPackageAsset {
   dataBase64: string
 }
 
+/** `trace.json`'s own wire format — see the backend's `CmsPackageTraceStep`
+ * (animationPackage.types.ts) for why this differs from the flat
+ * `CmsDsaTraceStep`. `packageTraceUtils.ts`'s `packageTraceStepToCmsDsaTraceStep`
+ * is the one place that flattens it for the "Import into CMS Structured"
+ * feature. */
+export interface CmsPackageTraceStepCode {
+  pseudocode: string
+  python?: string | null
+  cpp?: string | null
+  java?: string | null
+}
+export interface CmsPackageTraceStep {
+  id: string
+  label: string
+  animationEvent?: string | null
+  code: CmsPackageTraceStepCode
+}
+export interface CmsPackageTrace {
+  version: number
+  steps: CmsPackageTraceStep[]
+}
+
 export interface CmsAnimationPackage {
   packageId: string
   revisionId: string
@@ -35,6 +57,7 @@ export interface CmsAnimationPackage {
   css: string | null
   js: string | null
   assets: CmsPackageAsset[]
+  packageTrace: CmsPackageTrace | null
 }
 
 export function createAnimationPackage(client: ApiClient, title: string): Promise<CmsAnimationPackage> {
@@ -72,7 +95,19 @@ async function withConflictHandling<T>(promise: Promise<T>): Promise<T> {
 export function saveAnimationPackageContent(
   client: ApiClient,
   packageId: string,
-  input: { title: string; manifest: Omit<CmsPackageManifest, "bridgeVersion">; html: string; css?: string | null; js?: string | null; expectedRevision: number },
+  input: {
+    title: string
+    manifest: Omit<CmsPackageManifest, "bridgeVersion">
+    html: string
+    css?: string | null
+    js?: string | null
+    /** Whole-tree-replace, like every other field — pass the package's
+     * CURRENT `packageTrace` back unchanged unless intentionally clearing
+     * or replacing it, or a plain HTML/CSS/JS edit will silently wipe a
+     * trace that came from an earlier ZIP upload. */
+    packageTrace?: CmsPackageTrace | null
+    expectedRevision: number
+  },
 ): Promise<CmsAnimationPackage> {
   return withConflictHandling(client.request<CmsAnimationPackage>("PATCH", `/cms/animation-packages/${encodeURIComponent(packageId)}`, { body: input }).then(res => res.data))
 }

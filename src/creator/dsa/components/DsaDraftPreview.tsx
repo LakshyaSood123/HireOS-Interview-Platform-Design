@@ -35,6 +35,7 @@ import type { ProgressState } from "../../../learning/types"
 import { useAuth } from "../../../auth/AuthContext"
 import { getAnimationPackageRevision, type CmsAnimationPackage } from "../animationPackageClient"
 import CustomAnimationHost, { type CustomAnimationHostHandle } from "./CustomAnimationHost"
+import { packageTraceStepToCmsDsaTraceStep } from "../packageTraceUtils"
 
 const previewRunner = new DisabledCodeRunner()
 const previewNotesRepository = new LocalNotesRepository()
@@ -66,7 +67,18 @@ export default function DsaDraftPreview({ course, target, onTargetChange }: DsaD
     ?.modules.find(m => m.id === target.moduleId)
     ?.checkpoints.find(cp => cp.id === target.checkpointId)
   const customAnimation = rawCheckpoint?.workspace?.animation?.kind === "custom" ? rawCheckpoint.workspace.animation : null
-  const cmsTraceSteps = rawCheckpoint?.workspace?.traceSource?.kind === "cms" ? (rawCheckpoint.workspace.traceSource.steps ?? []) : []
+  const traceSourceKind = rawCheckpoint?.workspace?.traceSource?.kind
+  // "cms" trace steps come straight from the checkpoint; "package" trace
+  // steps come from the currently-loaded package's OWN trace.json (fetched
+  // below as `customPkg`) — same display shape either way via
+  // `packageTraceStepToCmsDsaTraceStep`, since this panel only ever needs
+  // label/pseudocode/animationEvent, not the full authoring model.
+  const cmsTraceSteps =
+    traceSourceKind === "cms"
+      ? (rawCheckpoint?.workspace?.traceSource?.steps ?? [])
+      : traceSourceKind === "package" && customPkg?.packageTrace
+        ? customPkg.packageTrace.steps.map(packageTraceStepToCmsDsaTraceStep)
+        : []
   const [currentStepId, setCurrentStepId] = useState<string | null>(null)
   const activeTraceStep = currentStepId ? cmsTraceSteps.find(s => s.animationEvent === currentStepId) : null
   const animationHostRef = useRef<CustomAnimationHostHandle>(null)

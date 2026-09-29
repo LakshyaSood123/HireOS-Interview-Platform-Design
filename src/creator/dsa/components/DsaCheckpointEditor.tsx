@@ -9,6 +9,7 @@ import DsaAnimationSourceEditor from "./DsaAnimationSourceEditor"
 import DsaCodeTraceSourceEditor from "./DsaCodeTraceSourceEditor"
 import DsaLayoutEditor from "./DsaLayoutEditor"
 import { useState } from "react"
+import type { PromptContext } from "../promptGenerator"
 
 interface DsaCheckpointEditorProps {
   course: CreatorCourse
@@ -32,6 +33,23 @@ export default function DsaCheckpointEditor({ course, zone, module, checkpoint, 
   const commitWorkspace = (patch: Partial<CmsDsaWorkspace>) => {
     const workspace: CmsDsaWorkspace = { ...(checkpoint.workspace ?? { title: checkpoint.title, theory: [] }), ...patch }
     commit({ workspace })
+  }
+
+  // Real, currently-authored context only — every field is omitted by
+  // promptGenerator.ts when absent, never fabricated (PART 9).
+  const promptContext: PromptContext = {
+    courseTitle: course.title,
+    zoneTitle: zone.title,
+    moduleTitle: module.title,
+    checkpointTitle: checkpoint.title,
+    lessonTitle: checkpoint.workspace?.title,
+    theory: checkpoint.workspace?.theory?.length ? checkpoint.workspace.theory : undefined,
+    quickCheckQuestion: checkpoint.workspace?.quickCheck?.question,
+    existingCodeExamples: checkpoint.workspace?.codeExamples?.length ? checkpoint.workspace.codeExamples : undefined,
+    existingTraceSteps:
+      checkpoint.workspace?.traceSource?.kind === "cms" && checkpoint.workspace.traceSource.steps?.length
+        ? checkpoint.workspace.traceSource.steps.map((s) => ({ label: s.label || s.stepId, pseudocode: s.pseudocode }))
+        : undefined,
   }
 
   return (
@@ -145,7 +163,7 @@ export default function DsaCheckpointEditor({ course, zone, module, checkpoint, 
 
           <div className="rounded-2xl bg-[#0F2A20] border border-white/10 p-6">
             <h3 className="text-xs font-black uppercase tracking-wider text-[#A7CE65] mb-4">Study Animation</h3>
-            <DsaAnimationSourceEditor animation={checkpoint.workspace.animation} onChange={animation => commitWorkspace({ animation })} />
+            <DsaAnimationSourceEditor animation={checkpoint.workspace.animation} onChange={animation => commitWorkspace({ animation })} promptContext={promptContext} />
           </div>
 
           <div className="rounded-2xl bg-[#0F2A20] border border-white/10 p-6">
@@ -154,6 +172,7 @@ export default function DsaCheckpointEditor({ course, zone, module, checkpoint, 
               traceSource={checkpoint.workspace.traceSource}
               animation={checkpoint.workspace.animation}
               onChange={traceSource => commitWorkspace({ traceSource })}
+              promptContext={promptContext}
             />
           </div>
 

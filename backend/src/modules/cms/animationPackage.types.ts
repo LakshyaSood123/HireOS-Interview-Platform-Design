@@ -56,6 +56,35 @@ export interface CmsPackageManifest {
   traceEvents: string[];
 }
 
+/**
+ * `trace.json`'s own wire format — deliberately NOT the same shape as the
+ * existing `CmsTraceStep` (cms.types.ts: `stepId`, flat `pseudocode`/
+ * `python`/`cpp`/`java` fields). `id`/nested `code.{pseudocode,...}` is what
+ * this project's generated AI prompts instruct an external tool to produce
+ * (see promptGenerator.ts on the frontend) — a natural, self-documenting
+ * external file format. `packageTraceStepToCmsTraceStep` (frontend) is the
+ * one place that flattens it into the existing internal `CmsTraceStep`
+ * shape for the "Import into CMS Structured" feature — there is still only
+ * ONE internal structured-trace model; trace.json is just its own honest
+ * external contract, not a second internal one.
+ */
+export interface CmsPackageTraceStepCode {
+  pseudocode: string;
+  python?: string | null;
+  cpp?: string | null;
+  java?: string | null;
+}
+export interface CmsPackageTraceStep {
+  id: string;
+  label: string;
+  animationEvent?: string | null;
+  code: CmsPackageTraceStepCode;
+}
+export interface CmsPackageTrace {
+  version: number;
+  steps: CmsPackageTraceStep[];
+}
+
 export interface CmsAnimationPackageContent {
   title: string;
   manifest: CmsPackageManifest;
@@ -67,6 +96,13 @@ export interface CmsAnimationPackageContent {
   css?: string | null;
   js?: string | null;
   assets: CmsPackageAsset[];
+  /** Parsed, validated `trace.json` — absent for a single-HTML upload or a
+   * ZIP that didn't include one (both remain fully valid packages). Part of
+   * the SAME immutable package revision as everything else above — see
+   * `freezePackageRevisionIfNeeded` in animationPackage.service.ts, whose
+   * content hash now includes this field so a trace-only edit mints a new
+   * frozen revision exactly like an html/css/js edit would. */
+  packageTrace?: CmsPackageTrace | null;
 }
 
 export interface CmsAnimationPackageRevision extends CmsAnimationPackageContent {
@@ -100,6 +136,14 @@ export const ANIMATION_PACKAGE_LIMITS = {
   maxZipEntryCount: 50,
   traceEventsMaxCount: 200,
   traceEventIdMaxChars: 64,
+  // trace.json limits — deliberately close to the existing CMS Structured
+  // trace limits (cms.schema.ts's `traceStepSchema`) so the two stay
+  // consistent, not two independently-drifting numbers.
+  packageTraceMaxSteps: 200,
+  packageTraceStepIdMaxChars: 64,
+  packageTraceLabelMaxChars: 200,
+  packageTraceCodeMaxChars: 2000,
+  packageTraceJsonMaxBytes: 200_000,
 } as const;
 
 export const ANIMATION_PACKAGE_ASSET_CONTENT_TYPES = ["image/png", "image/jpeg", "image/gif", "image/webp"] as const;

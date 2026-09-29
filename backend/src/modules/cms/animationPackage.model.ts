@@ -25,6 +25,29 @@ const manifestSchema = new Schema(
   { _id: false },
 );
 
+const packageTraceStepCodeSchema = new Schema(
+  {
+    pseudocode: { type: String, required: true },
+    python: { type: String, default: null },
+    cpp: { type: String, default: null },
+    java: { type: String, default: null },
+  },
+  { _id: false },
+);
+const packageTraceStepSchema = new Schema(
+  {
+    id: { type: String, required: true },
+    label: { type: String, required: true },
+    animationEvent: { type: String, default: null },
+    code: { type: packageTraceStepCodeSchema, required: true },
+  },
+  { _id: false },
+);
+/** `trace.json`, stored as-parsed — see animationPackage.types.ts's
+ * `CmsPackageTrace` comment for why its shape differs from the existing
+ * flat `CmsTraceStep`. */
+const packageTraceSchema = new Schema({ version: { type: Number, required: true }, steps: { type: [packageTraceStepSchema], required: true, default: [] } }, { _id: false });
+
 const animationPackageSchema = new Schema(
   {
     packageId: { type: String, required: true, maxlength: 64 },
@@ -43,6 +66,7 @@ const animationPackageSchema = new Schema(
     css: { type: String, default: null },
     js: { type: String, default: null },
     assets: { type: [assetSchema], required: true, default: [] },
+    packageTrace: { type: packageTraceSchema, default: null },
 
     /** Set only on a `"draft"` revision, after it has been frozen at least
      * once — lets `freezePackageRevisionIfNeeded` reuse the same frozen
