@@ -1,0 +1,60 @@
+{
+  "title": "Gaussian mixture models: mean, spread, weight",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "dataset",
+      "label": "The overlapping customers",
+      "pseudocode": "Customers described by two features.",
+      "python": "customers = [(1.4, 2.5), (2.4, 2.7), (4.8, 6.4), (5.8, 6.2), (7.5, 6.7), (8.4, 5.0)]\nprint(len(customers), 'example customers')\n# prints: 6 example customers"
+    },
+    {
+      "id": "component-center",
+      "label": "A component's mean",
+      "pseudocode": "Each Gaussian has a mean (center).",
+      "python": "component = {'weight': 0.41, 'mean': (5.0, 6.4), 'sigma': (0.7, 0.7)}\nprint('mean', component['mean'])\n# prints: mean (5.0, 6.4)"
+    },
+    {
+      "id": "component-spread",
+      "label": "A component's spread",
+      "pseudocode": "Each Gaussian has a spread.",
+      "python": "component = {'weight': 0.41, 'mean': (5.0, 6.4), 'sigma': (0.7, 0.7)}\nprint('spread', component['sigma'])\n# prints: spread (0.7, 0.7)"
+    },
+    {
+      "id": "component-weight",
+      "label": "A component's weight",
+      "pseudocode": "Each Gaussian has a mixing weight.",
+      "python": "weights = [0.29, 0.41, 0.30]\nprint(weights, round(sum(weights), 2))\n# prints: [0.29, 0.41, 0.3] 1.0"
+    },
+    {
+      "id": "three-gaussians",
+      "label": "Three Gaussian components",
+      "pseudocode": "Three components, each with its own parameters.",
+      "python": "mix = [(0.30, 2, 0.8), (0.45, 5, 1.0), (0.25, 8, 0.9)]      # (weight, mean, sigma)\nmixture = lambda x: sum(w * pdf(x, m, s) for w, m, s in mix)\nfor w, m, s in mix:\n    print('weight', w, 'mean', m, 'sigma', s)\n# prints: weight 0.3 mean 2 sigma 0.8\n# prints: weight 0.45 mean 5 sigma 1.0\n# prints: weight 0.25 mean 8 sigma 0.9"
+    },
+    {
+      "id": "overlap",
+      "label": "Where components overlap",
+      "pseudocode": "A point between components is plausible under both.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\nx = 6.5\nprint(round(pdf(x, 5.0, 0.7), 4), round(pdf(x, 7.4, 1.0), 4))\n# prints: 0.0574 0.2661"
+    },
+    {
+      "id": "combine-density",
+      "label": "Combine into one density",
+      "pseudocode": "The mixture density is the weighted sum.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\nmix = [(0.30, 2, 0.8), (0.45, 5, 1.0), (0.25, 8, 0.9)]      # (weight, mean, sigma)\nmixture = lambda x: sum(w * pdf(x, m, s) for w, m, s in mix)\nprint([round(mixture(x), 4) for x in (2, 5, 8)])\n# prints: [0.1516, 0.1801, 0.1128]"
+    },
+    {
+      "id": "new-point",
+      "label": "A new customer",
+      "pseudocode": "Contributions of each component at x = 3.5.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\nmix = [(0.30, 2, 0.8), (0.45, 5, 1.0), (0.25, 8, 0.9)]      # (weight, mean, sigma)\nmixture = lambda x: sum(w * pdf(x, m, s) for w, m, s in mix)\nx = 3.5\nprint([round(w * pdf(x, m, s), 4) for w, m, s in mix], round(mixture(x), 4))\n# prints: [0.0258, 0.0583, 0.0] 0.0841"
+    },
+    {
+      "id": "gmm-view",
+      "label": "The GMM view",
+      "pseudocode": "Mean, spread and weight define each component.",
+      "python": "mix = [(0.30, 2, 0.8), (0.45, 5, 1.0), (0.25, 8, 0.9)]      # (weight, mean, sigma)\nmixture = lambda x: sum(w * pdf(x, m, s) for w, m, s in mix)\nfor name, (w, m, s) in zip('ABC', mix):\n    print(name, {'weight': w, 'mean': m, 'sigma': s})\n# prints: A {'weight': 0.3, 'mean': 2, 'sigma': 0.8}\n# prints: B {'weight': 0.45, 'mean': 5, 'sigma': 1.0}\n# prints: C {'weight': 0.25, 'mean': 8, 'sigma': 0.9}"
+    }
+  ]
+}

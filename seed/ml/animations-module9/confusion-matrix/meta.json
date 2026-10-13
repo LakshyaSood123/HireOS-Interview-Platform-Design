@@ -1,0 +1,66 @@
+{
+  "title": "Confusion matrix: counting every kind of outcome",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "email-predictions",
+      "label": "A filter makes predictions",
+      "pseudocode": "Each email has an actual and a predicted class.",
+      "python": "emails = [('spam', 'spam'), ('spam', 'spam'), ('spam', 'legit'), ('legit', 'spam'), ('legit', 'legit'), ('legit', 'legit'), ('spam', 'spam'), ('legit', 'legit'), ('legit', 'spam'), ('legit', 'legit')]   # (actual, predicted)\nprint(len(emails), 'emails')\n# prints: 10 emails"
+    },
+    {
+      "id": "actual-labels",
+      "label": "The actual labels",
+      "pseudocode": "The actual class of each email.",
+      "python": "emails = [('spam', 'spam'), ('spam', 'spam'), ('spam', 'legit'), ('legit', 'spam'), ('legit', 'legit'), ('legit', 'legit'), ('spam', 'spam'), ('legit', 'legit'), ('legit', 'spam'), ('legit', 'legit')]   # (actual, predicted)\nprint([a for a, p in emails])\n# prints: ['spam', 'spam', 'spam', 'legit', 'legit', 'legit', 'spam', 'legit', 'legit', 'legit']"
+    },
+    {
+      "id": "predicted-labels",
+      "label": "The predicted labels",
+      "pseudocode": "The predicted class of each email.",
+      "python": "emails = [('spam', 'spam'), ('spam', 'spam'), ('spam', 'legit'), ('legit', 'spam'), ('legit', 'legit'), ('legit', 'legit'), ('spam', 'spam'), ('legit', 'legit'), ('legit', 'spam'), ('legit', 'legit')]   # (actual, predicted)\nprint([p for a, p in emails])\n# prints: ['spam', 'spam', 'legit', 'spam', 'legit', 'legit', 'spam', 'legit', 'spam', 'legit']"
+    },
+    {
+      "id": "correct-spam",
+      "label": "True positives",
+      "pseudocode": "Actual spam predicted spam.",
+      "python": "emails = [('spam', 'spam'), ('spam', 'spam'), ('spam', 'legit'), ('legit', 'spam'), ('legit', 'legit'), ('legit', 'legit'), ('spam', 'spam'), ('legit', 'legit'), ('legit', 'spam'), ('legit', 'legit')]   # (actual, predicted)\nprint(sum(a == 'spam' and p == 'spam' for a, p in emails), 'true positives')\n# prints: 3 true positives"
+    },
+    {
+      "id": "missed-spam",
+      "label": "False negatives",
+      "pseudocode": "Actual spam predicted legitimate.",
+      "python": "emails = [('spam', 'spam'), ('spam', 'spam'), ('spam', 'legit'), ('legit', 'spam'), ('legit', 'legit'), ('legit', 'legit'), ('spam', 'spam'), ('legit', 'legit'), ('legit', 'spam'), ('legit', 'legit')]   # (actual, predicted)\nprint(sum(a == 'spam' and p == 'legit' for a, p in emails), 'false negatives')\n# prints: 1 false negatives"
+    },
+    {
+      "id": "false-alarm",
+      "label": "False positives",
+      "pseudocode": "Actual legitimate predicted spam.",
+      "python": "emails = [('spam', 'spam'), ('spam', 'spam'), ('spam', 'legit'), ('legit', 'spam'), ('legit', 'legit'), ('legit', 'legit'), ('spam', 'spam'), ('legit', 'legit'), ('legit', 'spam'), ('legit', 'legit')]   # (actual, predicted)\nprint(sum(a == 'legit' and p == 'spam' for a, p in emails), 'false positives')\n# prints: 2 false positives"
+    },
+    {
+      "id": "correct-legitimate",
+      "label": "True negatives",
+      "pseudocode": "Actual legitimate predicted legitimate.",
+      "python": "emails = [('spam', 'spam'), ('spam', 'spam'), ('spam', 'legit'), ('legit', 'spam'), ('legit', 'legit'), ('legit', 'legit'), ('spam', 'spam'), ('legit', 'legit'), ('legit', 'spam'), ('legit', 'legit')]   # (actual, predicted)\nprint(sum(a == 'legit' and p == 'legit' for a, p in emails), 'true negatives')\n# prints: 4 true negatives"
+    },
+    {
+      "id": "build-matrix",
+      "label": "Build the confusion matrix",
+      "pseudocode": "Rows are actual, columns are predicted.",
+      "python": "matrix = [['TP', 'FN'],\n          ['FP', 'TN']]       # rows: actual spam, actual legit; columns: predicted spam, predicted legit\nfor row in matrix:\n    print(row)\n# prints: ['TP', 'FN']\n# prints: ['FP', 'TN']"
+    },
+    {
+      "id": "fill-counts",
+      "label": "Fill in the counts",
+      "pseudocode": "Fill the cells with counts from all 100 emails.",
+      "python": "tp, fn, fp, tn = 16, 4, 8, 72        # positive class = spam\nmatrix = [[tp, fn], [fp, tn]]\nprint(matrix, 'total', tp + fn + fp + tn)\n# prints: [[16, 4], [8, 72]] total 100"
+    },
+    {
+      "id": "read-matrix",
+      "label": "Read the matrix",
+      "pseudocode": "Row sums are actual totals; the diagonal is correct.",
+      "python": "tp, fn, fp, tn = 16, 4, 8, 72        # positive class = spam\nprint('actual spam', tp + fn, 'actual legit', fp + tn)\nprint('accuracy', (tp + tn) / (tp + fn + fp + tn))\n# prints: actual spam 20 actual legit 80\n# prints: accuracy 0.88"
+    }
+  ]
+}

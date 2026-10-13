@@ -659,4 +659,19 @@ export const libraryCourses: LibraryCourse[] = [
     difficulty: "All Levels",
     status: "available",
   },
+  {
+    // Curriculum is NOT defined here — it is the backend-published,
+    // learner-pinned CMS version (see src/learning/courseSources.ts). This
+    // entry is only the Course Library card.
+    id: "machine-learning-foundations",
+    title: "Machine Learning Foundations",
+    biomeTitle: "Model Meadow",
+    biomeIcon: "🌾",
+    accentColor: "#38BDF8",
+    description: "Learn how machines discover patterns from data — from features and labels to your first trainable model.",
+    duration: "Self-paced",
+    lessonCount: 3,
+    difficulty: "Beginner → Intermediate",
+    status: "available",
+  },
 ]

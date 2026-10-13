@@ -1,0 +1,48 @@
+{
+  "title": "Joint distributions: probabilities for pairs",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "variable-x",
+      "label": "A first variable: bedrooms",
+      "pseudocode": "X = number of bedrooms, which can be 1, 2 or 3.",
+      "python": "X = [1, 2, 3]\nprint(X)"
+    },
+    {
+      "id": "variable-y",
+      "label": "A second variable: price band",
+      "pseudocode": "Y = price band, which can be Low or High.",
+      "python": "Y = ['Low', 'High']\nprint(Y)"
+    },
+    {
+      "id": "pair-values",
+      "label": "Pairs of values",
+      "pseudocode": "Every combination of an X value and a Y value is a pair.",
+      "python": "X = [1, 2, 3]\nY = ['Low', 'High']\npairs = [(x, y) for x in X for y in Y]\nprint(len(pairs))   # 6"
+    },
+    {
+      "id": "grid",
+      "label": "One cell, one pair",
+      "pseudocode": "Each pair is one cell of the table.",
+      "python": "X = [1, 2, 3]\nY = ['Low', 'High']\npairs = [(x, y) for x in X for y in Y]\nprint(pairs[-1])   # (3, 'High')"
+    },
+    {
+      "id": "joint-probabilities",
+      "label": "The joint probabilities",
+      "pseudocode": "P(X = x, Y = y) is stored for every pair, and all of them add up to 1.",
+      "python": "joint = {\n    (1, 'Low'): 0.25, (1, 'High'): 0.05,\n    (2, 'Low'): 0.20, (2, 'High'): 0.20,\n    (3, 'Low'): 0.05, (3, 'High'): 0.25,\n}\nprint(joint[(3, 'High')], round(sum(joint.values()), 2))   # 0.25 1.0"
+    },
+    {
+      "id": "pattern",
+      "label": "Reading the pattern",
+      "pseudocode": "If X and Y were unrelated, P(x, y) would equal P(x) * P(y). Compare.",
+      "python": "joint = {\n    (1, 'Low'): 0.25, (1, 'High'): 0.05,\n    (2, 'Low'): 0.20, (2, 'High'): 0.20,\n    (3, 'Low'): 0.05, (3, 'High'): 0.25,\n}\np_x3 = joint[(3, 'Low')] + joint[(3, 'High')]\np_high = sum(p for (x, y), p in joint.items() if y == 'High')\nprint(round(p_x3 * p_high, 2), joint[(3, 'High')])   # 0.15 0.25: more than chance alone"
+    },
+    {
+      "id": "ml-features",
+      "label": "Why ML cares: features together",
+      "pseudocode": "A dataset is a list of samples, each holding several variables at once.",
+      "python": "rows = [(3, 'High'), (1, 'Low'), (2, 'Low'), (3, 'High'), (2, 'High')]\nprint(len(rows), rows[0])   # 5 (3, 'High')"
+    }
+  ]
+}

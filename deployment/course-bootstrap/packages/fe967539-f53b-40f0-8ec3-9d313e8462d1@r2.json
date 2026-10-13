@@ -1,0 +1,147 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322c4e9cccef168ed03"
+  },
+  "assets": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498513"
+    }
+  },
+  "createdBy": {
+    "$oid": "000000000000000000000000"
+  },
+  "css": "body {\r\n  margin: 0;\r\n  padding: 14px;\r\n  box-sizing: border-box;\r\n  background: #0b1d16;\r\n  color: #e6f5ec;\r\n  font-family: system-ui, sans-serif;\r\n}\r\n.scene {\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 8px;\r\n}\r\n.step-label {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  letter-spacing: 0.08em;\r\n  text-transform: uppercase;\r\n  color: #a7ce65;\r\n}\r\nsvg {\r\n  width: 100%;\r\n  height: auto;\r\n  max-width: 640px;\r\n  background: #071510;\r\n  border-radius: 10px;\r\n  border: 1px solid rgba(29, 181, 132, 0.35);\r\n}\r\nsvg g,\r\nsvg line,\r\nsvg polygon,\r\nsvg path,\r\nsvg ellipse,\r\nsvg circle,\r\nsvg rect,\r\nsvg text {\r\n  transition: opacity 0.4s ease, transform 0.6s ease;\r\n}\r\n.axis {\r\n  stroke: rgba(167, 206, 101, 0.3);\r\n  stroke-width: 1;\r\n}\r\n.tick {\r\n  font-size: 10px;\r\n  fill: #8fa89c;\r\n}\r\n.lbl,\r\n.big,\r\n.note,\r\n.mono {\r\n  paint-order: stroke;\r\n  stroke: #071510;\r\n  stroke-width: 3px;\r\n  stroke-linejoin: round;\r\n}\r\n.lbl {\r\n  font-size: 12px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.lbl-g { fill: #1db584; }\r\n.lbl-y { fill: #e2b44a; }\r\n.lbl-p { fill: #f472b6; }\r\n.lbl-b { fill: #38bdf8; }\r\n.lbl-r { fill: #f87171; }\r\n.big {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.note {\r\n  font-size: 11px;\r\n  fill: #c9dccf;\r\n}\r\n.mono {\r\n  font-family: ui-monospace, Consolas, monospace;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.caption {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  line-height: 1.5;\r\n  color: #c9dccf;\r\n  min-height: 40px;\r\n}\r\n.cell rect {\r\n  fill: rgba(255, 255, 255, 0.05);\r\n  stroke: rgba(255, 255, 255, 0.28);\r\n  stroke-width: 1.2;\r\n}\r\n.cell text {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.cell.hl-row rect { fill: rgba(226, 180, 74, 0.25); stroke: #e2b44a; }\r\n.cell.hl-col rect { fill: rgba(29, 181, 132, 0.25); stroke: #1db584; }\r\n.cell.hl-both rect { fill: rgba(244, 114, 182, 0.28); stroke: #f472b6; }\r\n.dim { opacity: 0.25; }\r\n.dash { stroke-dasharray: 5 4; }\r\n.fillA { fill: rgba(56, 189, 248, 0.16); stroke: #38bdf8; stroke-width: 2; }\r\n.fillB { fill: rgba(244, 114, 182, 0.18); stroke: #f472b6; stroke-width: 2; }\r\n.fillG { fill: rgba(29, 181, 132, 0.16); stroke: #1db584; stroke-width: 2; }\r\n.contour { stroke: rgba(56, 189, 248, 0.45); stroke-width: 1.5; }\n.curve { fill: none; stroke: #38bdf8; stroke-width: 3; }\n.curve-y { fill: none; stroke: #e2b44a; stroke-width: 3; }\n.curve-p { fill: none; stroke: #f472b6; stroke-width: 3; }\n.curve-g { fill: none; stroke: #1db584; stroke-width: 3; }\n.ghost { fill: none; stroke: rgba(201, 220, 207, 0.4); stroke-width: 2; }\n.lbl-w { fill: #e6f5ec; }\n.lbl-s { font-size: 11px; font-weight: 600; fill: #c9dccf; }\n\n/* ── explanation panel (shared by every generated ML animation) ── */\n.explain {\n  box-sizing: border-box;\n  max-width: 640px;\n  margin-top: 4px;\n  padding: 14px 18px 16px;\n  min-height: 150px;\n  border-radius: 12px;\n  background: rgba(29, 181, 132, 0.10);\n  border: 1px solid rgba(29, 181, 132, 0.45);\n  border-left: 5px solid #1db584;\n}\n.explain-h {\n  margin: 0 0 8px;\n  font-size: 13px;\n  font-weight: 800;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.explain-t {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.55;\n  color: #f1faf4;\n}\n.explain-t strong {\n  font-weight: 800;\n  color: #ffd98a;\n}\n\n",
+  "html": "<div class=\"scene\">\n  <p class=\"step-label\" id=\"step-label\"></p>\n  <svg id=\"scene\" viewBox=\"0 0 640 360\" role=\"img\" aria-label=\"Probability spaces: outcomes, events and probabilities\"></svg>\n  <section class=\"explain\" aria-live=\"polite\">\n    <h3 class=\"explain-h\" id=\"explain-h\"></h3>\n    <p class=\"explain-t\" id=\"caption\"></p>\n  </section>\n</div>\n",
+  "js": "(function () {\n  // ── shared helpers (SVG, tweening) ─────────────────────────────────────────\r\n  var NS = \"http://www.w3.org/2000/svg\";\r\n  var svg = document.getElementById(\"scene\");\r\n  var labelEl = document.getElementById(\"step-label\");\r\n  var captionEl = document.getElementById(\"caption\");\r\n\r\n  function el(name, attrs, parent) {\r\n    var node = document.createElementNS(NS, name);\r\n    for (var key in attrs) node.setAttribute(key, attrs[key]);\r\n    if (parent) parent.appendChild(node);\r\n    return node;\r\n  }\r\n  function txt(parent, x, y, cls, str, anchor) {\r\n    var t = el(\"text\", { x: x, y: y, class: cls }, parent);\r\n    if (anchor) t.setAttribute(\"text-anchor\", anchor);\r\n    t.textContent = str;\r\n    return t;\r\n  }\r\n  function show(node, on) {\r\n    node.setAttribute(\"opacity\", on ? \"1\" : \"0\");\r\n  }\r\n  function place(node, x, y) {\r\n    node.style.transform = \"translate(\" + x + \"px,\" + y + \"px)\";\r\n  }\r\n  function setLine(node, x1, y1, x2, y2) {\r\n    node.setAttribute(\"x1\", x1);\r\n    node.setAttribute(\"y1\", y1);\r\n    node.setAttribute(\"x2\", x2);\r\n    node.setAttribute(\"y2\", y2);\r\n  }\r\n  function lerp(a, b, e) {\r\n    return a + (b - a) * e;\r\n  }\r\n  function round1(v) {\r\n    return (Math.round(v * 10) / 10).toFixed(1);\r\n  }\r\n\r\n  // Eased animation. fn(e) is called with e from 0 to 1. Without\r\n  // requestAnimationFrame (or with ms = 0) it jumps straight to fn(1).\r\n  var animTokens = {};\r\n  function anim(key, ms, fn) {\r\n    var token = (animTokens[key] || 0) + 1;\r\n    animTokens[key] = token;\r\n    if (typeof requestAnimationFrame !== \"function\" || ms <= 0) {\r\n      fn(1);\r\n      return;\r\n    }\r\n    var start = null;\r\n    function frame(now) {\r\n      if (animTokens[key] !== token) return;\r\n      if (start === null) start = now;\r\n      var p = Math.min(1, (now - start) / ms);\r\n      var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;\r\n      fn(e);\r\n      if (p < 1) requestAnimationFrame(frame);\r\n    }\r\n    requestAnimationFrame(frame);\r\n  }\r\n\r\n  // Arrowheads, one marker per colour.\r\n  var COLORS = { g: \"#1DB584\", y: \"#E2B44A\", p: \"#F472B6\", b: \"#38BDF8\", w: \"#c9dccf\", r: \"#F87171\" };\r\n  var defs = el(\"defs\", {}, svg);\r\n  Object.keys(COLORS).forEach(function (k) {\r\n    var m = el(\"marker\", { id: \"ah-\" + k, viewBox: \"0 0 10 10\", refX: 9, refY: 5, markerUnits: \"userSpaceOnUse\", markerWidth: 13, markerHeight: 13, orient: \"auto\" }, defs);\r\n    el(\"path\", { d: \"M0 0 L10 5 L0 10 Z\", fill: COLORS[k] }, m);\r\n  });\r\n  function arrow(parent, colorKey, width) {\r\n    return el(\"line\", { x1: 0, y1: 0, x2: 0, y2: 0, stroke: COLORS[colorKey], \"stroke-width\": width || 3, \"marker-end\": \"url(#ah-\" + colorKey + \")\", \"stroke-linecap\": \"round\" }, parent);\r\n  }\r\n  function polygon(parent, cls) {\r\n    return el(\"polygon\", { points: \"\", class: cls }, parent);\r\n  }\r\n  function setPoly(node, pts) {\r\n    node.setAttribute(\"points\", pts.map(function (p) { return p[0].toFixed(1) + \",\" + p[1].toFixed(1); }).join(\" \"));\r\n  }\r\n  function lerpPts(a, b, e) {\r\n    return a.map(function (p, i) { return [lerp(p[0], b[i][0], e), lerp(p[1], b[i][1], e)]; });\r\n  }\r\n  // Maps maths coordinates (x right, y up) to screen pixels.\r\n  function makePlane(cx, cy, s) {\r\n    return {\r\n      x: function (v) { return cx + s * v; },\r\n      y: function (v) { return cy - s * v; },\r\n      pt: function (p) { return [cx + s * p[0], cy - s * p[1]]; },\r\n      s: s, cx: cx, cy: cy\r\n    };\r\n  }\r\n  function axes(parent, plane, xr, yr) {\r\n    el(\"line\", { x1: plane.x(-xr), y1: plane.y(0), x2: plane.x(xr), y2: plane.y(0), class: \"axis\" }, parent);\r\n    el(\"line\", { x1: plane.x(0), y1: plane.y(-yr), x2: plane.x(0), y2: plane.y(yr), class: \"axis\" }, parent);\r\n  }\r\n\n  // ── Module 3 helpers: graphs, curves, contour plane ───────────────────────\n  // makeGraph maps maths values to pixels with separate x and y scales.\n  function makeGraph(ox, oy, sx, sy) {\n    return {\n      ox: ox, oy: oy, sx: sx, sy: sy,\n      x: function (v) { return ox + sx * v; },\n      y: function (v) { return oy - sy * v; }\n    };\n  }\n  function curveD(g, f, a, b, n) {\n    var d = \"\";\n    for (var i = 0; i <= n; i++) {\n      var v = a + ((b - a) * i) / n;\n      d += (i ? \" L \" : \"M \") + g.x(v).toFixed(1) + \" \" + g.y(f(v)).toFixed(1);\n    }\n    return d;\n  }\n  function setD(node, d) {\n    node.setAttribute(\"d\", d);\n  }\n  function fmt(v, n) {\n    return (Math.round(v * 100000) / 100000).toFixed(n === undefined ? 1 : n);\n  }\n  function drawAxes(parent, g, xmax, ymax, xticks, yticks) {\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(xmax), y2: g.y(0), class: \"axis\" }, parent);\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(0), y2: g.y(ymax), class: \"axis\" }, parent);\n    (xticks || []).forEach(function (t) { txt(parent, g.x(t), g.y(0) + 15, \"tick\", String(t), \"middle\"); });\n    (yticks || []).forEach(function (t) { txt(parent, g.x(0) - 7, g.y(t) + 4, \"tick\", String(t), \"end\"); });\n  }\n  function card(parent, x, y, w, h, cls) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: 10, class: cls || \"fillG\" }, parent);\n  }\n  function ring(parent, cx, cy, rx, ry, cls) {\n    return el(\"ellipse\", { cx: cx, cy: cy, rx: rx, ry: ry, fill: \"none\", class: cls || \"contour\" }, parent);\n  }\n  function clipTo(id, x, y, w, h) {\n    var c = el(\"clipPath\", { id: id }, defs);\n    el(\"rect\", { x: x, y: y, width: w, height: h }, c);\n  }\n\n  // ── Module 4 helpers: seeded randomness, small shapes ─────────────────────\n  function mulberry(seed) {\n    var a = seed;\n    return function () {\n      a |= 0; a = (a + 0x6D2B79F5) | 0;\n      var t = Math.imul(a ^ (a >>> 15), 1 | a);\n      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;\n      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;\n    };\n  }\n  function gaussSource(rand) {\n    return function () {\n      var u = 1 - rand(), v = rand();\n      return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);\n    };\n  }\n  function box(parent, x, y, w, h, fill, stroke, r) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: r === undefined ? 6 : r, fill: fill, stroke: stroke || \"none\", \"stroke-width\": 2 }, parent);\n  }\n  function setBox(node, x, y, w, h) {\n    node.setAttribute(\"x\", x); node.setAttribute(\"y\", y); node.setAttribute(\"width\", Math.max(0, w)); node.setAttribute(\"height\", Math.max(0, h));\n  }\n  function vis(list, on) {\n    list.forEach(function (n) { show(n, on); });\n  }\n\n  var EXPLAIN = {\"experiment\":{\"h\":\"WHAT YOU ARE LOOKING AT\",\"t\":\"We roll a **fair six-sided die**. Before the roll, nobody can say which face will come up. An experiment whose result is uncertain is called a **random experiment**.\"},\"possible-outcomes\":{\"h\":\"THE POSSIBLE OUTCOMES\",\"t\":\"Each possible result is an **outcome**. A die has six: **1, 2, 3, 4, 5 and 6**. Exactly one of them happens on every roll.\"},\"sample-space\":{\"h\":\"THE SAMPLE SPACE\",\"t\":\"The set of all possible outcomes is the **sample space**: **{1, 2, 3, 4, 5, 6}**. Everything we will ask about lives inside it.\"},\"event\":{\"h\":\"AN EVENT IS A GROUP OF OUTCOMES\",\"t\":\"An **event** is any collection of outcomes we care about. “The roll is even” is the event **{2, 4, 6}**. It happens whenever the roll lands on one of those faces.\"},\"assign-probability\":{\"h\":\"GIVE EACH OUTCOME A PROBABILITY\",\"t\":\"A fair die gives each face probability **1/6**. The probability of an event is the **sum over its outcomes**: P(even) = 1/6 + 1/6 + 1/6 = **1/2**.\"},\"valid-probabilities\":{\"h\":\"WHAT MAKES PROBABILITIES VALID\",\"t\":\"Every probability must be **between 0 and 1**, and all outcomes together must **add to exactly 1**. Six faces at 1/6 add to 1. Six faces at 0.2 would add to 1.2, which is not valid.\"},\"ml-connection\":{\"h\":\"TAKEAWAY\",\"t\":\"A classifier that outputs **spam 0.9 and not spam 0.1** is assigning probabilities to its two possible outcomes. They must **add to 1**, or the output is not a coherent belief.\"}};\n  // ── scene ──\n  var steps = [\r\n    { id: \"experiment\", label: \"A random experiment\", caption: \"Roll a fair six-sided die. Before the roll, nobody can say which face will come up. An experiment whose result is uncertain is called a random experiment.\" },\r\n    { id: \"possible-outcomes\", label: \"The possible outcomes\", caption: \"Each possible result is an outcome. A die has six: 1, 2, 3, 4, 5 and 6. Exactly one of them happens on every roll.\" },\r\n    { id: \"sample-space\", label: \"The sample space\", caption: \"The set of all possible outcomes is the sample space: {1, 2, 3, 4, 5, 6}. Everything we will ask about lives inside it.\" },\r\n    { id: \"event\", label: \"An event is a group of outcomes\", caption: \"An event is any collection of outcomes we care about. 'The roll is even' is the event {2, 4, 6}. It happens whenever the roll lands on one of those faces.\" },\r\n    { id: \"assign-probability\", label: \"Give each outcome a probability\", caption: \"A fair die gives each face probability 1/6. The probability of an event is the sum over its outcomes: P(even) = 1/6 + 1/6 + 1/6 = 1/2.\" },\r\n    { id: \"valid-probabilities\", label: \"What makes probabilities valid\", caption: \"Every probability must be between 0 and 1, and all outcomes together must add to exactly 1. Six faces at 1/6 add to 1. Six faces at 0.2 would add to 1.2, which is not valid.\" },\r\n    { id: \"ml-connection\", label: \"The same rule inside a model\", caption: \"A classifier that outputs spam 0.9 and not spam 0.1 is assigning probabilities to its two possible outcomes. They must add to 1, or the output is not a coherent belief.\" }\r\n  ];\r\n\r\n  var FX = function (i) { return 40 + i * 96; };\r\n  var faces = [], nums = [], bars = [], barLbls = [];\r\n  var big = el(\"g\", {}, svg);\r\n  card(big, 245, 100, 150, 130, \"fillA\");\r\n  txt(big, 320, 180, \"big\", \"?\", \"middle\").setAttribute(\"font-size\", \"48\");\r\n  txt(big, 320, 262, \"note\", \"roll the die: which face?\", \"middle\");\r\n\r\n  var facesG = el(\"g\", {}, svg);\r\n  for (var i = 0; i < 6; i++) {\r\n    faces.push(box(facesG, FX(i), 120, 80, 80, \"rgba(56,189,248,0.16)\", \"#38bdf8\", 12));\r\n    nums.push(txt(facesG, FX(i) + 40, 172, \"big\", String(i + 1), \"middle\"));\r\n    nums[i].setAttribute(\"font-size\", \"30\");\r\n  }\r\n  var spaceBox = el(\"rect\", { x: 28, y: 108, width: 584, height: 104, rx: 14, fill: \"none\", stroke: \"#e2b44a\", \"stroke-width\": 2.5, \"stroke-dasharray\": \"7 5\" }, svg);\r\n  var spaceLbl = txt(svg, 320, 96, \"lbl lbl-y\", \"sample space = {1, 2, 3, 4, 5, 6}\", \"middle\");\r\n  var evLbl = txt(svg, 320, 232, \"lbl lbl-p\", \"event: the roll is even = {2, 4, 6}\", \"middle\");\r\n  var outLbl = txt(svg, 320, 96, \"lbl\", \"six possible outcomes\", \"middle\");\r\n\r\n  var barsG = el(\"g\", {}, svg);\r\n  for (var j = 0; j < 6; j++) {\r\n    bars.push(box(barsG, FX(j) + 20, 336 - 48, 40, 48, \"rgba(56,189,248,0.5)\", \"#38bdf8\", 4));\r\n    barLbls.push(txt(barsG, FX(j) + 40, 336 - 54, \"lbl\", \"1/6\", \"middle\"));\r\n  }\r\n  el(\"line\", { x1: 30, y1: 336, x2: 610, y2: 336, class: \"axis\" }, barsG);\r\n  var sumLbl = txt(svg, 320, 258, \"big\", \"P(even) = 1/6 + 1/6 + 1/6 = 1/2\", \"middle\");\r\n\r\n  // Validity bars.\r\n  var validG = el(\"g\", {}, svg);\r\n  var W = 420, X0 = 90;\r\n  txt(validG, X0, 122, \"lbl lbl-g\", \"valid: six faces at 1/6\", \"start\");\r\n  for (var k = 0; k < 6; k++) box(validG, X0 + (W / 6) * k, 132, W / 6 - 2, 36, k % 2 ? \"rgba(29,181,132,0.55)\" : \"rgba(29,181,132,0.8)\", \"none\", 4);\r\n  txt(validG, X0 + W + 14, 156, \"big\", \"= 1\", \"start\");\r\n  el(\"line\", { x1: X0 + W, y1: 124, x2: X0 + W, y2: 300, stroke: \"#c9dccf\", \"stroke-width\": 2, \"stroke-dasharray\": \"5 4\" }, validG);\r\n  txt(validG, X0 + W, 316, \"note\", \"total of 1\", \"middle\");\r\n  txt(validG, X0, 222, \"lbl lbl-r\", \"not valid: six faces at 0.2\", \"start\");\r\n  for (var m = 0; m < 6; m++) box(validG, X0 + (W / 5) * m, 232, W / 5 - 2, 36, m % 2 ? \"rgba(248,113,113,0.55)\" : \"rgba(248,113,113,0.8)\", \"none\", 4);\r\n  txt(validG, X0, 296, \"big\", \"adds up to 1.2: too much\", \"start\").setAttribute(\"fill\", \"#f87171\");\r\n\r\n  var mlG = el(\"g\", {}, svg);\r\n  card(mlG, 40, 110, 150, 80, \"fillB\");\r\n  txt(mlG, 115, 142, \"note\", \"classifier output\", \"middle\");\r\n  txt(mlG, 115, 170, \"lbl\", \"for one email\", \"middle\");\r\n  var a1 = arrow(mlG, \"w\", 3); setLine(a1, 194, 150, 250, 150);\r\n  box(mlG, 260, 130, 0.9 * 330, 40, \"rgba(244,114,182,0.8)\", \"none\", 4);\r\n  box(mlG, 260 + 0.9 * 330, 130, 0.1 * 330, 40, \"rgba(56,189,248,0.8)\", \"none\", 4);\r\n  txt(mlG, 260 + 0.45 * 330, 156, \"lbl\", \"spam 0.9\", \"middle\");\r\n  txt(mlG, 260 + 0.95 * 330, 198, \"lbl lbl-b\", \"not spam 0.1\", \"middle\");\r\n  txt(mlG, 425, 244, \"big\", \"0.9 + 0.1 = 1\", \"middle\");\r\n  txt(mlG, 425, 276, \"note\", \"a valid probability assignment over two outcomes\", \"middle\");\r\n\r\n  function render(index, id) {\r\n    var i = index;\r\n    show(big, i === 0);\r\n    show(facesG, i >= 1 && i <= 4);\r\n    show(outLbl, i === 1);\r\n    show(spaceBox, i >= 2 && i <= 4);\r\n    show(spaceLbl, i >= 2 && i <= 4);\r\n    show(evLbl, i === 3 || i === 4);\r\n    show(barsG, i === 4);\r\n    show(sumLbl, i === 4);\r\n    show(validG, i === 5);\r\n    show(mlG, i === 6);\r\n    evLbl.setAttribute(\"y\", 232);\r\n    for (var f = 0; f < 6; f++) {\r\n      var isEven = (f + 1) % 2 === 0;\r\n      var hi = (i >= 3) && isEven;\r\n      faces[f].setAttribute(\"fill\", hi ? \"rgba(244,114,182,0.4)\" : \"rgba(56,189,248,0.16)\");\r\n      faces[f].setAttribute(\"stroke\", hi ? \"#f472b6\" : \"#38bdf8\");\r\n      bars[f].setAttribute(\"fill\", isEven ? \"rgba(244,114,182,0.7)\" : \"rgba(56,189,248,0.35)\");\r\n      bars[f].setAttribute(\"stroke\", isEven ? \"#f472b6\" : \"#38bdf8\");\r\n      faces[f].setAttribute(\"opacity\", \"1\");\r\n      nums[f].setAttribute(\"opacity\", \"1\");\r\n    }\r\n      if (i === 1) {\r\n      anim(\"faces\", 1100, function (e) {\r\n        for (var q = 0; q < 6; q++) {\r\n          var o = Math.max(0, Math.min(1, e * 7 - q)).toFixed(2);\r\n          faces[q].setAttribute(\"opacity\", o);\r\n          nums[q].setAttribute(\"opacity\", o);\r\n        }\r\n      });\r\n    }\r\n  }\r\n\n\n  // ── shared runtime: stepping, explanation panel, educational autoplay pacing, bridge ──\n  var current = 0;\n  var explainHeadEl = document.getElementById(\"explain-h\");\n\n  // **bold** markers in an explanation become <strong> nodes (built with DOM calls, never innerHTML).\n  function setRich(node, str) {\n    node.textContent = \"\";\n    var parts = String(str).split(\"**\");\n    for (var i = 0; i < parts.length; i++) {\n      if (parts[i] === \"\") continue;\n      var seg = document.createElement(i % 2 ? \"strong\" : \"span\");\n      seg.textContent = parts[i];\n      node.appendChild(seg);\n    }\n  }\n\n  function explanationFor(index) {\n    var ex = (typeof EXPLAIN === \"object\" && EXPLAIN) ? EXPLAIN[steps[index].id] : null;\n    return ex || { h: \"WHAT IS HAPPENING\", t: steps[index].caption };\n  }\n\n  // Autoplay pace: 4.5 to 10.5 seconds per step, longer for longer explanations, so a learner can read.\n  function stepMs(index) {\n    var words = String(explanationFor(index).t).replace(/\\*\\*/g, \"\").split(/\\s+/).length;\n    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));\n  }\n\n  function renderStep(index) {\n    var ex = explanationFor(index);\n    labelEl.textContent = steps[index].label;\n    if (explainHeadEl) explainHeadEl.textContent = ex.h;\n    setRich(captionEl, ex.t);\n    render(index, steps[index].id);\n  }\n\n  function goTo(index) {\n    if (index < 0 || index >= steps.length) return;\n    current = index;\n    renderStep(current);\n    if (window.ReagvisBridge) window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n\n  renderStep(current);\n\n  // Autoplay: exactly one timer, one step per tick, stops on the final step.\n  // PLAY on the final step restarts from the first step and plays again.\n  var timer = null;\n\n  function stopAuto() {\n    if (timer !== null) {\n      clearTimeout(timer);\n      timer = null;\n    }\n  }\n\n  function scheduleNext() {\n    timer = setTimeout(function () {\n      timer = null;\n      if (current >= steps.length - 1) return;\n      goTo(current + 1);\n      if (current < steps.length - 1) scheduleNext();\n    }, stepMs(current));\n  }\n\n  function startAuto() {\n    if (timer !== null) return;\n    if (current >= steps.length - 1) goTo(0);\n    scheduleNext();\n  }\n\n  window.addEventListener(\"pagehide\", stopAuto);\n\n  window.ReagvisAnimation = {\n    stepDuration: stepMs,\n    onCommand: function (type, stepId) {\n      if (type === \"PLAY\") startAuto();\n      else if (type === \"PAUSE\") stopAuto();\n      else if (type === \"NEXT\") { stopAuto(); goTo(current + 1); }\n      else if (type === \"PREVIOUS\") { stopAuto(); goTo(current - 1); }\n      else if (type === \"RESET\") { stopAuto(); goTo(0); }\n      else if (type === \"GOTO_STEP\") {\n        stopAuto();\n        for (var i = 0; i < steps.length; i++) {\n          if (steps[i].id === stepId) { goTo(i); break; }\n        }\n      }\n    },\n  };\n\n  if (window.ReagvisBridge) {\n    window.ReagvisBridge.ready();\n    window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n})();\n",
+  "lastFrozenContentHash": null,
+  "lastFrozenRevisionId": null,
+  "manifest": {
+    "bridgeVersion": {
+      "$numberInt": "1"
+    },
+    "capabilities": [
+      "play",
+      "pause",
+      "next",
+      "previous",
+      "reset",
+      "gotoStep"
+    ],
+    "heightPx": {
+      "$numberInt": "590"
+    },
+    "traceEvents": [
+      "experiment",
+      "possible-outcomes",
+      "sample-space",
+      "event",
+      "assign-probability",
+      "valid-probabilities",
+      "ml-connection"
+    ]
+  },
+  "packageId": "fe967539-f53b-40f0-8ec3-9d313e8462d1",
+  "packageTrace": {
+    "steps": [
+      {
+        "animationEvent": "experiment",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "A random experiment is a process whose result is uncertain, such as rolling a die.",
+          "python": "import random\n\nrandom.seed(1)\nroll = random.randint(1, 6)   # one roll: the result is uncertain\nprint(1 <= roll <= 6)           # True"
+        },
+        "id": "experiment",
+        "label": "A random experiment"
+      },
+      {
+        "animationEvent": "possible-outcomes",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "List every result the experiment could produce. These are the outcomes.",
+          "python": "outcomes = [1, 2, 3, 4, 5, 6]\nprint(outcomes)"
+        },
+        "id": "possible-outcomes",
+        "label": "The possible outcomes"
+      },
+      {
+        "animationEvent": "sample-space",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "The sample space is the set of all possible outcomes.",
+          "python": "sample_space = {1, 2, 3, 4, 5, 6}\nprint(len(sample_space))   # 6"
+        },
+        "id": "sample-space",
+        "label": "The sample space"
+      },
+      {
+        "animationEvent": "event",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "An event is a subset of the sample space, for example 'the roll is even'.",
+          "python": "even = {o for o in range(1, 7) if o % 2 == 0}\nprint(sorted(even))   # [2, 4, 6]"
+        },
+        "id": "event",
+        "label": "An event is a group of outcomes"
+      },
+      {
+        "animationEvent": "assign-probability",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "P(event) = sum of the probabilities of its outcomes.",
+          "python": "p = {o: 1 / 6 for o in range(1, 7)}\nprint(round(sum(p[o] for o in (2, 4, 6)), 3))   # 0.5"
+        },
+        "id": "assign-probability",
+        "label": "Give each outcome a probability"
+      },
+      {
+        "animationEvent": "valid-probabilities",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Each probability is between 0 and 1, and all outcomes together add to exactly 1.",
+          "python": "fair = [1 / 6] * 6\nbad = [0.2] * 6\nprint(round(sum(fair), 2), round(sum(bad), 2))   # 1.0 1.2"
+        },
+        "id": "valid-probabilities",
+        "label": "What makes probabilities valid"
+      },
+      {
+        "animationEvent": "ml-connection",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "A classifier's output over its classes must add up to 1.",
+          "python": "output = {\"spam\": 0.9, \"not spam\": 0.1}\nprint(round(sum(output.values()), 2))   # 1.0"
+        },
+        "id": "ml-connection",
+        "label": "The same rule inside a model"
+      }
+    ],
+    "version": {
+      "$numberInt": "1"
+    }
+  },
+  "revision": {
+    "$numberInt": "5"
+  },
+  "revisionId": "r2",
+  "sourceKind": "zip",
+  "status": "frozen",
+  "title": "ML Module 4 — Probability Spaces",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498513"
+    }
+  },
+  "updatedBy": {
+    "$oid": "000000000000000000000000"
+  }
+}

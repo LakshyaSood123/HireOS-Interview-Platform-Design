@@ -1,0 +1,136 @@
+body {
+  margin: 0;
+  padding: 14px;
+  box-sizing: border-box;
+  background: #0b1d16;
+  color: #e6f5ec;
+  font-family: system-ui, sans-serif;
+}
+.scene {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+.step-label {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #a7ce65;
+}
+.stats {
+  margin: 0;
+  font-size: 12px;
+  color: #c9dccf;
+}
+svg {
+  width: 100%;
+  height: auto;
+  max-width: 640px;
+  background: #071510;
+  border-radius: 10px;
+  border: 1px solid rgba(29, 181, 132, 0.35);
+}
+.axis {
+  stroke: rgba(167, 206, 101, 0.4);
+  stroke-width: 1;
+}
+.axis-label {
+  font-size: 11px;
+  fill: #8FA89C;
+}
+.pt {
+  stroke: rgba(0, 0, 0, 0.4);
+  stroke-width: 1;
+  transition: opacity 0.4s ease;
+}
+.pt-train {
+  fill: #1DB584;
+}
+.pt-val {
+  fill: #E2B44A;
+}
+.curve {
+  stroke-width: 3;
+  stroke-linejoin: round;
+  transition: opacity 0.4s ease;
+}
+.curve-underfit {
+  stroke: #94A3B8;
+}
+.curve-good {
+  stroke: #1DB584;
+}
+.curve-overfit {
+  stroke: #F472B6;
+}
+.bar {
+  transition: height 0.5s ease, y 0.5s ease, opacity 0.3s ease;
+}
+.bar-train {
+  fill: #1DB584;
+  opacity: 0.85;
+}
+.bar-val {
+  fill: #E2B44A;
+  opacity: 0.85;
+}
+.bar-focus {
+  stroke: #ffffff;
+  stroke-width: 2;
+}
+.bar-name {
+  font-size: 11px;
+  font-weight: 800;
+  fill: #e6f5ec;
+}
+.bar-value {
+  font-size: 10.5px;
+  fill: #c9dccf;
+}
+.caption {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #c9dccf;
+  min-height: 40px;
+}
+
+/* ── explanation panel (shared by every generated ML animation) ── */
+.explain {
+  box-sizing: border-box;
+  max-width: 640px;
+  margin-top: 4px;
+  padding: 14px 18px 16px;
+  min-height: 150px;
+  border-radius: 12px;
+  background: rgba(29, 181, 132, 0.10);
+  border: 1px solid rgba(29, 181, 132, 0.45);
+  border-left: 5px solid #1db584;
+}
+.explain-h {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #a7ce65;
+}
+.explain-t {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.55;
+  color: #f1faf4;
+}
+.explain-t strong {
+  font-weight: 800;
+  color: #ffd98a;
+}

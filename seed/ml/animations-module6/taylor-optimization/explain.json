@@ -1,0 +1,34 @@
+{
+ "objective": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Our objective is still **L(w) = (w − 3)²**. An optimizer cannot see the whole curve: it sees **one point and what it can measure there**. Taylor approximations turn that local information into a simple model."
+ },
+ "current-point": {
+  "h": "THE CURRENT POINT",
+  "t": "We stand at **w = 0**, where the loss is **L = 9**. Everything we build is a model of the objective **near this point**."
+ },
+ "first-order-view": {
+  "h": "FIRST-ORDER MODEL: THE TANGENT LINE",
+  "t": "Using only the slope: **L(0 + Δ) ≈ 9 − 6Δ**, the tangent line. It says the loss keeps falling the further we go. Gradient descent **trusts this picture for small steps**."
+ },
+ "gradient": {
+  "h": "THE GRADIENT IS THE SLOPE",
+  "t": "The slope **L′(0) = −6** is the gradient. Move **Δ = 1** to the right and the first-order model says the loss falls by 6. This is exactly the information gradient descent uses."
+ },
+ "curvature": {
+  "h": "CURVATURE: HOW THE SLOPE CHANGES",
+  "t": "The slope itself changes as we move: **−6 at w = 0, −4 at 1, −2 at 2, 0 at 3**. It rises by 2 per unit. That rate of change of the slope is the **curvature, L″ = 2**."
+ },
+ "second-order-view": {
+  "h": "SECOND-ORDER MODEL: ADD THE BEND",
+  "t": "Adding the curvature term: **L(0 + Δ) ≈ 9 − 6Δ + Δ²**. Unlike the line, this model **bends back up** and has a bottom at **Δ = 3**, where it predicts a loss of 0."
+ },
+ "compare-local-models": {
+  "h": "COMPARE THE TWO LOCAL MODELS",
+  "t": "Step **Δ = 0.6**: first order says 5.4, second order 5.76 (true 5.76). A giant step **Δ = 6**: first order says −27, which is impossible; second order says 9 (true 9). **Curvature tells how far a step can be trusted.**"
+ },
+ "optimization-connection": {
+  "h": "TAKEAWAY",
+  "t": "First-order methods use the slope and rely on **small steps**. Second-order information can suggest better steps: here **Δ = −L′/L″ = 3** jumps straight to the minimum. It costs more to compute, especially with many parameters."
+ }
+}

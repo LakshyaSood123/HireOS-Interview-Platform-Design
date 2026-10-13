@@ -1,0 +1,42 @@
+{
+ "centered-cloud": {
+  "h": "THE QUESTION",
+  "t": "Here are the six centered customers. **Which axis through the center captures the most spread?** We will try different directions and measure each one."
+ },
+ "candidate-axis": {
+  "h": "A FIRST GUESS",
+  "t": "The yellow line is a candidate axis at **135°**, running against the trend. The graph on the right will track the variance along the axis as we turn it."
+ },
+ "project-points": {
+  "h": "PROJECT THE POINTS",
+  "t": "Each customer is dropped perpendicularly onto the axis. The small dots on the line are the **projected positions**, and their spread is what we measure."
+ },
+ "small-spread": {
+  "h": "SMALL SPREAD",
+  "t": "The projections bunch tightly together: the variance is only **0.20**, the lowest point on the curve. This axis throws away most of the spread in the data."
+ },
+ "rotate-axis": {
+  "h": "ROTATE THE AXIS",
+  "t": "As the axis turns to **90°** (the spend axis), the projections spread out and the variance rises to **2.70**. The pink dot slides along the curve."
+ },
+ "larger-spread": {
+  "h": "LARGER SPREAD",
+  "t": "Turning toward the trend, to **60°**, raises the variance to **5.41**. The green bar along the axis shows the points spreading out."
+ },
+ "maximum-spread": {
+  "h": "MAXIMUM SPREAD",
+  "t": "Near **41°** the curve peaks: the variance reaches about **6.03**. Turning further would reduce it again, so this is the direction of greatest spread."
+ },
+ "first-direction": {
+  "h": "FIRST PRINCIPAL DIRECTION",
+  "t": "That best axis is **PC1 = (0.754, 0.657)**, with variance **6.03**. The arrow points along the cloud and is a mix of both original features."
+ },
+ "orthogonal-second": {
+  "h": "THE SECOND DIRECTION",
+  "t": "**PC2** is perpendicular to PC1 (the small square marks the right angle) and captures what is left: variance **0.17**. In two dimensions it is fixed once PC1 is chosen."
+ },
+ "principal-directions": {
+  "h": "TAKEAWAY",
+  "t": "The two perpendicular axes, ordered by variance (**6.03 and 0.17**), add up to the original total of **6.20**. Rotating the axes reorganizes the spread but does not change it."
+ }
+}

@@ -1,0 +1,147 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322c4e9cccef168ed4b"
+  },
+  "assets": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498563"
+    }
+  },
+  "createdBy": {
+    "$oid": "000000000000000000000000"
+  },
+  "css": "body {\r\n  margin: 0;\r\n  padding: 14px;\r\n  box-sizing: border-box;\r\n  background: #0b1d16;\r\n  color: #e6f5ec;\r\n  font-family: system-ui, sans-serif;\r\n}\r\n.scene {\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 8px;\r\n}\r\n.step-label {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  letter-spacing: 0.08em;\r\n  text-transform: uppercase;\r\n  color: #a7ce65;\r\n}\r\nsvg {\r\n  width: 100%;\r\n  height: auto;\r\n  max-width: 640px;\r\n  background: #071510;\r\n  border-radius: 10px;\r\n  border: 1px solid rgba(29, 181, 132, 0.35);\r\n}\r\nsvg g,\r\nsvg line,\r\nsvg polygon,\r\nsvg path,\r\nsvg ellipse,\r\nsvg circle,\r\nsvg rect,\r\nsvg text {\r\n  transition: opacity 0.4s ease, transform 0.6s ease;\r\n}\r\n.axis {\r\n  stroke: rgba(167, 206, 101, 0.3);\r\n  stroke-width: 1;\r\n}\r\n.tick {\r\n  font-size: 10px;\r\n  fill: #8fa89c;\r\n}\r\n.lbl,\r\n.big,\r\n.note,\r\n.mono {\r\n  paint-order: stroke;\r\n  stroke: #071510;\r\n  stroke-width: 3px;\r\n  stroke-linejoin: round;\r\n}\r\n.lbl {\r\n  font-size: 12px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.lbl-g { fill: #1db584; }\r\n.lbl-y { fill: #e2b44a; }\r\n.lbl-p { fill: #f472b6; }\r\n.lbl-b { fill: #38bdf8; }\r\n.lbl-r { fill: #f87171; }\r\n.big {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.note {\r\n  font-size: 11px;\r\n  fill: #c9dccf;\r\n}\r\n.mono {\r\n  font-family: ui-monospace, Consolas, monospace;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.caption {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  line-height: 1.5;\r\n  color: #c9dccf;\r\n  min-height: 40px;\r\n}\r\n.cell rect {\r\n  fill: rgba(255, 255, 255, 0.05);\r\n  stroke: rgba(255, 255, 255, 0.28);\r\n  stroke-width: 1.2;\r\n}\r\n.cell text {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.cell.hl-row rect { fill: rgba(226, 180, 74, 0.25); stroke: #e2b44a; }\r\n.cell.hl-col rect { fill: rgba(29, 181, 132, 0.25); stroke: #1db584; }\r\n.cell.hl-both rect { fill: rgba(244, 114, 182, 0.28); stroke: #f472b6; }\r\n.dim { opacity: 0.25; }\r\n.dash { stroke-dasharray: 5 4; }\r\n.fillA { fill: rgba(56, 189, 248, 0.16); stroke: #38bdf8; stroke-width: 2; }\r\n.fillB { fill: rgba(244, 114, 182, 0.18); stroke: #f472b6; stroke-width: 2; }\r\n.fillG { fill: rgba(29, 181, 132, 0.16); stroke: #1db584; stroke-width: 2; }\r\n.contour { stroke: rgba(56, 189, 248, 0.45); stroke-width: 1.5; }\n.curve { fill: none; stroke: #38bdf8; stroke-width: 3; }\n.curve-y { fill: none; stroke: #e2b44a; stroke-width: 3; }\n.curve-p { fill: none; stroke: #f472b6; stroke-width: 3; }\n.curve-g { fill: none; stroke: #1db584; stroke-width: 3; }\n.ghost { fill: none; stroke: rgba(201, 220, 207, 0.4); stroke-width: 2; }\n.lbl-w { fill: #e6f5ec; }\n.lbl-s { font-size: 11px; font-weight: 600; fill: #c9dccf; }\n\n/* ── explanation panel (shared by every generated ML animation) ── */\n.explain {\n  box-sizing: border-box;\n  max-width: 640px;\n  margin-top: 4px;\n  padding: 14px 18px 16px;\n  min-height: 150px;\n  border-radius: 12px;\n  background: rgba(29, 181, 132, 0.10);\n  border: 1px solid rgba(29, 181, 132, 0.45);\n  border-left: 5px solid #1db584;\n}\n.explain-h {\n  margin: 0 0 8px;\n  font-size: 13px;\n  font-weight: 800;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.explain-t {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.55;\n  color: #f1faf4;\n}\n.explain-t strong {\n  font-weight: 800;\n  color: #ffd98a;\n}\n\n",
+  "html": "<div class=\"scene\">\n  <p class=\"step-label\" id=\"step-label\"></p>\n  <svg id=\"scene\" viewBox=\"0 0 640 360\" role=\"img\" aria-label=\"Joint distributions: probabilities for pairs\"></svg>\n  <section class=\"explain\" aria-live=\"polite\">\n    <h3 class=\"explain-h\" id=\"explain-h\"></h3>\n    <p class=\"explain-t\" id=\"caption\"></p>\n  </section>\n</div>\n",
+  "js": "(function () {\n  // ── shared helpers (SVG, tweening) ─────────────────────────────────────────\r\n  var NS = \"http://www.w3.org/2000/svg\";\r\n  var svg = document.getElementById(\"scene\");\r\n  var labelEl = document.getElementById(\"step-label\");\r\n  var captionEl = document.getElementById(\"caption\");\r\n\r\n  function el(name, attrs, parent) {\r\n    var node = document.createElementNS(NS, name);\r\n    for (var key in attrs) node.setAttribute(key, attrs[key]);\r\n    if (parent) parent.appendChild(node);\r\n    return node;\r\n  }\r\n  function txt(parent, x, y, cls, str, anchor) {\r\n    var t = el(\"text\", { x: x, y: y, class: cls }, parent);\r\n    if (anchor) t.setAttribute(\"text-anchor\", anchor);\r\n    t.textContent = str;\r\n    return t;\r\n  }\r\n  function show(node, on) {\r\n    node.setAttribute(\"opacity\", on ? \"1\" : \"0\");\r\n  }\r\n  function place(node, x, y) {\r\n    node.style.transform = \"translate(\" + x + \"px,\" + y + \"px)\";\r\n  }\r\n  function setLine(node, x1, y1, x2, y2) {\r\n    node.setAttribute(\"x1\", x1);\r\n    node.setAttribute(\"y1\", y1);\r\n    node.setAttribute(\"x2\", x2);\r\n    node.setAttribute(\"y2\", y2);\r\n  }\r\n  function lerp(a, b, e) {\r\n    return a + (b - a) * e;\r\n  }\r\n  function round1(v) {\r\n    return (Math.round(v * 10) / 10).toFixed(1);\r\n  }\r\n\r\n  // Eased animation. fn(e) is called with e from 0 to 1. Without\r\n  // requestAnimationFrame (or with ms = 0) it jumps straight to fn(1).\r\n  var animTokens = {};\r\n  function anim(key, ms, fn) {\r\n    var token = (animTokens[key] || 0) + 1;\r\n    animTokens[key] = token;\r\n    if (typeof requestAnimationFrame !== \"function\" || ms <= 0) {\r\n      fn(1);\r\n      return;\r\n    }\r\n    var start = null;\r\n    function frame(now) {\r\n      if (animTokens[key] !== token) return;\r\n      if (start === null) start = now;\r\n      var p = Math.min(1, (now - start) / ms);\r\n      var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;\r\n      fn(e);\r\n      if (p < 1) requestAnimationFrame(frame);\r\n    }\r\n    requestAnimationFrame(frame);\r\n  }\r\n\r\n  // Arrowheads, one marker per colour.\r\n  var COLORS = { g: \"#1DB584\", y: \"#E2B44A\", p: \"#F472B6\", b: \"#38BDF8\", w: \"#c9dccf\", r: \"#F87171\" };\r\n  var defs = el(\"defs\", {}, svg);\r\n  Object.keys(COLORS).forEach(function (k) {\r\n    var m = el(\"marker\", { id: \"ah-\" + k, viewBox: \"0 0 10 10\", refX: 9, refY: 5, markerUnits: \"userSpaceOnUse\", markerWidth: 13, markerHeight: 13, orient: \"auto\" }, defs);\r\n    el(\"path\", { d: \"M0 0 L10 5 L0 10 Z\", fill: COLORS[k] }, m);\r\n  });\r\n  function arrow(parent, colorKey, width) {\r\n    return el(\"line\", { x1: 0, y1: 0, x2: 0, y2: 0, stroke: COLORS[colorKey], \"stroke-width\": width || 3, \"marker-end\": \"url(#ah-\" + colorKey + \")\", \"stroke-linecap\": \"round\" }, parent);\r\n  }\r\n  function polygon(parent, cls) {\r\n    return el(\"polygon\", { points: \"\", class: cls }, parent);\r\n  }\r\n  function setPoly(node, pts) {\r\n    node.setAttribute(\"points\", pts.map(function (p) { return p[0].toFixed(1) + \",\" + p[1].toFixed(1); }).join(\" \"));\r\n  }\r\n  function lerpPts(a, b, e) {\r\n    return a.map(function (p, i) { return [lerp(p[0], b[i][0], e), lerp(p[1], b[i][1], e)]; });\r\n  }\r\n  // Maps maths coordinates (x right, y up) to screen pixels.\r\n  function makePlane(cx, cy, s) {\r\n    return {\r\n      x: function (v) { return cx + s * v; },\r\n      y: function (v) { return cy - s * v; },\r\n      pt: function (p) { return [cx + s * p[0], cy - s * p[1]]; },\r\n      s: s, cx: cx, cy: cy\r\n    };\r\n  }\r\n  function axes(parent, plane, xr, yr) {\r\n    el(\"line\", { x1: plane.x(-xr), y1: plane.y(0), x2: plane.x(xr), y2: plane.y(0), class: \"axis\" }, parent);\r\n    el(\"line\", { x1: plane.x(0), y1: plane.y(-yr), x2: plane.x(0), y2: plane.y(yr), class: \"axis\" }, parent);\r\n  }\r\n\n  // ── Module 3 helpers: graphs, curves, contour plane ───────────────────────\n  // makeGraph maps maths values to pixels with separate x and y scales.\n  function makeGraph(ox, oy, sx, sy) {\n    return {\n      ox: ox, oy: oy, sx: sx, sy: sy,\n      x: function (v) { return ox + sx * v; },\n      y: function (v) { return oy - sy * v; }\n    };\n  }\n  function curveD(g, f, a, b, n) {\n    var d = \"\";\n    for (var i = 0; i <= n; i++) {\n      var v = a + ((b - a) * i) / n;\n      d += (i ? \" L \" : \"M \") + g.x(v).toFixed(1) + \" \" + g.y(f(v)).toFixed(1);\n    }\n    return d;\n  }\n  function setD(node, d) {\n    node.setAttribute(\"d\", d);\n  }\n  function fmt(v, n) {\n    return (Math.round(v * 100000) / 100000).toFixed(n === undefined ? 1 : n);\n  }\n  function drawAxes(parent, g, xmax, ymax, xticks, yticks) {\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(xmax), y2: g.y(0), class: \"axis\" }, parent);\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(0), y2: g.y(ymax), class: \"axis\" }, parent);\n    (xticks || []).forEach(function (t) { txt(parent, g.x(t), g.y(0) + 15, \"tick\", String(t), \"middle\"); });\n    (yticks || []).forEach(function (t) { txt(parent, g.x(0) - 7, g.y(t) + 4, \"tick\", String(t), \"end\"); });\n  }\n  function card(parent, x, y, w, h, cls) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: 10, class: cls || \"fillG\" }, parent);\n  }\n  function ring(parent, cx, cy, rx, ry, cls) {\n    return el(\"ellipse\", { cx: cx, cy: cy, rx: rx, ry: ry, fill: \"none\", class: cls || \"contour\" }, parent);\n  }\n  function clipTo(id, x, y, w, h) {\n    var c = el(\"clipPath\", { id: id }, defs);\n    el(\"rect\", { x: x, y: y, width: w, height: h }, c);\n  }\n\n  // ── Module 4 helpers: seeded randomness, small shapes ─────────────────────\n  function mulberry(seed) {\n    var a = seed;\n    return function () {\n      a |= 0; a = (a + 0x6D2B79F5) | 0;\n      var t = Math.imul(a ^ (a >>> 15), 1 | a);\n      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;\n      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;\n    };\n  }\n  function gaussSource(rand) {\n    return function () {\n      var u = 1 - rand(), v = rand();\n      return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);\n    };\n  }\n  function box(parent, x, y, w, h, fill, stroke, r) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: r === undefined ? 6 : r, fill: fill, stroke: stroke || \"none\", \"stroke-width\": 2 }, parent);\n  }\n  function setBox(node, x, y, w, h) {\n    node.setAttribute(\"x\", x); node.setAttribute(\"y\", y); node.setAttribute(\"width\", Math.max(0, w)); node.setAttribute(\"height\", Math.max(0, h));\n  }\n  function vis(list, on) {\n    list.forEach(function (n) { show(n, on); });\n  }\n\n  var EXPLAIN = {\"variable-x\":{\"h\":\"A FIRST VARIABLE: BEDROOMS\",\"t\":\"Look at houses. Let **X = the number of bedrooms**: 1, 2 or 3. Each house has one value of X.\"},\"variable-y\":{\"h\":\"A SECOND VARIABLE: PRICE BAND\",\"t\":\"Each house also has a price band. Let **Y = Low or High**. Now every house carries **two values at once**.\"},\"pair-values\":{\"h\":\"PAIRS OF VALUES\",\"t\":\"Together the two variables give pairs: **(1, Low), (1, High), (2, Low)** and so on. With 3 × 2 choices there are **6 possible pairs**, one per cell of a table.\"},\"grid\":{\"h\":\"ONE CELL, ONE PAIR\",\"t\":\"Each cell stands for one combination. The highlighted cell is the pair **(3 bedrooms, High price)**. We want a probability for every cell.\"},\"joint-probabilities\":{\"h\":\"THE JOINT PROBABILITIES\",\"t\":\"**P(X = x, Y = y)** is the probability of both happening together. For example **P(X = 3, Y = High) = 0.25**: 25% of all houses. All six cells **add up to 1**.\"},\"pattern\":{\"h\":\"READING THE PATTERN\",\"t\":\"Small houses are mostly Low priced (**0.25 versus 0.05**); big houses are mostly High (**0.25 versus 0.05**). The numbers are not spread evenly, so the variables are **related**.\"},\"ml-features\":{\"h\":\"TAKEAWAY\",\"t\":\"A dataset is a pile of samples from a **joint distribution**: each row holds several variables at once. Models learn how features relate by learning about this **joint behavior**.\"}};\n  // ── scene ──\n  var steps = [\n    { id: \"variable-x\", label: \"A first variable: bedrooms\", caption: \"Look at houses. Let X = the number of bedrooms: 1, 2 or 3. Each house has one value of X.\" },\n    { id: \"variable-y\", label: \"A second variable: price band\", caption: \"Each house also has a price band. Let Y = Low or High. Now every house carries two values at once.\" },\n    { id: \"pair-values\", label: \"Pairs of values\", caption: \"Together the two variables give pairs: (1, Low), (1, High), (2, Low) and so on. With 3 × 2 choices there are 6 possible pairs, one per cell of a table.\" },\n    { id: \"grid\", label: \"One cell, one pair\", caption: \"Each cell stands for one combination. The highlighted cell is the pair (3 bedrooms, High price). We want a probability for every cell.\" },\n    { id: \"joint-probabilities\", label: \"The joint probabilities\", caption: \"P(X = x, Y = y) is the probability of both happening together. For example P(X = 3, Y = High) = 0.25: 25% of all houses. All six cells add up to 1.\" },\n    { id: \"pattern\", label: \"Reading the pattern\", caption: \"Small houses are mostly Low priced (0.25 versus 0.05); big houses are mostly High (0.25 versus 0.05). The numbers are not spread evenly, so the variables are related.\" },\n    { id: \"ml-features\", label: \"Why ML cares: features together\", caption: \"A dataset is a pile of samples from a joint distribution: each row holds several variables at once. Models learn how features relate by learning about this joint behavior.\" }\n  ];\n\n  var ROWS = [1, 2, 3], COLS = [\"Low\", \"High\"];\n  var P = { \"1,Low\": 0.25, \"1,High\": 0.05, \"2,Low\": 0.20, \"2,High\": 0.20, \"3,Low\": 0.05, \"3,High\": 0.25 };\n  var GX = 230, GY = 110, CW = 140, CH = 66;\n\n  var gridG = el(\"g\", {}, svg);\n  var cells = {}, pairLbls = {}, probLbls = {};\n  ROWS.forEach(function (r, ri) {\n    COLS.forEach(function (c, ci) {\n      var key = r + \",\" + c;\n      var x = GX + ci * CW, y = GY + ri * CH;\n      cells[key] = box(gridG, x + 3, y + 3, CW - 6, CH - 6, \"rgba(56,189,248,0.08)\", \"rgba(56,189,248,0.5)\", 8);\n      pairLbls[key] = txt(gridG, x + CW / 2, y + CH / 2 + 5, \"lbl\", \"(\" + r + \", \" + c + \")\", \"middle\");\n      probLbls[key] = txt(gridG, x + CW / 2, y + CH / 2 + 9, \"big\", P[key].toFixed(2), \"middle\");\n      probLbls[key].setAttribute(\"font-size\", \"22\");\n    });\n  });\n  var rowHdr = el(\"g\", {}, svg);\n  ROWS.forEach(function (r, ri) {\n    txt(rowHdr, GX - 14, GY + ri * CH + CH / 2 + 6, \"big\", r + (r === 1 ? \" bedroom\" : \" bedrooms\"), \"end\").setAttribute(\"font-size\", \"15\");\n  });\n  txt(rowHdr, 26, 84, \"lbl lbl-y\", \"X = number of bedrooms\", \"start\");\n  var colHdr = el(\"g\", {}, svg);\n  COLS.forEach(function (c, ci) {\n    txt(colHdr, GX + ci * CW + CW / 2, GY - 12, \"big\", c, \"middle\").setAttribute(\"font-size\", \"17\");\n  });\n  txt(colHdr, GX + CW, GY - 36, \"lbl lbl-p\", \"Y = price band\", \"middle\");\n\n  var spotlight = el(\"rect\", { x: GX + CW + 1, y: GY + 2 * CH + 1, width: CW - 2, height: CH - 2, rx: 10, fill: \"none\", stroke: \"#e2b44a\", \"stroke-width\": 4 }, svg);\n  var spotLbl = txt(svg, GX + 2 * CW + 12, GY + 2 * CH + CH / 2 + 5, \"lbl lbl-y\", \"one cell = one pair\", \"start\");\n  var sumLbl = txt(svg, GX + CW, GY + 3 * CH + 30, \"big\", \"all six add up to 1.00\", \"middle\");\n  var patG = el(\"g\", {}, svg);\n    txt(patG, GX + 2 * CW + 12, GY + 60, \"lbl lbl-g\", \"bigger houses go\", \"start\");\n  txt(patG, GX + 2 * CW + 12, GY + 78, \"lbl lbl-g\", \"with higher prices,\", \"start\");\n  txt(patG, GX + 2 * CW + 12, GY + 96, \"lbl lbl-g\", \"small ones with\", \"start\");\n  txt(patG, GX + 2 * CW + 12, GY + 114, \"lbl lbl-g\", \"lower prices\", \"start\");\n\n  var featG = el(\"g\", {}, svg);\n  card(featG, 60, 36, 300, 40, \"fillA\");\n  txt(featG, 130, 62, \"lbl\", \"bedrooms\", \"middle\");\n  txt(featG, 290, 62, \"lbl\", \"price band\", \"middle\");\n  [[3, \"High\"], [1, \"Low\"], [2, \"Low\"], [3, \"High\"], [2, \"High\"]].forEach(function (row, i) {\n    var y = 84 + i * 44;\n    card(featG, 60, y, 300, 38, \"fillG\");\n    txt(featG, 130, y + 25, \"mono\", String(row[0]), \"middle\");\n    txt(featG, 290, y + 25, \"mono\", row[1], \"middle\");\n  });\n  txt(featG, 210, 22, \"lbl lbl-y\", \"five houses from the dataset\", \"middle\");\n  var fa = arrow(featG, \"w\", 4); setLine(fa, 368, 180, 428, 180);\n  card(featG, 436, 120, 184, 120, \"fillB\");\n  txt(featG, 528, 154, \"lbl\", \"each row is one sample\", \"middle\");\n  txt(featG, 528, 176, \"lbl\", \"from the joint\", \"middle\");\n  txt(featG, 528, 198, \"lbl\", \"distribution of\", \"middle\");\n  txt(featG, 528, 220, \"lbl lbl-y\", \"(bedrooms, price)\", \"middle\");\n\n  function render(index, id) {\n    var i = index;\n    show(gridG, i <= 5);\n    show(rowHdr, i <= 5);\n    show(colHdr, i >= 1 && i <= 5);\n    show(spotlight, i === 3); show(spotLbl, i === 3);\n    show(sumLbl, i === 4);\n    show(patG, i === 5);\n    show(featG, i === 6);\n    ROWS.forEach(function (r) {\n      COLS.forEach(function (c) {\n        var key = r + \",\" + c;\n        var showNums = i >= 4;\n        show(pairLbls[key], i === 2 || i === 3);\n        show(probLbls[key], showNums);\n        var p = P[key];\n        var strong = key === \"1,Low\" || key === \"3,High\";\n        var fill = \"rgba(56,189,248,0.08)\";\n        if (showNums) fill = \"rgba(56,189,248,\" + (0.1 + (p / 0.25) * 0.5).toFixed(2) + \")\";\n        if (i === 5) fill = strong ? \"rgba(29,181,132,0.6)\" : \"rgba(56,189,248,\" + (0.05 + (p / 0.25) * 0.15).toFixed(2) + \")\";\n        cells[key].setAttribute(\"fill\", fill);\n        cells[key].setAttribute(\"opacity\", i === 5 && !strong ? \"0.55\" : \"1\");\n      });\n    });\n  }\n\n\n  // ── shared runtime: stepping, explanation panel, educational autoplay pacing, bridge ──\n  var current = 0;\n  var explainHeadEl = document.getElementById(\"explain-h\");\n\n  // **bold** markers in an explanation become <strong> nodes (built with DOM calls, never innerHTML).\n  function setRich(node, str) {\n    node.textContent = \"\";\n    var parts = String(str).split(\"**\");\n    for (var i = 0; i < parts.length; i++) {\n      if (parts[i] === \"\") continue;\n      var seg = document.createElement(i % 2 ? \"strong\" : \"span\");\n      seg.textContent = parts[i];\n      node.appendChild(seg);\n    }\n  }\n\n  function explanationFor(index) {\n    var ex = (typeof EXPLAIN === \"object\" && EXPLAIN) ? EXPLAIN[steps[index].id] : null;\n    return ex || { h: \"WHAT IS HAPPENING\", t: steps[index].caption };\n  }\n\n  // Autoplay pace: 4.5 to 10.5 seconds per step, longer for longer explanations, so a learner can read.\n  function stepMs(index) {\n    var words = String(explanationFor(index).t).replace(/\\*\\*/g, \"\").split(/\\s+/).length;\n    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));\n  }\n\n  function renderStep(index) {\n    var ex = explanationFor(index);\n    labelEl.textContent = steps[index].label;\n    if (explainHeadEl) explainHeadEl.textContent = ex.h;\n    setRich(captionEl, ex.t);\n    render(index, steps[index].id);\n  }\n\n  function goTo(index) {\n    if (index < 0 || index >= steps.length) return;\n    current = index;\n    renderStep(current);\n    if (window.ReagvisBridge) window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n\n  renderStep(current);\n\n  // Autoplay: exactly one timer, one step per tick, stops on the final step.\n  // PLAY on the final step restarts from the first step and plays again.\n  var timer = null;\n\n  function stopAuto() {\n    if (timer !== null) {\n      clearTimeout(timer);\n      timer = null;\n    }\n  }\n\n  function scheduleNext() {\n    timer = setTimeout(function () {\n      timer = null;\n      if (current >= steps.length - 1) return;\n      goTo(current + 1);\n      if (current < steps.length - 1) scheduleNext();\n    }, stepMs(current));\n  }\n\n  function startAuto() {\n    if (timer !== null) return;\n    if (current >= steps.length - 1) goTo(0);\n    scheduleNext();\n  }\n\n  window.addEventListener(\"pagehide\", stopAuto);\n\n  window.ReagvisAnimation = {\n    stepDuration: stepMs,\n    onCommand: function (type, stepId) {\n      if (type === \"PLAY\") startAuto();\n      else if (type === \"PAUSE\") stopAuto();\n      else if (type === \"NEXT\") { stopAuto(); goTo(current + 1); }\n      else if (type === \"PREVIOUS\") { stopAuto(); goTo(current - 1); }\n      else if (type === \"RESET\") { stopAuto(); goTo(0); }\n      else if (type === \"GOTO_STEP\") {\n        stopAuto();\n        for (var i = 0; i < steps.length; i++) {\n          if (steps[i].id === stepId) { goTo(i); break; }\n        }\n      }\n    },\n  };\n\n  if (window.ReagvisBridge) {\n    window.ReagvisBridge.ready();\n    window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n})();\n",
+  "lastFrozenContentHash": null,
+  "lastFrozenRevisionId": null,
+  "manifest": {
+    "bridgeVersion": {
+      "$numberInt": "1"
+    },
+    "capabilities": [
+      "play",
+      "pause",
+      "next",
+      "previous",
+      "reset",
+      "gotoStep"
+    ],
+    "heightPx": {
+      "$numberInt": "590"
+    },
+    "traceEvents": [
+      "variable-x",
+      "variable-y",
+      "pair-values",
+      "grid",
+      "joint-probabilities",
+      "pattern",
+      "ml-features"
+    ]
+  },
+  "packageId": "6e3a7a3a-c5b4-40f5-8787-b7acba9dce0b",
+  "packageTrace": {
+    "steps": [
+      {
+        "animationEvent": "variable-x",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "X = number of bedrooms, which can be 1, 2 or 3.",
+          "python": "X = [1, 2, 3]\nprint(X)"
+        },
+        "id": "variable-x",
+        "label": "A first variable: bedrooms"
+      },
+      {
+        "animationEvent": "variable-y",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Y = price band, which can be Low or High.",
+          "python": "Y = ['Low', 'High']\nprint(Y)"
+        },
+        "id": "variable-y",
+        "label": "A second variable: price band"
+      },
+      {
+        "animationEvent": "pair-values",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Every combination of an X value and a Y value is a pair.",
+          "python": "X = [1, 2, 3]\nY = ['Low', 'High']\npairs = [(x, y) for x in X for y in Y]\nprint(len(pairs))   # 6"
+        },
+        "id": "pair-values",
+        "label": "Pairs of values"
+      },
+      {
+        "animationEvent": "grid",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Each pair is one cell of the table.",
+          "python": "X = [1, 2, 3]\nY = ['Low', 'High']\npairs = [(x, y) for x in X for y in Y]\nprint(pairs[-1])   # (3, 'High')"
+        },
+        "id": "grid",
+        "label": "One cell, one pair"
+      },
+      {
+        "animationEvent": "joint-probabilities",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "P(X = x, Y = y) is stored for every pair, and all of them add up to 1.",
+          "python": "joint = {\n    (1, 'Low'): 0.25, (1, 'High'): 0.05,\n    (2, 'Low'): 0.20, (2, 'High'): 0.20,\n    (3, 'Low'): 0.05, (3, 'High'): 0.25,\n}\nprint(joint[(3, 'High')], round(sum(joint.values()), 2))   # 0.25 1.0"
+        },
+        "id": "joint-probabilities",
+        "label": "The joint probabilities"
+      },
+      {
+        "animationEvent": "pattern",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "If X and Y were unrelated, P(x, y) would equal P(x) * P(y). Compare.",
+          "python": "joint = {\n    (1, 'Low'): 0.25, (1, 'High'): 0.05,\n    (2, 'Low'): 0.20, (2, 'High'): 0.20,\n    (3, 'Low'): 0.05, (3, 'High'): 0.25,\n}\np_x3 = joint[(3, 'Low')] + joint[(3, 'High')]\np_high = sum(p for (x, y), p in joint.items() if y == 'High')\nprint(round(p_x3 * p_high, 2), joint[(3, 'High')])   # 0.15 0.25: more than chance alone"
+        },
+        "id": "pattern",
+        "label": "Reading the pattern"
+      },
+      {
+        "animationEvent": "ml-features",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "A dataset is a list of samples, each holding several variables at once.",
+          "python": "rows = [(3, 'High'), (1, 'Low'), (2, 'Low'), (3, 'High'), (2, 'High')]\nprint(len(rows), rows[0])   # 5 (3, 'High')"
+        },
+        "id": "ml-features",
+        "label": "Why ML cares: features together"
+      }
+    ],
+    "version": {
+      "$numberInt": "1"
+    }
+  },
+  "revision": {
+    "$numberInt": "5"
+  },
+  "revisionId": "r2",
+  "sourceKind": "zip",
+  "status": "frozen",
+  "title": "ML Module 4 — Joint Distributions",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498563"
+    }
+  },
+  "updatedBy": {
+    "$oid": "000000000000000000000000"
+  }
+}

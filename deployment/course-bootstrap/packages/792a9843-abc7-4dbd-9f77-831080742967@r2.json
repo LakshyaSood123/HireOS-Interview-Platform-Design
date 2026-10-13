@@ -1,0 +1,171 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322c4e9cccef168ed43"
+  },
+  "assets": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498557"
+    }
+  },
+  "createdBy": {
+    "$oid": "000000000000000000000000"
+  },
+  "css": "body {\r\n  margin: 0;\r\n  padding: 14px;\r\n  box-sizing: border-box;\r\n  background: #0b1d16;\r\n  color: #e6f5ec;\r\n  font-family: system-ui, sans-serif;\r\n}\r\n.scene {\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 8px;\r\n}\r\n.step-label {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  letter-spacing: 0.08em;\r\n  text-transform: uppercase;\r\n  color: #a7ce65;\r\n}\r\nsvg {\r\n  width: 100%;\r\n  height: auto;\r\n  max-width: 640px;\r\n  background: #071510;\r\n  border-radius: 10px;\r\n  border: 1px solid rgba(29, 181, 132, 0.35);\r\n}\r\nsvg g,\r\nsvg line,\r\nsvg polygon,\r\nsvg path,\r\nsvg ellipse,\r\nsvg circle,\r\nsvg rect,\r\nsvg text {\r\n  transition: opacity 0.4s ease, transform 0.6s ease;\r\n}\r\n.axis {\r\n  stroke: rgba(167, 206, 101, 0.3);\r\n  stroke-width: 1;\r\n}\r\n.tick {\r\n  font-size: 10px;\r\n  fill: #8fa89c;\r\n}\r\n.lbl,\r\n.big,\r\n.note,\r\n.mono {\r\n  paint-order: stroke;\r\n  stroke: #071510;\r\n  stroke-width: 3px;\r\n  stroke-linejoin: round;\r\n}\r\n.lbl {\r\n  font-size: 12px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.lbl-g { fill: #1db584; }\r\n.lbl-y { fill: #e2b44a; }\r\n.lbl-p { fill: #f472b6; }\r\n.lbl-b { fill: #38bdf8; }\r\n.lbl-r { fill: #f87171; }\r\n.big {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.note {\r\n  font-size: 11px;\r\n  fill: #c9dccf;\r\n}\r\n.mono {\r\n  font-family: ui-monospace, Consolas, monospace;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.caption {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  line-height: 1.5;\r\n  color: #c9dccf;\r\n  min-height: 40px;\r\n}\r\n.cell rect {\r\n  fill: rgba(255, 255, 255, 0.05);\r\n  stroke: rgba(255, 255, 255, 0.28);\r\n  stroke-width: 1.2;\r\n}\r\n.cell text {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.cell.hl-row rect { fill: rgba(226, 180, 74, 0.25); stroke: #e2b44a; }\r\n.cell.hl-col rect { fill: rgba(29, 181, 132, 0.25); stroke: #1db584; }\r\n.cell.hl-both rect { fill: rgba(244, 114, 182, 0.28); stroke: #f472b6; }\r\n.dim { opacity: 0.25; }\r\n.dash { stroke-dasharray: 5 4; }\r\n.fillA { fill: rgba(56, 189, 248, 0.16); stroke: #38bdf8; stroke-width: 2; }\r\n.fillB { fill: rgba(244, 114, 182, 0.18); stroke: #f472b6; stroke-width: 2; }\r\n.fillG { fill: rgba(29, 181, 132, 0.16); stroke: #1db584; stroke-width: 2; }\r\n.contour { stroke: rgba(56, 189, 248, 0.45); stroke-width: 1.5; }\n.curve { fill: none; stroke: #38bdf8; stroke-width: 3; }\n.curve-y { fill: none; stroke: #e2b44a; stroke-width: 3; }\n.curve-p { fill: none; stroke: #f472b6; stroke-width: 3; }\n.curve-g { fill: none; stroke: #1db584; stroke-width: 3; }\n.ghost { fill: none; stroke: rgba(201, 220, 207, 0.4); stroke-width: 2; }\n.lbl-w { fill: #e6f5ec; }\n.lbl-s { font-size: 11px; font-weight: 600; fill: #c9dccf; }\n.contour-hi { fill: none; stroke: #e2b44a; stroke-width: 3; }\n.feasible { fill: rgba(29, 181, 132, 0.16); stroke: none; }\n.infeasible { fill: rgba(248, 113, 113, 0.14); stroke: none; }\n\n/* ── explanation panel (shared by every generated ML animation) ── */\n.explain {\n  box-sizing: border-box;\n  max-width: 640px;\n  margin-top: 4px;\n  padding: 14px 18px 16px;\n  min-height: 150px;\n  border-radius: 12px;\n  background: rgba(29, 181, 132, 0.10);\n  border: 1px solid rgba(29, 181, 132, 0.45);\n  border-left: 5px solid #1db584;\n}\n.explain-h {\n  margin: 0 0 8px;\n  font-size: 13px;\n  font-weight: 800;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.explain-t {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.55;\n  color: #f1faf4;\n}\n.explain-t strong {\n  font-weight: 800;\n  color: #ffd98a;\n}\n\n",
+  "html": "<div class=\"scene\">\n  <p class=\"step-label\" id=\"step-label\"></p>\n  <svg id=\"scene\" viewBox=\"0 0 640 360\" role=\"img\" aria-label=\"Learning rate: how big a step to take\"></svg>\n  <section class=\"explain\" aria-live=\"polite\">\n    <h3 class=\"explain-h\" id=\"explain-h\"></h3>\n    <p class=\"explain-t\" id=\"caption\"></p>\n  </section>\n</div>\n",
+  "js": "(function () {\n  // ── shared helpers (SVG, tweening) ─────────────────────────────────────────\r\n  var NS = \"http://www.w3.org/2000/svg\";\r\n  var svg = document.getElementById(\"scene\");\r\n  var labelEl = document.getElementById(\"step-label\");\r\n  var captionEl = document.getElementById(\"caption\");\r\n\r\n  function el(name, attrs, parent) {\r\n    var node = document.createElementNS(NS, name);\r\n    for (var key in attrs) node.setAttribute(key, attrs[key]);\r\n    if (parent) parent.appendChild(node);\r\n    return node;\r\n  }\r\n  function txt(parent, x, y, cls, str, anchor) {\r\n    var t = el(\"text\", { x: x, y: y, class: cls }, parent);\r\n    if (anchor) t.setAttribute(\"text-anchor\", anchor);\r\n    t.textContent = str;\r\n    return t;\r\n  }\r\n  function show(node, on) {\r\n    node.setAttribute(\"opacity\", on ? \"1\" : \"0\");\r\n  }\r\n  function place(node, x, y) {\r\n    node.style.transform = \"translate(\" + x + \"px,\" + y + \"px)\";\r\n  }\r\n  function setLine(node, x1, y1, x2, y2) {\r\n    node.setAttribute(\"x1\", x1);\r\n    node.setAttribute(\"y1\", y1);\r\n    node.setAttribute(\"x2\", x2);\r\n    node.setAttribute(\"y2\", y2);\r\n  }\r\n  function lerp(a, b, e) {\r\n    return a + (b - a) * e;\r\n  }\r\n  function round1(v) {\r\n    return (Math.round(v * 10) / 10).toFixed(1);\r\n  }\r\n\r\n  // Eased animation. fn(e) is called with e from 0 to 1. Without\r\n  // requestAnimationFrame (or with ms = 0) it jumps straight to fn(1).\r\n  var animTokens = {};\r\n  function anim(key, ms, fn) {\r\n    var token = (animTokens[key] || 0) + 1;\r\n    animTokens[key] = token;\r\n    if (typeof requestAnimationFrame !== \"function\" || ms <= 0) {\r\n      fn(1);\r\n      return;\r\n    }\r\n    var start = null;\r\n    function frame(now) {\r\n      if (animTokens[key] !== token) return;\r\n      if (start === null) start = now;\r\n      var p = Math.min(1, (now - start) / ms);\r\n      var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;\r\n      fn(e);\r\n      if (p < 1) requestAnimationFrame(frame);\r\n    }\r\n    requestAnimationFrame(frame);\r\n  }\r\n\r\n  // Arrowheads, one marker per colour.\r\n  var COLORS = { g: \"#1DB584\", y: \"#E2B44A\", p: \"#F472B6\", b: \"#38BDF8\", w: \"#c9dccf\", r: \"#F87171\" };\r\n  var defs = el(\"defs\", {}, svg);\r\n  Object.keys(COLORS).forEach(function (k) {\r\n    var m = el(\"marker\", { id: \"ah-\" + k, viewBox: \"0 0 10 10\", refX: 9, refY: 5, markerUnits: \"userSpaceOnUse\", markerWidth: 13, markerHeight: 13, orient: \"auto\" }, defs);\r\n    el(\"path\", { d: \"M0 0 L10 5 L0 10 Z\", fill: COLORS[k] }, m);\r\n  });\r\n  function arrow(parent, colorKey, width) {\r\n    return el(\"line\", { x1: 0, y1: 0, x2: 0, y2: 0, stroke: COLORS[colorKey], \"stroke-width\": width || 3, \"marker-end\": \"url(#ah-\" + colorKey + \")\", \"stroke-linecap\": \"round\" }, parent);\r\n  }\r\n  function polygon(parent, cls) {\r\n    return el(\"polygon\", { points: \"\", class: cls }, parent);\r\n  }\r\n  function setPoly(node, pts) {\r\n    node.setAttribute(\"points\", pts.map(function (p) { return p[0].toFixed(1) + \",\" + p[1].toFixed(1); }).join(\" \"));\r\n  }\r\n  function lerpPts(a, b, e) {\r\n    return a.map(function (p, i) { return [lerp(p[0], b[i][0], e), lerp(p[1], b[i][1], e)]; });\r\n  }\r\n  // Maps maths coordinates (x right, y up) to screen pixels.\r\n  function makePlane(cx, cy, s) {\r\n    return {\r\n      x: function (v) { return cx + s * v; },\r\n      y: function (v) { return cy - s * v; },\r\n      pt: function (p) { return [cx + s * p[0], cy - s * p[1]]; },\r\n      s: s, cx: cx, cy: cy\r\n    };\r\n  }\r\n  function axes(parent, plane, xr, yr) {\r\n    el(\"line\", { x1: plane.x(-xr), y1: plane.y(0), x2: plane.x(xr), y2: plane.y(0), class: \"axis\" }, parent);\r\n    el(\"line\", { x1: plane.x(0), y1: plane.y(-yr), x2: plane.x(0), y2: plane.y(yr), class: \"axis\" }, parent);\r\n  }\r\n\n  // ── Module 3 helpers: graphs, curves, contour plane ───────────────────────\n  // makeGraph maps maths values to pixels with separate x and y scales.\n  function makeGraph(ox, oy, sx, sy) {\n    return {\n      ox: ox, oy: oy, sx: sx, sy: sy,\n      x: function (v) { return ox + sx * v; },\n      y: function (v) { return oy - sy * v; }\n    };\n  }\n  function curveD(g, f, a, b, n) {\n    var d = \"\";\n    for (var i = 0; i <= n; i++) {\n      var v = a + ((b - a) * i) / n;\n      d += (i ? \" L \" : \"M \") + g.x(v).toFixed(1) + \" \" + g.y(f(v)).toFixed(1);\n    }\n    return d;\n  }\n  function setD(node, d) {\n    node.setAttribute(\"d\", d);\n  }\n  function fmt(v, n) {\n    return (Math.round(v * 100000) / 100000).toFixed(n === undefined ? 1 : n);\n  }\n  function drawAxes(parent, g, xmax, ymax, xticks, yticks) {\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(xmax), y2: g.y(0), class: \"axis\" }, parent);\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(0), y2: g.y(ymax), class: \"axis\" }, parent);\n    (xticks || []).forEach(function (t) { txt(parent, g.x(t), g.y(0) + 15, \"tick\", String(t), \"middle\"); });\n    (yticks || []).forEach(function (t) { txt(parent, g.x(0) - 7, g.y(t) + 4, \"tick\", String(t), \"end\"); });\n  }\n  function card(parent, x, y, w, h, cls) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: 10, class: cls || \"fillG\" }, parent);\n  }\n  function ring(parent, cx, cy, rx, ry, cls) {\n    return el(\"ellipse\", { cx: cx, cy: cy, rx: rx, ry: ry, fill: \"none\", class: cls || \"contour\" }, parent);\n  }\n  function clipTo(id, x, y, w, h) {\n    var c = el(\"clipPath\", { id: id }, defs);\n    el(\"rect\", { x: x, y: y, width: w, height: h }, c);\n  }\n\n  // ── Module 4 helpers: seeded randomness, small shapes ─────────────────────\n  function mulberry(seed) {\n    var a = seed;\n    return function () {\n      a |= 0; a = (a + 0x6D2B79F5) | 0;\n      var t = Math.imul(a ^ (a >>> 15), 1 | a);\n      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;\n      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;\n    };\n  }\n  function gaussSource(rand) {\n    return function () {\n      var u = 1 - rand(), v = rand();\n      return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);\n    };\n  }\n  function box(parent, x, y, w, h, fill, stroke, r) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: r === undefined ? 6 : r, fill: fill, stroke: stroke || \"none\", \"stroke-width\": 2 }, parent);\n  }\n  function setBox(node, x, y, w, h) {\n    node.setAttribute(\"x\", x); node.setAttribute(\"y\", y); node.setAttribute(\"width\", Math.max(0, w)); node.setAttribute(\"height\", Math.max(0, h));\n  }\n  function vis(list, on) {\n    list.forEach(function (n) { show(n, on); });\n  }\n\n  // ── Module 5 helpers: coins, and rows of bars over the nine candidate values of p ──\n  function coin(parent, x, y, r, letter) {\n    var g = el(\"g\", {}, parent);\n    var head = letter === \"H\";\n    el(\"circle\", { cx: x, cy: y, r: r, fill: head ? \"rgba(244,114,182,0.35)\" : \"rgba(56,189,248,0.3)\", stroke: head ? \"#f472b6\" : \"#38bdf8\", \"stroke-width\": 3 }, g);\n    var t = txt(g, x, y + r * 0.36, \"big\", letter, \"middle\");\n    t.setAttribute(\"font-size\", String(Math.round(r * 1.05)));\n    return g;\n  }\n  var THETAS = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9];\n  var WEIGHTS = [1, 2, 3, 4, 5, 4, 3, 2, 1];\n  function lik(t, k, n) { return Math.pow(t, k) * Math.pow(1 - t, n - k); }\n  function normalized(arr) {\n    var s = 0;\n    arr.forEach(function (v) { s += v; });\n    return arr.map(function (v) { return v / s; });\n  }\n  function argmaxIndex(arr) {\n    var b = 0;\n    arr.forEach(function (v, i) { if (v > arr[b]) b = i; });\n    return b;\n  }\n  // A row of nine bars. set(values, maxValue) rescales heights so maxValue fills `height`.\n  function barRow(parent, x0, dx, base, bw, height, fill, stroke) {\n    var g = el(\"g\", {}, parent);\n    var bars = THETAS.map(function (t, i) {\n      return box(g, x0 + i * dx - bw / 2, base, bw, 0, fill, stroke || \"none\", 3);\n    });\n    var tick = THETAS.map(function (t, i) {\n      var tt = txt(g, x0 + i * dx, base + 14, \"tick\", String(t), \"middle\");\n      tt.setAttribute(\"opacity\", \"0\");\n      return tt;\n    });\n    return {\n      g: g,\n      bars: bars,\n      ticks: tick,\n      set: function (values, maxValue) {\n        values.forEach(function (v, i) {\n          var h = Math.max(0, (v / maxValue) * height);\n          setBox(bars[i], x0 + i * dx - bw / 2, base - h, bw, h);\n        });\n      },\n      showTicks: function (on) { tick.forEach(function (n) { n.setAttribute(\"opacity\", on ? \"1\" : \"0\"); }); }\n    };\n  }\n\n  // ── Module 6 helpers: the two-weight objective, contours, quick arrows ────\n  function L2(w1, w2) { return (w1 - 3) * (w1 - 3) + 2 * (w2 - 1) * (w2 - 1); }\n  function G2(w1, w2) { return [2 * (w1 - 3), 4 * (w2 - 1)]; }\n  // Contour of L2 at level c, drawn in the plane P (makeGraph) around the minimum (3, 1).\n  function levelEllipse(parent, P, c, cls) {\n    var e = el(\"ellipse\", { cx: P.x(3), cy: P.y(1), rx: Math.sqrt(c) * P.sx, ry: Math.sqrt(c / 2) * P.sy, fill: \"none\", class: cls || \"contour\" }, parent);\n    return e;\n  }\n  function arrowLine(parent, key, width, x1, y1, x2, y2) {\n    var a = arrow(parent, key, width);\n    setLine(a, x1, y1, x2, y2);\n    return a;\n  }\n\n  var EXPLAIN = {\"same-start\":{\"h\":\"WHAT YOU ARE LOOKING AT\",\"t\":\"Same bowl **L(w) = (w − 3)²**, same start **w = 0**, same rule **w_new = w_old − η × gradient**. Only the **learning rate η**, which sets the step size, will change. The direction stays the same.\"},\"small-rate\":{\"h\":\"A SMALL LEARNING RATE (0.02)\",\"t\":\"With **η = 0.02** each step is tiny: w goes **0, 0.12, 0.24, 0.35, 0.45 …** The path crawls along the bowl.\"},\"small-progress\":{\"h\":\"SMALL RATE: SAFE BUT SLOW\",\"t\":\"After 10 steps **w is only about 1.0** and the loss is still about 4. It will get there, but it needs hundreds of steps.\"},\"good-rate\":{\"h\":\"A GOOD LEARNING RATE (0.3)\",\"t\":\"With **η = 0.3** the steps are **1.8, 2.52, 2.81, 2.92 …** Big steps at first, then smaller ones as the ground flattens.\"},\"good-progress\":{\"h\":\"GOOD RATE: FAST AND STEADY\",\"t\":\"After 5 steps **w ≈ 2.97** and the loss is about **0.001**. Efficient progress with no drama.\"},\"large-rate\":{\"h\":\"A LARGE LEARNING RATE (0.9)\",\"t\":\"With **η = 0.9** the first step jumps from 0 to **5.4**, right over the minimum at 3.\"},\"overshoot\":{\"h\":\"OVERSHOOT AND OSCILLATION\",\"t\":\"The next steps go back and forth: **1.08, 4.54, 1.77 …** It bounces from side to side. Each bounce is smaller here, so it still converges, but **slowly and wastefully**.\"},\"diverge\":{\"h\":\"TOO LARGE: DIVERGENCE\",\"t\":\"With **η = 1.1** the steps are **6.6, −1.32, 8.18, −3.22 …** Each bounce is **bigger** than the last, so the loss grows: the search **diverges**. For this objective any η above 1 diverges.\"},\"compare\":{\"h\":\"TAKEAWAY\",\"t\":\"Small η: slow but steady. Good η: fast. η = 0.9: bouncing but shrinking. η = 1.1: growing. **The learning rate controls the step size, not the direction.**\"}};\n  // ── scene ──\n  var steps = [\r\n    { id: \"same-start\", label: \"Same objective, same start\", caption: \"Same bowl L(w) = (w − 3)², same start w = 0, same rule w_new = w_old − η × gradient. The only thing we change is the learning rate η, which sets the step size. Direction stays the same.\" },\r\n    { id: \"small-rate\", label: \"A small learning rate (0.02)\", caption: \"With η = 0.02 each step is tiny: w goes 0, 0.12, 0.24, 0.35, 0.45 ... The path crawls along the bowl.\" },\r\n    { id: \"small-progress\", label: \"Small rate: safe but slow\", caption: \"After 10 steps w is only about 1.0 and the loss is still about 4. It will get there, but it needs hundreds of steps.\" },\r\n    { id: \"good-rate\", label: \"A good learning rate (0.3)\", caption: \"With η = 0.3 the steps are 1.8, 2.52, 2.81, 2.92 ... Big steps at first, then smaller as the ground flattens.\" },\r\n    { id: \"good-progress\", label: \"Good rate: fast and steady\", caption: \"After 5 steps w ≈ 2.97 and the loss is about 0.001. Efficient progress with no drama.\" },\r\n    { id: \"large-rate\", label: \"A large learning rate (0.9)\", caption: \"With η = 0.9 the first step jumps from 0 to 5.4, right over the minimum at 3.\" },\r\n    { id: \"overshoot\", label: \"Overshoot and oscillation\", caption: \"The next steps go back and forth: 1.08, 4.54, 1.77 ... It bounces from side to side. Here each bounce is smaller so it still converges, slowly, but it wastes steps.\" },\r\n    { id: \"diverge\", label: \"Too large: divergence\", caption: \"With η = 1.1 the steps are 6.6, −1.32, 8.18, −3.22 ... Each bounce is bigger than the last. The loss grows: the search diverges. For this objective any η above 1 diverges.\" },\r\n    { id: \"compare\", label: \"Compare the four\", caption: \"Loss versus step. Small η: slow but steady. Good η: fast. η = 0.9: bouncing but shrinking. η = 1.1: growing. The learning rate controls step SIZE, not direction.\" }\r\n  ];\r\n\r\n  function Lw(w) { return (w - 3) * (w - 3); }\r\n  var X = function (w) { return 40 + 41 * (w + 4); };\r\n  var Y = function (l) { return 320 - 6.2 * l; };\r\n  var RATES = [\r\n    { lr: 0.02, color: \"#38bdf8\", name: \"η = 0.02  (small)\" },\r\n    { lr: 0.3, color: \"#1db584\", name: \"η = 0.3  (good)\" },\r\n    { lr: 0.9, color: \"#e2b44a\", name: \"η = 0.9  (large)\" },\r\n    { lr: 1.1, color: \"#f87171\", name: \"η = 1.1  (too large)\" }\r\n  ];\r\n  RATES.forEach(function (r) {\r\n    var w = 0, path = [0];\r\n    for (var k = 0; k < 10; k++) { w = w - r.lr * 2 * (w - 3); path.push(w); }\r\n    r.path = path;\r\n  });\r\n\r\n  clipTo(\"lrclip\", 30, 60, 570, 270);\r\n  var graphG = el(\"g\", {}, svg);\r\n  el(\"line\", { x1: 30, y1: Y(0), x2: 600, y2: Y(0), class: \"axis\" }, graphG);\r\n  for (var t = -4; t <= 9; t += 1) txt(graphG, X(t), Y(0) + 16, \"tick\", String(t), \"middle\");\r\n  txt(graphG, 600, Y(0) + 32, \"note\", \"weight w\", \"end\");\r\n  var cd = \"\";\r\n  for (var w = -4; w <= 9.01; w += 0.1) cd += (cd ? \" L \" : \"M \") + X(w).toFixed(1) + \" \" + Y(Lw(w)).toFixed(1);\r\n  var clipG = el(\"g\", { \"clip-path\": \"url(#lrclip)\" }, graphG);\r\n  el(\"path\", { d: cd, class: \"curve\" }, clipG);\r\n  el(\"line\", { x1: X(3), y1: Y(0), x2: X(3), y2: Y(11), stroke: \"#1db584\", \"stroke-width\": 2, \"stroke-dasharray\": \"5 4\" }, graphG);\r\n  txt(graphG, X(3), 66, \"lbl lbl-g\", \"minimum w = 3\", \"middle\");\r\n\r\n  var pathsG = el(\"g\", { \"clip-path\": \"url(#lrclip)\" }, svg);\r\n  RATES.forEach(function (r) {\r\n    r.g = el(\"g\", {}, pathsG);\r\n    r.line = el(\"polyline\", { fill: \"none\", stroke: r.color, \"stroke-width\": 2, \"stroke-dasharray\": \"5 3\", opacity: 0.8 }, r.g);\r\n    r.dots = r.path.map(function (wv) { return el(\"circle\", { cx: X(wv), cy: Y(Lw(wv)), r: 5.5, fill: r.color, stroke: \"#071510\", \"stroke-width\": 1.5 }, r.g); });\r\n  });\r\n  var startDot = el(\"circle\", { cx: X(0), cy: Y(9), r: 9, fill: \"#ffffff\", stroke: \"#071510\", \"stroke-width\": 3 }, svg);\r\n  var startLbl = txt(svg, X(0) + 14, Y(9) - 8, \"lbl\", \"start w = 0\", \"start\");\r\n  var readout = txt(svg, 40, 34, \"mono\", \"\", \"start\");\r\n  var readout2 = txt(svg, 40, 52, \"note\", \"\", \"start\");\r\n\r\n  var chipsG = el(\"g\", {}, svg);\r\n  RATES.forEach(function (r, i) {\r\n    var x = 40 + i * 144;\r\n    box(chipsG, x, 70, 134, 28, \"rgba(255,255,255,0.06)\", r.color, 14);\r\n    txt(chipsG, x + 67, 89, \"lbl\", r.name, \"middle\").setAttribute(\"fill\", r.color);\r\n  });\r\n\r\n  var jumpG = el(\"g\", {}, svg);\r\n  var ja = arrow(jumpG, \"y\", 4); setLine(ja, X(0) + 6, 126, X(5.4) - 6, 126);\r\n  el(\"line\", { x1: X(0), y1: 126, x2: X(0), y2: Y(9) - 12, stroke: \"#e2b44a\", \"stroke-width\": 2, \"stroke-dasharray\": \"4 3\" }, jumpG);\r\n  el(\"line\", { x1: X(5.4), y1: 126, x2: X(5.4), y2: Y(Lw(5.4)) - 8, stroke: \"#e2b44a\", \"stroke-width\": 2, \"stroke-dasharray\": \"4 3\" }, jumpG);\r\n  txt(jumpG, X(2.7), 116, \"lbl lbl-y\", \"first step: 0 → 5.4, past the minimum at 3\", \"middle\");\r\n\r\n  // Loss-versus-step comparison.\r\n  var cmpG = el(\"g\", {}, svg);\r\n  var CX = function (k) { return 80 + k * 48; };\r\n  var CY = function (l) { return 310 - l * 12; };\r\n  clipTo(\"cmpclip\", 70, 50, 440, 262);\r\n  el(\"line\", { x1: 70, y1: CY(0), x2: 570, y2: CY(0), class: \"axis\" }, cmpG);\r\n  el(\"line\", { x1: 70, y1: CY(0), x2: 70, y2: 50, class: \"axis\" }, cmpG);\r\n  for (var q = 0; q <= 10; q += 2) txt(cmpG, CX(q), CY(0) + 16, \"tick\", String(q), \"middle\");\r\n  [0, 5, 10, 15, 20].forEach(function (v) { txt(cmpG, 62, CY(v) + 4, \"tick\", String(v), \"end\"); });\r\n  txt(cmpG, 570, CY(0) + 32, \"note\", \"step number\", \"end\");\r\n  txt(cmpG, 76, 44, \"note\", \"loss\", \"start\");\r\n  var cclip = el(\"g\", { \"clip-path\": \"url(#cmpclip)\" }, cmpG);\r\n  RATES.forEach(function (r) {\r\n    var pts = r.path.map(function (wv, k) { return CX(k).toFixed(1) + \",\" + CY(Lw(wv)).toFixed(1); }).join(\" \");\r\n    el(\"polyline\", { points: pts, fill: \"none\", stroke: r.color, \"stroke-width\": 3 }, cclip);\r\n    r.path.forEach(function (wv, k) { el(\"circle\", { cx: CX(k), cy: CY(Lw(wv)), r: 3.5, fill: r.color }, cclip); });\r\n  });\r\n  RATES.forEach(function (r, i) {\r\n    box(cmpG, 400, 70 + i * 22, 14, 14, r.color, \"none\", 3);\r\n    txt(cmpG, 420, 82 + i * 22, \"lbl\", r.name, \"start\");\r\n  });\r\n  txt(cmpG, 320, 346, \"note\", \"η = 1.1 leaves the chart: its loss is above 300 at step 10\", \"middle\");\r\n\r\n  function drawRate(idx, n) {\r\n    var r = RATES[idx];\r\n    r.line.setAttribute(\"points\", r.path.slice(0, n + 1).map(function (wv) { return X(wv).toFixed(1) + \",\" + Y(Lw(wv)).toFixed(1); }).join(\" \"));\r\n    r.dots.forEach(function (d, k) { d.setAttribute(\"opacity\", k <= n ? \"1\" : \"0\"); });\r\n    readout.textContent = r.name + \"     step \" + n + \":  w = \" + fmt(r.path[n], 2) + \",  loss = \" + (Lw(r.path[n]) > 1000 ? \"> 1000\" : fmt(Lw(r.path[n]), Lw(r.path[n]) < 0.1 ? 4 : 2));\r\n  }\r\n  function only(idx) {\r\n    RATES.forEach(function (r, k) { show(r.g, k === idx); });\r\n  }\r\n\r\n  function render(index, id) {\r\n    var i = index;\r\n    show(graphG, i <= 7); show(pathsG, i >= 1 && i <= 7);\r\n    show(startDot, i <= 7); show(startLbl, i === 0);\r\n    show(readout, i >= 1 && i <= 7); show(readout2, i >= 1 && i <= 7);\r\n    show(chipsG, i === 0);\r\n    show(jumpG, i === 6);\r\n    show(cmpG, i === 8);\r\n    readout.textContent = \"\"; readout2.textContent = \"\";\r\n    if (i === 1) { only(0); anim(\"p\", 2600, function (e) { drawRate(0, Math.round(e * 10)); readout2.textContent = \"tiny steps\"; }); }\r\n    if (i === 2) { only(0); drawRate(0, 10); readout2.textContent = \"after 10 steps: far from 3, loss still ≈ 4\"; }\r\n    if (i === 3) { only(1); anim(\"p\", 2200, function (e) { drawRate(1, Math.round(e * 10)); readout2.textContent = \"big steps first, smaller later\"; }); }\r\n    if (i === 4) { only(1); drawRate(1, 5); readout2.textContent = \"after 5 steps: w ≈ 2.97, loss ≈ 0.001\"; }\r\n    if (i === 5) { only(2); anim(\"p\", 800, function (e) { drawRate(2, Math.round(e * 1)); readout2.textContent = \"the first step overshoots the minimum\"; }); }\r\n    if (i === 6) { only(2); drawRate(2, 6); readout2.textContent = \"bounces from side to side, shrinking slowly\"; }\r\n    if (i === 7) { only(3); anim(\"p\", 2400, function (e) { drawRate(3, Math.round(e * 10)); readout2.textContent = \"each bounce is bigger: the loss grows\"; }); }\r\n  }\r\n\n\n  // ── shared runtime: stepping, explanation panel, educational autoplay pacing, bridge ──\n  var current = 0;\n  var explainHeadEl = document.getElementById(\"explain-h\");\n\n  // **bold** markers in an explanation become <strong> nodes (built with DOM calls, never innerHTML).\n  function setRich(node, str) {\n    node.textContent = \"\";\n    var parts = String(str).split(\"**\");\n    for (var i = 0; i < parts.length; i++) {\n      if (parts[i] === \"\") continue;\n      var seg = document.createElement(i % 2 ? \"strong\" : \"span\");\n      seg.textContent = parts[i];\n      node.appendChild(seg);\n    }\n  }\n\n  function explanationFor(index) {\n    var ex = (typeof EXPLAIN === \"object\" && EXPLAIN) ? EXPLAIN[steps[index].id] : null;\n    return ex || { h: \"WHAT IS HAPPENING\", t: steps[index].caption };\n  }\n\n  // Autoplay pace: 4.5 to 10.5 seconds per step, longer for longer explanations, so a learner can read.\n  function stepMs(index) {\n    var words = String(explanationFor(index).t).replace(/\\*\\*/g, \"\").split(/\\s+/).length;\n    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));\n  }\n\n  function renderStep(index) {\n    var ex = explanationFor(index);\n    labelEl.textContent = steps[index].label;\n    if (explainHeadEl) explainHeadEl.textContent = ex.h;\n    setRich(captionEl, ex.t);\n    render(index, steps[index].id);\n  }\n\n  function goTo(index) {\n    if (index < 0 || index >= steps.length) return;\n    current = index;\n    renderStep(current);\n    if (window.ReagvisBridge) window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n\n  renderStep(current);\n\n  // Autoplay: exactly one timer, one step per tick, stops on the final step.\n  // PLAY on the final step restarts from the first step and plays again.\n  var timer = null;\n\n  function stopAuto() {\n    if (timer !== null) {\n      clearTimeout(timer);\n      timer = null;\n    }\n  }\n\n  function scheduleNext() {\n    timer = setTimeout(function () {\n      timer = null;\n      if (current >= steps.length - 1) return;\n      goTo(current + 1);\n      if (current < steps.length - 1) scheduleNext();\n    }, stepMs(current));\n  }\n\n  function startAuto() {\n    if (timer !== null) return;\n    if (current >= steps.length - 1) goTo(0);\n    scheduleNext();\n  }\n\n  window.addEventListener(\"pagehide\", stopAuto);\n\n  window.ReagvisAnimation = {\n    stepDuration: stepMs,\n    onCommand: function (type, stepId) {\n      if (type === \"PLAY\") startAuto();\n      else if (type === \"PAUSE\") stopAuto();\n      else if (type === \"NEXT\") { stopAuto(); goTo(current + 1); }\n      else if (type === \"PREVIOUS\") { stopAuto(); goTo(current - 1); }\n      else if (type === \"RESET\") { stopAuto(); goTo(0); }\n      else if (type === \"GOTO_STEP\") {\n        stopAuto();\n        for (var i = 0; i < steps.length; i++) {\n          if (steps[i].id === stepId) { goTo(i); break; }\n        }\n      }\n    },\n  };\n\n  if (window.ReagvisBridge) {\n    window.ReagvisBridge.ready();\n    window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n})();\n",
+  "lastFrozenContentHash": null,
+  "lastFrozenRevisionId": null,
+  "manifest": {
+    "bridgeVersion": {
+      "$numberInt": "1"
+    },
+    "capabilities": [
+      "play",
+      "pause",
+      "next",
+      "previous",
+      "reset",
+      "gotoStep"
+    ],
+    "heightPx": {
+      "$numberInt": "590"
+    },
+    "traceEvents": [
+      "same-start",
+      "small-rate",
+      "small-progress",
+      "good-rate",
+      "good-progress",
+      "large-rate",
+      "overshoot",
+      "diverge",
+      "compare"
+    ]
+  },
+  "packageId": "792a9843-abc7-4dbd-9f77-831080742967",
+  "packageTrace": {
+    "steps": [
+      {
+        "animationEvent": "same-start",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Same objective and start; only the learning rate changes.",
+          "python": "def grad(w):\n    return 2 * (w - 3)\n\ndef run(lr, steps=10, w=0.0):\n    path = [w]\n    for _ in range(steps):\n        w = w - lr * grad(w)\n        path.append(w)\n    return path\n\nfor lr in [0.02, 0.3, 0.9, 1.1]:\n    print(lr, run(lr)[0])   # every run starts at w = 0.0"
+        },
+        "id": "same-start",
+        "label": "Same objective, same start"
+      },
+      {
+        "animationEvent": "small-rate",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "A small learning rate takes tiny steps.",
+          "python": "def grad(w):\n    return 2 * (w - 3)\n\ndef run(lr, steps=10, w=0.0):\n    path = [w]\n    for _ in range(steps):\n        w = w - lr * grad(w)\n        path.append(w)\n    return path\n\nprint([round(v, 2) for v in run(0.02)[:5]])   # [0.0, 0.12, 0.24, 0.35, 0.45]"
+        },
+        "id": "small-rate",
+        "label": "A small learning rate: 0.02"
+      },
+      {
+        "animationEvent": "small-progress",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "After 10 steps the weight is still far from 3.",
+          "python": "def grad(w):\n    return 2 * (w - 3)\n\ndef run(lr, steps=10, w=0.0):\n    path = [w]\n    for _ in range(steps):\n        w = w - lr * grad(w)\n        path.append(w)\n    return path\n\npath = run(0.02)\nprint(round(path[-1], 2), round((path[-1] - 3) ** 2, 2))   # 1.01 3.98"
+        },
+        "id": "small-progress",
+        "label": "Small rate: safe but slow"
+      },
+      {
+        "animationEvent": "good-rate",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "A good learning rate takes big steps at first, then smaller ones.",
+          "python": "def grad(w):\n    return 2 * (w - 3)\n\ndef run(lr, steps=10, w=0.0):\n    path = [w]\n    for _ in range(steps):\n        w = w - lr * grad(w)\n        path.append(w)\n    return path\n\nprint([round(v, 2) for v in run(0.3)[:5]])   # [0.0, 1.8, 2.52, 2.81, 2.92]"
+        },
+        "id": "good-rate",
+        "label": "A good learning rate: 0.3"
+      },
+      {
+        "animationEvent": "good-progress",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "After 5 steps the weight is almost at the minimum.",
+          "python": "def grad(w):\n    return 2 * (w - 3)\n\ndef run(lr, steps=10, w=0.0):\n    path = [w]\n    for _ in range(steps):\n        w = w - lr * grad(w)\n        path.append(w)\n    return path\n\npath = run(0.3, steps=5)\nprint(round(path[-1], 2), round((path[-1] - 3) ** 2, 4))   # 2.97 0.0009"
+        },
+        "id": "good-progress",
+        "label": "Good rate: fast and steady"
+      },
+      {
+        "animationEvent": "large-rate",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "A large learning rate jumps past the minimum on the first step.",
+          "python": "def grad(w):\n    return 2 * (w - 3)\n\ndef run(lr, steps=10, w=0.0):\n    path = [w]\n    for _ in range(steps):\n        w = w - lr * grad(w)\n        path.append(w)\n    return path\n\npath = run(0.9)\nprint(path[0], round(path[1], 1))   # 0.0 5.4: past the minimum at 3"
+        },
+        "id": "large-rate",
+        "label": "A large learning rate: 0.9"
+      },
+      {
+        "animationEvent": "overshoot",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "The weight bounces from side to side around the minimum.",
+          "python": "def grad(w):\n    return 2 * (w - 3)\n\ndef run(lr, steps=10, w=0.0):\n    path = [w]\n    for _ in range(steps):\n        w = w - lr * grad(w)\n        path.append(w)\n    return path\n\nprint([round(v, 2) for v in run(0.9)[:5]])   # [0.0, 5.4, 1.08, 4.54, 1.77]"
+        },
+        "id": "overshoot",
+        "label": "Overshoot and oscillation"
+      },
+      {
+        "animationEvent": "diverge",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "With a learning rate above 1 each bounce is bigger and the loss grows.",
+          "python": "def grad(w):\n    return 2 * (w - 3)\n\ndef run(lr, steps=10, w=0.0):\n    path = [w]\n    for _ in range(steps):\n        w = w - lr * grad(w)\n        path.append(w)\n    return path\n\nprint([round(v, 2) for v in run(1.1)[:5]])   # [0.0, 6.6, -1.32, 8.18, -3.22]"
+        },
+        "id": "diverge",
+        "label": "Too large: divergence"
+      },
+      {
+        "animationEvent": "compare",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Compare the final loss after 10 steps for each learning rate.",
+          "python": "def grad(w):\n    return 2 * (w - 3)\n\ndef run(lr, steps=10, w=0.0):\n    path = [w]\n    for _ in range(steps):\n        w = w - lr * grad(w)\n        path.append(w)\n    return path\n\nfor lr in [0.02, 0.3, 0.9, 1.1]:\n    path = run(lr)\n    print(lr, round((path[-1] - 3) ** 2, 3))\n# 0.02 3.978 / 0.3 0.0 / 0.9 0.104 / 1.1 345.038"
+        },
+        "id": "compare",
+        "label": "Compare the four"
+      }
+    ],
+    "version": {
+      "$numberInt": "1"
+    }
+  },
+  "revision": {
+    "$numberInt": "5"
+  },
+  "revisionId": "r2",
+  "sourceKind": "zip",
+  "status": "frozen",
+  "title": "ML Module 6 — Learning Rate",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498557"
+    }
+  },
+  "updatedBy": {
+    "$oid": "000000000000000000000000"
+  }
+}

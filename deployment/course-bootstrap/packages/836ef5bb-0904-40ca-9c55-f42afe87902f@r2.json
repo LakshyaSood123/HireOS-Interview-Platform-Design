@@ -1,0 +1,159 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322c4e9cccef168ed3b"
+  },
+  "assets": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498552"
+    }
+  },
+  "createdBy": {
+    "$oid": "000000000000000000000000"
+  },
+  "css": "body {\r\n  margin: 0;\r\n  padding: 14px;\r\n  box-sizing: border-box;\r\n  background: #0b1d16;\r\n  color: #e6f5ec;\r\n  font-family: system-ui, sans-serif;\r\n}\r\n.scene {\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 8px;\r\n}\r\n.step-label {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  letter-spacing: 0.08em;\r\n  text-transform: uppercase;\r\n  color: #a7ce65;\r\n}\r\nsvg {\r\n  width: 100%;\r\n  height: auto;\r\n  max-width: 640px;\r\n  background: #071510;\r\n  border-radius: 10px;\r\n  border: 1px solid rgba(29, 181, 132, 0.35);\r\n}\r\nsvg g,\r\nsvg line,\r\nsvg polygon,\r\nsvg path,\r\nsvg ellipse,\r\nsvg circle,\r\nsvg rect,\r\nsvg text {\r\n  transition: opacity 0.4s ease, transform 0.6s ease;\r\n}\r\n.axis {\r\n  stroke: rgba(167, 206, 101, 0.3);\r\n  stroke-width: 1;\r\n}\r\n.tick {\r\n  font-size: 10px;\r\n  fill: #8fa89c;\r\n}\r\n.lbl,\r\n.big,\r\n.note,\r\n.mono {\r\n  paint-order: stroke;\r\n  stroke: #071510;\r\n  stroke-width: 3px;\r\n  stroke-linejoin: round;\r\n}\r\n.lbl {\r\n  font-size: 12px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.lbl-g { fill: #1db584; }\r\n.lbl-y { fill: #e2b44a; }\r\n.lbl-p { fill: #f472b6; }\r\n.lbl-b { fill: #38bdf8; }\r\n.lbl-r { fill: #f87171; }\r\n.big {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.note {\r\n  font-size: 11px;\r\n  fill: #c9dccf;\r\n}\r\n.mono {\r\n  font-family: ui-monospace, Consolas, monospace;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.caption {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  line-height: 1.5;\r\n  color: #c9dccf;\r\n  min-height: 40px;\r\n}\r\n.cell rect {\r\n  fill: rgba(255, 255, 255, 0.05);\r\n  stroke: rgba(255, 255, 255, 0.28);\r\n  stroke-width: 1.2;\r\n}\r\n.cell text {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.cell.hl-row rect { fill: rgba(226, 180, 74, 0.25); stroke: #e2b44a; }\r\n.cell.hl-col rect { fill: rgba(29, 181, 132, 0.25); stroke: #1db584; }\r\n.cell.hl-both rect { fill: rgba(244, 114, 182, 0.28); stroke: #f472b6; }\r\n.dim { opacity: 0.25; }\r\n.dash { stroke-dasharray: 5 4; }\r\n.fillA { fill: rgba(56, 189, 248, 0.16); stroke: #38bdf8; stroke-width: 2; }\r\n.fillB { fill: rgba(244, 114, 182, 0.18); stroke: #f472b6; stroke-width: 2; }\r\n.fillG { fill: rgba(29, 181, 132, 0.16); stroke: #1db584; stroke-width: 2; }\r\n.contour { stroke: rgba(56, 189, 248, 0.45); stroke-width: 1.5; }\n.curve { fill: none; stroke: #38bdf8; stroke-width: 3; }\n.curve-y { fill: none; stroke: #e2b44a; stroke-width: 3; }\n.curve-p { fill: none; stroke: #f472b6; stroke-width: 3; }\n.curve-g { fill: none; stroke: #1db584; stroke-width: 3; }\n.ghost { fill: none; stroke: rgba(201, 220, 207, 0.4); stroke-width: 2; }\n.lbl-w { fill: #e6f5ec; }\n.lbl-s { font-size: 11px; font-weight: 600; fill: #c9dccf; }\n\n/* ── explanation panel (shared by every generated ML animation) ── */\n.explain {\n  box-sizing: border-box;\n  max-width: 640px;\n  margin-top: 4px;\n  padding: 14px 18px 16px;\n  min-height: 150px;\n  border-radius: 12px;\n  background: rgba(29, 181, 132, 0.10);\n  border: 1px solid rgba(29, 181, 132, 0.45);\n  border-left: 5px solid #1db584;\n}\n.explain-h {\n  margin: 0 0 8px;\n  font-size: 13px;\n  font-weight: 800;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.explain-t {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.55;\n  color: #f1faf4;\n}\n.explain-t strong {\n  font-weight: 800;\n  color: #ffd98a;\n}\n\n",
+  "html": "<div class=\"scene\">\n  <p class=\"step-label\" id=\"step-label\"></p>\n  <svg id=\"scene\" viewBox=\"0 0 640 360\" role=\"img\" aria-label=\"The law of large numbers\"></svg>\n  <section class=\"explain\" aria-live=\"polite\">\n    <h3 class=\"explain-h\" id=\"explain-h\"></h3>\n    <p class=\"explain-t\" id=\"caption\"></p>\n  </section>\n</div>\n",
+  "js": "(function () {\n  // ── shared helpers (SVG, tweening) ─────────────────────────────────────────\r\n  var NS = \"http://www.w3.org/2000/svg\";\r\n  var svg = document.getElementById(\"scene\");\r\n  var labelEl = document.getElementById(\"step-label\");\r\n  var captionEl = document.getElementById(\"caption\");\r\n\r\n  function el(name, attrs, parent) {\r\n    var node = document.createElementNS(NS, name);\r\n    for (var key in attrs) node.setAttribute(key, attrs[key]);\r\n    if (parent) parent.appendChild(node);\r\n    return node;\r\n  }\r\n  function txt(parent, x, y, cls, str, anchor) {\r\n    var t = el(\"text\", { x: x, y: y, class: cls }, parent);\r\n    if (anchor) t.setAttribute(\"text-anchor\", anchor);\r\n    t.textContent = str;\r\n    return t;\r\n  }\r\n  function show(node, on) {\r\n    node.setAttribute(\"opacity\", on ? \"1\" : \"0\");\r\n  }\r\n  function place(node, x, y) {\r\n    node.style.transform = \"translate(\" + x + \"px,\" + y + \"px)\";\r\n  }\r\n  function setLine(node, x1, y1, x2, y2) {\r\n    node.setAttribute(\"x1\", x1);\r\n    node.setAttribute(\"y1\", y1);\r\n    node.setAttribute(\"x2\", x2);\r\n    node.setAttribute(\"y2\", y2);\r\n  }\r\n  function lerp(a, b, e) {\r\n    return a + (b - a) * e;\r\n  }\r\n  function round1(v) {\r\n    return (Math.round(v * 10) / 10).toFixed(1);\r\n  }\r\n\r\n  // Eased animation. fn(e) is called with e from 0 to 1. Without\r\n  // requestAnimationFrame (or with ms = 0) it jumps straight to fn(1).\r\n  var animTokens = {};\r\n  function anim(key, ms, fn) {\r\n    var token = (animTokens[key] || 0) + 1;\r\n    animTokens[key] = token;\r\n    if (typeof requestAnimationFrame !== \"function\" || ms <= 0) {\r\n      fn(1);\r\n      return;\r\n    }\r\n    var start = null;\r\n    function frame(now) {\r\n      if (animTokens[key] !== token) return;\r\n      if (start === null) start = now;\r\n      var p = Math.min(1, (now - start) / ms);\r\n      var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;\r\n      fn(e);\r\n      if (p < 1) requestAnimationFrame(frame);\r\n    }\r\n    requestAnimationFrame(frame);\r\n  }\r\n\r\n  // Arrowheads, one marker per colour.\r\n  var COLORS = { g: \"#1DB584\", y: \"#E2B44A\", p: \"#F472B6\", b: \"#38BDF8\", w: \"#c9dccf\", r: \"#F87171\" };\r\n  var defs = el(\"defs\", {}, svg);\r\n  Object.keys(COLORS).forEach(function (k) {\r\n    var m = el(\"marker\", { id: \"ah-\" + k, viewBox: \"0 0 10 10\", refX: 9, refY: 5, markerUnits: \"userSpaceOnUse\", markerWidth: 13, markerHeight: 13, orient: \"auto\" }, defs);\r\n    el(\"path\", { d: \"M0 0 L10 5 L0 10 Z\", fill: COLORS[k] }, m);\r\n  });\r\n  function arrow(parent, colorKey, width) {\r\n    return el(\"line\", { x1: 0, y1: 0, x2: 0, y2: 0, stroke: COLORS[colorKey], \"stroke-width\": width || 3, \"marker-end\": \"url(#ah-\" + colorKey + \")\", \"stroke-linecap\": \"round\" }, parent);\r\n  }\r\n  function polygon(parent, cls) {\r\n    return el(\"polygon\", { points: \"\", class: cls }, parent);\r\n  }\r\n  function setPoly(node, pts) {\r\n    node.setAttribute(\"points\", pts.map(function (p) { return p[0].toFixed(1) + \",\" + p[1].toFixed(1); }).join(\" \"));\r\n  }\r\n  function lerpPts(a, b, e) {\r\n    return a.map(function (p, i) { return [lerp(p[0], b[i][0], e), lerp(p[1], b[i][1], e)]; });\r\n  }\r\n  // Maps maths coordinates (x right, y up) to screen pixels.\r\n  function makePlane(cx, cy, s) {\r\n    return {\r\n      x: function (v) { return cx + s * v; },\r\n      y: function (v) { return cy - s * v; },\r\n      pt: function (p) { return [cx + s * p[0], cy - s * p[1]]; },\r\n      s: s, cx: cx, cy: cy\r\n    };\r\n  }\r\n  function axes(parent, plane, xr, yr) {\r\n    el(\"line\", { x1: plane.x(-xr), y1: plane.y(0), x2: plane.x(xr), y2: plane.y(0), class: \"axis\" }, parent);\r\n    el(\"line\", { x1: plane.x(0), y1: plane.y(-yr), x2: plane.x(0), y2: plane.y(yr), class: \"axis\" }, parent);\r\n  }\r\n\n  // ── Module 3 helpers: graphs, curves, contour plane ───────────────────────\n  // makeGraph maps maths values to pixels with separate x and y scales.\n  function makeGraph(ox, oy, sx, sy) {\n    return {\n      ox: ox, oy: oy, sx: sx, sy: sy,\n      x: function (v) { return ox + sx * v; },\n      y: function (v) { return oy - sy * v; }\n    };\n  }\n  function curveD(g, f, a, b, n) {\n    var d = \"\";\n    for (var i = 0; i <= n; i++) {\n      var v = a + ((b - a) * i) / n;\n      d += (i ? \" L \" : \"M \") + g.x(v).toFixed(1) + \" \" + g.y(f(v)).toFixed(1);\n    }\n    return d;\n  }\n  function setD(node, d) {\n    node.setAttribute(\"d\", d);\n  }\n  function fmt(v, n) {\n    return (Math.round(v * 100000) / 100000).toFixed(n === undefined ? 1 : n);\n  }\n  function drawAxes(parent, g, xmax, ymax, xticks, yticks) {\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(xmax), y2: g.y(0), class: \"axis\" }, parent);\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(0), y2: g.y(ymax), class: \"axis\" }, parent);\n    (xticks || []).forEach(function (t) { txt(parent, g.x(t), g.y(0) + 15, \"tick\", String(t), \"middle\"); });\n    (yticks || []).forEach(function (t) { txt(parent, g.x(0) - 7, g.y(t) + 4, \"tick\", String(t), \"end\"); });\n  }\n  function card(parent, x, y, w, h, cls) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: 10, class: cls || \"fillG\" }, parent);\n  }\n  function ring(parent, cx, cy, rx, ry, cls) {\n    return el(\"ellipse\", { cx: cx, cy: cy, rx: rx, ry: ry, fill: \"none\", class: cls || \"contour\" }, parent);\n  }\n  function clipTo(id, x, y, w, h) {\n    var c = el(\"clipPath\", { id: id }, defs);\n    el(\"rect\", { x: x, y: y, width: w, height: h }, c);\n  }\n\n  // ── Module 4 helpers: seeded randomness, small shapes ─────────────────────\n  function mulberry(seed) {\n    var a = seed;\n    return function () {\n      a |= 0; a = (a + 0x6D2B79F5) | 0;\n      var t = Math.imul(a ^ (a >>> 15), 1 | a);\n      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;\n      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;\n    };\n  }\n  function gaussSource(rand) {\n    return function () {\n      var u = 1 - rand(), v = rand();\n      return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);\n    };\n  }\n  function box(parent, x, y, w, h, fill, stroke, r) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: r === undefined ? 6 : r, fill: fill, stroke: stroke || \"none\", \"stroke-width\": 2 }, parent);\n  }\n  function setBox(node, x, y, w, h) {\n    node.setAttribute(\"x\", x); node.setAttribute(\"y\", y); node.setAttribute(\"width\", Math.max(0, w)); node.setAttribute(\"height\", Math.max(0, h));\n  }\n  function vis(list, on) {\n    list.forEach(function (n) { show(n, on); });\n  }\n\n  // ── Module 5 helpers: coins, and rows of bars over the nine candidate values of p ──\n  function coin(parent, x, y, r, letter) {\n    var g = el(\"g\", {}, parent);\n    var head = letter === \"H\";\n    el(\"circle\", { cx: x, cy: y, r: r, fill: head ? \"rgba(244,114,182,0.35)\" : \"rgba(56,189,248,0.3)\", stroke: head ? \"#f472b6\" : \"#38bdf8\", \"stroke-width\": 3 }, g);\n    var t = txt(g, x, y + r * 0.36, \"big\", letter, \"middle\");\n    t.setAttribute(\"font-size\", String(Math.round(r * 1.05)));\n    return g;\n  }\n  var THETAS = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9];\n  var WEIGHTS = [1, 2, 3, 4, 5, 4, 3, 2, 1];\n  function lik(t, k, n) { return Math.pow(t, k) * Math.pow(1 - t, n - k); }\n  function normalized(arr) {\n    var s = 0;\n    arr.forEach(function (v) { s += v; });\n    return arr.map(function (v) { return v / s; });\n  }\n  function argmaxIndex(arr) {\n    var b = 0;\n    arr.forEach(function (v, i) { if (v > arr[b]) b = i; });\n    return b;\n  }\n  // A row of nine bars. set(values, maxValue) rescales heights so maxValue fills `height`.\n  function barRow(parent, x0, dx, base, bw, height, fill, stroke) {\n    var g = el(\"g\", {}, parent);\n    var bars = THETAS.map(function (t, i) {\n      return box(g, x0 + i * dx - bw / 2, base, bw, 0, fill, stroke || \"none\", 3);\n    });\n    var tick = THETAS.map(function (t, i) {\n      var tt = txt(g, x0 + i * dx, base + 14, \"tick\", String(t), \"middle\");\n      tt.setAttribute(\"opacity\", \"0\");\n      return tt;\n    });\n    return {\n      g: g,\n      bars: bars,\n      ticks: tick,\n      set: function (values, maxValue) {\n        values.forEach(function (v, i) {\n          var h = Math.max(0, (v / maxValue) * height);\n          setBox(bars[i], x0 + i * dx - bw / 2, base - h, bw, h);\n        });\n      },\n      showTicks: function (on) { tick.forEach(function (n) { n.setAttribute(\"opacity\", on ? \"1\" : \"0\"); }); }\n    };\n  }\n\n  var EXPLAIN = {\"few-samples\":{\"h\":\"WHAT YOU ARE LOOKING AT\",\"t\":\"Suppose the coin truly has **p = 0.8**, but we do not know it. After the first 5 flips, the fraction of heads (the **sample mean**) is a rough, jumpy guess.\"},\"running-average\":{\"h\":\"TRACK THE RUNNING AVERAGE\",\"t\":\"After every new flip we recompute the fraction of heads so far. This is the **running average**: each point is the average of **all flips up to that point**.\"},\"fluctuation\":{\"h\":\"EARLY FLUCTUATION\",\"t\":\"At the start a single flip is a big share of the sample, so the average jumps around: **1.0, 0.5, 0.67, 0.5, 0.6** over the first five flips, then 0.67, 0.71, 0.63 …\"},\"more-samples\":{\"h\":\"MORE SAMPLES, A SECOND RUN\",\"t\":\"Keep flipping. The horizontal axis is the number of flips, drawn on a **log scale**. A second run of the same coin (pink) **wanders along a different path**.\"},\"stabilize\":{\"h\":\"THE AVERAGES SETTLE\",\"t\":\"By **100 flips** both runs sit near the same level and move much less. By **1000 flips** they are both very close to it.\"},\"true-mean\":{\"h\":\"THEY SETTLE NEAR THE TRUE VALUE\",\"t\":\"That level is the true **p = 0.8**, the expected value of one flip. The running average gets close **without ever being guaranteed to hit it exactly**.\"},\"lln-idea\":{\"h\":\"WHAT THE LAW SAYS (AND DOES NOT)\",\"t\":\"The **law of large numbers**: as n grows, the sample mean settles toward the expected value. It does **not** say every new flip helps: the pink run was exactly 0.8 at n = 10, then drifted to 0.63 by n = 30 before coming back.\"},\"ml-connection\":{\"h\":\"TAKEAWAY\",\"t\":\"An average over more data is a **steadier estimate of an expectation**. That is why the average loss on a big dataset is close to the true expected loss, and why more data gives steadier estimates.\"}};\n  // ── scene ──\n  var steps = [\r\n    { id: \"few-samples\", label: \"Only a few flips\", caption: \"Suppose the coin truly has p = 0.8, but we do not know it. After the first 5 flips, the fraction of heads (the sample mean) is a rough, jumpy guess.\" },\r\n    { id: \"running-average\", label: \"Track the running average\", caption: \"After every new flip, recompute the fraction of heads so far. This is the running average. Each point is the average of all flips up to that point.\" },\r\n    { id: \"fluctuation\", label: \"Early fluctuation\", caption: \"At the start a single flip is a big share of the sample, so the average jumps around a lot: 1.0, 0.5, 0.67, 0.5, 0.6 over the first five flips, then 0.67, 0.71, 0.63 ...\" },\r\n    { id: \"more-samples\", label: \"More samples, a second run\", caption: \"Keep flipping. The horizontal axis is the number of flips, drawn on a log scale. A second run of the same coin (pink) wanders along a different path.\" },\r\n    { id: \"stabilize\", label: \"The averages settle\", caption: \"By 100 flips both runs sit near the same level and move much less. By 1000 flips they are both very close to it.\" },\r\n    { id: \"true-mean\", label: \"They settle near the true value\", caption: \"That level is the true p = 0.8, the expected value of one flip. The running average gets close without ever being guaranteed to hit it exactly.\" },\r\n    { id: \"lln-idea\", label: \"What the law says (and does not)\", caption: \"The law of large numbers: as n grows, the sample mean settles toward the expected value. It does NOT say every new flip helps: here the pink run was exactly 0.8 at n = 10, then drifted to 0.63 by n = 30 before coming back.\" },\r\n    { id: \"ml-connection\", label: \"Why ML cares\", caption: \"An average over more data is a steadier estimate of an expectation. That is why the average loss on a big dataset is close to the true expected loss, and why more data gives steadier estimates.\" }\r\n  ];\r\n\r\n  function seq(seed) {\r\n    var r = mulberry(seed), s = 0, out = [];\r\n    for (var i = 1; i <= 1000; i++) { s += r() < 0.8 ? 1 : 0; out.push(s / i); }\r\n    return out;\r\n  }\r\n  var A = seq(9), B = seq(6);\r\n  var PXs = function (n) { return 74 + 520 * (Math.log(n) / Math.LN10) / 3; };\r\n  var PYs = function (v) { return 300 - 230 * v; };\r\n\r\n  var axG = el(\"g\", {}, svg);\r\n  el(\"line\", { x1: 74, y1: 300, x2: 600, y2: 300, class: \"axis\" }, axG);\r\n  el(\"line\", { x1: 74, y1: 300, x2: 74, y2: 62, class: \"axis\" }, axG);\r\n  [1, 10, 100, 1000].forEach(function (n) { txt(axG, PXs(n), 318, \"tick\", String(n), \"middle\"); });\r\n  [0, 0.5, 1].forEach(function (v) { txt(axG, 66, PYs(v) + 4, \"tick\", String(v), \"end\"); });\r\n  txt(axG, 600, 336, \"note\", \"number of flips so far (log scale)\", \"end\");\r\n  txt(axG, 80, 54, \"note\", \"fraction of heads so far\", \"start\");\r\n\r\n  var trueG = el(\"g\", {}, svg);\r\n  el(\"line\", { x1: 74, y1: PYs(0.8), x2: 600, y2: PYs(0.8), stroke: \"#e2b44a\", \"stroke-width\": 2.5, \"stroke-dasharray\": \"7 5\" }, trueG);\r\n  txt(trueG, 596, PYs(0.8) - 8, \"lbl lbl-y\", \"true p = 0.8\", \"end\");\r\n\r\n  var lineA = el(\"polyline\", { fill: \"none\", stroke: \"#38bdf8\", \"stroke-width\": 2.5 }, svg);\r\n  var lineB = el(\"polyline\", { fill: \"none\", stroke: \"#f472b6\", \"stroke-width\": 2.5 }, svg);\r\n  var dotsA = [];\r\n  for (var i = 0; i < 30; i++) dotsA.push(el(\"circle\", { cx: PXs(i + 1), cy: PYs(A[i]), r: 4.5, fill: \"#38bdf8\", stroke: \"#071510\", \"stroke-width\": 1.5 }, svg));\r\n  var endA = el(\"circle\", { r: 6, fill: \"#38bdf8\", stroke: \"#071510\", \"stroke-width\": 2 }, svg);\r\n  var endB = el(\"circle\", { r: 6, fill: \"#f472b6\", stroke: \"#071510\", \"stroke-width\": 2 }, svg);\r\n  var readout = txt(svg, 90, 90, \"mono\", \"\", \"start\");\r\n\r\n  var driftG = el(\"g\", {}, svg);\r\n  el(\"rect\", { x: PXs(10), y: PYs(0.95), width: PXs(30) - PXs(10), height: PYs(0.55) - PYs(0.95), rx: 8, fill: \"rgba(248,113,113,0.14)\", stroke: \"#f87171\", \"stroke-width\": 2, \"stroke-dasharray\": \"5 4\" }, driftG);\r\n  txt(driftG, PXs(10), PYs(0.55) + 16, \"lbl lbl-r\", \"moved AWAY from 0.8\", \"start\");\r\n  txt(driftG, PXs(10), PYs(0.55) + 32, \"note\", \"(n = 10: 0.80, n = 30: 0.63)\", \"start\");\r\n\r\n  var mlG = el(\"g\", {}, svg);\r\n  card(mlG, 40, 80, 270, 150, \"fillA\");\r\n  txt(mlG, 175, 116, \"lbl lbl-b\", \"AVERAGE LOSS\", \"middle\");\r\n  txt(mlG, 175, 148, \"big\", \"on a larger dataset\", \"middle\");\r\n  txt(mlG, 175, 178, \"note\", \"is steadier and closer to\", \"middle\");\r\n  txt(mlG, 175, 196, \"note\", \"the true expected loss\", \"middle\");\r\n  card(mlG, 330, 80, 270, 150, \"fillB\");\r\n  txt(mlG, 465, 116, \"lbl lbl-p\", \"MORE DATA\", \"middle\");\r\n  txt(mlG, 465, 148, \"big\", \"steadier estimates\", \"middle\");\r\n  txt(mlG, 465, 178, \"note\", \"but how tightly do averages\", \"middle\");\r\n  txt(mlG, 465, 196, \"note\", \"cluster? next: the CLT\", \"middle\");\r\n  txt(mlG, 320, 270, \"lbl lbl-y\", \"empirical averages approximate expectations\", \"middle\");\r\n\r\n  function draw(nShow, showB) {\r\n    var pa = [], pb = [];\r\n    var step = nShow > 60 ? 1 : 1;\r\n    for (var n = 1; n <= nShow; n += step) { pa.push(PXs(n).toFixed(1) + \",\" + PYs(A[n - 1]).toFixed(1)); pb.push(PXs(n).toFixed(1) + \",\" + PYs(B[n - 1]).toFixed(1)); }\r\n    lineA.setAttribute(\"points\", pa.join(\" \"));\r\n    lineB.setAttribute(\"points\", showB ? pb.join(\" \") : \"\");\r\n    endA.setAttribute(\"cx\", PXs(nShow)); endA.setAttribute(\"cy\", PYs(A[nShow - 1]));\r\n    endB.setAttribute(\"cx\", PXs(nShow)); endB.setAttribute(\"cy\", PYs(B[nShow - 1]));\r\n    show(endB, showB);\r\n    for (var k = 0; k < 30; k++) dotsA[k].setAttribute(\"opacity\", k < Math.min(nShow, 10) && nShow <= 10 ? \"1\" : \"0\");\r\n    readout.textContent = \"n = \" + nShow + \"   run A: \" + fmt(A[nShow - 1], 2) + (showB ? \"   run B: \" + fmt(B[nShow - 1], 2) : \"\");\r\n  }\r\n\r\n  function render(index, id) {\r\n    var i = index;\r\n    show(axG, i <= 6);\r\n    show(trueG, i >= 5 && i <= 6);\r\n    show(driftG, i === 6);\r\n    show(lineA, i <= 6); show(lineB, i >= 3 && i <= 6);\r\n    show(endA, i <= 6);\r\n    show(readout, i <= 5);\r\n    show(mlG, i === 7);\r\n    if (i >= 5) vis(dotsA, false);\r\n    if (i === 0) draw(5, false);\r\n    if (i === 1) draw(10, false);\r\n    if (i === 2) draw(30, false);\r\n    if (i === 3) anim(\"n\", 2200, function (e) { draw(Math.round(30 * Math.pow(200 / 30, e)), true); });\r\n    if (i === 4) anim(\"n\", 2600, function (e) { draw(Math.round(200 * Math.pow(1000 / 200, e)), true); });\r\n    if (i >= 5 && i <= 6) draw(1000, true);\r\n  }\r\n\n\n  // ── shared runtime: stepping, explanation panel, educational autoplay pacing, bridge ──\n  var current = 0;\n  var explainHeadEl = document.getElementById(\"explain-h\");\n\n  // **bold** markers in an explanation become <strong> nodes (built with DOM calls, never innerHTML).\n  function setRich(node, str) {\n    node.textContent = \"\";\n    var parts = String(str).split(\"**\");\n    for (var i = 0; i < parts.length; i++) {\n      if (parts[i] === \"\") continue;\n      var seg = document.createElement(i % 2 ? \"strong\" : \"span\");\n      seg.textContent = parts[i];\n      node.appendChild(seg);\n    }\n  }\n\n  function explanationFor(index) {\n    var ex = (typeof EXPLAIN === \"object\" && EXPLAIN) ? EXPLAIN[steps[index].id] : null;\n    return ex || { h: \"WHAT IS HAPPENING\", t: steps[index].caption };\n  }\n\n  // Autoplay pace: 4.5 to 10.5 seconds per step, longer for longer explanations, so a learner can read.\n  function stepMs(index) {\n    var words = String(explanationFor(index).t).replace(/\\*\\*/g, \"\").split(/\\s+/).length;\n    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));\n  }\n\n  function renderStep(index) {\n    var ex = explanationFor(index);\n    labelEl.textContent = steps[index].label;\n    if (explainHeadEl) explainHeadEl.textContent = ex.h;\n    setRich(captionEl, ex.t);\n    render(index, steps[index].id);\n  }\n\n  function goTo(index) {\n    if (index < 0 || index >= steps.length) return;\n    current = index;\n    renderStep(current);\n    if (window.ReagvisBridge) window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n\n  renderStep(current);\n\n  // Autoplay: exactly one timer, one step per tick, stops on the final step.\n  // PLAY on the final step restarts from the first step and plays again.\n  var timer = null;\n\n  function stopAuto() {\n    if (timer !== null) {\n      clearTimeout(timer);\n      timer = null;\n    }\n  }\n\n  function scheduleNext() {\n    timer = setTimeout(function () {\n      timer = null;\n      if (current >= steps.length - 1) return;\n      goTo(current + 1);\n      if (current < steps.length - 1) scheduleNext();\n    }, stepMs(current));\n  }\n\n  function startAuto() {\n    if (timer !== null) return;\n    if (current >= steps.length - 1) goTo(0);\n    scheduleNext();\n  }\n\n  window.addEventListener(\"pagehide\", stopAuto);\n\n  window.ReagvisAnimation = {\n    stepDuration: stepMs,\n    onCommand: function (type, stepId) {\n      if (type === \"PLAY\") startAuto();\n      else if (type === \"PAUSE\") stopAuto();\n      else if (type === \"NEXT\") { stopAuto(); goTo(current + 1); }\n      else if (type === \"PREVIOUS\") { stopAuto(); goTo(current - 1); }\n      else if (type === \"RESET\") { stopAuto(); goTo(0); }\n      else if (type === \"GOTO_STEP\") {\n        stopAuto();\n        for (var i = 0; i < steps.length; i++) {\n          if (steps[i].id === stepId) { goTo(i); break; }\n        }\n      }\n    },\n  };\n\n  if (window.ReagvisBridge) {\n    window.ReagvisBridge.ready();\n    window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n})();\n",
+  "lastFrozenContentHash": null,
+  "lastFrozenRevisionId": null,
+  "manifest": {
+    "bridgeVersion": {
+      "$numberInt": "1"
+    },
+    "capabilities": [
+      "play",
+      "pause",
+      "next",
+      "previous",
+      "reset",
+      "gotoStep"
+    ],
+    "heightPx": {
+      "$numberInt": "590"
+    },
+    "traceEvents": [
+      "few-samples",
+      "running-average",
+      "fluctuation",
+      "more-samples",
+      "stabilize",
+      "true-mean",
+      "lln-idea",
+      "ml-connection"
+    ]
+  },
+  "packageId": "836ef5bb-0904-40ca-9c55-f42afe87902f",
+  "packageTrace": {
+    "steps": [
+      {
+        "animationEvent": "few-samples",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "After few flips the fraction of heads is a rough guess.",
+          "python": "import random\n\nrandom.seed(3)\np = 0.8\nflips = [1 if random.random() < p else 0 for _ in range(1000)]\nrunning = [sum(flips[:n]) / n for n in range(1, 1001)]\nprint(round(running[4], 2))   # 1.0 with this seed: the fraction after 5 flips"
+        },
+        "id": "few-samples",
+        "label": "Only a few flips"
+      },
+      {
+        "animationEvent": "running-average",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "running average after n flips = heads so far / n",
+          "python": "import random\n\nrandom.seed(3)\np = 0.8\nflips = [1 if random.random() < p else 0 for _ in range(1000)]\nrunning = [sum(flips[:n]) / n for n in range(1, 1001)]\nprint([round(r, 2) for r in running[:10]])\n# [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.88, 0.89, 0.9]"
+        },
+        "id": "running-average",
+        "label": "Track the running average"
+      },
+      {
+        "animationEvent": "fluctuation",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Early averages swing widely.",
+          "python": "import random\n\nrandom.seed(3)\np = 0.8\nflips = [1 if random.random() < p else 0 for _ in range(1000)]\nrunning = [sum(flips[:n]) / n for n in range(1, 1001)]\nearly = running[:30]\nprint(round(min(early), 2), round(max(early), 2))   # 0.77 1.0: lowest and highest running average in the first 30 flips"
+        },
+        "id": "fluctuation",
+        "label": "Early fluctuation"
+      },
+      {
+        "animationEvent": "more-samples",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Another run of the same coin takes a different path.",
+          "python": "import random\n\ndef run(seed, n=1000, p=0.8):\n    random.seed(seed)\n    flips = [1 if random.random() < p else 0 for _ in range(n)]\n    return [sum(flips[:k]) / k for k in range(1, n + 1)]\n\na, b = run(9), run(6)\nprint(round(a[99], 2), round(b[99], 2))   # 0.85 0.79: two runs, 100 flips each"
+        },
+        "id": "more-samples",
+        "label": "More samples, a second run"
+      },
+      {
+        "animationEvent": "stabilize",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "With many flips the running averages move much less.",
+          "python": "import random\n\ndef run(seed, n=1000, p=0.8):\n    random.seed(seed)\n    flips = [1 if random.random() < p else 0 for _ in range(n)]\n    return [sum(flips[:k]) / k for k in range(1, n + 1)]\n\na, b = run(9), run(6)\nprint(round(a[999], 2), round(b[999], 2))   # 0.81 0.8: two runs, 1000 flips each"
+        },
+        "id": "stabilize",
+        "label": "The averages settle"
+      },
+      {
+        "animationEvent": "true-mean",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Compare the final running average with the true p.",
+          "python": "import random\n\nrandom.seed(3)\np = 0.8\nflips = [1 if random.random() < p else 0 for _ in range(1000)]\nrunning = [sum(flips[:n]) / n for n in range(1, 1001)]\nprint(round(abs(running[999] - 0.8), 3))   # 0.005: a small error at n = 1000"
+        },
+        "id": "true-mean",
+        "label": "They settle near the true value"
+      },
+      {
+        "animationEvent": "lln-idea",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "The running average can move away from the true value for a while before settling.",
+          "python": "import random\n\nrandom.seed(3)\np = 0.8\nflips = [1 if random.random() < p else 0 for _ in range(1000)]\nrunning = [sum(flips[:n]) / n for n in range(1, 1001)]\naway = sum(1 for n in range(10, 300) if abs(running[n] - p) > abs(running[n - 1] - p))\nprint(away > 0)   # True: some steps move AWAY from p"
+        },
+        "id": "lln-idea",
+        "label": "What the law says (and does not)"
+      },
+      {
+        "animationEvent": "ml-connection",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "An average over more data is a steadier estimate of an expectation.",
+          "python": "import random\n\nrandom.seed(2)\nfor n in [10, 100, 10000]:\n    losses = [(random.random() - 0.5) ** 2 for _ in range(n)]\n    print(n, round(sum(losses) / n, 3))   # tends toward the true expected loss 1/12 = 0.083"
+        },
+        "id": "ml-connection",
+        "label": "Why ML cares"
+      }
+    ],
+    "version": {
+      "$numberInt": "1"
+    }
+  },
+  "revision": {
+    "$numberInt": "5"
+  },
+  "revisionId": "r2",
+  "sourceKind": "zip",
+  "status": "frozen",
+  "title": "ML Module 5 — Law of Large Numbers",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498552"
+    }
+  },
+  "updatedBy": {
+    "$oid": "000000000000000000000000"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "title": "Convex functions",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "bowl",
+      "label": "The familiar bowl",
+      "pseudocode": "L(w) = (w - 3) squared is a bowl.",
+      "python": "def f(w):\n    return (w - 3) ** 2\n\nprint(f(1), f(3), f(5))   # 4 0 4"
+    },
+    {
+      "id": "two-points",
+      "label": "Pick two points on the curve",
+      "pseudocode": "Pick two points on the graph.",
+      "python": "def f(w):\n    return (w - 3) ** 2\n\nx, y = 1.0, 5.0\nprint(f(x), f(y))   # 4.0 4.0"
+    },
+    {
+      "id": "chord",
+      "label": "Draw the chord",
+      "pseudocode": "The chord height at a mix lam is lam * f(x) + (1 - lam) * f(y).",
+      "python": "def f(w):\n    return (w - 3) ** 2\n\nx, y, lam = 1.0, 5.0, 0.5\nprint(lam * f(x) + (1 - lam) * f(y))   # 4.0"
+    },
+    {
+      "id": "function-below-chord",
+      "label": "The function sits below the chord",
+      "pseudocode": "Convex: f at a mix of x and y is at most the chord height.",
+      "python": "def f(w):\n    return (w - 3) ** 2\n\nx, y, lam = 1.0, 5.0, 0.5\nleft = f(lam * x + (1 - lam) * y)\nright = lam * f(x) + (1 - lam) * f(y)\nprint(left, right, left <= right)   # 0.0 4.0 True"
+    },
+    {
+      "id": "minimum",
+      "label": "One valley, one bottom",
+      "pseudocode": "A convex function has a single valley.",
+      "python": "def f(w):\n    return (w - 3) ** 2\n\ngrid = [i / 10 for i in range(0, 61)]\nprint(min(grid, key=f))   # 3.0"
+    },
+    {
+      "id": "local-global",
+      "label": "Local minimum = global minimum",
+      "pseudocode": "Gradient descent from different starts reaches the same minimum.",
+      "python": "def grad(w):\n    return 2 * (w - 3)\n\nfor start in [0.4, 5.6]:\n    w = start\n    for _ in range(30):\n        w = w - 0.3 * grad(w)\n    print(start, round(w, 3))   # 0.4 3.0 / 5.6 3.0"
+    },
+    {
+      "id": "nonconvex-contrast",
+      "label": "A non-convex contrast",
+      "pseudocode": "g has two valleys, and gradient descent can end in either.",
+      "python": "def g(w):\n    return (w ** 2 - 1) ** 2 + 0.3 * w\n\ndef g_grad(w):\n    return 4 * w * (w ** 2 - 1) + 0.3\n\nprint(g(0.0), 0.5 * g(-1.0) + 0.5 * g(1.0))   # 1.0 0.0 : above the chord\nfor start in [-2.0, 2.0]:\n    w = start\n    for _ in range(200):\n        w = w - 0.02 * g_grad(w)\n    print(start, round(w, 2), round(g(w), 2))\n# -2.0 -1.04 -0.31\n# 2.0 0.96 0.29"
+    },
+    {
+      "id": "ml-connection",
+      "label": "Why ML cares",
+      "pseudocode": "Convex objectives are easier to optimize; many ML objectives are not convex.",
+      "python": "convex = ['linear regression with squared loss']\nnot_convex = ['neural network training']\nprint(convex[0], '->', 'one valley')\nprint(not_convex[0], '->', 'many valleys')"
+    }
+  ]
+}

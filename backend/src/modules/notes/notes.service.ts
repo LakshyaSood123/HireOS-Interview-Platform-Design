@@ -3,7 +3,7 @@ import { Types } from "mongoose";
 import { ApiError } from "../../shared/errors.js";
 import { logger } from "../../shared/logger.js";
 import { isDuplicateKeyError } from "../../shared/transaction.js";
-import { requireCurriculum, type CurriculumIndex } from "../curriculum/curriculum.service.js";
+import { resolveLearnerCurriculum, type CurriculumIndex } from "../curriculum/curriculum.service.js";
 import { Note } from "./note.model.js";
 import type { ListNotesQuery, UpsertNoteInput } from "./notes.schema.js";
 
@@ -96,7 +96,7 @@ function resolveScope(
  * the pages cannot make it appear twice or not at all.
  */
 export async function listNotes(userId: string, query: ListNotesQuery): Promise<NotesPage> {
-  const curriculum = await requireCurriculum(query.courseId);
+  const curriculum = await resolveLearnerCurriculum(userId, query.courseId);
 
   const filter = {
     userId,
@@ -129,7 +129,7 @@ export async function listNotes(userId: string, query: ListNotesQuery): Promise<
  * queued while offline, without ever duplicating a note.
  */
 export async function upsertNote(userId: string, noteId: string, input: UpsertNoteInput): Promise<NoteResponse> {
-  const curriculum = await requireCurriculum(input.courseId);
+  const curriculum = await resolveLearnerCurriculum(userId, input.courseId);
   const scope = resolveScope(curriculum, input);
 
   const write = () =>

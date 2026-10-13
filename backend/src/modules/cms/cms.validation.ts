@@ -10,6 +10,7 @@
 import { isKnownAnimationId } from "./animationIds.js";
 import { isApprovedPistonHarnessKey } from "./pistonHarnessKeys.js";
 import { normalizeAnimationSource } from "./cms.types.js";
+import { CmsAnimationPackage } from "./animationPackage.model.js";
 import type { CmsVersionContent } from "./cms.types.js";
 
 export interface CmsValidationIssue {
@@ -22,11 +23,11 @@ export interface CmsValidationIssue {
 export function validateCmsVersionContent(content: CmsVersionContent): CmsValidationIssue[] {
   const issues: CmsValidationIssue[] = [];
 
-  if (content.courseType === "standard") {
-    // Phase 3B only implements structured-DSA persistence in depth (plan §20)
-    // — a standard course's `zones` stays empty and needs no further check.
-    return issues;
-  }
+  // Every course type runs the generic structure/content checks below.
+  // DSA-only checks (registered animation allowlist, approved Piston
+  // harnesses) are gated on `structured-dsa`; a `standard` course may not
+  // use them at all — see the `isDsa` guards further down.
+  const isDsa = content.courseType === "structured-dsa";
 
   const zoneIds = new Map<string, number>();
   const moduleIds = new Map<string, number>();
@@ -83,7 +84,9 @@ export function validateCmsVersionContent(content: CmsVersionContent): CmsValida
             if (!anim) {
               issues.push({ entityType: "checkpoint", entityId: checkpoint.id, field: "workspace.animation", message: "Animation source is malformed." });
             } else if (anim.kind === "registered") {
-              if (!isKnownAnimationId(anim.id)) {
+              if (!isDsa) {
+                issues.push({ entityType: "checkpoint", entityId: checkpoint.id, field: "workspace.animation", message: "Registered animations are only available for the structured-dsa course type. Use a custom animation package." });
+              } else if (!isKnownAnimationId(anim.id)) {
                 issues.push({ entityType: "checkpoint", entityId: checkpoint.id, field: "workspace.animation.id", message: `Unknown animation id "${anim.id}".` });
               }
             } else {
@@ -131,7 +134,9 @@ export function validateCmsVersionContent(content: CmsVersionContent): CmsValida
             if (!coding.prompt.trim()) issues.push({ entityType: "checkpoint", entityId: checkpoint.id, field: "workspace.codingActivity.prompt", message: "Problem prompt is required." });
             if (coding.languages.length === 0) issues.push({ entityType: "checkpoint", entityId: checkpoint.id, field: "workspace.codingActivity.languages", message: "At least one supported language is required." });
 
-            if (coding.executionMode === "piston") {
+            if (coding.executionMode === "piston" && !isDsa) {
+              issues.push({ entityType: "checkpoint", entityId: checkpoint.id, field: "workspace.codingActivity.executionMode", message: 'Graded Piston execution is only available for the structured-dsa course type.' });
+            } else if (coding.executionMode === "piston") {
               if (!coding.harnessKey) {
                 issues.push({ entityType: "checkpoint", entityId: checkpoint.id, field: "workspace.codingActivity.harnessKey", message: 'executionMode "piston" requires a harnessKey.' });
               } else if (!isApprovedPistonHarnessKey(coding.harnessKey)) {
@@ -200,5 +205,80 @@ export function validateCmsVersionContent(content: CmsVersionContent): CmsValida
     }
   }
 
+  const prereqsById = new Map<string, string[]>();
+  for (const zone of content.zones) for (const zm of zone.modules) for (const cp of zm.checkpoints) prereqsById.set(cp.id, cp.prerequisites);
+  const cycleMembers = findPrerequisiteCycle(prereqsById);
+  if (cycleMembers) {
+    issues.push({ entityType: "checkpoint", entityId: cycleMembers[0]!, field: "prerequisites", message: `Prerequisite cycle detected: ${cycleMembers.join(" -> ")}.` });
+  }
+
+  if (!isDsa) {
+    for (const zone of content.zones) {
+      for (const zm of zone.modules) {
+        for (const cp of zm.checkpoints) {
+          if (cp.type === "lesson" && cp.workspace && cp.workspace.theory.length === 0) {
+            issues.push({ entityType: "checkpoint", entityId: cp.id, field: "workspace.theory", message: "A lesson checkpoint needs at least one concept block." });
+          }
+        }
+      }
+    }
+  }
+
+  return issues;
+}
+
+/** Returns one cycle's ids (in order) if the prerequisite graph has one, else null. */
+function findPrerequisiteCycle(prereqsById: Map<string, string[]>): string[] | null {
+  const state = new Map<string, 1 | 2>(); // 1 = on stack, 2 = done
+  const stack: string[] = [];
+  const visit = (id: string): string[] | null => {
+    const s = state.get(id);
+    if (s === 2) return null;
+    if (s === 1) {
+      const start = stack.indexOf(id);
+      return [...stack.slice(start), id];
+    }
+    state.set(id, 1);
+    stack.push(id);
+    for (const dep of prereqsById.get(id) ?? []) {
+      if (!prereqsById.has(dep)) continue;
+      const found = visit(dep);
+      if (found) return found;
+    }
+    stack.pop();
+    state.set(id, 2);
+    return null;
+  };
+  for (const id of prereqsById.keys()) {
+    const found = visit(id);
+    if (found) return found;
+  }
+  return null;
+}
+
+/**
+ * Async, DB-backed half of publish validation: every custom animation
+ * reference must name a package and revision that exists. A `"draft"`
+ * revision must exist as the package's mutable draft; a frozen `rN` must
+ * exist as a frozen revision. Kept separate from the pure validator above.
+ */
+export async function validatePackageReferences(zones: CmsVersionContent["zones"]): Promise<CmsValidationIssue[]> {
+  const issues: CmsValidationIssue[] = [];
+  const refs = new Map<string, { checkpointId: string; packageId: string; revisionId: string }>();
+  for (const zone of zones) for (const zm of zone.modules) for (const cp of zm.checkpoints) {
+    const anim = normalizeAnimationSource(cp.workspace?.animation);
+    if (anim?.kind === "custom") refs.set(`${cp.id}`, { checkpointId: cp.id, packageId: anim.packageId, revisionId: anim.revisionId });
+  }
+  for (const ref of refs.values()) {
+    const found = await CmsAnimationPackage.exists({ packageId: ref.packageId, revisionId: ref.revisionId });
+    if (!found) {
+      issues.push({
+        entityType: "checkpoint",
+        entityId: ref.checkpointId,
+        field: "workspace.animation",
+        message: `Custom animation package "${ref.packageId}" revision "${ref.revisionId}" does not exist.`,
+      });
+    }
+  }
   return issues;
 }

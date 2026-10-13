@@ -1,0 +1,60 @@
+{
+  "title": "Update step: move each center to its group's mean",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "assigned-groups",
+      "label": "Assignments are frozen",
+      "pseudocode": "Start from the assignments.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\npoints = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\ncenters = [(3, 4), (5, 3), (5, 9.5)]\nlabels = [nearest_center(p, centers) for p in points]\nprint(labels)\n# prints: [0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2]"
+    },
+    {
+      "id": "select-cluster",
+      "label": "Pick one cluster",
+      "pseudocode": "Take the members of one cluster.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\npoints = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\ncenters = [(3, 4), (5, 3), (5, 9.5)]\nlabels = [nearest_center(p, centers) for p in points]\nprint([p for p, l in zip(points, labels) if l == 1])\n# prints: [(6, 6), (6.5, 5.5), (7, 6.2)]"
+    },
+    {
+      "id": "collect-x",
+      "label": "Collect the x values",
+      "pseudocode": "Collect the x coordinates.",
+      "python": "members = [(6, 6), (6.5, 5.5), (7, 6.2)]\nprint([p[0] for p in members])\n# prints: [6, 6.5, 7]"
+    },
+    {
+      "id": "collect-y",
+      "label": "Collect the y values",
+      "pseudocode": "Collect the y coordinates.",
+      "python": "members = [(6, 6), (6.5, 5.5), (7, 6.2)]\nprint([p[1] for p in members])\n# prints: [6, 5.5, 6.2]"
+    },
+    {
+      "id": "average-x",
+      "label": "Average the x values",
+      "pseudocode": "mean x = sum / count",
+      "python": "members = [(6, 6), (6.5, 5.5), (7, 6.2)]\nprint(round(sum(p[0] for p in members) / len(members), 2))\n# prints: 6.5"
+    },
+    {
+      "id": "average-y",
+      "label": "Average the y values",
+      "pseudocode": "mean y = sum / count",
+      "python": "members = [(6, 6), (6.5, 5.5), (7, 6.2)]\nprint(round(sum(p[1] for p in members) / len(members), 2))\n# prints: 5.9"
+    },
+    {
+      "id": "new-centroid",
+      "label": "The new centroid",
+      "pseudocode": "The centroid is the coordinate-wise mean.",
+      "python": "def mean_point(m):\n    return (sum(p[0] for p in m) / len(m), sum(p[1] for p in m) / len(m))\nm = mean_point([(6, 6), (6.5, 5.5), (7, 6.2)])\nprint((round(m[0], 2), round(m[1], 2)))\n# prints: (6.5, 5.9)"
+    },
+    {
+      "id": "move-centroid",
+      "label": "Move the center",
+      "pseudocode": "Replace the old center; points stay.",
+      "python": "def mean_point(m):\n    return (sum(p[0] for p in m) / len(m), sum(p[1] for p in m) / len(m))\nold = (5, 3)\nnew = mean_point([(6, 6), (6.5, 5.5), (7, 6.2)])\nprint('moves from', old, 'to', (round(new[0], 2), round(new[1], 2)))\n# prints: moves from (5, 3) to (6.5, 5.9)"
+    },
+    {
+      "id": "update-all",
+      "label": "Update all the centers",
+      "pseudocode": "Update every cluster the same way.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\npoints = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\ndef mean_point(m):\n    return (sum(p[0] for p in m) / len(m), sum(p[1] for p in m) / len(m))\ncenters = [(3, 4), (5, 3), (5, 9.5)]\nlabels = [nearest_center(p, centers) for p in points]\nnew = [mean_point([p for p, l in zip(points, labels) if l == i]) for i in range(3)]\nprint([(round(x, 2), round(y, 2)) for x, y in new])\n# prints: [(1.68, 2.0), (6.5, 5.9), (4.3, 7.98)]"
+    }
+  ]
+}

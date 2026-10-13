@@ -1,0 +1,34 @@
+{
+ "data": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "**Four data points.** No single straight line passes through all of them, so we must decide what “best fit” means."
+ },
+ "candidate-line": {
+  "h": "TRY A CANDIDATE LINE",
+  "t": "Pick a line, here **y = 0.5x + 2**, and see how well it predicts each point."
+ },
+ "residuals": {
+  "h": "MEASURE EACH RESIDUAL",
+  "t": "A **residual** is the vertical gap between a point and the line: **actual minus predicted**. The bars show how far the line misses each point."
+ },
+ "square-errors": {
+  "h": "SQUARE THE RESIDUALS",
+  "t": "Squaring makes every error **positive** and **punishes big misses**. Adding the squares gives a total of **2.5** for this line."
+ },
+ "compare-lines": {
+  "h": "COMPARE OTHER LINES",
+  "t": "Try other lines. **Each one has its own total of squared errors**, so lines can be ranked by how well they fit."
+ },
+ "minimum": {
+  "h": "THE BEST LINE HAS THE SMALLEST TOTAL",
+  "t": "**Least squares** picks the line with the smallest total squared error. Here that is **y = 0.8x + 1.5**, with a total of **1.8**."
+ },
+ "projection-view": {
+  "h": "THE SAME ANSWER, AS A PROJECTION",
+  "t": "Geometrically, the data vector **b** is **projected** onto the space of possible predictions **A x**. The leftover residual is **perpendicular** to that space."
+ },
+ "ml-connection": {
+  "h": "TAKEAWAY",
+  "t": "Fitting a regression line is exactly this problem. The best x solves **AᵀA x = Aᵀb**, the **normal equations**."
+ }
+}

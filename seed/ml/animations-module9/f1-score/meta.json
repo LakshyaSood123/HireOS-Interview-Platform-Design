@@ -1,0 +1,60 @@
+{
+  "title": "F1 score: balancing precision and recall",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "precision-only",
+      "label": "Judge by precision only",
+      "pseudocode": "Compare two models by precision.",
+      "python": "a, b = 0.95, 0.75\nprint('higher precision:', 'A' if a > b else 'B')\n# prints: higher precision: A"
+    },
+    {
+      "id": "recall-only",
+      "label": "Judge by recall only",
+      "pseudocode": "Compare two models by recall.",
+      "python": "a, b = 0.40, 0.75\nprint('higher recall:', 'A' if a > b else 'B')\n# prints: higher recall: B"
+    },
+    {
+      "id": "imbalanced-pair",
+      "label": "Model A: precision 0.95, recall 0.40",
+      "pseudocode": "Model A is precise but misses most positives.",
+      "python": "p, r = 0.95, 0.40\nprint('misses', round(1 - r, 2), 'of positives')\n# prints: misses 0.6 of positives"
+    },
+    {
+      "id": "balanced-pair",
+      "label": "Model B: precision 0.75, recall 0.75",
+      "pseudocode": "Model B is balanced.",
+      "python": "p, r = 0.75, 0.75\nprint('misses', round(1 - r, 2), 'of positives')\n# prints: misses 0.25 of positives"
+    },
+    {
+      "id": "need-combination",
+      "label": "Which is better?",
+      "pseudocode": "A single combined score helps compare them.",
+      "python": "models = {'A': (0.95, 0.40), 'B': (0.75, 0.75)}\nfor name, (p, r) in models.items():\n    print(name, 'precision', p, 'recall', r)\n# prints: A precision 0.95 recall 0.4\n# prints: B precision 0.75 recall 0.75"
+    },
+    {
+      "id": "f1-formula",
+      "label": "The F1 score",
+      "pseudocode": "F1 = 2PR / (P + R), the harmonic mean.",
+      "python": "def precision(tp, fp):\n    return tp / (tp + fp) if tp + fp else None\n\ndef recall(tp, fn):\n    return tp / (tp + fn) if tp + fn else None\n\ndef f1(p, r):\n    return 2 * p * r / (p + r) if p and r else 0.0\n\nprint(round(f1(0.5, 0.5), 3), round(f1(0.9, 0.1), 3))\n# prints: 0.5 0.18"
+    },
+    {
+      "id": "harmonic-balance",
+      "label": "A mean that rewards balance",
+      "pseudocode": "Compare the plain average with F1.",
+      "python": "def precision(tp, fp):\n    return tp / (tp + fp) if tp + fp else None\n\ndef recall(tp, fn):\n    return tp / (tp + fn) if tp + fn else None\n\ndef f1(p, r):\n    return 2 * p * r / (p + r) if p and r else 0.0\n\nfor p, r in [(0.95, 0.40), (0.75, 0.75)]:\n    print('average', round((p + r) / 2, 3), 'F1', round(f1(p, r), 3))\n# prints: average 0.675 F1 0.563\n# prints: average 0.75 F1 0.75"
+    },
+    {
+      "id": "calculate-example",
+      "label": "Our recurring example",
+      "pseudocode": "Compute F1 from the recurring counts.",
+      "python": "def precision(tp, fp):\n    return tp / (tp + fp) if tp + fp else None\n\ndef recall(tp, fn):\n    return tp / (tp + fn) if tp + fn else None\n\ndef f1(p, r):\n    return 2 * p * r / (p + r) if p and r else 0.0\n\ntp, fn, fp, tn = 16, 4, 8, 72        # positive class = spam\np, r = precision(tp, fp), recall(tp, fn)\nprint(round(p, 3), r, round(f1(p, r), 3))\n# prints: 0.667 0.8 0.727"
+    },
+    {
+      "id": "interpret",
+      "label": "How to read F1",
+      "pseudocode": "F1 is 0 if either precision or recall is 0.",
+      "python": "def precision(tp, fp):\n    return tp / (tp + fp) if tp + fp else None\n\ndef recall(tp, fn):\n    return tp / (tp + fn) if tp + fn else None\n\ndef f1(p, r):\n    return 2 * p * r / (p + r) if p and r else 0.0\n\nprint(f1(0.9, 0.0), round(f1(0.9, 0.9), 2))\n# prints: 0.0 0.9"
+    }
+  ]
+}

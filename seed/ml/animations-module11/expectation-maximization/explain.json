@@ -1,0 +1,42 @@
+{
+ "initial-components": {
+  "h": "THE STARTING GUESS",
+  "t": "EM begins with a guess: **three rough ellipses** on the customer data. This picture is two-dimensional, so its numbers differ from the one-dimensional examples."
+ },
+ "e-step-1": {
+  "h": "E-STEP 1",
+  "t": "With the components **fixed**, compute each customer's **responsibilities** for the three components. This is the “expectation” half of the loop."
+ },
+ "responsibilities-1": {
+  "h": "RESPONSIBILITIES 1",
+  "t": "Each customer now has soft memberships, shown by **blended color**. Most are muddled, because the first guess is poor."
+ },
+ "m-step-1": {
+  "h": "M-STEP 1",
+  "t": "With the responsibilities **fixed**, refit every component: **means, spreads and weights**. This is the “maximization” half of the loop."
+ },
+ "components-move": {
+  "h": "THE COMPONENTS MOVE",
+  "t": "The ellipses have moved **toward the customers they explain**. The dashed ellipses show where they were before this M-step."
+ },
+ "e-step-2": {
+  "h": "E-STEP 2",
+  "t": "Repeat the E-step with the **new components**: the responsibilities **sharpen**, since the components now fit the data better."
+ },
+ "m-step-2": {
+  "h": "M-STEP 2",
+  "t": "Repeat the M-step with the sharper responsibilities: the components move **further toward the visible groups**, and their shapes begin to settle."
+ },
+ "likelihood-improves": {
+  "h": "THE LIKELIHOOD IMPROVES",
+  "t": "The log-likelihood rises with every round: **−162.9, −137.3, −134.8, −131.7** and so on. A full E-then-M round **never makes the fit worse**."
+ },
+ "stabilize": {
+  "h": "STABILIZE",
+  "t": "After many rounds the changes become tiny. The components fit the three groups, and ambiguous customers in the overlaps **keep split responsibilities**."
+ },
+ "em-summary": {
+  "h": "TAKEAWAY",
+  "t": "EM **alternates E and M** until the parameters or the likelihood stop changing. It can converge to a **local optimum**, so the starting guess matters."
+ }
+}

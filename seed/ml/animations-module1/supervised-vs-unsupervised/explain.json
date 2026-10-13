@@ -1,0 +1,26 @@
+{
+ "dataset": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Each dot is **one example described by two features, X**. Nothing says what the groups are yet, so all we see are positions."
+ },
+ "labels": {
+  "h": "LABELS REVEAL THE ANSWER",
+  "t": "Now every dot carries a **known label y**. This is the answer the model is allowed to learn from, which is what makes the problem **supervised**."
+ },
+ "supervised": {
+  "h": "SUPERVISED: LEARN y FROM X",
+  "t": "The model learns a **boundary from labelled examples**, then predicts the label of a **new point** by seeing which side it falls on."
+ },
+ "remove-labels": {
+  "h": "REMOVE THE LABELS",
+  "t": "Hide y. **Only the features X remain**, exactly as an unsupervised learner sees the data. There is no answer key any more."
+ },
+ "unsupervised": {
+  "h": "UNSUPERVISED: FIND STRUCTURE",
+  "t": "Group points that are **similar to each other**. The groups are **discovered from X alone**; nobody tells the algorithm what they mean."
+ },
+ "compare": {
+  "h": "TAKEAWAY",
+  "t": "**Supervised** learning learns to **predict a known target**. **Unsupervised** learning **discovers structure in X**. The difference is whether labels are available."
+ }
+}

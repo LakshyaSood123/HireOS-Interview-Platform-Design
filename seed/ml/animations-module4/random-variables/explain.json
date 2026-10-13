@@ -1,0 +1,30 @@
+{
+ "experiment": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "We toss a **fair coin twice**. Before the tosses, the result is uncertain. We will turn the result into a **number we can compute with**."
+ },
+ "outcomes": {
+  "h": "THE FOUR OUTCOMES",
+  "t": "The possible outcomes are **HH, HT, TH and TT**, each with probability **1/4**. These are descriptions, not numbers: we cannot average them or put them in a formula."
+ },
+ "define-variable": {
+  "h": "DEFINE A RANDOM VARIABLE",
+  "t": "Choose a rule: **X = the number of heads**. A random variable is exactly this: **a rule that gives a number to every outcome**. The rule is fixed; only which outcome occurs is random."
+ },
+ "map-outcomes": {
+  "h": "MAP EACH OUTCOME TO A NUMBER",
+  "t": "Apply the rule: **HH has 2 heads, HT has 1, TH has 1, TT has 0**. Two different outcomes (HT and TH) can map to the same value."
+ },
+ "possible-values": {
+  "h": "THE POSSIBLE VALUES",
+  "t": "X can take the values **0, 1 or 2**. These numbers, not the coin pictures, are what a formula can work with."
+ },
+ "probabilities": {
+  "h": "PROBABILITIES OF THE VALUES",
+  "t": "Add up the outcomes that map to each value: **P(X = 0) = 1/4**, **P(X = 1) = 1/4 + 1/4 = 1/2**, **P(X = 2) = 1/4**. Values with their probabilities are the **distribution of X**."
+ },
+ "ml-connection": {
+  "h": "TAKEAWAY",
+  "t": "**Features, labels and noise are random variables**: rules from “what happened” to a number. Once they are numbers we can talk about averages, spread and relationships."
+ }
+}

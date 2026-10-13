@@ -1,0 +1,38 @@
+{
+ "fixed-centers": {
+  "h": "WHAT HAPPENS IN THE ASSIGNMENT STEP",
+  "t": "In the **assignment step** the three centers (diamonds) are **fixed** where they are. Only the **memberships** will change."
+ },
+ "select-point": {
+  "h": "PICK ONE CUSTOMER",
+  "t": "Take the customer **P = (6.8, 6.8)** and ask which center it should join."
+ },
+ "distance-c1": {
+  "h": "DISTANCE TO C1",
+  "t": "The distance from P to C1 = (3, 4) is **√(3.8² + 2.8²) = 4.72**."
+ },
+ "distance-c2": {
+  "h": "DISTANCE TO C2",
+  "t": "The distance from P to C2 = (5, 3) is **√(1.8² + 3.8²) = 4.20**."
+ },
+ "distance-c3": {
+  "h": "DISTANCE TO C3",
+  "t": "The distance from P to C3 = (5, 9.5) is **√(1.8² + 2.7²) = 3.24**."
+ },
+ "nearest-center": {
+  "h": "THE NEAREST CENTER",
+  "t": "The smallest of the three distances is **3.24, to C3**. The other two are farther, so they lose."
+ },
+ "assign-point": {
+  "h": "ASSIGN THE POINT",
+  "t": "P joins the cluster of **C3 (id 2)**. The id is just a name: cluster 2 is not better or larger than cluster 0."
+ },
+ "repeat-points": {
+  "h": "REPEAT FOR EVERY POINT",
+  "t": "Every other customer does the same: it computes the distance to **all three centers** and joins the nearest."
+ },
+ "assigned-groups": {
+  "h": "TAKEAWAY",
+  "t": "Four customers join C1, three join C2 and five join C3. **The centers did not move at all.** The assignment step changes memberships; updating the centers is the next step."
+ }
+}

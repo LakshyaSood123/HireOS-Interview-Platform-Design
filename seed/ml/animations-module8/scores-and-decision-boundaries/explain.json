@@ -1,0 +1,42 @@
+{
+ "data-points": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Each email has one feature, its **spam score from 0 to 10**. Here the ten emails are placed on a **score axis**."
+ },
+ "class-colors": {
+  "h": "COLOR BY TRUE CLASS",
+  "t": "Colored by the true class: **blue is not spam, pink is spam**. The classes **overlap a little** around scores 3 to 5, which is what makes the problem hard."
+ },
+ "model-score": {
+  "h": "THE MODEL'S SCORE",
+  "t": "A classifier turns each email into a **score**: larger means more spam-like. A score is **not automatically a probability**: a score of 8 does not mean 80 percent."
+ },
+ "boundary": {
+  "h": "A DECISION BOUNDARY",
+  "t": "Put a **boundary at score 4**. The rule: below 4 means class 0, at or above 4 means class 1. The boundary is **where the predicted class changes**."
+ },
+ "left-region": {
+  "h": "THE CLASS 0 REGION",
+  "t": "Everything **left** of the boundary is the **not-spam region**: any email that lands here is predicted not spam."
+ },
+ "right-region": {
+  "h": "THE CLASS 1 REGION",
+  "t": "Everything **at or right of** the boundary is the **spam region**: any email that lands here is predicted spam."
+ },
+ "classify-points": {
+  "h": "CLASSIFY THE POINTS",
+  "t": "Each ring shows the predicted class. **Eight predictions are right.** Two are wrong (red crosses): the spam at **3.5** and the real mail at **4.5**."
+ },
+ "near-boundary": {
+  "h": "NEAR THE BOUNDARY",
+  "t": "The mistakes sit **right next to the boundary**. A tiny change in score flips the class there, so the model is least certain close to it. Far-away emails, like 0.5 and 9, are easy."
+ },
+ "two-features": {
+  "h": "WITH TWO FEATURES",
+  "t": "With two features, such as suspicious words and number of links, each email is a point in a **plane** and the boundary becomes a **line**. One side is class 0, the other is class 1."
+ },
+ "move-boundary": {
+  "h": "TAKEAWAY",
+  "t": "Moving the boundary changes predictions: boundary 3 makes **2 mistakes**, boundary 4 makes **2**, boundary 5 makes only **1**. The right boundary should be **learned and checked on held-out data**, not chosen by eye."
+ }
+}

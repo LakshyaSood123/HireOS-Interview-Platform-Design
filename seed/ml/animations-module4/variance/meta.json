@@ -1,0 +1,54 @@
+{
+  "title": "Variance: how spread out a quantity is",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "same-mean",
+      "label": "Two distributions, same mean",
+      "pseudocode": "A and B have the same mean.",
+      "python": "def mean(d):\n    return sum(x * p for x, p in d.items())\n\nA = {4: 0.25, 5: 0.5, 6: 0.25}\nB = {0: 0.25, 5: 0.5, 10: 0.25}\nprint(mean(A), mean(B))   # 5.0 5.0"
+    },
+    {
+      "id": "different-spread",
+      "label": "But they are spread differently",
+      "pseudocode": "Compare how far apart each distribution's values are.",
+      "python": "def mean(d):\n    return sum(x * p for x, p in d.items())\n\nA = {4: 0.25, 5: 0.5, 6: 0.25}\nB = {0: 0.25, 5: 0.5, 10: 0.25}\nprint(max(A) - min(A), max(B) - min(B))   # 2 10"
+    },
+    {
+      "id": "mean",
+      "label": "Start from the mean",
+      "pseudocode": "Measure spread relative to the mean of A.",
+      "python": "def mean(d):\n    return sum(x * p for x, p in d.items())\n\nA = {4: 0.25, 5: 0.5, 6: 0.25}\nB = {0: 0.25, 5: 0.5, 10: 0.25}\nm = mean(A)\nprint(m)   # 5.0"
+    },
+    {
+      "id": "deviations",
+      "label": "Deviations from the mean",
+      "pseudocode": "deviation = value - mean. Their weighted average is always 0.",
+      "python": "def mean(d):\n    return sum(x * p for x, p in d.items())\n\nA = {4: 0.25, 5: 0.5, 6: 0.25}\nB = {0: 0.25, 5: 0.5, 10: 0.25}\nm = mean(A)\nprint([x - m for x in A])                  # [-1.0, 0.0, 1.0]\nprint(sum(p * (x - m) for x, p in A.items()))   # 0.0: they cancel"
+    },
+    {
+      "id": "square-deviations",
+      "label": "Square the deviations",
+      "pseudocode": "Squaring removes the signs and punishes large deviations more.",
+      "python": "def mean(d):\n    return sum(x * p for x, p in d.items())\n\nA = {4: 0.25, 5: 0.5, 6: 0.25}\nB = {0: 0.25, 5: 0.5, 10: 0.25}\nm = mean(A)\nprint([(x - m) ** 2 for x in A])   # [1.0, 0.0, 1.0]"
+    },
+    {
+      "id": "average",
+      "label": "Average the squares",
+      "pseudocode": "variance = expected squared deviation",
+      "python": "def mean(d):\n    return sum(x * p for x, p in d.items())\n\nA = {4: 0.25, 5: 0.5, 6: 0.25}\nB = {0: 0.25, 5: 0.5, 10: 0.25}\nm = mean(A)\nprint(sum(p * (x - m) ** 2 for x, p in A.items()))   # 0.5"
+    },
+    {
+      "id": "compare-variance",
+      "label": "Compare with B",
+      "pseudocode": "Do the same for B and compare the two variances.",
+      "python": "def mean(d):\n    return sum(x * p for x, p in d.items())\n\nA = {4: 0.25, 5: 0.5, 6: 0.25}\nB = {0: 0.25, 5: 0.5, 10: 0.25}\ndef variance(d):\n    m = mean(d)\n    return sum(p * (x - m) ** 2 for x, p in d.items())\n\nprint(variance(A), variance(B))   # 0.5 12.5"
+    },
+    {
+      "id": "ml-connection",
+      "label": "Why variance matters in ML",
+      "pseudocode": "Standard deviation = square root of variance, in the original units.",
+      "python": "def mean(d):\n    return sum(x * p for x, p in d.items())\n\nA = {4: 0.25, 5: 0.5, 6: 0.25}\nB = {0: 0.25, 5: 0.5, 10: 0.25}\ndef variance(d):\n    m = mean(d)\n    return sum(p * (x - m) ** 2 for x, p in d.items())\n\nprint(round(variance(A) ** 0.5, 2), round(variance(B) ** 0.5, 2))   # 0.71 3.54"
+    }
+  ]
+}

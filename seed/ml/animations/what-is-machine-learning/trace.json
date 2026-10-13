@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "steps": [
+    {
+      "id": "rules",
+      "label": "Explicit rules",
+      "animationEvent": "rules",
+      "code": {
+        "pseudocode": "Define the explicit rules a traditional program uses.\nnew_output <- apply_rules(input)",
+        "python": "def apply_rules(x):\n    if x > 10:\n        return \"large\"\n    return \"small\""
+      }
+    },
+    {
+      "id": "data",
+      "label": "Collect examples",
+      "animationEvent": "data",
+      "code": {
+        "pseudocode": "Collect examples that contain the useful input information.\nexamples <- collect_examples()",
+        "python": "examples = [\n    (3, \"small\"),\n    (14, \"large\"),\n    (8, \"small\"),\n]"
+      }
+    },
+    {
+      "id": "train",
+      "label": "Learn instead of hard-coding",
+      "animationEvent": "train",
+      "code": {
+        "pseudocode": "Use examples to learn a model instead of hard-coding every rule.\nmodel <- learn(examples)",
+        "python": "examples = [(3, \"small\"), (14, \"large\"), (8, \"small\")]\n\n# Learn a cut-off from the examples instead of hard-coding it\nsmall = [x for x, label in examples if label == \"small\"]\nlarge = [x for x, label in examples if label == \"large\"]\nthreshold = (max(small) + min(large)) / 2\nprint(threshold)  # 11.0"
+      }
+    },
+    {
+      "id": "unseen-input",
+      "label": "Try a new example",
+      "animationEvent": "unseen-input",
+      "code": {
+        "pseudocode": "Give the trained model a new example it has not seen.\nnew_example <- 12",
+        "python": "new_example = 12"
+      }
+    },
+    {
+      "id": "generalize",
+      "label": "Predict the new example",
+      "animationEvent": "generalize",
+      "code": {
+        "pseudocode": "Use the learned pattern to predict the new example.\nprediction <- model.predict(new_example)",
+        "python": "threshold = 11.0  # learned from the examples in the previous step\nnew_example = 12\nprediction = \"large\" if new_example > threshold else \"small\"\nprint(prediction)  # large"
+      }
+    }
+  ]
+}

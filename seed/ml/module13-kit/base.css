@@ -1,0 +1,117 @@
+body {
+  margin: 0;
+  padding: 14px;
+  box-sizing: border-box;
+  background: #0b1d16;
+  color: #e6f5ec;
+  font-family: system-ui, sans-serif;
+}
+.scene {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.step-label {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #a7ce65;
+}
+svg {
+  width: 100%;
+  height: auto;
+  max-width: 640px;
+  background: #071510;
+  border-radius: 10px;
+  border: 1px solid rgba(29, 181, 132, 0.35);
+}
+svg g,
+svg line,
+svg polygon,
+svg path,
+svg ellipse,
+svg circle,
+svg rect,
+svg text {
+  transition: opacity 0.4s ease, transform 0.6s ease;
+}
+.axis {
+  stroke: rgba(167, 206, 101, 0.3);
+  stroke-width: 1;
+}
+.tick {
+  font-size: 10px;
+  fill: #8fa89c;
+}
+.lbl,
+.big,
+.note,
+.mono {
+  paint-order: stroke;
+  stroke: #071510;
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+.lbl {
+  font-size: 12px;
+  font-weight: 700;
+  fill: #e6f5ec;
+}
+.lbl-g { fill: #1db584; }
+.lbl-y { fill: #e2b44a; }
+.lbl-p { fill: #f472b6; }
+.lbl-b { fill: #38bdf8; }
+.lbl-r { fill: #f87171; }
+.big {
+  font-size: 15px;
+  font-weight: 800;
+  fill: #e6f5ec;
+}
+.note {
+  font-size: 11px;
+  fill: #c9dccf;
+}
+.mono {
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 13px;
+  font-weight: 700;
+  fill: #e6f5ec;
+}
+.caption {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #c9dccf;
+  min-height: 40px;
+}
+.cell rect {
+  fill: rgba(255, 255, 255, 0.05);
+  stroke: rgba(255, 255, 255, 0.28);
+  stroke-width: 1.2;
+}
+.cell text {
+  font-size: 15px;
+  font-weight: 800;
+  fill: #e6f5ec;
+}
+.cell.hl-row rect { fill: rgba(226, 180, 74, 0.25); stroke: #e2b44a; }
+.cell.hl-col rect { fill: rgba(29, 181, 132, 0.25); stroke: #1db584; }
+.cell.hl-both rect { fill: rgba(244, 114, 182, 0.28); stroke: #f472b6; }
+.dim { opacity: 0.25; }
+.dash { stroke-dasharray: 5 4; }
+.fillA { fill: rgba(56, 189, 248, 0.16); stroke: #38bdf8; stroke-width: 2; }
+.fillB { fill: rgba(244, 114, 182, 0.18); stroke: #f472b6; stroke-width: 2; }
+.fillG { fill: rgba(29, 181, 132, 0.16); stroke: #1db584; stroke-width: 2; }
+.contour { stroke: rgba(56, 189, 248, 0.45); stroke-width: 1.5; }
+.curve { fill: none; stroke: #38bdf8; stroke-width: 3; }
+.curve-y { fill: none; stroke: #e2b44a; stroke-width: 3; }
+.curve-p { fill: none; stroke: #f472b6; stroke-width: 3; }
+.curve-g { fill: none; stroke: #1db584; stroke-width: 3; }
+.ghost { fill: none; stroke: rgba(201, 220, 207, 0.4); stroke-width: 2; }
+.lbl-w { fill: #e6f5ec; }
+.lbl-s { font-size: 11px; font-weight: 600; fill: #c9dccf; }
+.contour-hi { fill: none; stroke: #e2b44a; stroke-width: 3; }
+.feasible { fill: rgba(29, 181, 132, 0.16); stroke: none; }
+.infeasible { fill: rgba(248, 113, 113, 0.14); stroke: none; }

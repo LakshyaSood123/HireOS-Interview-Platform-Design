@@ -1,0 +1,38 @@
+{
+ "raw-columns": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "A slice of the customer table: **seven columns** for six customers. Most describe the customer, one is a date, and the last, **churned**, is the outcome. The first question is which columns a model may legitimately use."
+ },
+ "candidate-features": {
+  "h": "FEATURES",
+  "t": "The green columns are the **candidate features**: tenure, usage, tickets, price and days idle. They describe each customer **before** the decision, so they are the information the model is allowed to look at."
+ },
+ "target-column": {
+  "h": "THE TARGET",
+  "t": "The blue column is the **target** (churned_30d), the outcome we want to predict. Features go in, the target is what should come out. Keeping the two separate is the basic structure of supervised learning."
+ },
+ "valid-feature": {
+  "h": "A VALID FEATURE",
+  "t": "**Days idle** counts how long ago the customer was last active, so it is known on the prediction day. Because it exists **before** the outcome, it is a valid feature, and a useful one."
+ },
+ "another-feature": {
+  "h": "ANOTHER VALID FEATURE",
+  "t": "**Support tickets** are also counted before the 30-day window starts, so they are valid too. Every feature passes the same test: **would we know this value on the day we predict?**"
+ },
+ "leaky-feature": {
+  "h": "SPOT THE LEAK",
+  "t": "The **closed date** is filled in for every churner and empty for every customer who stayed, so it predicts the target **6 out of 6**. That perfection is the warning sign: the column contains the answer."
+ },
+ "prediction-time-check": {
+  "h": "THE PREDICTION-TIME TEST",
+  "t": "Ask the test on day 0: the customer has **not cancelled yet**, so there is **no closed date** to read. A column that only exists after the outcome cannot be a feature, however well it predicts."
+ },
+ "remove-leakage": {
+  "h": "FIX: REMOVE THE LEAK",
+  "t": "The closed-date column fades out because it is removed **before any training or testing**. A model built with it would look perfect in testing and then fail in real use, where the date does not exist yet."
+ },
+ "final-feature-set": {
+  "h": "TAKEAWAY",
+  "t": "**X** is the five valid features and **y** is churned_30d. **Remember:** a feature is valid only if it is known at prediction time. A strong predictor that breaks this rule is **leakage**, not skill."
+ }
+}

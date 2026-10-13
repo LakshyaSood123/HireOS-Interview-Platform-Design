@@ -1,0 +1,38 @@
+{
+ "problem-type": {
+  "h": "WHAT KIND OF PROBLEM IS THIS?",
+  "t": "Each customer either **churns (1) or stays (0)**, so this is **binary classification**. That narrows the choice to classifiers, but there are still several ways to build one."
+ },
+ "baseline": {
+  "h": "START WITH A BASELINE",
+  "t": "The first card is a **simple rule**: flag customers inactive for over 30 days. It reaches **0.81 accuracy but only 0.40 recall**, so it misses most churners. Any model has to beat this bar."
+ },
+ "linear-model": {
+  "h": "CANDIDATE 1",
+  "t": "The **logistic-style model** gives each feature a weight (blue pushes toward staying, red toward churn) and combines them. It is fast and **easy to explain**, which matters to retention staff."
+ },
+ "tree-model": {
+  "h": "CANDIDATE 2",
+  "t": "The **tree-style model** asks a chain of yes/no questions, such as idle days above 20, then tickets above 2. It can capture **combinations of signals**, but it is more flexible and harder to keep stable."
+ },
+ "complexity": {
+  "h": "COMPLEXITY",
+  "t": "The bars rank the candidates by complexity: **1, 2, 3**. More flexible models can fit more patterns, including accidental ones, and they have **more to tune and more that can go wrong**."
+ },
+ "interpretability": {
+  "h": "INTERPRETABILITY",
+  "t": "Retention staff need to understand **why** a customer is flagged. All three candidates can be explained when kept small, so interpretability does not rule any of them out."
+ },
+ "constraints": {
+  "h": "CONSTRAINTS",
+  "t": "The bar at the bottom lists the practical limits: staff must understand a flag, scoring runs **once a day** so speed is not critical, and we have only **700 training customers**."
+ },
+ "candidate-set": {
+  "h": "HYPOTHESES, NOT WINNERS",
+  "t": "The question marks show that we have **not chosen a winner**. Each card is a hypothesis to test, and a fancier model is not automatically a better one."
+ },
+ "choose-to-test": {
+  "h": "TAKEAWAY",
+  "t": "All three go forward to be **trained and measured on the same validation set**. **Remember:** choose candidates by problem type, data size and constraints, then let the evidence decide."
+ }
+}

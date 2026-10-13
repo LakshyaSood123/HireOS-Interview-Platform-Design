@@ -1,0 +1,34 @@
+{
+ "data": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "The **same five houses** as before: size against price. Instead of walking toward the best line step by step, can we **compute it directly**?"
+ },
+ "feature-matrix": {
+  "h": "BUILD THE FEATURE MATRIX X",
+  "t": "Each house becomes a row **[x, 1]**. The extra column of ones lets the **bias b act like any other weight**. X has **5 rows and 2 columns**."
+ },
+ "target-vector": {
+  "h": "THE TARGET VECTOR y",
+  "t": "Stack the prices into a column **y = [2.0, 2.8, 3.7, 4.1, 5.2]**. We want weights **[w, b]** so that **X·[w, b]** is as close to y as possible."
+ },
+ "least-squares-view": {
+  "h": "ZERO GRADIENT GIVES EQUATIONS",
+  "t": "At the minimum of the MSE both gradients are **zero**. That turns into the **normal equations (XᵀX)·[w, b] = Xᵀy**, a small 2 × 2 system with plain numbers."
+ },
+ "projection": {
+  "h": "THE PROJECTION PICTURE",
+  "t": "The columns of X span a flat surface of **every prediction a line can make**. The best fit is the point of that surface **closest to y**: its projection. The leftover gap is **perpendicular** to the surface."
+ },
+ "best-coefficients": {
+  "h": "SOLVE THE 2×2 SYSTEM",
+  "t": "The determinant is **5 × 22.5 − 10 × 10 = 12.5**. Solving gives **w = 19.25 ÷ 12.5 = 1.54** and **b = 6.0 ÷ 12.5 = 0.48**, with no learning rate and no loop."
+ },
+ "fitted-line": {
+  "h": "THE FITTED LINE",
+  "t": "The line **ŷ = 1.54x + 0.48** has MSE **0.0166**, exactly where gradient descent ended up."
+ },
+ "gradient-vs-closed-form": {
+  "h": "TAKEAWAY",
+  "t": "They minimize the same MSE, so they agree. **Closed form is exact** and has no learning rate; **gradient descent scales** to huge data and to models with no closed form. Neither is universally better."
+ }
+}

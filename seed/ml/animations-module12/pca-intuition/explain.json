@@ -1,0 +1,38 @@
+{
+ "original-data": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "The six customers as they are: usage across and monthly spend up. PCA will find a **better set of axes** for the same points."
+ },
+ "center": {
+  "h": "STEP 1: CENTER",
+  "t": "Subtracting the feature means **(4.5, 3.5)** moves the center of the cloud to the origin, because PCA describes the spread around the center."
+ },
+ "principal-axis": {
+  "h": "STEP 2: FIND THE AXES",
+  "t": "**PC1** (solid yellow) follows the cloud. **PC2** (dashed blue) is perpendicular to it. Together they are a rotated set of axes for the same data."
+ },
+ "project": {
+  "h": "STEP 3: PROJECT",
+  "t": "Each point is dropped perpendicularly onto PC1. The projected positions are what we will keep."
+ },
+ "pc1-coordinate": {
+  "h": "PC1 COORDINATES",
+  "t": "The labels give each customer's **position along PC1**, from **−3.20** for the lowest to **3.53** for the highest. These are the new, single coordinates."
+ },
+ "drop-pc2": {
+  "h": "DROP PC2",
+  "t": "The red segments are the **PC2 coordinates**: each customer's distance from the PC1 line. They are all small (at most 0.61), so dropping them loses little."
+ },
+ "one-dimensional-data": {
+  "h": "ONE-DIMENSIONAL DATA",
+  "t": "The data is now **six numbers on a line**, the PC1 coordinates, with the same order and spacing as along the trend."
+ },
+ "compare-representations": {
+  "h": "COMPARE",
+  "t": "Two numbers per customer keep everything (**100% of the variance**). One number per customer keeps **97.2%** while storing half as much."
+ },
+ "pca-summary": {
+  "h": "TAKEAWAY",
+  "t": "**Center, find the directions of greatest variance, keep the top coordinates.** PC1 is a **new feature** that mixes both originals, so PCA is not the same as picking a column."
+ }
+}

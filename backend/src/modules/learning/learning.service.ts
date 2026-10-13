@@ -2,7 +2,7 @@ import { ApiError } from "../../shared/errors.js";
 import { isoDate } from "../../shared/dates.js";
 import { logger } from "../../shared/logger.js";
 import { isDuplicateKeyError, withTransaction } from "../../shared/transaction.js";
-import { requireCurriculum, type CurriculumIndex } from "../curriculum/curriculum.service.js";
+import { resolveLearnerCurriculum, type CurriculumIndex } from "../curriculum/curriculum.service.js";
 import type { SnapshotCheckpoint } from "../curriculum/curriculum.model.js";
 import { CourseProgress, type CheckpointStat, type ModuleStat } from "./courseProgress.model.js";
 import { LearningAttempt } from "./learningAttempt.model.js";
@@ -237,7 +237,7 @@ function buildCourseState(curriculum: CurriculumIndex, record: ProgressRecord): 
 
 /** `GET /me/courses/{courseId}/state` — the call the app makes on boot. */
 export async function getCourseState(userId: string, courseId: string): Promise<CourseStateResponse> {
-  const curriculum = await requireCurriculum(courseId);
+  const curriculum = await resolveLearnerCurriculum(userId, courseId);
   const record = await getOrCreateProgress(userId, curriculum);
   return buildCourseState(curriculum, record);
 }
@@ -248,7 +248,7 @@ export async function getModuleProgress(
   courseId: string,
   moduleId: string,
 ): Promise<ModuleProgressResponse> {
-  const curriculum = await requireCurriculum(courseId);
+  const curriculum = await resolveLearnerCurriculum(userId, courseId);
   const module = requireModule(curriculum, moduleId);
   const record = await getOrCreateProgress(userId, curriculum);
   const progress = toLearnerState(record);
@@ -288,7 +288,7 @@ export async function setActive(
   courseId: string,
   input: SetActiveInput,
 ): Promise<CourseStateResponse> {
-  const curriculum = await requireCurriculum(courseId);
+  const curriculum = await resolveLearnerCurriculum(userId, courseId);
   const record = await getOrCreateProgress(userId, curriculum);
   const progress = toLearnerState(record);
 
@@ -381,7 +381,7 @@ export async function startModule(
   courseId: string,
   moduleId: string,
 ): Promise<StartModuleResponse> {
-  const curriculum = await requireCurriculum(courseId);
+  const curriculum = await resolveLearnerCurriculum(userId, courseId);
   const module = requireModule(curriculum, moduleId);
   const record = await getOrCreateProgress(userId, curriculum);
   const progress = toLearnerState(record);
@@ -460,7 +460,7 @@ export async function completeCheckpoint(
   checkpointId: string,
   options: CompleteCheckpointOptions = {},
 ): Promise<CompletionResponse> {
-  const curriculum = await requireCurriculum(courseId);
+  const curriculum = await resolveLearnerCurriculum(userId, courseId);
   const checkpoint = requireCheckpoint(curriculum, checkpointId);
   const record = await getOrCreateProgress(userId, curriculum);
   const before = toLearnerState(record);
@@ -629,7 +629,7 @@ export async function recordAttempt(
   userId: string,
   input: RecordAttemptInput,
 ): Promise<{ attemptId: string; passed: boolean }> {
-  const curriculum = await requireCurriculum(input.courseId);
+  const curriculum = await resolveLearnerCurriculum(userId, input.courseId);
   const checkpoint = requireCheckpoint(curriculum, input.checkpointId);
   const moduleId = curriculum.moduleIdByCheckpointId.get(checkpoint.id) ?? "";
 

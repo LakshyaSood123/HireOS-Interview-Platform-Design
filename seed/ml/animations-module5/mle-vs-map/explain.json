@@ -1,0 +1,34 @@
+{
+ "small-dataset": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Start with just **5 flips** of the coin: **H H T H H**, 4 heads. With so little data, how much should we trust it?"
+ },
+ "mle": {
+  "h": "MLE: LISTEN TO THE DATA ONLY",
+  "t": "The likelihood (green) is highest at **0.8**, so **MLE = 0.8**. MLE uses **only the data**: it knows nothing about what we believed beforehand."
+ },
+ "prior": {
+  "h": "OUR PRIOR BELIEF",
+  "t": "Before the flips, we believed the coin was **probably close to fair**: the prior (blue) peaks at **0.5**."
+ },
+ "map": {
+  "h": "MAP: DATA PLUS PRIOR",
+  "t": "Multiplying the likelihood by the prior and rescaling gives the **posterior** (pink), which peaks at **0.7**. So **MAP = 0.7**."
+ },
+ "compare-small-data": {
+  "h": "SMALL DATA: THEY DISAGREE",
+  "t": "With only 5 flips **MLE = 0.8** and **MAP = 0.7**. The prior still has a say, which keeps the estimate more cautious. Neither is simply “better”: they answer slightly different questions."
+ },
+ "more-data": {
+  "h": "NOW COLLECT MORE DATA",
+  "t": "Keep the same share of heads but gather **10, 20 and then 50 flips**. The likelihood gets **sharper and sharper** while the prior stays the same."
+ },
+ "estimates-converge": {
+  "h": "WITH ENOUGH DATA THEY AGREE",
+  "t": "By **20 flips** MAP has moved onto **0.8**, the MLE, and it stays there. With plenty of informative data the likelihood outweighs the prior, so the two estimates **converge**."
+ },
+ "ml-connection": {
+  "h": "TAKEAWAY",
+  "t": "**Little data:** a prior (a gentle brake on extreme parameters) matters. **Lots of data:** the data dominate. In several models MAP estimation looks like **regularized training**."
+ }
+}

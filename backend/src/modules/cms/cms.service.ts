@@ -8,9 +8,10 @@ import { forgetCurriculum } from "../curriculum/curriculum.service.js";
 import { CourseProgress } from "../learning/courseProgress.model.js";
 import { CmsCourse } from "./cmsCourse.model.js";
 import { CmsCourseVersion, type CmsCourseVersionAttributes } from "./cmsCourseVersion.model.js";
-import { validateCmsVersionContent, type CmsValidationIssue } from "./cms.validation.js";
+import { validateCmsVersionContent, validatePackageReferences, type CmsValidationIssue } from "./cms.validation.js";
 import { buildSnapshotFromCmsVersion } from "./snapshotFromCmsVersion.js";
 import { normalizeAnimationSource, type CmsCourseType, type CmsZone } from "./cms.types.js";
+import { CmsAnimationPackage } from "./animationPackage.model.js";
 import { freezePackageRevisionIfNeeded } from "./animationPackage.service.js";
 
 /**
@@ -264,7 +265,7 @@ export async function publishDraft(courseId: string, actorId: string): Promise<P
 
     let snapshotCheckpointCount = 0;
 
-    if (draft.courseType === "structured-dsa") {
+    if (draft.zones.length > 0) {
       const snapshotDraft = buildSnapshotFromCmsVersion(published.toObject(), { frontendCommit: null });
       assertStructureOnly(snapshotDraft);
       assertGraphIsSound(snapshotDraft);
@@ -338,7 +339,7 @@ export async function activateVersion(courseId: string, versionId: string): Prom
   if (!target) throw ApiError.notFound(`Published version "${versionId}" not found for course "${courseId}".`);
 
   await withTransaction(async (session) => {
-    if (target.courseType === "structured-dsa") {
+    if (target.zones.length > 0) {
       const existingSnapshot = await CurriculumSnapshot.findOne({ courseId, version: versionId }).session(session ?? null);
 
       await CurriculumSnapshot.updateMany({ courseId, isActive: true }, { $set: { isActive: false } }, { session });
@@ -391,6 +392,51 @@ export async function getPublishedVersionById(courseId: string, versionId: strin
 }
 
 /**
+ * Admin/dev operation: moves ONE learner's pin for ONE course to an explicit,
+ * already-published version. Nothing else is touched (progress, XP, completed
+ * checkpoints stay exactly as they are).
+ *
+ * Refuses: a draft or nonexistent version (only `status: "published"` is
+ * accepted), a version with no curriculum snapshot, a learner who is not
+ * enrolled, and a target version that no longer contains a checkpoint the
+ * learner has already completed (that would silently orphan their progress).
+ * Idempotent: repinning to the version they already have changes nothing.
+ */
+export async function repinLearnerCourse(
+  userId: string,
+  courseId: string,
+  targetVersionId: string,
+  options: { dryRun?: boolean } = {},
+): Promise<{ changed: boolean; from: string | null; to: string }> {
+  await getPublishedVersionById(courseId, targetVersionId); // throws 404 for draft / nonexistent
+
+  const snapshot = await CurriculumSnapshot.findOne({ courseId, version: targetVersionId }).lean();
+  if (!snapshot) {
+    throw ApiError.validation(`Version "${targetVersionId}" of "${courseId}" has no curriculum snapshot, so a learner cannot be pinned to it.`);
+  }
+
+  const progress = await CourseProgress.findOne({ userId, courseId }).lean();
+  if (!progress) throw ApiError.notFound(`This learner is not enrolled in "${courseId}", so there is no pin to move.`);
+
+  const from = progress.curriculumVersion ?? null;
+  if (from === targetVersionId) return { changed: false, from, to: targetVersionId };
+
+  const known = new Set((snapshot.checkpoints ?? []).map((cp: { id: string }) => cp.id));
+  const orphaned = (progress.completedCheckpointIds ?? []).filter((id: string) => !known.has(id));
+  if (orphaned.length > 0) {
+    throw ApiError.validation(
+      `Refusing to repin: version "${targetVersionId}" no longer contains completed checkpoint(s) ${orphaned.join(", ")}.`,
+    );
+  }
+
+  // A dry run runs every check above and reports what WOULD change.
+  if (!options.dryRun) {
+    await CourseProgress.updateOne({ userId, courseId }, { $set: { curriculumVersion: targetVersionId } });
+  }
+  return { changed: true, from, to: targetVersionId };
+}
+
+/**
  * Learner-facing — resolves content for the CALLING learner's OWN pinned
  * version, server-side, from their own `courseProgress.curriculumVersion`
  * (Keshav's field, unchanged). This is what backs
@@ -410,4 +456,44 @@ export async function getPinnedPublishedContent(courseId: string, userId: string
     return getPublishedVersionById(courseId, progress.curriculumVersion);
   }
   return getPublishedContent(courseId);
+}
+
+/**
+ * Learner-facing package read. Serves a FROZEN package revision only when it
+ * is referenced by the calling learner's own pinned published version
+ * (`getPinnedPublishedContent`). Drafts, unreferenced revisions and any
+ * other package id are indistinguishable from "not found" to the caller.
+ */
+export async function getLearnerReferencedPackageRevision(
+  courseId: string,
+  userId: string,
+  packageId: string,
+  revisionId: string,
+) {
+  const pinned = await getPinnedPublishedContent(courseId, userId);
+  const referenced = pinned.zones.some((zone) =>
+    zone.modules.some((zoneModule) =>
+      zoneModule.checkpoints.some((cp) => {
+        const anim = normalizeAnimationSource(cp.workspace?.animation);
+        return anim?.kind === "custom" && anim.packageId === packageId && anim.revisionId === revisionId;
+      }),
+    ),
+  );
+  if (!referenced) throw ApiError.notFound("Animation package revision not found.");
+
+  const revision = await CmsAnimationPackage.findOne({ packageId, revisionId, status: "frozen" }).lean();
+  if (!revision) throw ApiError.notFound("Animation package revision not found.");
+
+  return {
+    packageId: revision.packageId,
+    revisionId: revision.revisionId,
+    title: revision.title,
+    manifest: revision.manifest,
+    sourceKind: revision.sourceKind,
+    html: revision.html,
+    css: revision.css ?? null,
+    js: revision.js ?? null,
+    assets: revision.assets,
+    packageTrace: revision.packageTrace ?? null,
+  };
 }

@@ -1,0 +1,54 @@
+{
+  "title": "Gaussian noise: why squared error is principled",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "perfect-line",
+      "label": "An imagined perfect line",
+      "pseudocode": "Without noise, every price would lie exactly on y = 1.5 x + 0.5.",
+      "python": "sizes = [1.0, 1.5, 2.0, 2.5, 3.0]\nprices = [2.0, 2.8, 3.7, 4.1, 5.2]\nprint([1.5 * x + 0.5 for x in sizes])\n# prints: [2.0, 2.75, 3.5, 4.25, 5.0]"
+    },
+    {
+      "id": "add-noise",
+      "label": "Add random noise",
+      "pseudocode": "Observed price = line + noise.",
+      "python": "import math\nsizes = [1.0, 1.5, 2.0, 2.5, 3.0]\nprices = [2.0, 2.8, 3.7, 4.1, 5.2]\nnoise = [y - (1.5 * x + 0.5) for x, y in zip(sizes, prices)]\nprint([round(e, 2) for e in noise])\n# prints: [0.0, 0.05, 0.2, -0.15, 0.2]"
+    },
+    {
+      "id": "noisy-observations",
+      "label": "What we actually observe",
+      "pseudocode": "We only see line + noise, never the perfect line.",
+      "python": "import math\nsizes = [1.0, 1.5, 2.0, 2.5, 3.0]\nprices = [2.0, 2.8, 3.7, 4.1, 5.2]\nnoise = [y - (1.5 * x + 0.5) for x, y in zip(sizes, prices)]\nprint([round(1.5 * x + 0.5 + e, 2) for x, e in zip(sizes, noise)])\n# prints: [2.0, 2.8, 3.7, 4.1, 5.2]"
+    },
+    {
+      "id": "residuals",
+      "label": "Collect the noise values",
+      "pseudocode": "Small values, positive and negative, clustered near zero.",
+      "python": "import math\nsizes = [1.0, 1.5, 2.0, 2.5, 3.0]\nprices = [2.0, 2.8, 3.7, 4.1, 5.2]\nnoise = [y - (1.5 * x + 0.5) for x, y in zip(sizes, prices)]\nprint(sorted(round(e, 2) for e in noise))\n# prints: [-0.15, 0.0, 0.05, 0.2, 0.2]"
+    },
+    {
+      "id": "gaussian-noise",
+      "label": "Model noise as Gaussian",
+      "pseudocode": "Gaussian density with mean 0 and spread sigma = 0.2.",
+      "python": "import math\nsizes = [1.0, 1.5, 2.0, 2.5, 3.0]\nprices = [2.0, 2.8, 3.7, 4.1, 5.2]\nnoise = [y - (1.5 * x + 0.5) for x, y in zip(sizes, prices)]\ndef pdf(e, s=0.2):\n    return math.exp(-0.5 * (e / s) ** 2) / (s * math.sqrt(2 * math.pi))\nprint([round(pdf(e), 2) for e in noise])\n# prints: [1.99, 1.93, 1.21, 1.51, 1.21]"
+    },
+    {
+      "id": "likelihood-view",
+      "label": "Likelihood of the observations",
+      "pseudocode": "The likelihood is the product of the bell heights.",
+      "python": "import math\nsizes = [1.0, 1.5, 2.0, 2.5, 3.0]\nprices = [2.0, 2.8, 3.7, 4.1, 5.2]\nnoise = [y - (1.5 * x + 0.5) for x, y in zip(sizes, prices)]\ndef pdf(e, s=0.2):\n    return math.exp(-0.5 * (e / s) ** 2) / (s * math.sqrt(2 * math.pi))\nlikelihood = 1.0\nfor e in noise:\n    likelihood *= pdf(e)\nprint(round(likelihood, 2), round(-math.log(likelihood), 2))\n# prints: 8.5 -2.14"
+    },
+    {
+      "id": "mse-connection",
+      "label": "Maximum likelihood is least squares",
+      "pseudocode": "-log L = constant + SSE / (2 sigma^2), so smaller SSE means larger likelihood.",
+      "python": "import math\nsizes = [1.0, 1.5, 2.0, 2.5, 3.0]\nprices = [2.0, 2.8, 3.7, 4.1, 5.2]\ndef nll(w, b, sigma=0.2):\n    sse = sum(((w * x + b) - y) ** 2 for x, y in zip(sizes, prices))\n    return len(sizes) / 2 * math.log(2 * math.pi * sigma ** 2) + sse / (2 * sigma ** 2), sse\nfor w, b in [(1.0, 1.0), (1.5, 0.5), (1.54, 0.48)]:\n    value, sse = nll(w, b)\n    print(w, b, round(sse, 3), round(value, 2))\n# prints: 1.0 1.0 2.38 26.3\n# prints: 1.5 0.5 0.105 -2.14\n# prints: 1.54 0.48 0.083 -2.41"
+    },
+    {
+      "id": "ml-interpretation",
+      "label": "What this means for ML",
+      "pseudocode": "Under constant-spread Gaussian noise, maximum likelihood equals minimum squared error.",
+      "python": "import math\nsizes = [1.0, 1.5, 2.0, 2.5, 3.0]\nprices = [2.0, 2.8, 3.7, 4.1, 5.2]\ndef nll(w, b, sigma=0.2):\n    sse = sum(((w * x + b) - y) ** 2 for x, y in zip(sizes, prices))\n    return len(sizes) / 2 * math.log(2 * math.pi * sigma ** 2) + sse / (2 * sigma ** 2), sse\nlines = [(1.0, 1.0), (1.5, 0.5), (1.54, 0.48)]\nby_nll = min(lines, key=lambda wb: nll(*wb)[0])\nby_sse = min(lines, key=lambda wb: nll(*wb)[1])\nprint(by_nll == by_sse, by_nll)\n# prints: True (1.54, 0.48)"
+    }
+  ]
+}

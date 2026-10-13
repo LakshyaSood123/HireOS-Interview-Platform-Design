@@ -1,0 +1,60 @@
+{
+  "title": "Precision: when the model says spam, how often is it right?",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "matrix",
+      "label": "Our confusion matrix",
+      "pseudocode": "The confusion matrix of the evaluation set.",
+      "python": "tp, fn, fp, tn = 16, 4, 8, 72        # positive class = spam\nprint([[tp, fn], [fp, tn]])\n# prints: [[16, 4], [8, 72]]"
+    },
+    {
+      "id": "predicted-positive-column",
+      "label": "The predicted-spam column",
+      "pseudocode": "All predicted positives = TP + FP.",
+      "python": "tp, fn, fp, tn = 16, 4, 8, 72        # positive class = spam\nprint('predicted spam:', tp + fp)\n# prints: predicted spam: 24"
+    },
+    {
+      "id": "select-tp",
+      "label": "Flagged and really spam",
+      "pseudocode": "True positives are in the predicted-spam column.",
+      "python": "tp, fn, fp, tn = 16, 4, 8, 72        # positive class = spam\nprint('true positives:', tp)\n# prints: true positives: 16"
+    },
+    {
+      "id": "select-fp",
+      "label": "Flagged but legitimate",
+      "pseudocode": "False positives are legitimate emails flagged.",
+      "python": "tp, fn, fp, tn = 16, 4, 8, 72        # positive class = spam\nprint('false positives:', fp)\n# prints: false positives: 8"
+    },
+    {
+      "id": "precision-question",
+      "label": "The precision question",
+      "pseudocode": "Of the emails predicted spam, what share is truly spam?",
+      "python": "tp, fn, fp, tn = 16, 4, 8, 72        # positive class = spam\nprint(tp, 'of', tp + fp, 'flagged emails are spam')\n# prints: 16 of 24 flagged emails are spam"
+    },
+    {
+      "id": "numerator",
+      "label": "The numerator",
+      "pseudocode": "Numerator: true positives.",
+      "python": "tp, fn, fp, tn = 16, 4, 8, 72        # positive class = spam\nnumerator = tp\nprint(numerator)\n# prints: 16"
+    },
+    {
+      "id": "denominator",
+      "label": "The denominator",
+      "pseudocode": "Denominator: all predicted positives.",
+      "python": "tp, fn, fp, tn = 16, 4, 8, 72        # positive class = spam\ndenominator = tp + fp\nprint(denominator)\n# prints: 24"
+    },
+    {
+      "id": "calculate",
+      "label": "Calculate precision",
+      "pseudocode": "precision = TP / (TP + FP)",
+      "python": "def precision(tp, fp):\n    return tp / (tp + fp) if tp + fp else None\n\ndef recall(tp, fn):\n    return tp / (tp + fn) if tp + fn else None\n\ndef f1(p, r):\n    return 2 * p * r / (p + r) if p and r else 0.0\n\ntp, fn, fp, tn = 16, 4, 8, 72        # positive class = spam\nprint(round(precision(tp, fp), 3))\n# prints: 0.667"
+    },
+    {
+      "id": "interpret",
+      "label": "Interpret it",
+      "pseudocode": "A precision of 2/3 means one in three flagged emails is legitimate.",
+      "python": "def precision(tp, fp):\n    return tp / (tp + fp) if tp + fp else None\n\ndef recall(tp, fn):\n    return tp / (tp + fn) if tp + fn else None\n\ndef f1(p, r):\n    return 2 * p * r / (p + r) if p and r else 0.0\n\ntp, fn, fp, tn = 16, 4, 8, 72        # positive class = spam\np = precision(tp, fp)\nprint(round(1 - p, 3), 'of flagged emails are legitimate')\nprint('nothing flagged:', precision(0, 0))\n# prints: 0.333 of flagged emails are legitimate\n# prints: nothing flagged: None"
+    }
+  ]
+}

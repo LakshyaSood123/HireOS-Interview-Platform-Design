@@ -1,0 +1,38 @@
+{
+ "training-data": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "**Eight houses** are available for building the model (training and validation houses together). The **two test houses stay locked away**."
+ },
+ "create-folds": {
+  "h": "CREATE K = 4 FOLDS",
+  "t": "Deal the eight houses into **four folds of two houses** each. Every house belongs to **exactly one** fold."
+ },
+ "fold-one-validation": {
+  "h": "ROUND 1: VALIDATE ON FOLD 1",
+  "t": "Fit the model on **folds 2, 3 and 4** (gold), then score it on **fold 1** (blue), which it never saw: validation MSE **0.0264**."
+ },
+ "rotate": {
+  "h": "ROTATE THE VALIDATION FOLD",
+  "t": "Round 2 makes **fold 2** the validation fold. The other three folds train a **fresh model**."
+ },
+ "fold-two": {
+  "h": "ROUND 2: VALIDATE ON FOLD 2",
+  "t": "Fit on folds 1, 3 and 4, then score on fold 2: validation MSE **0.0004**."
+ },
+ "continue-rotating": {
+  "h": "KEEP ROTATING",
+  "t": "Rounds 3 and 4 do the same with folds 3 and 4: validation MSE **0.0252 and 0.0914**. Now **every house has been used for validation exactly once**."
+ },
+ "collect-scores": {
+  "h": "COLLECT THE FOUR SCORES",
+  "t": "Four scores: **0.0264, 0.0004, 0.0252, 0.0914**. Their spread shows how much the result depends on **which houses were held out**."
+ },
+ "average-score": {
+  "h": "AVERAGE THEM",
+  "t": "The cross-validation score is the average: **(0.0264 + 0.0004 + 0.0252 + 0.0914) / 4 = 0.0359**. This is one steadier estimate for the straight line."
+ },
+ "model-selection": {
+  "h": "TAKEAWAY",
+  "t": "Run the same procedure for other candidates and compare averages: the **line (0.0359)** beats the unregularized curve (**0.3169**) and the ridge curve with λ = 0.3 (**0.1662**). Then refit the winner on all development data. The folds are **not** the test set, which stays locked."
+ }
+}

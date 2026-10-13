@@ -1,0 +1,135 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322c4e9cccef168ed23"
+  },
+  "assets": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498536"
+    }
+  },
+  "createdBy": {
+    "$oid": "000000000000000000000000"
+  },
+  "css": "body {\n  margin: 0;\n  padding: 14px;\n  box-sizing: border-box;\n  background: #0b1d16;\n  color: #e6f5ec;\n  font-family: system-ui, sans-serif;\n}\n.scene {\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n}\n.header {\n  display: flex;\n  justify-content: space-between;\n  align-items: baseline;\n}\n.step-label {\n  margin: 0;\n  font-size: 13px;\n  font-weight: 700;\n  letter-spacing: 0.08em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\nsvg {\n  width: 100%;\n  height: auto;\n  max-width: 640px;\n  background: #071510;\n  border-radius: 10px;\n  border: 1px solid rgba(29, 181, 132, 0.35);\n}\n.pt {\n  stroke: rgba(0, 0, 0, 0.4);\n  stroke-width: 1;\n  transition: cx 0.7s ease, cy 0.7s ease, fill 0.5s ease;\n}\n.pt-quiet {\n  fill: #8FA89C;\n}\n.boundary {\n  stroke: rgba(226, 180, 74, 0);\n  stroke-width: 2;\n  stroke-dasharray: 6 4;\n  transition: stroke 0.5s ease;\n}\n.boundary.on {\n  stroke: #E2B44A;\n}\n.new-point {\n  fill: #ffffff;\n  stroke: #0b1d16;\n  stroke-width: 1.5;\n  transition: transform 0.6s ease, opacity 0.4s ease;\n}\n.new-point.hidden {\n  opacity: 0;\n}\n.new-point.on {\n  opacity: 1;\n}\n.new-label {\n  text-anchor: middle;\n  font-size: 11px;\n  font-weight: 700;\n  fill: #e6f5ec;\n}\n.divider {\n  stroke: rgba(255, 255, 255, 0.2);\n}\n.panel-title {\n  font-size: 11px;\n  font-weight: 800;\n  letter-spacing: 0.04em;\n}\n.panel-supervised {\n  fill: #38BDF8;\n}\n.panel-unsupervised {\n  fill: #FBBF24;\n}\n.caption {\n  margin: 0;\n  font-size: 13px;\n  line-height: 1.5;\n  color: #c9dccf;\n  min-height: 40px;\n}\n\n/* ── explanation panel (shared by every generated ML animation) ── */\n.explain {\n  box-sizing: border-box;\n  max-width: 640px;\n  margin-top: 4px;\n  padding: 14px 18px 16px;\n  min-height: 150px;\n  border-radius: 12px;\n  background: rgba(29, 181, 132, 0.10);\n  border: 1px solid rgba(29, 181, 132, 0.45);\n  border-left: 5px solid #1db584;\n}\n.explain-h {\n  margin: 0 0 8px;\n  font-size: 13px;\n  font-weight: 800;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.explain-t {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.55;\n  color: #f1faf4;\n}\n.explain-t strong {\n  font-weight: 800;\n  color: #ffd98a;\n}\n",
+  "html": "<div class=\"scene\">\n  <div class=\"header\">\n    <p class=\"step-label\" id=\"step-label\">The same points</p>\n  </div>\n  <svg id=\"scene\" viewBox=\"0 0 640 330\" role=\"img\" aria-label=\"Supervised learning uses labels; unsupervised learning groups points using features only\">\n    <g id=\"main\"></g>\n    <g id=\"boundaries\" opacity=\"0\"></g>\n    <g id=\"compare\" opacity=\"0\"></g>\n  </svg>\n  <section class=\"explain\" aria-live=\"polite\">\n        <h3 class=\"explain-h\" id=\"explain-h\"></h3>\n        <p class=\"explain-t\" id=\"caption\"></p>\n      </section>\n</div>\n",
+  "js": "(function () {\n  var NS = \"http://www.w3.org/2000/svg\";\n\n  var steps = [\n    { id: \"dataset\", label: \"The same points\", caption: \"Each dot is one example described by two features, X. Nothing says what the groups are yet.\" },\n    { id: \"labels\", label: \"Labels reveal the answer\", caption: \"Now every dot carries a known label y. This is the answer the model is allowed to learn from.\" },\n    { id: \"supervised\", label: \"Supervised: learn y from X\", caption: \"The model learns a boundary from labelled examples, then predicts the label of a new point.\" },\n    { id: \"remove-labels\", label: \"Remove the labels\", caption: \"Hide y. Only the features X remain, exactly as an unsupervised learner sees the data.\" },\n    { id: \"unsupervised\", label: \"Unsupervised: find structure\", caption: \"Group points that are similar to each other. The groups are discovered from X alone.\" },\n    { id: \"compare\", label: \"Compare the two settings\", caption: \"SUPERVISED learns to predict a known target. UNSUPERVISED discovers structure in X.\" }\n  ];\n\n  var CENTERS = [\n    { x: 150, y: 120 },\n    { x: 490, y: 120 },\n    { x: 320, y: 236 },\n  ];\n  var LABEL_COLOR = [\"#38BDF8\", \"#1DB584\", \"#F472B6\"];\n  var FOUND_COLOR = [\"#FBBF24\", \"#34D399\", \"#A78BFA\"];\n\n  // 24 points, 8 per cluster, placed deterministically around each centre.\n  var pts = [];\n  for (var c = 0; c < 3; c++) {\n    for (var j = 0; j < 8; j++) {\n      var angle = (j + c * 3) * 2.399;\n      var radius = 16 + (j % 4) * 11;\n      pts.push({\n        x: CENTERS[c].x + Math.cos(angle) * radius,\n        y: CENTERS[c].y + Math.sin(angle) * radius * 0.8,\n        label: c,\n      });\n    }\n  }\n\n  var svg = document.getElementById(\"scene\");\n  var main = document.getElementById(\"main\");\n  var boundaries = document.getElementById(\"boundaries\");\n  var compare = document.getElementById(\"compare\");\n  var labelEl = document.getElementById(\"step-label\");\n  var captionEl = document.getElementById(\"caption\");\n  var explainHeadEl = document.getElementById(\"explain-h\");\n  // Per-step explanations (mirrors explain.json in this package folder). **bold** markers become <strong>.\n  var EXPLAIN = {\"dataset\": {\"h\": \"WHAT YOU ARE LOOKING AT\", \"t\": \"Each dot is **one example described by two features, X**. Nothing says what the groups are yet, so all we see are positions.\"}, \"labels\": {\"h\": \"LABELS REVEAL THE ANSWER\", \"t\": \"Now every dot carries a **known label y**. This is the answer the model is allowed to learn from, which is what makes the problem **supervised**.\"}, \"supervised\": {\"h\": \"SUPERVISED: LEARN y FROM X\", \"t\": \"The model learns a **boundary from labelled examples**, then predicts the label of a **new point** by seeing which side it falls on.\"}, \"remove-labels\": {\"h\": \"REMOVE THE LABELS\", \"t\": \"Hide y. **Only the features X remain**, exactly as an unsupervised learner sees the data. There is no answer key any more.\"}, \"unsupervised\": {\"h\": \"UNSUPERVISED: FIND STRUCTURE\", \"t\": \"Group points that are **similar to each other**. The groups are **discovered from X alone**; nobody tells the algorithm what they mean.\"}, \"compare\": {\"h\": \"TAKEAWAY\", \"t\": \"**Supervised** learning learns to **predict a known target**. **Unsupervised** learning **discovers structure in X**. The difference is whether labels are available.\"}};\n\n  function setRich(node, str) {\n    node.textContent = \"\";\n    var parts = String(str).split(\"**\");\n    for (var i = 0; i < parts.length; i++) {\n      if (parts[i] === \"\") continue;\n      var seg = document.createElement(i % 2 ? \"strong\" : \"span\");\n      seg.textContent = parts[i];\n      node.appendChild(seg);\n    }\n  }\n\n  function explanationFor(index) {\n    var ex = EXPLAIN[steps[index].id];\n    return ex || { h: \"WHAT IS HAPPENING\", t: steps[index].caption || steps[index].detail || \"\" };\n  }\n\n  function stepMs(index) {\n    var words = String(explanationFor(index).t).replace(/\\*\\*/g, \"\").split(/\\s+/).length;\n    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));\n  }\n\n  function showExplanation(index) {\n    var ex = explanationFor(index);\n    if (explainHeadEl) explainHeadEl.textContent = ex.h;\n    setRich(captionEl, ex.t);\n  }\n\n  function el(name, attrs, parent) {\n    var node = document.createElementNS(NS, name);\n    for (var key in attrs) node.setAttribute(key, attrs[key]);\n    if (parent) parent.appendChild(node);\n    return node;\n  }\n\n  var nodes = pts.map(function (p, i) {\n    var node = el(\"circle\", { r: 7.5, class: \"pt\", \"data-i\": i }, main);\n    node.style.cx = p.x + \"px\";\n    node.style.cy = p.y + \"px\";\n    return node;\n  });\n\n  // Decision boundaries between the labelled classes (perpendicular bisectors).\n  function bisector(a, b) {\n    var mx = (a.x + b.x) / 2;\n    var my = (a.y + b.y) / 2;\n    var dx = b.x - a.x;\n    var dy = b.y - a.y;\n    var len = Math.sqrt(dx * dx + dy * dy);\n    var px = -dy / len;\n    var py = dx / len;\n    return el(\"line\", {\n      x1: mx - px * 420, y1: my - py * 420,\n      x2: mx + px * 420, y2: my + py * 420,\n      class: \"boundary\",\n    }, boundaries);\n  }\n  var boundaryLines = [bisector(CENTERS[0], CENTERS[2]), bisector(CENTERS[1], CENTERS[2])];\n\n  // The new point the supervised model predicts.\n  var newPoint = { x: 400, y: 150 };\n  var newNode = el(\"path\", { d: \"M0 -11 L11 0 L0 11 L-11 0 Z\", class: \"new-point\" }, main);\n  newNode.style.transform = \"translate(\" + newPoint.x + \"px,\" + newPoint.y + \"px)\";\n  var newLabel = el(\"text\", { x: 0, y: 0, class: \"new-label\" }, main);\n  newLabel.style.transform = \"translate(\" + newPoint.x + \"px,\" + (newPoint.y + 28) + \"px)\";\n\n  // Nearest labelled-class centre, used for the supervised prediction.\n  function predictClass(p) {\n    var best = 0;\n    var bestDistance = Infinity;\n    for (var k = 0; k < CENTERS.length; k++) {\n      var dx = p.x - CENTERS[k].x;\n      var dy = p.y - CENTERS[k].y;\n      var d = dx * dx + dy * dy;\n      if (d < bestDistance) { bestDistance = d; best = k; }\n    }\n    return best;\n  }\n  var predicted = predictClass(newPoint);\n\n  // K-means on X only: three iterations from fixed starting points.\n  var means = [pts[0], pts[8], pts[16]].map(function (p) { return { x: p.x, y: p.y }; });\n  var assign = [];\n  for (var it = 0; it < 3; it++) {\n    assign = pts.map(function (p) {\n      var best = 0;\n      var bestD = Infinity;\n      for (var k = 0; k < 3; k++) {\n        var d = (p.x - means[k].x) * (p.x - means[k].x) + (p.y - means[k].y) * (p.y - means[k].y);\n        if (d < bestD) { bestD = d; best = k; }\n      }\n      return best;\n    });\n    means = [0, 1, 2].map(function (k) {\n      var members = pts.filter(function (_, i) { return assign[i] === k; });\n      if (members.length === 0) return means[k];\n      return {\n        x: members.reduce(function (s, p) { return s + p.x; }, 0) / members.length,\n        y: members.reduce(function (s, p) { return s + p.y; }, 0) / members.length,\n      };\n    });\n  }\n\n  // Split-screen comparison: a smaller copy of the scene on each side.\n  var compareLeft = el(\"g\", { transform: \"translate(0,60) scale(0.5,0.5)\", class: \"half\" }, compare);\n  var compareRight = el(\"g\", { transform: \"translate(320,60) scale(0.5,0.5)\", class: \"half\" }, compare);\n  pts.forEach(function (p) {\n    el(\"circle\", { cx: p.x, cy: p.y, r: 7, class: \"pt\", fill: LABEL_COLOR[p.label] }, compareLeft);\n    el(\"circle\", { cx: p.x, cy: p.y, r: 7, class: \"pt\", fill: FOUND_COLOR[0] }, compareRight);\n  });\n  // Recolour the right half by the discovered groups.\n  var rightDots = compareRight.querySelectorAll(\"circle\");\n  rightDots.forEach(function (node, i) { node.setAttribute(\"fill\", FOUND_COLOR[assign[i]]); });\n  el(\"line\", { x1: 320, y1: 30, x2: 320, y2: 300, class: \"divider\" }, compare);\n  el(\"text\", { x: 20, y: 296, class: \"panel-title panel-supervised\" }, compare).textContent = \"SUPERVISED · X + y · Learn to predict a known target\";\n  el(\"text\", { x: 340, y: 296, class: \"panel-title panel-unsupervised\" }, compare).textContent = \"UNSUPERVISED · X only · Discover structure\";\n\n  var current = 0;\n\n  function colorFor(index, mode) {\n    var p = pts[index];\n    if (mode === \"label\") return LABEL_COLOR[p.label];\n    if (mode === \"found\") return FOUND_COLOR[assign[index]];\n    return \"#8FA89C\";\n  }\n\n  function setMode(mode, showBoundary) {\n    nodes.forEach(function (node, i) {\n      node.setAttribute(\"fill\", colorFor(i, mode));\n      node.setAttribute(\"class\", \"pt\" + (mode === \"none\" ? \" pt-quiet\" : \"\"));\n    });\n    boundaryLines.forEach(function (line) { line.setAttribute(\"class\", showBoundary ? \"boundary on\" : \"boundary\"); });\n  }\n\n  function render(index) {\n    var step = steps[index];\n    labelEl.textContent = step.label;\n    showExplanation(index);\n    var id = step.id;\n    main.setAttribute(\"opacity\", id === \"compare\" ? \"0\" : \"1\");\n    boundaries.setAttribute(\"opacity\", id === \"compare\" ? \"0\" : \"1\");\n    compare.setAttribute(\"opacity\", id === \"compare\" ? \"1\" : \"0\");\n    newNode.setAttribute(\"class\", \"new-point\");\n    newLabel.textContent = \"\";\n\n    if (id === \"dataset\") {\n      setMode(\"none\", false);\n      newNode.setAttribute(\"class\", \"new-point hidden\");\n    } else if (id === \"labels\") {\n      setMode(\"label\", false);\n      newNode.setAttribute(\"class\", \"new-point hidden\");\n    } else if (id === \"supervised\") {\n      setMode(\"label\", true);\n      newNode.setAttribute(\"class\", \"new-point on\");\n      newNode.setAttribute(\"fill\", LABEL_COLOR[predicted]);\n      newLabel.textContent = \"predicted: class \" + (predicted + 1);\n    } else if (id === \"remove-labels\") {\n      setMode(\"none\", false);\n      newNode.setAttribute(\"class\", \"new-point hidden\");\n    } else if (id === \"unsupervised\") {\n      setMode(\"found\", false);\n      newNode.setAttribute(\"class\", \"new-point hidden\");\n    } else if (id === \"compare\") {\n      // Right-hand panel already coloured by discovered groups; left by labels.\n      newNode.setAttribute(\"class\", \"new-point hidden\");\n    }\n  }\n\n  function emit() {\n    if (window.ReagvisBridge) window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n\n  function go(index) {\n    if (index < 0 || index >= steps.length) return false;\n    current = index;\n    render(current);\n    emit();\n    return true;\n  }\n\n  // Autoplay pace: 4.5 to 10.5 seconds per step (longer for longer explanations), exactly one timer.\n  // PLAY on the final step restarts from the first step and plays again.\n  var timer = null;\n\n  function stopAuto() {\n    if (timer !== null) {\n      clearTimeout(timer);\n      timer = null;\n    }\n  }\n\n  function scheduleNext() {\n    timer = setTimeout(function () {\n      timer = null;\n      if (current >= steps.length - 1) return;\n      go(current + 1);\n      if (current < steps.length - 1) scheduleNext();\n    }, stepMs(current));\n  }\n\n  function startAuto() {\n    if (timer !== null) return;\n    if (current >= steps.length - 1) go(0);\n    scheduleNext();\n  }\n\n  window.addEventListener(\"pagehide\", stopAuto);\n\n  window.ReagvisAnimation = {\n    stepDuration: stepMs,\n    onCommand: function (type, stepId) {\n      if (type === \"PLAY\") startAuto();\n      else if (type === \"PAUSE\") stopAuto();\n      else if (type === \"NEXT\") { stopAuto(); go(current + 1); }\n      else if (type === \"PREVIOUS\") { stopAuto(); go(current - 1); }\n      else if (type === \"RESET\") { stopAuto(); go(0); }\n      else if (type === \"GOTO_STEP\") {\n        stopAuto();\n        for (var i = 0; i < steps.length; i++) {\n          if (steps[i].id === stepId) { go(i); break; }\n        }\n      }\n    },\n  };\n\n  render(current);\n  if (window.ReagvisBridge) {\n    window.ReagvisBridge.ready();\n    window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n})();\n",
+  "lastFrozenContentHash": null,
+  "lastFrozenRevisionId": null,
+  "manifest": {
+    "bridgeVersion": {
+      "$numberInt": "1"
+    },
+    "capabilities": [
+      "play",
+      "pause",
+      "next",
+      "previous",
+      "reset",
+      "gotoStep"
+    ],
+    "heightPx": {
+      "$numberInt": "560"
+    },
+    "traceEvents": [
+      "dataset",
+      "labels",
+      "supervised",
+      "remove-labels",
+      "unsupervised",
+      "compare"
+    ]
+  },
+  "packageId": "cb80c523-05e6-4b5e-bbe3-77cd57f39f81",
+  "packageTrace": {
+    "steps": [
+      {
+        "animationEvent": "dataset",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Each example has features X. No target is attached, so the groups are not known yet.",
+          "python": "X = [[1.0, 2.0], [1.2, 2.1], [5.0, 6.0]]\nprint(len(X), 'examples with features only')"
+        },
+        "id": "dataset",
+        "label": "Examples described by features X"
+      },
+      {
+        "animationEvent": "labels",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Attach a known target y to each example. These answers are the training signal for supervised learning.",
+          "python": "X = [[1.0, 2.0], [1.2, 2.1], [5.0, 6.0]]\ny = [0, 0, 1]\nprint(list(zip(X, y)))"
+        },
+        "id": "labels",
+        "label": "Known labels y"
+      },
+      {
+        "animationEvent": "supervised",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Learn a rule from the labelled pairs (X, y). Use it to predict the label of a new example that has features but no label.",
+          "python": "def predict(x, class_centers):\n    distances = [(x[0] - c[0]) ** 2 + (x[1] - c[1]) ** 2 for c in class_centers]\n    return distances.index(min(distances))\n\nprint(predict([4.8, 5.9], [[1.0, 2.0], [5.0, 6.0]]))"
+        },
+        "id": "supervised",
+        "label": "Learn from X and y to predict"
+      },
+      {
+        "animationEvent": "remove-labels",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Drop y completely. The algorithm now receives only the features X, with no answer to copy.",
+          "python": "X = [[1.0, 2.0], [1.2, 2.1], [5.0, 6.0]]\nunlabelled = [x for x in X]  # features only, no y\nprint(len(unlabelled))"
+        },
+        "id": "remove-labels",
+        "label": "Hide the labels"
+      },
+      {
+        "animationEvent": "unsupervised",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Start with a few group centres. Assign each point to its nearest centre, move each centre to the mean of its points, and repeat.",
+          "python": "def nearest(point, centers):\n    distances = [(point[0] - c[0]) ** 2 + (point[1] - c[1]) ** 2 for c in centers]\n    return distances.index(min(distances))\n\nprint(nearest([1.1, 2.0], [[1.0, 2.0], [5.0, 6.0]]))"
+        },
+        "id": "unsupervised",
+        "label": "Group similar points"
+      },
+      {
+        "animationEvent": "compare",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Supervised learning needs X and y and learns to predict a known target. Unsupervised learning uses X alone and reports structure, such as groups.",
+          "python": "setting = {'supervised': ('X', 'y'), 'unsupervised': ('X',)}\nprint(setting['supervised'], setting['unsupervised'])"
+        },
+        "id": "compare",
+        "label": "Supervised versus unsupervised"
+      }
+    ],
+    "version": {
+      "$numberInt": "1"
+    }
+  },
+  "revision": {
+    "$numberInt": "7"
+  },
+  "revisionId": "r2",
+  "sourceKind": "zip",
+  "status": "frozen",
+  "title": "ML Module 1 — Supervised vs Unsupervised Learning",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498536"
+    }
+  },
+  "updatedBy": {
+    "$oid": "000000000000000000000000"
+  }
+}

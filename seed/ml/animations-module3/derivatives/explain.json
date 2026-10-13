@@ -1,0 +1,30 @@
+{
+ "two-points": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Take the loss curve **L(w) = (w − 3)²**. Pick two points on it: **A at w = 1** and **B at w = 2**. We want to know **how steep** the curve is."
+ },
+ "secant-slope": {
+  "h": "THE SLOPE BETWEEN THEM",
+  "t": "Draw a straight line through A and B. Its slope is **rise over run**: the loss falls by 3 while w moves right by 1, so the slope is **−3**."
+ },
+ "points-move-closer": {
+  "h": "SLIDE B CLOSER TO A",
+  "t": "Keep A fixed and slide B toward it. The gap **h shrinks**, and the slope settles toward one number: **−3.5, −3.9, −3.99 …** It heads to **−4**."
+ },
+ "tangent": {
+  "h": "THE LINE THAT JUST TOUCHES THE CURVE",
+  "t": "When B sits almost on top of A, the line only **touches the curve at that one point**. This is the **tangent line**, and its slope is the steepness of the curve right there."
+ },
+ "derivative": {
+  "h": "THAT SLOPE IS THE DERIVATIVE",
+  "t": "The slope of the tangent is the **derivative** of the loss, written **dL/dw**. For this loss **dL/dw = 2(w − 3)**, which is **−4 at w = 1**."
+ },
+ "positive-negative-zero": {
+  "h": "NEGATIVE, ZERO, POSITIVE",
+  "t": "At **w = 1** the slope is **−4** (the curve goes down as w grows). At **w = 3** it is **0** (flat bottom). At **w = 5** it is **+4** (the curve goes up)."
+ },
+ "ml-sensitivity": {
+  "h": "TAKEAWAY",
+  "t": "The derivative says **which way to move a weight and how strongly the loss reacts**. Slope −4: raise w to lower the loss. Nudge w by +0.1 and the loss drops by about **0.4**."
+ }
+}

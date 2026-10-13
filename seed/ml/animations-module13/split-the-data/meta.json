@@ -1,0 +1,66 @@
+{
+  "title": "Split the data",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "full-dataset",
+      "label": "The full dataset",
+      "pseudocode": "Start from all observations.",
+      "python": "n = 1000\ncustomers = [{'id': i, 'week': i // 50 + 1} for i in range(n)]\nprint(len(customers), 'observations, weeks', customers[0]['week'], 'to', customers[-1]['week'])\n# prints: 1000 observations, weeks 1 to 20"
+    },
+    {
+      "id": "shuffle-or-time-order",
+      "label": "Random or chronological?",
+      "pseudocode": "Choose a split that matches how the model is used.",
+      "python": "weeks_random = [(i * 7) % 20 + 1 for i in range(20)]\nprint('random order of weeks:', weeks_random[:8], '...')\nprint('chronological order of weeks:', list(range(1, 9)), '...')\n# prints: random order of weeks: [1, 8, 15, 2, 9, 16, 3, 10] ...\n# prints: chronological order of weeks: [1, 2, 3, 4, 5, 6, 7, 8] ..."
+    },
+    {
+      "id": "training-split",
+      "label": "Training split",
+      "pseudocode": "train = earliest 70%",
+      "python": "n = 1000\ncustomers = [{'id': i, 'week': i // 50 + 1} for i in range(n)]\ntrain = [c for c in customers if c['week'] <= 14]\nvalid = [c for c in customers if 15 <= c['week'] <= 17]\ntest = [c for c in customers if c['week'] >= 18]\nprint('training customers:', len(train))\n# prints: training customers: 700"
+    },
+    {
+      "id": "validation-split",
+      "label": "Validation split",
+      "pseudocode": "validation = next 15%",
+      "python": "n = 1000\ncustomers = [{'id': i, 'week': i // 50 + 1} for i in range(n)]\ntrain = [c for c in customers if c['week'] <= 14]\nvalid = [c for c in customers if 15 <= c['week'] <= 17]\ntest = [c for c in customers if c['week'] >= 18]\nprint('validation customers:', len(valid))\n# prints: validation customers: 150"
+    },
+    {
+      "id": "test-split",
+      "label": "Test split",
+      "pseudocode": "test = latest 15%",
+      "python": "n = 1000\ncustomers = [{'id': i, 'week': i // 50 + 1} for i in range(n)]\ntrain = [c for c in customers if c['week'] <= 14]\nvalid = [c for c in customers if 15 <= c['week'] <= 17]\ntest = [c for c in customers if c['week'] >= 18]\nprint('test customers:', len(test))\n# prints: test customers: 150"
+    },
+    {
+      "id": "train-open",
+      "label": "Training is open",
+      "pseudocode": "Fit parameters on train only.",
+      "python": "n = 1000\ncustomers = [{'id': i, 'week': i // 50 + 1} for i in range(n)]\ntrain = [c for c in customers if c['week'] <= 14]\nvalid = [c for c in customers if 15 <= c['week'] <= 17]\ntest = [c for c in customers if c['week'] >= 18]\nprint('fit on', len(train), 'customers; newest week', max(c['week'] for c in train))\n# prints: fit on 700 customers; newest week 14"
+    },
+    {
+      "id": "validation-open",
+      "label": "Validation is open",
+      "pseudocode": "Choose with validation data.",
+      "python": "n = 1000\ncustomers = [{'id': i, 'week': i // 50 + 1} for i in range(n)]\ntrain = [c for c in customers if c['week'] <= 14]\nvalid = [c for c in customers if 15 <= c['week'] <= 17]\ntest = [c for c in customers if c['week'] >= 18]\nprint('choose with', len(valid), 'customers; weeks', min(c['week'] for c in valid), 'to', max(c['week'] for c in valid))\n# prints: choose with 150 customers; weeks 15 to 17"
+    },
+    {
+      "id": "test-locked",
+      "label": "Test is locked",
+      "pseudocode": "Keep the test set untouched.",
+      "python": "n = 1000\ncustomers = [{'id': i, 'week': i // 50 + 1} for i in range(n)]\ntrain = [c for c in customers if c['week'] <= 14]\nvalid = [c for c in customers if 15 <= c['week'] <= 17]\ntest = [c for c in customers if c['week'] >= 18]\ntest_opened = False\nprint('test customers:', len(test), ' opened during development:', test_opened)\n# prints: test customers: 150  opened during development: False"
+    },
+    {
+      "id": "leakage-warning",
+      "label": "Leakage warning",
+      "pseudocode": "A random split can leak the future into training.",
+      "python": "n = 1000\ncustomers = [{'id': i, 'week': i // 50 + 1} for i in range(n)]\ntrain = [c for c in customers if c['week'] <= 14]\nvalid = [c for c in customers if 15 <= c['week'] <= 17]\ntest = [c for c in customers if c['week'] >= 18]\nshuffled = [customers[(i * 37) % n] for i in range(n)]\nr_train, r_valid = shuffled[:700], shuffled[700:850]\nnewest = max(c['week'] for c in r_train)\nprint('random:', sum(c['week'] < newest for c in r_valid), ' chronological:', sum(c['week'] < max(t['week'] for t in train) for c in valid))\n# prints: random: 144  chronological: 0"
+    },
+    {
+      "id": "final-split",
+      "label": "The final split",
+      "pseudocode": "Verify sizes and that the sets do not overlap.",
+      "python": "n = 1000\ncustomers = [{'id': i, 'week': i // 50 + 1} for i in range(n)]\ntrain = [c for c in customers if c['week'] <= 14]\nvalid = [c for c in customers if 15 <= c['week'] <= 17]\ntest = [c for c in customers if c['week'] >= 18]\nids = [{c['id'] for c in part} for part in (train, valid, test)]\nprint(len(train), len(valid), len(test), ' overlap:', len(ids[0] & ids[1]) + len(ids[0] & ids[2]) + len(ids[1] & ids[2]))\n# prints: 700 150 150  overlap: 0"
+    }
+  ]
+}

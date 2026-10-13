@@ -1,0 +1,42 @@
+{
+ "candidate-models": {
+  "h": "THE CANDIDATES",
+  "t": "Three models enter the comparison: the **baseline rule**, the **logistic-style** model and the **tree-style** model at depth 4. They differ in complexity, and no winner has been chosen yet."
+ },
+ "same-data": {
+  "h": "SAME DATA FOR EVERY MODEL",
+  "t": "Each model is **fitted on the same 700 training customers** and **judged on the same 150 validation customers**. Otherwise differences in score might just be differences in data."
+ },
+ "same-protocol": {
+  "h": "ONE FAIR PROTOCOL",
+  "t": "The checklist: same training data, same validation set, **same metrics**, and the test set kept **out** of the comparison. A fair comparison changes only the model."
+ },
+ "metric-table": {
+  "h": "THE METRIC TABLE",
+  "t": "Each row is one model on the validation set. The tree has precision **0.59**, recall **0.80** and F1 **0.68**. The last column asks whether each model meets the stated goal."
+ },
+ "performance": {
+  "h": "PERFORMANCE VS THE GOAL",
+  "t": "The recall column is highlighted because it is the goal's key requirement. Recall rises **0.40 → 0.70 → 0.80**, and only the tree reaches the **0.75** that is needed."
+ },
+ "complexity": {
+  "h": "WEIGH COMPLEXITY",
+  "t": "The tree is the most complex candidate (**3**). More complexity means more to tune, explain and keep stable, so it has to earn its place with better results."
+ },
+ "interpretability": {
+  "h": "WEIGH INTERPRETABILITY",
+  "t": "All three can still be explained to retention staff, and the tree stays small at **depth 4**. Interpretability does not overturn the metric result here."
+ },
+ "select-model": {
+  "h": "SELECT THE MODEL",
+  "t": "The tree row is highlighted: it is the **only model that meets both parts of the goal**. It trades some precision (**0.64 → 0.59**) for more recall (**0.70 → 0.80**)."
+ },
+ "lock-choice": {
+  "h": "LOCK THE CHOICE",
+  "t": "The decision is written down: **tree-style, max_depth 4**. After this point nothing about the model or its settings changes."
+ },
+ "test-ready": {
+  "h": "TAKEAWAY",
+  "t": "Only now is the **test set** used, **exactly once**, on the locked model. **Remember:** compare fairly, choose against the goal, lock the decision, then run the final test."
+ }
+}

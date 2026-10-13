@@ -1,0 +1,159 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322c4e9cccef168ecff"
+  },
+  "assets": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498510"
+    }
+  },
+  "createdBy": {
+    "$oid": "000000000000000000000000"
+  },
+  "css": "body {\r\n  margin: 0;\r\n  padding: 14px;\r\n  box-sizing: border-box;\r\n  background: #0b1d16;\r\n  color: #e6f5ec;\r\n  font-family: system-ui, sans-serif;\r\n}\r\n.scene {\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 8px;\r\n}\r\n.step-label {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  letter-spacing: 0.08em;\r\n  text-transform: uppercase;\r\n  color: #a7ce65;\r\n}\r\nsvg {\r\n  width: 100%;\r\n  height: auto;\r\n  max-width: 640px;\r\n  background: #071510;\r\n  border-radius: 10px;\r\n  border: 1px solid rgba(29, 181, 132, 0.35);\r\n}\r\nsvg g,\r\nsvg line,\r\nsvg polygon,\r\nsvg path,\r\nsvg ellipse,\r\nsvg circle,\r\nsvg rect,\r\nsvg text {\r\n  transition: opacity 0.4s ease, transform 0.6s ease;\r\n}\r\n.axis {\r\n  stroke: rgba(167, 206, 101, 0.3);\r\n  stroke-width: 1;\r\n}\r\n.tick {\r\n  font-size: 10px;\r\n  fill: #8fa89c;\r\n}\r\n.lbl,\r\n.big,\r\n.note,\r\n.mono {\r\n  paint-order: stroke;\r\n  stroke: #071510;\r\n  stroke-width: 3px;\r\n  stroke-linejoin: round;\r\n}\r\n.lbl {\r\n  font-size: 12px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.lbl-g { fill: #1db584; }\r\n.lbl-y { fill: #e2b44a; }\r\n.lbl-p { fill: #f472b6; }\r\n.lbl-b { fill: #38bdf8; }\r\n.lbl-r { fill: #f87171; }\r\n.big {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.note {\r\n  font-size: 11px;\r\n  fill: #c9dccf;\r\n}\r\n.mono {\r\n  font-family: ui-monospace, Consolas, monospace;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.caption {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  line-height: 1.5;\r\n  color: #c9dccf;\r\n  min-height: 40px;\r\n}\r\n.cell rect {\r\n  fill: rgba(255, 255, 255, 0.05);\r\n  stroke: rgba(255, 255, 255, 0.28);\r\n  stroke-width: 1.2;\r\n}\r\n.cell text {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.cell.hl-row rect { fill: rgba(226, 180, 74, 0.25); stroke: #e2b44a; }\r\n.cell.hl-col rect { fill: rgba(29, 181, 132, 0.25); stroke: #1db584; }\r\n.cell.hl-both rect { fill: rgba(244, 114, 182, 0.28); stroke: #f472b6; }\r\n.dim { opacity: 0.25; }\r\n.dash { stroke-dasharray: 5 4; }\r\n.fillA { fill: rgba(56, 189, 248, 0.16); stroke: #38bdf8; stroke-width: 2; }\r\n.fillB { fill: rgba(244, 114, 182, 0.18); stroke: #f472b6; stroke-width: 2; }\r\n.fillG { fill: rgba(29, 181, 132, 0.16); stroke: #1db584; stroke-width: 2; }\r\n.contour { stroke: rgba(56, 189, 248, 0.45); stroke-width: 1.5; }\n.curve { fill: none; stroke: #38bdf8; stroke-width: 3; }\n.curve-y { fill: none; stroke: #e2b44a; stroke-width: 3; }\n.curve-p { fill: none; stroke: #f472b6; stroke-width: 3; }\n.curve-g { fill: none; stroke: #1db584; stroke-width: 3; }\n.ghost { fill: none; stroke: rgba(201, 220, 207, 0.4); stroke-width: 2; }\n.lbl-w { fill: #e6f5ec; }\n.lbl-s { font-size: 11px; font-weight: 600; fill: #c9dccf; }\n\n/* ── explanation panel (shared by every generated ML animation) ── */\n.explain {\n  box-sizing: border-box;\n  max-width: 640px;\n  margin-top: 4px;\n  padding: 14px 18px 16px;\n  min-height: 150px;\n  border-radius: 12px;\n  background: rgba(29, 181, 132, 0.10);\n  border: 1px solid rgba(29, 181, 132, 0.45);\n  border-left: 5px solid #1db584;\n}\n.explain-h {\n  margin: 0 0 8px;\n  font-size: 13px;\n  font-weight: 800;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.explain-t {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.55;\n  color: #f1faf4;\n}\n.explain-t strong {\n  font-weight: 800;\n  color: #ffd98a;\n}\n\n",
+  "html": "<div class=\"scene\">\n  <p class=\"step-label\" id=\"step-label\"></p>\n  <svg id=\"scene\" viewBox=\"0 0 640 360\" role=\"img\" aria-label=\"Taylor approximation: slope plus bend\"></svg>\n  <section class=\"explain\" aria-live=\"polite\">\n    <h3 class=\"explain-h\" id=\"explain-h\"></h3>\n    <p class=\"explain-t\" id=\"caption\"></p>\n  </section>\n</div>\n",
+  "js": "(function () {\n  // ── shared helpers (SVG, tweening) ─────────────────────────────────────────\r\n  var NS = \"http://www.w3.org/2000/svg\";\r\n  var svg = document.getElementById(\"scene\");\r\n  var labelEl = document.getElementById(\"step-label\");\r\n  var captionEl = document.getElementById(\"caption\");\r\n\r\n  function el(name, attrs, parent) {\r\n    var node = document.createElementNS(NS, name);\r\n    for (var key in attrs) node.setAttribute(key, attrs[key]);\r\n    if (parent) parent.appendChild(node);\r\n    return node;\r\n  }\r\n  function txt(parent, x, y, cls, str, anchor) {\r\n    var t = el(\"text\", { x: x, y: y, class: cls }, parent);\r\n    if (anchor) t.setAttribute(\"text-anchor\", anchor);\r\n    t.textContent = str;\r\n    return t;\r\n  }\r\n  function show(node, on) {\r\n    node.setAttribute(\"opacity\", on ? \"1\" : \"0\");\r\n  }\r\n  function place(node, x, y) {\r\n    node.style.transform = \"translate(\" + x + \"px,\" + y + \"px)\";\r\n  }\r\n  function setLine(node, x1, y1, x2, y2) {\r\n    node.setAttribute(\"x1\", x1);\r\n    node.setAttribute(\"y1\", y1);\r\n    node.setAttribute(\"x2\", x2);\r\n    node.setAttribute(\"y2\", y2);\r\n  }\r\n  function lerp(a, b, e) {\r\n    return a + (b - a) * e;\r\n  }\r\n  function round1(v) {\r\n    return (Math.round(v * 10) / 10).toFixed(1);\r\n  }\r\n\r\n  // Eased animation. fn(e) is called with e from 0 to 1. Without\r\n  // requestAnimationFrame (or with ms = 0) it jumps straight to fn(1).\r\n  var animTokens = {};\r\n  function anim(key, ms, fn) {\r\n    var token = (animTokens[key] || 0) + 1;\r\n    animTokens[key] = token;\r\n    if (typeof requestAnimationFrame !== \"function\" || ms <= 0) {\r\n      fn(1);\r\n      return;\r\n    }\r\n    var start = null;\r\n    function frame(now) {\r\n      if (animTokens[key] !== token) return;\r\n      if (start === null) start = now;\r\n      var p = Math.min(1, (now - start) / ms);\r\n      var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;\r\n      fn(e);\r\n      if (p < 1) requestAnimationFrame(frame);\r\n    }\r\n    requestAnimationFrame(frame);\r\n  }\r\n\r\n  // Arrowheads, one marker per colour.\r\n  var COLORS = { g: \"#1DB584\", y: \"#E2B44A\", p: \"#F472B6\", b: \"#38BDF8\", w: \"#c9dccf\", r: \"#F87171\" };\r\n  var defs = el(\"defs\", {}, svg);\r\n  Object.keys(COLORS).forEach(function (k) {\r\n    var m = el(\"marker\", { id: \"ah-\" + k, viewBox: \"0 0 10 10\", refX: 9, refY: 5, markerUnits: \"userSpaceOnUse\", markerWidth: 13, markerHeight: 13, orient: \"auto\" }, defs);\r\n    el(\"path\", { d: \"M0 0 L10 5 L0 10 Z\", fill: COLORS[k] }, m);\r\n  });\r\n  function arrow(parent, colorKey, width) {\r\n    return el(\"line\", { x1: 0, y1: 0, x2: 0, y2: 0, stroke: COLORS[colorKey], \"stroke-width\": width || 3, \"marker-end\": \"url(#ah-\" + colorKey + \")\", \"stroke-linecap\": \"round\" }, parent);\r\n  }\r\n  function polygon(parent, cls) {\r\n    return el(\"polygon\", { points: \"\", class: cls }, parent);\r\n  }\r\n  function setPoly(node, pts) {\r\n    node.setAttribute(\"points\", pts.map(function (p) { return p[0].toFixed(1) + \",\" + p[1].toFixed(1); }).join(\" \"));\r\n  }\r\n  function lerpPts(a, b, e) {\r\n    return a.map(function (p, i) { return [lerp(p[0], b[i][0], e), lerp(p[1], b[i][1], e)]; });\r\n  }\r\n  // Maps maths coordinates (x right, y up) to screen pixels.\r\n  function makePlane(cx, cy, s) {\r\n    return {\r\n      x: function (v) { return cx + s * v; },\r\n      y: function (v) { return cy - s * v; },\r\n      pt: function (p) { return [cx + s * p[0], cy - s * p[1]]; },\r\n      s: s, cx: cx, cy: cy\r\n    };\r\n  }\r\n  function axes(parent, plane, xr, yr) {\r\n    el(\"line\", { x1: plane.x(-xr), y1: plane.y(0), x2: plane.x(xr), y2: plane.y(0), class: \"axis\" }, parent);\r\n    el(\"line\", { x1: plane.x(0), y1: plane.y(-yr), x2: plane.x(0), y2: plane.y(yr), class: \"axis\" }, parent);\r\n  }\r\n\n  // ── Module 3 helpers: graphs, curves, contour plane ───────────────────────\n  // makeGraph maps maths values to pixels with separate x and y scales.\n  function makeGraph(ox, oy, sx, sy) {\n    return {\n      ox: ox, oy: oy, sx: sx, sy: sy,\n      x: function (v) { return ox + sx * v; },\n      y: function (v) { return oy - sy * v; }\n    };\n  }\n  function curveD(g, f, a, b, n) {\n    var d = \"\";\n    for (var i = 0; i <= n; i++) {\n      var v = a + ((b - a) * i) / n;\n      d += (i ? \" L \" : \"M \") + g.x(v).toFixed(1) + \" \" + g.y(f(v)).toFixed(1);\n    }\n    return d;\n  }\n  function setD(node, d) {\n    node.setAttribute(\"d\", d);\n  }\n  function fmt(v, n) {\n    return (Math.round(v * 100000) / 100000).toFixed(n === undefined ? 1 : n);\n  }\n  function drawAxes(parent, g, xmax, ymax, xticks, yticks) {\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(xmax), y2: g.y(0), class: \"axis\" }, parent);\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(0), y2: g.y(ymax), class: \"axis\" }, parent);\n    (xticks || []).forEach(function (t) { txt(parent, g.x(t), g.y(0) + 15, \"tick\", String(t), \"middle\"); });\n    (yticks || []).forEach(function (t) { txt(parent, g.x(0) - 7, g.y(t) + 4, \"tick\", String(t), \"end\"); });\n  }\n  function card(parent, x, y, w, h, cls) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: 10, class: cls || \"fillG\" }, parent);\n  }\n  function ring(parent, cx, cy, rx, ry, cls) {\n    return el(\"ellipse\", { cx: cx, cy: cy, rx: rx, ry: ry, fill: \"none\", class: cls || \"contour\" }, parent);\n  }\n  function clipTo(id, x, y, w, h) {\n    var c = el(\"clipPath\", { id: id }, defs);\n    el(\"rect\", { x: x, y: y, width: w, height: h }, c);\n  }\n\n  var EXPLAIN = {\"original-function\":{\"h\":\"WHAT YOU ARE LOOKING AT\",\"t\":\"Take **f(x) = x³**, a curve that bends upward. We want a **simple formula that predicts f near one chosen point** without computing the whole function.\"},\"expansion-point\":{\"h\":\"CHOOSE THE EXPANSION POINT\",\"t\":\"Pick the point **a = 1**, where **f(1) = 1**. Everything we build will be centered on this point and is **most accurate close to it**.\"},\"first-order\":{\"h\":\"FIRST ORDER: THE TANGENT LINE\",\"t\":\"Use the value and the slope there. The slope is **f′(1) = 3**, so **f(x) ≈ 1 + 3(x − 1)**. This is the straight-line approximation.\"},\"first-order-error\":{\"h\":\"WHERE THE STRAIGHT LINE FALLS SHORT\",\"t\":\"At **x = 1.5** the true value is **3.375** but the line says **2.5**, off by **0.875**. The curve is bending upward and the line cannot follow.\"},\"curvature\":{\"h\":\"CURVATURE: THE SLOPE KEEPS CHANGING\",\"t\":\"Look at the slope along the curve: about **1.1 at x = 0.6, 3 at x = 1, about 5.9 at x = 1.4**. The slope itself grows. How fast it changes is the **curvature, f″ = 6x**, which is 6 at x = 1.\"},\"second-order\":{\"h\":\"SECOND ORDER: ADD THE BEND\",\"t\":\"Add a term for the bend: **½ × f″(1) × (x − 1)² = 3(x − 1)²**. Now **f(x) ≈ 1 + 3(x − 1) + 3(x − 1)²**, and the pink curve follows the bend.\"},\"improved-approximation\":{\"h\":\"THE SECOND-ORDER VERSION IS CLOSER\",\"t\":\"At **x = 2** the truth is **8**: first order says 4, second order says **7**. At **x = 1.5** the truth is 3.375: first order gives 2.5 and second order **3.25**.\"},\"ml-connection\":{\"h\":\"TAKEAWAY\",\"t\":\"A gradient alone is a **first-order** picture: it knows the slope, not how the slope changes. **Curvature tells how far a gradient step can be trusted**, which is why second-order information matters in training.\"}};\n  // ── scene ──\n  var steps = [\r\n    { id: \"original-function\", label: \"A curved function to approximate\", caption: \"Take f(x) = x³, a curve that bends upward. We want a simple formula that predicts f near one chosen point without computing the whole function.\" },\r\n    { id: \"expansion-point\", label: \"Choose the expansion point\", caption: \"Pick the point a = 1, where f(1) = 1. Everything we build will be centred on this point and is most accurate close to it.\" },\r\n    { id: \"first-order\", label: \"First order: the tangent line\", caption: \"Use the value and the slope there. The slope is f'(1) = 3, so f(x) ≈ 1 + 3(x − 1). This is the straight-line approximation.\" },\r\n    { id: \"first-order-error\", label: \"Where the straight line falls short\", caption: \"At x = 1.5 the true value is 3.375 but the line says 2.5, off by 0.875. The curve is bending upward and the line cannot follow.\" },\r\n    { id: \"curvature\", label: \"Curvature: the slope keeps changing\", caption: \"Look at the slope along the curve: about 1.1 at x = 0.6, 3 at x = 1, about 5.9 at x = 1.4. The slope itself grows. How fast it changes is the curvature, f'' = 6x, which is 6 at x = 1.\" },\r\n    { id: \"second-order\", label: \"Second order: add the bend\", caption: \"Add a term for the bend: ½ × f''(1) × (x − 1)² = 3(x − 1)². Now f(x) ≈ 1 + 3(x − 1) + 3(x − 1)², and the pink curve follows the bend.\" },\r\n    { id: \"improved-approximation\", label: \"The second-order version is closer\", caption: \"At x = 2 the truth is 8. First order says 4, second order says 7. At x = 1.5 the truth is 3.375, first order gives 2.5 and second order 3.25.\" },\r\n    { id: \"ml-connection\", label: \"Why a model cares\", caption: \"A gradient alone is a first-order picture: it knows the slope, not how the slope changes. Curvature tells how far a gradient step can be trusted, which is why second-order information matters in training.\" }\r\n  ];\r\n\r\n  function f(x) { return x * x * x; }\r\n  function first(x) { return 1 + 3 * (x - 1); }\r\n  function second(x) { return 1 + 3 * (x - 1) + 3 * (x - 1) * (x - 1); }\r\n  var g = makeGraph(44, 318, 130, 30);\r\n  drawAxes(svg, g, 2.3, 9.8, [0, 0.5, 1, 1.5, 2], [0, 2, 4, 6, 8]);\r\n  txt(svg, g.x(2.3), g.y(0) + 28, \"note\", \"x\", \"end\");\r\n  txt(svg, g.x(0) + 8, g.y(9.8) - 2, \"note\", \"f(x) = x³\", \"start\");\r\n\r\n  var band = el(\"rect\", { x: g.x(0.8), y: g.y(9.5), width: g.x(1.2) - g.x(0.8), height: g.y(0) - g.y(9.5), fill: \"rgba(29,181,132,0.16)\" }, svg);\r\n  var bandLbl = txt(svg, g.x(1), g.y(9.5) - 4, \"lbl lbl-g\", \"both agree here\", \"middle\");\r\n  el(\"path\", { class: \"curve\", d: curveD(g, f, 0, 2.1, 60) }, svg);\r\n  var firstLine = el(\"line\", { stroke: \"#e2b44a\", \"stroke-width\": 3, \"stroke-linecap\": \"round\" }, svg);\r\n  setLine(firstLine, g.x(0.45), g.y(first(0.45)), g.x(2.1), g.y(first(2.1)));\r\n  var secondPath = el(\"path\", { class: \"curve-p\", d: curveD(g, second, 0.35, 2.1, 40) }, svg);\r\n  var firstLbl = txt(svg, g.x(2.1) + 8, g.y(first(2.1)) + 4, \"lbl lbl-y\", \"1 + 3(x − 1)\", \"start\");\r\n  var secondLbl = txt(svg, g.x(1.75), g.y(2.0), \"lbl lbl-p\", \"+ 3(x − 1)²\", \"start\");\r\n\r\n  var slopes = el(\"g\", {}, svg);\r\n  [0.6, 1.0, 1.4].forEach(function (x) {\r\n    var m = 3 * x * x;\r\n    var ln = el(\"line\", { stroke: \"#1db584\", \"stroke-width\": 3, \"stroke-linecap\": \"round\" }, slopes);\r\n    setLine(ln, g.x(x - 0.17), g.y(f(x) - m * 0.17), g.x(x + 0.17), g.y(f(x) + m * 0.17));\r\n    el(\"circle\", { cx: g.x(x), cy: g.y(f(x)), r: 4.5, fill: \"#1db584\" }, slopes);\r\n    txt(slopes, x < 0.8 ? g.x(x) - 10 : g.x(x) + 8, g.y(f(x)) + (x < 0.8 ? -10 : x < 1.2 ? 22 : 4), \"lbl lbl-g\", \"slope \" + fmt(m, 1), x < 0.8 ? \"end\" : \"start\");\r\n  });\r\n\r\n  var pt = el(\"circle\", { cx: g.x(1), cy: g.y(1), r: 7, fill: \"#ffffff\", stroke: \"#071510\", \"stroke-width\": 2 }, svg);\r\n  var ptLbl = txt(svg, g.x(1) + 12, g.y(1) + 20, \"lbl\", \"a = 1, f(a) = 1\", \"start\");\r\n\r\n  // Comparison dots at x = 1.5 (error) and x = 2 (improved).\r\n  var cmp = el(\"g\", {}, svg);\r\n  var cmpGap = el(\"line\", { stroke: \"#f87171\", \"stroke-width\": 4, \"stroke-linecap\": \"round\" }, cmp);\r\n  var cmpTrue = el(\"circle\", { r: 6, fill: \"#38bdf8\", stroke: \"#071510\", \"stroke-width\": 2 }, cmp);\r\n  var cmpFirst = el(\"circle\", { r: 6, fill: \"#e2b44a\", stroke: \"#071510\", \"stroke-width\": 2 }, cmp);\r\n  var cmpSecond = el(\"circle\", { r: 6, fill: \"#f472b6\", stroke: \"#071510\", \"stroke-width\": 2 }, cmp);\r\n  var cmpL1 = txt(cmp, 0, 0, \"lbl lbl-b\", \"\", \"end\");\r\n  var cmpL2 = txt(cmp, 0, 0, \"lbl lbl-y\", \"\", \"end\");\r\n  var cmpL3 = txt(cmp, 0, 0, \"lbl lbl-p\", \"\", \"end\");\r\n  var cmpL4 = txt(cmp, 0, 0, \"lbl lbl-r\", \"\", \"start\");\r\n\r\n  var panel = el(\"g\", {}, svg);\r\n  card(panel, 360, 30, 265, 132, \"fillG\");\r\n  var p1 = txt(panel, 492, 56, \"note\", \"\", \"middle\");\r\n  var p2 = txt(panel, 492, 84, \"mono\", \"\", \"middle\");\r\n  var p3 = txt(panel, 492, 108, \"mono\", \"\", \"middle\");\r\n  var p4 = txt(panel, 492, 134, \"big\", \"\", \"middle\");\r\n  var p5 = txt(panel, 492, 154, \"note\", \"\", \"middle\");\r\n\r\n  function placeCmp(x, withSecond) {\r\n    var yT = g.y(f(x)), y1 = g.y(first(x)), y2 = g.y(second(x));\r\n    cmpTrue.setAttribute(\"cx\", g.x(x)); cmpTrue.setAttribute(\"cy\", yT);\r\n    cmpFirst.setAttribute(\"cx\", g.x(x)); cmpFirst.setAttribute(\"cy\", y1);\r\n    cmpSecond.setAttribute(\"cx\", g.x(x)); cmpSecond.setAttribute(\"cy\", y2);\r\n    setLine(cmpGap, g.x(x), yT, g.x(x), y1);\r\n    show(cmpSecond, withSecond); show(cmpL3, withSecond);\r\n    var right = withSecond;\r\n    var lx = right ? g.x(x) + 12 : g.x(x) - 12;\r\n    [cmpL1, cmpL2, cmpL3].forEach(function (n) { n.setAttribute(\"text-anchor\", right ? \"start\" : \"end\"); n.setAttribute(\"x\", lx); });\r\n    cmpL1.setAttribute(\"y\", yT + 4);\r\n    cmpL1.textContent = right ? \"true \" + fmt(f(x), 0) : \"true \" + fmt(f(x), 3);\r\n    cmpL2.setAttribute(\"y\", y1 + 4);\r\n    cmpL2.textContent = right ? \"1st \" + fmt(first(x), 0) : \"first order \" + fmt(first(x), 1);\r\n    cmpL3.setAttribute(\"y\", y2 + 4);\r\n    cmpL3.textContent = \"2nd \" + fmt(second(x), 0);\r\n    cmpL4.setAttribute(\"x\", g.x(x) + 10); cmpL4.setAttribute(\"y\", (yT + y1) / 2 + 4);\r\n    cmpL4.textContent = \"off by \" + fmt(f(x) - first(x), 3);\r\n  }\r\n\r\n  function render(index, id) {\r\n    var i = index;\r\n    show(pt, i >= 1); show(ptLbl, i === 1);\r\n    show(firstLine, i >= 2); show(firstLbl, i === 2);\r\n    firstLine.setAttribute(\"opacity\", i === 4 ? \"0.35\" : i >= 2 ? \"1\" : \"0\");\r\n    show(slopes, i === 4);\r\n    show(secondPath, i >= 5); show(secondLbl, i === 5);\r\n    show(cmp, i === 3 || i === 6);\r\n    show(band, i === 7); show(bandLbl, i === 7);\r\n    p1.textContent = \"\"; p2.textContent = \"\"; p3.textContent = \"\"; p4.textContent = \"\"; p5.textContent = \"\";\r\n    if (i === 3) {\r\n      placeCmp(1.5, false);\r\n      p1.textContent = \"at x = 1.5\";\r\n      p2.textContent = \"true:  3.375\";\r\n      p3.textContent = \"line:  2.5\";\r\n      p4.textContent = \"off by 0.875\";\r\n    } else if (i === 6) {\r\n      placeCmp(2, true);\r\n      show(cmpL4, false);\r\n      show(cmpGap, false);\r\n      p1.textContent = \"x = 1.5  (true 3.375)\";\r\n      p2.textContent = \"1st 2.5  ·  2nd 3.25\";\r\n      p3.textContent = \"x = 2  (true 8)\";\r\n      p4.textContent = \"1st 4  ·  2nd 7\";\r\n      p5.textContent = \"second order is much closer\";\r\n    }\r\n    if (i === 2) { p1.textContent = \"value + slope × distance\"; p2.textContent = \"f(1) = 1, f'(1) = 3\"; p3.textContent = \"1 + 3(x − 1)\"; }\r\n    if (i === 4) { p1.textContent = \"the slope keeps growing\"; p2.textContent = \"f'(x) = 3x²\"; p3.textContent = \"f''(x) = 6x, so f''(1) = 6\"; }\r\n    if (i === 5) { p1.textContent = \"second order\"; p2.textContent = \"1 + 3(x − 1)\"; p3.textContent = \"+ ½·6·(x − 1)²\"; p4.textContent = \"= + 3(x − 1)²\"; }\r\n    if (i === 7) { p1.textContent = \"gradient = first order\"; p2.textContent = \"knows the slope only\"; p3.textContent = \"curvature = how far to trust it\"; }\r\n    if (i === 3) { show(cmpL4, true); show(cmpGap, true); }\r\n    show(panel, i >= 2);\r\n  }\r\n\n\n  // ── shared runtime: stepping, explanation panel, educational autoplay pacing, bridge ──\n  var current = 0;\n  var explainHeadEl = document.getElementById(\"explain-h\");\n\n  // **bold** markers in an explanation become <strong> nodes (built with DOM calls, never innerHTML).\n  function setRich(node, str) {\n    node.textContent = \"\";\n    var parts = String(str).split(\"**\");\n    for (var i = 0; i < parts.length; i++) {\n      if (parts[i] === \"\") continue;\n      var seg = document.createElement(i % 2 ? \"strong\" : \"span\");\n      seg.textContent = parts[i];\n      node.appendChild(seg);\n    }\n  }\n\n  function explanationFor(index) {\n    var ex = (typeof EXPLAIN === \"object\" && EXPLAIN) ? EXPLAIN[steps[index].id] : null;\n    return ex || { h: \"WHAT IS HAPPENING\", t: steps[index].caption };\n  }\n\n  // Autoplay pace: 4.5 to 10.5 seconds per step, longer for longer explanations, so a learner can read.\n  function stepMs(index) {\n    var words = String(explanationFor(index).t).replace(/\\*\\*/g, \"\").split(/\\s+/).length;\n    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));\n  }\n\n  function renderStep(index) {\n    var ex = explanationFor(index);\n    labelEl.textContent = steps[index].label;\n    if (explainHeadEl) explainHeadEl.textContent = ex.h;\n    setRich(captionEl, ex.t);\n    render(index, steps[index].id);\n  }\n\n  function goTo(index) {\n    if (index < 0 || index >= steps.length) return;\n    current = index;\n    renderStep(current);\n    if (window.ReagvisBridge) window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n\n  renderStep(current);\n\n  // Autoplay: exactly one timer, one step per tick, stops on the final step.\n  // PLAY on the final step restarts from the first step and plays again.\n  var timer = null;\n\n  function stopAuto() {\n    if (timer !== null) {\n      clearTimeout(timer);\n      timer = null;\n    }\n  }\n\n  function scheduleNext() {\n    timer = setTimeout(function () {\n      timer = null;\n      if (current >= steps.length - 1) return;\n      goTo(current + 1);\n      if (current < steps.length - 1) scheduleNext();\n    }, stepMs(current));\n  }\n\n  function startAuto() {\n    if (timer !== null) return;\n    if (current >= steps.length - 1) goTo(0);\n    scheduleNext();\n  }\n\n  window.addEventListener(\"pagehide\", stopAuto);\n\n  window.ReagvisAnimation = {\n    stepDuration: stepMs,\n    onCommand: function (type, stepId) {\n      if (type === \"PLAY\") startAuto();\n      else if (type === \"PAUSE\") stopAuto();\n      else if (type === \"NEXT\") { stopAuto(); goTo(current + 1); }\n      else if (type === \"PREVIOUS\") { stopAuto(); goTo(current - 1); }\n      else if (type === \"RESET\") { stopAuto(); goTo(0); }\n      else if (type === \"GOTO_STEP\") {\n        stopAuto();\n        for (var i = 0; i < steps.length; i++) {\n          if (steps[i].id === stepId) { goTo(i); break; }\n        }\n      }\n    },\n  };\n\n  if (window.ReagvisBridge) {\n    window.ReagvisBridge.ready();\n    window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n})();\n",
+  "lastFrozenContentHash": null,
+  "lastFrozenRevisionId": null,
+  "manifest": {
+    "bridgeVersion": {
+      "$numberInt": "1"
+    },
+    "capabilities": [
+      "play",
+      "pause",
+      "next",
+      "previous",
+      "reset",
+      "gotoStep"
+    ],
+    "heightPx": {
+      "$numberInt": "590"
+    },
+    "traceEvents": [
+      "original-function",
+      "expansion-point",
+      "first-order",
+      "first-order-error",
+      "curvature",
+      "second-order",
+      "improved-approximation",
+      "ml-connection"
+    ]
+  },
+  "packageId": "8d10dfd5-5861-4e7b-b2a7-8c58e82c0343",
+  "packageTrace": {
+    "steps": [
+      {
+        "animationEvent": "original-function",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Take a curved function f(x) = x cubed.",
+          "python": "def f(x):\n    return x ** 3\n\nprint(f(1), f(1.5), f(2))   # 1 3.375 8"
+        },
+        "id": "original-function",
+        "label": "A curved function to approximate"
+      },
+      {
+        "animationEvent": "expansion-point",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Choose the point a where we know the value of f.",
+          "python": "def f(x):\n    return x ** 3\n\na = 1.0\nprint(f(a))   # 1.0"
+        },
+        "id": "expansion-point",
+        "label": "Choose the expansion point"
+      },
+      {
+        "animationEvent": "first-order",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "first order = f(a) + slope * (x - a)",
+          "python": "def f(x):\n    return x ** 3\n\ndef f_slope(x):\n    return 3 * x ** 2\n\na = 1.0\ndef first_order(x):\n    return f(a) + f_slope(a) * (x - a)\n\nprint(first_order(1.5))   # 2.5"
+        },
+        "id": "first-order",
+        "label": "First order: the tangent line"
+      },
+      {
+        "animationEvent": "first-order-error",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Compare the first-order value with the true value at x = 1.5.",
+          "python": "def f(x):\n    return x ** 3\n\nfirst = 1 + 3 * (1.5 - 1)\nprint(f(1.5), first, f(1.5) - first)   # 3.375 2.5 0.875"
+        },
+        "id": "first-order-error",
+        "label": "Where the straight line falls short"
+      },
+      {
+        "animationEvent": "curvature",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Curvature is how fast the slope itself changes: the second derivative.",
+          "python": "def f_slope(x):\n    return 3 * x ** 2\n\ndef f_curvature(x):\n    return 6 * x\n\nfor x in [0.6, 1.0, 1.4]:\n    print(x, round(f_slope(x), 2))   # 0.6 1.08 / 1.0 3.0 / 1.4 5.88\nprint(f_curvature(1.0))   # 6.0"
+        },
+        "id": "curvature",
+        "label": "Curvature: the slope keeps changing"
+      },
+      {
+        "animationEvent": "second-order",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "second order = first order + 0.5 * curvature * (x - a) squared",
+          "python": "a = 1.0\ndef second_order(x):\n    return 1 + 3 * (x - a) + 0.5 * 6 * (x - a) ** 2\n\nprint(second_order(1.5))   # 3.25"
+        },
+        "id": "second-order",
+        "label": "Second order: add the bend"
+      },
+      {
+        "animationEvent": "improved-approximation",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Compare the true value, first order and second order at several points.",
+          "python": "def f(x):\n    return x ** 3\n\nfor x in [1.5, 2.0]:\n    first = 1 + 3 * (x - 1)\n    second = first + 3 * (x - 1) ** 2\n    print(x, f(x), first, second)\n# 1.5 3.375 2.5 3.25 / 2.0 8.0 4.0 7.0"
+        },
+        "id": "improved-approximation",
+        "label": "The second-order version is closer"
+      },
+      {
+        "animationEvent": "ml-connection",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "The gradient is the slope (first order). Curvature says how far a gradient step stays trustworthy.",
+          "python": "def f(x):\n    return x ** 3\n\nstep = 0.5\nfirst = 1 + 3 * step\nprint(f(1 + step), first)   # 3.375 2.5: a bigger step makes the slope-only guess worse"
+        },
+        "id": "ml-connection",
+        "label": "Why a model cares"
+      }
+    ],
+    "version": {
+      "$numberInt": "1"
+    }
+  },
+  "revision": {
+    "$numberInt": "5"
+  },
+  "revisionId": "r2",
+  "sourceKind": "zip",
+  "status": "frozen",
+  "title": "ML Module 3 — Taylor Approximation",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498510"
+    }
+  },
+  "updatedBy": {
+    "$oid": "000000000000000000000000"
+  }
+}

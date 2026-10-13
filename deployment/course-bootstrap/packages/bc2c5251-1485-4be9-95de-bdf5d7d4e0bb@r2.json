@@ -1,0 +1,147 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322c4e9cccef168ecfd"
+  },
+  "assets": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498508"
+    }
+  },
+  "createdBy": {
+    "$oid": "000000000000000000000000"
+  },
+  "css": "body {\r\n  margin: 0;\r\n  padding: 14px;\r\n  box-sizing: border-box;\r\n  background: #0b1d16;\r\n  color: #e6f5ec;\r\n  font-family: system-ui, sans-serif;\r\n}\r\n.scene {\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 8px;\r\n}\r\n.step-label {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  letter-spacing: 0.08em;\r\n  text-transform: uppercase;\r\n  color: #a7ce65;\r\n}\r\nsvg {\r\n  width: 100%;\r\n  height: auto;\r\n  max-width: 640px;\r\n  background: #071510;\r\n  border-radius: 10px;\r\n  border: 1px solid rgba(29, 181, 132, 0.35);\r\n}\r\nsvg g,\r\nsvg line,\r\nsvg polygon,\r\nsvg path,\r\nsvg ellipse,\r\nsvg circle,\r\nsvg rect,\r\nsvg text {\r\n  transition: opacity 0.4s ease, transform 0.6s ease;\r\n}\r\n.axis {\r\n  stroke: rgba(167, 206, 101, 0.3);\r\n  stroke-width: 1;\r\n}\r\n.tick {\r\n  font-size: 10px;\r\n  fill: #8fa89c;\r\n}\r\n.lbl,\r\n.big,\r\n.note,\r\n.mono {\r\n  paint-order: stroke;\r\n  stroke: #071510;\r\n  stroke-width: 3px;\r\n  stroke-linejoin: round;\r\n}\r\n.lbl {\r\n  font-size: 12px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.lbl-g { fill: #1db584; }\r\n.lbl-y { fill: #e2b44a; }\r\n.lbl-p { fill: #f472b6; }\r\n.lbl-b { fill: #38bdf8; }\r\n.lbl-r { fill: #f87171; }\r\n.big {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.note {\r\n  font-size: 11px;\r\n  fill: #c9dccf;\r\n}\r\n.mono {\r\n  font-family: ui-monospace, Consolas, monospace;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.caption {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  line-height: 1.5;\r\n  color: #c9dccf;\r\n  min-height: 40px;\r\n}\r\n.cell rect {\r\n  fill: rgba(255, 255, 255, 0.05);\r\n  stroke: rgba(255, 255, 255, 0.28);\r\n  stroke-width: 1.2;\r\n}\r\n.cell text {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.cell.hl-row rect { fill: rgba(226, 180, 74, 0.25); stroke: #e2b44a; }\r\n.cell.hl-col rect { fill: rgba(29, 181, 132, 0.25); stroke: #1db584; }\r\n.cell.hl-both rect { fill: rgba(244, 114, 182, 0.28); stroke: #f472b6; }\r\n.dim { opacity: 0.25; }\r\n.dash { stroke-dasharray: 5 4; }\r\n.fillA { fill: rgba(56, 189, 248, 0.16); stroke: #38bdf8; stroke-width: 2; }\r\n.fillB { fill: rgba(244, 114, 182, 0.18); stroke: #f472b6; stroke-width: 2; }\r\n.fillG { fill: rgba(29, 181, 132, 0.16); stroke: #1db584; stroke-width: 2; }\r\n.contour { stroke: rgba(56, 189, 248, 0.45); stroke-width: 1.5; }\n.curve { fill: none; stroke: #38bdf8; stroke-width: 3; }\n.curve-y { fill: none; stroke: #e2b44a; stroke-width: 3; }\n.curve-p { fill: none; stroke: #f472b6; stroke-width: 3; }\n.curve-g { fill: none; stroke: #1db584; stroke-width: 3; }\n.ghost { fill: none; stroke: rgba(201, 220, 207, 0.4); stroke-width: 2; }\n.lbl-w { fill: #e6f5ec; }\n.lbl-s { font-size: 11px; font-weight: 600; fill: #c9dccf; }\n\n/* ── explanation panel (shared by every generated ML animation) ── */\n.explain {\n  box-sizing: border-box;\n  max-width: 640px;\n  margin-top: 4px;\n  padding: 14px 18px 16px;\n  min-height: 150px;\n  border-radius: 12px;\n  background: rgba(29, 181, 132, 0.10);\n  border: 1px solid rgba(29, 181, 132, 0.45);\n  border-left: 5px solid #1db584;\n}\n.explain-h {\n  margin: 0 0 8px;\n  font-size: 13px;\n  font-weight: 800;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.explain-t {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.55;\n  color: #f1faf4;\n}\n.explain-t strong {\n  font-weight: 800;\n  color: #ffd98a;\n}\n\n",
+  "html": "<div class=\"scene\">\n  <p class=\"step-label\" id=\"step-label\"></p>\n  <svg id=\"scene\" viewBox=\"0 0 640 360\" role=\"img\" aria-label=\"Multivariate functions: from a curve to many weights\"></svg>\n  <section class=\"explain\" aria-live=\"polite\">\n    <h3 class=\"explain-h\" id=\"explain-h\"></h3>\n    <p class=\"explain-t\" id=\"caption\"></p>\n  </section>\n</div>\n",
+  "js": "(function () {\n  // ── shared helpers (SVG, tweening) ─────────────────────────────────────────\r\n  var NS = \"http://www.w3.org/2000/svg\";\r\n  var svg = document.getElementById(\"scene\");\r\n  var labelEl = document.getElementById(\"step-label\");\r\n  var captionEl = document.getElementById(\"caption\");\r\n\r\n  function el(name, attrs, parent) {\r\n    var node = document.createElementNS(NS, name);\r\n    for (var key in attrs) node.setAttribute(key, attrs[key]);\r\n    if (parent) parent.appendChild(node);\r\n    return node;\r\n  }\r\n  function txt(parent, x, y, cls, str, anchor) {\r\n    var t = el(\"text\", { x: x, y: y, class: cls }, parent);\r\n    if (anchor) t.setAttribute(\"text-anchor\", anchor);\r\n    t.textContent = str;\r\n    return t;\r\n  }\r\n  function show(node, on) {\r\n    node.setAttribute(\"opacity\", on ? \"1\" : \"0\");\r\n  }\r\n  function place(node, x, y) {\r\n    node.style.transform = \"translate(\" + x + \"px,\" + y + \"px)\";\r\n  }\r\n  function setLine(node, x1, y1, x2, y2) {\r\n    node.setAttribute(\"x1\", x1);\r\n    node.setAttribute(\"y1\", y1);\r\n    node.setAttribute(\"x2\", x2);\r\n    node.setAttribute(\"y2\", y2);\r\n  }\r\n  function lerp(a, b, e) {\r\n    return a + (b - a) * e;\r\n  }\r\n  function round1(v) {\r\n    return (Math.round(v * 10) / 10).toFixed(1);\r\n  }\r\n\r\n  // Eased animation. fn(e) is called with e from 0 to 1. Without\r\n  // requestAnimationFrame (or with ms = 0) it jumps straight to fn(1).\r\n  var animTokens = {};\r\n  function anim(key, ms, fn) {\r\n    var token = (animTokens[key] || 0) + 1;\r\n    animTokens[key] = token;\r\n    if (typeof requestAnimationFrame !== \"function\" || ms <= 0) {\r\n      fn(1);\r\n      return;\r\n    }\r\n    var start = null;\r\n    function frame(now) {\r\n      if (animTokens[key] !== token) return;\r\n      if (start === null) start = now;\r\n      var p = Math.min(1, (now - start) / ms);\r\n      var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;\r\n      fn(e);\r\n      if (p < 1) requestAnimationFrame(frame);\r\n    }\r\n    requestAnimationFrame(frame);\r\n  }\r\n\r\n  // Arrowheads, one marker per colour.\r\n  var COLORS = { g: \"#1DB584\", y: \"#E2B44A\", p: \"#F472B6\", b: \"#38BDF8\", w: \"#c9dccf\", r: \"#F87171\" };\r\n  var defs = el(\"defs\", {}, svg);\r\n  Object.keys(COLORS).forEach(function (k) {\r\n    var m = el(\"marker\", { id: \"ah-\" + k, viewBox: \"0 0 10 10\", refX: 9, refY: 5, markerUnits: \"userSpaceOnUse\", markerWidth: 13, markerHeight: 13, orient: \"auto\" }, defs);\r\n    el(\"path\", { d: \"M0 0 L10 5 L0 10 Z\", fill: COLORS[k] }, m);\r\n  });\r\n  function arrow(parent, colorKey, width) {\r\n    return el(\"line\", { x1: 0, y1: 0, x2: 0, y2: 0, stroke: COLORS[colorKey], \"stroke-width\": width || 3, \"marker-end\": \"url(#ah-\" + colorKey + \")\", \"stroke-linecap\": \"round\" }, parent);\r\n  }\r\n  function polygon(parent, cls) {\r\n    return el(\"polygon\", { points: \"\", class: cls }, parent);\r\n  }\r\n  function setPoly(node, pts) {\r\n    node.setAttribute(\"points\", pts.map(function (p) { return p[0].toFixed(1) + \",\" + p[1].toFixed(1); }).join(\" \"));\r\n  }\r\n  function lerpPts(a, b, e) {\r\n    return a.map(function (p, i) { return [lerp(p[0], b[i][0], e), lerp(p[1], b[i][1], e)]; });\r\n  }\r\n  // Maps maths coordinates (x right, y up) to screen pixels.\r\n  function makePlane(cx, cy, s) {\r\n    return {\r\n      x: function (v) { return cx + s * v; },\r\n      y: function (v) { return cy - s * v; },\r\n      pt: function (p) { return [cx + s * p[0], cy - s * p[1]]; },\r\n      s: s, cx: cx, cy: cy\r\n    };\r\n  }\r\n  function axes(parent, plane, xr, yr) {\r\n    el(\"line\", { x1: plane.x(-xr), y1: plane.y(0), x2: plane.x(xr), y2: plane.y(0), class: \"axis\" }, parent);\r\n    el(\"line\", { x1: plane.x(0), y1: plane.y(-yr), x2: plane.x(0), y2: plane.y(yr), class: \"axis\" }, parent);\r\n  }\r\n\n  // ── Module 3 helpers: graphs, curves, contour plane ───────────────────────\n  // makeGraph maps maths values to pixels with separate x and y scales.\n  function makeGraph(ox, oy, sx, sy) {\n    return {\n      ox: ox, oy: oy, sx: sx, sy: sy,\n      x: function (v) { return ox + sx * v; },\n      y: function (v) { return oy - sy * v; }\n    };\n  }\n  function curveD(g, f, a, b, n) {\n    var d = \"\";\n    for (var i = 0; i <= n; i++) {\n      var v = a + ((b - a) * i) / n;\n      d += (i ? \" L \" : \"M \") + g.x(v).toFixed(1) + \" \" + g.y(f(v)).toFixed(1);\n    }\n    return d;\n  }\n  function setD(node, d) {\n    node.setAttribute(\"d\", d);\n  }\n  function fmt(v, n) {\n    return (Math.round(v * 100000) / 100000).toFixed(n === undefined ? 1 : n);\n  }\n  function drawAxes(parent, g, xmax, ymax, xticks, yticks) {\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(xmax), y2: g.y(0), class: \"axis\" }, parent);\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(0), y2: g.y(ymax), class: \"axis\" }, parent);\n    (xticks || []).forEach(function (t) { txt(parent, g.x(t), g.y(0) + 15, \"tick\", String(t), \"middle\"); });\n    (yticks || []).forEach(function (t) { txt(parent, g.x(0) - 7, g.y(t) + 4, \"tick\", String(t), \"end\"); });\n  }\n  function card(parent, x, y, w, h, cls) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: 10, class: cls || \"fillG\" }, parent);\n  }\n  function ring(parent, cx, cy, rx, ry, cls) {\n    return el(\"ellipse\", { cx: cx, cy: cy, rx: rx, ry: ry, fill: \"none\", class: cls || \"contour\" }, parent);\n  }\n  function clipTo(id, x, y, w, h) {\n    var c = el(\"clipPath\", { id: id }, defs);\n    el(\"rect\", { x: x, y: y, width: w, height: h }, c);\n  }\n\n  var EXPLAIN = {\"one-variable\":{\"h\":\"WHAT YOU ARE LOOKING AT\",\"t\":\"With a **single weight**, the loss is a curve: the weight runs along the bottom and the loss is the height. This is the picture from the earlier checkpoints.\"},\"two-variables\":{\"h\":\"TWO WEIGHTS: A FLOOR OF CHOICES\",\"t\":\"With two weights, every choice of **(w₁, w₂)** is a point on a flat floor. **Two numbers** are needed to say where you are standing.\"},\"surface\":{\"h\":\"THE LOSS LIFTS INTO A SURFACE\",\"t\":\"At each point of the floor, raise the loss as a **height**. The flat floor becomes a **surface**, here a bowl with its lowest point above **(3, 1)**.\"},\"point-on-surface\":{\"h\":\"A POINT ON THE SURFACE\",\"t\":\"Each position of the model is a point on the surface: the floor point **(1, 3)** holds the weights, and the height above it is the **loss, 12**.\"},\"many-variables\":{\"h\":\"MANY WEIGHTS: SAME IDEAS\",\"t\":\"Real models have **thousands or millions** of weights. We cannot draw that landscape, but **nothing in the rules changes**.\"},\"parameter-vector\":{\"h\":\"A WEIGHT VECTOR AND ITS GRADIENT\",\"t\":\"The weights form a **vector w**. The gradient has **one entry per weight**: one partial derivative for each. Same count, same order.\"},\"ml-loss\":{\"h\":\"TAKEAWAY\",\"t\":\"A tiny model with 3 weights: the weights make a prediction, the prediction gives **one loss number**, and from it we get **one slope for each weight**.\"}};\n  // ── scene ──\n  var steps = [\n    { id: \"one-variable\", label: \"One weight: a curve\", caption: \"With a single weight, the loss is a curve: the weight runs along the bottom and the loss is the height. This is the picture from the earlier checkpoints.\" },\n    { id: \"two-variables\", label: \"Two weights: a floor of choices\", caption: \"With two weights, every choice of (w1, w2) is a point on a flat floor. Two numbers are needed to say where you are standing.\" },\n    { id: \"surface\", label: \"The loss lifts into a surface\", caption: \"At each point of the floor, raise the loss as a height. The flat floor becomes a surface, here a bowl with its lowest point above (3, 1).\" },\n    { id: \"point-on-surface\", label: \"A point on the surface\", caption: \"Each position of the model is a point on the surface: the floor point (1, 3) holds the weights, and the height above it is the loss, 12.\" },\n    { id: \"many-variables\", label: \"Many weights: same ideas\", caption: \"Real models have thousands or millions of weights. We cannot draw that landscape, but nothing in the rules changes.\" },\n    { id: \"parameter-vector\", label: \"A weight vector and its gradient\", caption: \"The weights form a vector w. The gradient has one entry per weight: one partial derivative for each. Same count, same order.\" },\n    { id: \"ml-loss\", label: \"One loss number, many partials\", caption: \"A tiny model with 3 weights: the weights make a prediction, the prediction gives ONE loss number, and from it we get one slope for each weight.\" }\n  ];\n\n  function L1(w) { return (w - 3) * (w - 3); }\n  function L2(w1, w2) { return (w1 - 3) * (w1 - 3) + 2 * (w2 - 1) * (w2 - 1); }\n\n  // ── A. one-variable curve ──\n  var g = makeGraph(50, 318, 58, 30);\n  var gCurve = el(\"g\", {}, svg);\n  drawAxes(gCurve, g, 6.3, 9.8, [0, 1, 2, 3, 4, 5, 6], [0, 3, 6, 9]);\n  txt(gCurve, g.x(6.3), g.y(0) + 28, \"note\", \"weight w\", \"end\");\n  txt(gCurve, g.x(0) + 8, g.y(9.8) - 2, \"note\", \"loss L(w)\", \"start\");\n  el(\"path\", { class: \"curve\", d: curveD(g, L1, 0, 6, 60) }, gCurve);\n  el(\"circle\", { cx: g.x(1), cy: g.y(L1(1)), r: 7, fill: \"#e2b44a\", stroke: \"#071510\", \"stroke-width\": 2 }, gCurve);\n  txt(gCurve, g.x(1) + 12, g.y(L1(1)) - 10, \"lbl lbl-y\", \"one weight, one number\", \"start\");\n  var cardCurve = el(\"g\", {}, gCurve);\n  card(cardCurve, 420, 60, 200, 70, \"fillG\");\n  txt(cardCurve, 520, 88, \"note\", \"1 weight\", \"middle\");\n  txt(cardCurve, 520, 114, \"mono\", \"→ a curve\", \"middle\");\n\n  // ── B. floor and surface (pseudo-3D) ──\n  var meshT = 0;\n  function Pr(w1, w2, h) { return [90 + 62 * w1 + 30 * w2, 316 - 32 * w2 - h * 9 * meshT]; }\n  var gMesh = el(\"g\", {}, svg);\n  var meshLines = [];\n  function addLine(fixed, value) {\n    var node = el(\"path\", { fill: \"none\", stroke: fixed === \"w2\" ? \"rgba(56,189,248,0.8)\" : \"rgba(244,114,182,0.7)\", \"stroke-width\": 1.6 }, gMesh);\n    meshLines.push({ node: node, fixed: fixed, value: value });\n  }\n  [0, 0.5, 1, 1.5, 2, 2.5, 3].forEach(function (v) { addLine(\"w2\", v); });\n  [0, 1, 2, 3, 4, 5, 6].forEach(function (v) { addLine(\"w1\", v); });\n  function setMesh(t) {\n    meshT = t;\n    meshLines.forEach(function (ln) {\n      var d = \"\";\n      var n = 24;\n      for (var i = 0; i <= n; i++) {\n        var a = ln.fixed === \"w2\" ? (6 * i) / n : (3 * i) / n;\n        var w1 = ln.fixed === \"w2\" ? a : ln.value;\n        var w2 = ln.fixed === \"w2\" ? ln.value : a;\n        var p = Pr(w1, w2, L2(w1, w2));\n        d += (i ? \" L \" : \"M \") + p[0].toFixed(1) + \" \" + p[1].toFixed(1);\n      }\n      ln.node.setAttribute(\"d\", d);\n    });\n    var m = Pr(3, 1, 0);\n    minDot.setAttribute(\"cx\", m[0]); minDot.setAttribute(\"cy\", m[1]);\n    var top = Pr(0, 0, 17);\n    setLine(lossAxis, Pr(0, 0, 0)[0], Pr(0, 0, 0)[1], top[0], top[1]);\n    lossLbl.setAttribute(\"x\", top[0] - 8); lossLbl.setAttribute(\"y\", top[1] - 6);\n  }\n  var lossAxis = el(\"line\", { stroke: \"#e2b44a\", \"stroke-width\": 2 }, gMesh);\n  var lossLbl = txt(gMesh, 0, 0, \"lbl lbl-y\", \"loss (height)\", \"start\");\n  var minDot = el(\"circle\", { r: 5, fill: \"#1db584\", stroke: \"#071510\", \"stroke-width\": 2 }, gMesh);\n  var floorLbls = el(\"g\", {}, gMesh);\n  [0, 2, 4, 6].forEach(function (v) { var p = Pr(v, 0, 0); txt(floorLbls, p[0], 316 + 16, \"tick\", String(v), \"middle\"); });\n  txt(floorLbls, Pr(6.3, 0, 0)[0], 320, \"lbl\", \"w1\", \"start\");\n  [0, 1, 2, 3].forEach(function (v) { var p = Pr(0, v, 0); txt(floorLbls, p[0] - 8, 316 - 32 * v + 4, \"tick\", String(v), \"end\"); });\n  txt(floorLbls, Pr(0, 3.35, 0)[0] - 4, Pr(0, 3.35, 0)[1], \"lbl\", \"w2\", \"end\");\n  var pointG = el(\"g\", {}, svg);\n  var dropLine = el(\"line\", { class: \"dash\", stroke: \"#e2b44a\", \"stroke-width\": 2 }, pointG);\n  var floorPt = el(\"circle\", { r: 6, fill: \"#ffffff\", stroke: \"#071510\", \"stroke-width\": 2 }, pointG);\n  var surfPt = el(\"circle\", { r: 7, fill: \"#e2b44a\", stroke: \"#071510\", \"stroke-width\": 2 }, pointG);\n  var fpLbl = txt(pointG, 0, 0, \"lbl\", \"floor point (1, 3): the weights\", \"start\");\n  var spLbl = txt(pointG, 0, 0, \"lbl lbl-y\", \"height = loss = 12\", \"end\");\n\n  // ── C. many weights ──\n  var gMany = el(\"g\", {}, svg);\n  [\"w1\", \"w2\", \"w3\", \"w4\", \"…\", \"w1000\"].forEach(function (name, i) {\n    var x = 44 + i * 95;\n    card(gMany, x, 120, 80, 56, i === 4 ? \"fillA\" : \"fillG\");\n    txt(gMany, x + 40, 154, \"big\", name, \"middle\");\n  });\n  txt(gMany, 320, 100, \"lbl\", \"a real model: thousands of weights\", \"middle\");\n  txt(gMany, 320, 218, \"note\", \"we cannot draw a landscape with 1000 directions\", \"middle\");\n  card(gMany, 120, 246, 400, 70, \"fillB\");\n  txt(gMany, 320, 274, \"mono\", \"the rules stay the same:\", \"middle\");\n  txt(gMany, 320, 298, \"note\", \"one loss number, and one partial derivative for each weight\", \"middle\");\n\n  // ── D. weight vector and gradient vector ──\n  var gVec = el(\"g\", {}, svg);\n  txt(gVec, 16, 100, \"lbl\", \"weights\", \"start\");\n  txt(gVec, 16, 114, \"lbl\", \"w\", \"start\");\n  txt(gVec, 16, 256, \"lbl lbl-y\", \"gradient\", \"start\");\n  txt(gVec, 16, 270, \"lbl lbl-y\", \"of the loss\", \"start\");\n  [[\"w1\", \"0\"], [\"w2\", \"0\"], [\"w3\", \"0\"]].forEach(function (p, i) {\n    var x = 120 + i * 170;\n    card(gVec, x, 76, 130, 54, \"fillA\");\n    txt(gVec, x + 65, 96, \"note\", p[0], \"middle\");\n    txt(gVec, x + 65, 120, \"big\", p[1], \"middle\");\n  });\n  [[\"∂L/∂w1\", \"−12\"], [\"∂L/∂w2\", \"−24\"], [\"∂L/∂w3\", \"−36\"]].forEach(function (p, i) {\n    var x = 120 + i * 170;\n    card(gVec, x, 236, 130, 54, \"fillB\");\n    txt(gVec, x + 65, 256, \"note\", p[0], \"middle\");\n    txt(gVec, x + 65, 280, \"big\", p[1], \"middle\");\n    var a = arrow(gVec, \"y\", 3);\n    setLine(a, x + 65, 134, x + 65, 232);\n  });\n  txt(gVec, 320, 310, \"note\", \"one slope for each weight, same order\", \"middle\"); // below the cards: the arrows pass through the gap between them\n  txt(gVec, 320, 330, \"note\", \"3 weights → 3 partial derivatives. 1000 weights → 1000.\", \"middle\");\n\n  // ── E. pipeline ──\n  var gPipe = el(\"g\", {}, svg);\n  var boxes = [\n    [\"weights\", \"[0, 0, 0]\", \"fillA\"],\n    [\"prediction\", \"w·x = 0\", \"fillG\"],\n    [\"loss\", \"(0 − 6)² = 36\", \"fillB\"],\n    [\"gradient\", \"[−12, −24, −36]\", \"fillG\"]\n  ];\n  boxes.forEach(function (b, i) {\n    var x = 18 + i * 156;\n    card(gPipe, x, 120, 130, 80, b[2]);\n    txt(gPipe, x + 65, 146, \"note\", b[0], \"middle\");\n    txt(gPipe, x + 65, 178, \"mono\", b[1], \"middle\");\n    if (i < boxes.length - 1) {\n      var a = arrow(gPipe, \"w\", 3);\n      setLine(a, x + 132, 160, x + 154, 160);\n    }\n  });\n  txt(gPipe, 320, 96, \"lbl\", \"inputs x = [1, 2, 3], target y = 6\", \"middle\");\n  txt(gPipe, 320, 250, \"note\", \"ONE number (the loss) …\", \"middle\");\n  txt(gPipe, 320, 272, \"note\", \"… gives ONE slope per weight\", \"middle\");\n\n  function render(index, id) {\n    show(gCurve, id === \"one-variable\");\n    var meshOn = id === \"two-variables\" || id === \"surface\" || id === \"point-on-surface\";\n    show(gMesh, meshOn);\n    show(pointG, id === \"point-on-surface\");\n    show(lossAxis, id !== \"two-variables\");\n    show(lossLbl, id !== \"two-variables\");\n    show(minDot, id !== \"two-variables\");\n    show(gMany, id === \"many-variables\");\n    show(gVec, id === \"parameter-vector\");\n    show(gPipe, id === \"ml-loss\");\n    if (id === \"two-variables\") setMesh(0);\n    else if (id === \"surface\") anim(\"mesh\", 1800, function (e) { setMesh(e); });\n    else if (id === \"point-on-surface\") {\n      setMesh(1);\n      var f = Pr(1, 3, 0), s = Pr(1, 3, 12);\n      setLine(dropLine, f[0], f[1], s[0], s[1]);\n      floorPt.setAttribute(\"cx\", f[0]); floorPt.setAttribute(\"cy\", f[1]);\n      surfPt.setAttribute(\"cx\", s[0]); surfPt.setAttribute(\"cy\", s[1]);\n      fpLbl.setAttribute(\"x\", f[0] + 12); fpLbl.setAttribute(\"y\", f[1] + 16);\n      spLbl.setAttribute(\"x\", s[0] - 12); spLbl.setAttribute(\"y\", s[1] - 8);\n    }\n  }\n\n\n  // ── shared runtime: stepping, explanation panel, educational autoplay pacing, bridge ──\n  var current = 0;\n  var explainHeadEl = document.getElementById(\"explain-h\");\n\n  // **bold** markers in an explanation become <strong> nodes (built with DOM calls, never innerHTML).\n  function setRich(node, str) {\n    node.textContent = \"\";\n    var parts = String(str).split(\"**\");\n    for (var i = 0; i < parts.length; i++) {\n      if (parts[i] === \"\") continue;\n      var seg = document.createElement(i % 2 ? \"strong\" : \"span\");\n      seg.textContent = parts[i];\n      node.appendChild(seg);\n    }\n  }\n\n  function explanationFor(index) {\n    var ex = (typeof EXPLAIN === \"object\" && EXPLAIN) ? EXPLAIN[steps[index].id] : null;\n    return ex || { h: \"WHAT IS HAPPENING\", t: steps[index].caption };\n  }\n\n  // Autoplay pace: 4.5 to 10.5 seconds per step, longer for longer explanations, so a learner can read.\n  function stepMs(index) {\n    var words = String(explanationFor(index).t).replace(/\\*\\*/g, \"\").split(/\\s+/).length;\n    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));\n  }\n\n  function renderStep(index) {\n    var ex = explanationFor(index);\n    labelEl.textContent = steps[index].label;\n    if (explainHeadEl) explainHeadEl.textContent = ex.h;\n    setRich(captionEl, ex.t);\n    render(index, steps[index].id);\n  }\n\n  function goTo(index) {\n    if (index < 0 || index >= steps.length) return;\n    current = index;\n    renderStep(current);\n    if (window.ReagvisBridge) window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n\n  renderStep(current);\n\n  // Autoplay: exactly one timer, one step per tick, stops on the final step.\n  // PLAY on the final step restarts from the first step and plays again.\n  var timer = null;\n\n  function stopAuto() {\n    if (timer !== null) {\n      clearTimeout(timer);\n      timer = null;\n    }\n  }\n\n  function scheduleNext() {\n    timer = setTimeout(function () {\n      timer = null;\n      if (current >= steps.length - 1) return;\n      goTo(current + 1);\n      if (current < steps.length - 1) scheduleNext();\n    }, stepMs(current));\n  }\n\n  function startAuto() {\n    if (timer !== null) return;\n    if (current >= steps.length - 1) goTo(0);\n    scheduleNext();\n  }\n\n  window.addEventListener(\"pagehide\", stopAuto);\n\n  window.ReagvisAnimation = {\n    stepDuration: stepMs,\n    onCommand: function (type, stepId) {\n      if (type === \"PLAY\") startAuto();\n      else if (type === \"PAUSE\") stopAuto();\n      else if (type === \"NEXT\") { stopAuto(); goTo(current + 1); }\n      else if (type === \"PREVIOUS\") { stopAuto(); goTo(current - 1); }\n      else if (type === \"RESET\") { stopAuto(); goTo(0); }\n      else if (type === \"GOTO_STEP\") {\n        stopAuto();\n        for (var i = 0; i < steps.length; i++) {\n          if (steps[i].id === stepId) { goTo(i); break; }\n        }\n      }\n    },\n  };\n\n  if (window.ReagvisBridge) {\n    window.ReagvisBridge.ready();\n    window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n})();\n",
+  "lastFrozenContentHash": null,
+  "lastFrozenRevisionId": null,
+  "manifest": {
+    "bridgeVersion": {
+      "$numberInt": "1"
+    },
+    "capabilities": [
+      "play",
+      "pause",
+      "next",
+      "previous",
+      "reset",
+      "gotoStep"
+    ],
+    "heightPx": {
+      "$numberInt": "590"
+    },
+    "traceEvents": [
+      "one-variable",
+      "two-variables",
+      "surface",
+      "point-on-surface",
+      "many-variables",
+      "parameter-vector",
+      "ml-loss"
+    ]
+  },
+  "packageId": "bc2c5251-1485-4be9-95de-bdf5d7d4e0bb",
+  "packageTrace": {
+    "steps": [
+      {
+        "animationEvent": "one-variable",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "With one weight w, the loss is a function of one number.",
+          "python": "def loss(w):\n    return (w - 3) ** 2\n\nprint(loss(1))   # 4"
+        },
+        "id": "one-variable",
+        "label": "One weight: a curve"
+      },
+      {
+        "animationEvent": "two-variables",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "With two weights, each choice is a pair (w1, w2): a point on a floor.",
+          "python": "choice = (1, 3)   # (w1, w2)\nprint(choice)"
+        },
+        "id": "two-variables",
+        "label": "Two weights: a floor of choices"
+      },
+      {
+        "animationEvent": "surface",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "For every pair (w1, w2), the loss is the height above that point.",
+          "python": "def loss(w1, w2):\n    return (w1 - 3) ** 2 + 2 * (w2 - 1) ** 2\n\nfor point in [(3, 1), (1, 3), (0, 0)]:\n    print(point, loss(*point))   # (3, 1) 0 / (1, 3) 12 / (0, 0) 11"
+        },
+        "id": "surface",
+        "label": "The loss lifts into a surface"
+      },
+      {
+        "animationEvent": "point-on-surface",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "The weights say where we stand on the floor. The loss is how high the surface is there.",
+          "python": "def loss(w1, w2):\n    return (w1 - 3) ** 2 + 2 * (w2 - 1) ** 2\n\nw1, w2 = 1, 3\nprint(loss(w1, w2))   # 12"
+        },
+        "id": "point-on-surface",
+        "label": "A point on the surface"
+      },
+      {
+        "animationEvent": "many-variables",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "A model can have thousands of weights. The loss is still one number.",
+          "python": "weights = [0.0] * 1000   # a model with 1000 weights\nprint(len(weights))     # 1000"
+        },
+        "id": "many-variables",
+        "label": "Many weights: same ideas"
+      },
+      {
+        "animationEvent": "parameter-vector",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "The gradient has one entry for each weight, in the same order.",
+          "python": "x = [1, 2, 3]\ny = 6\nw = [0, 0, 0]\nerror = sum(wi * xi for wi, xi in zip(w, x)) - y\ngradient = [2 * error * xi for xi in x]\nprint(gradient, len(gradient) == len(w))   # [-12, -24, -36] True"
+        },
+        "id": "parameter-vector",
+        "label": "A weight vector and its gradient"
+      },
+      {
+        "animationEvent": "ml-loss",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "weights -> prediction -> one loss number -> one partial derivative per weight",
+          "python": "x = [1, 2, 3]\ny = 6\nw = [0, 0, 0]\n\nprediction = sum(wi * xi for wi, xi in zip(w, x))\nloss = (prediction - y) ** 2\ngradient = [2 * (prediction - y) * xi for xi in x]\nprint(prediction, loss, gradient)   # 0 36 [-12, -24, -36]"
+        },
+        "id": "ml-loss",
+        "label": "One loss number, many partials"
+      }
+    ],
+    "version": {
+      "$numberInt": "1"
+    }
+  },
+  "revision": {
+    "$numberInt": "5"
+  },
+  "revisionId": "r2",
+  "sourceKind": "zip",
+  "status": "frozen",
+  "title": "ML Module 3 — Multivariate Functions",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498508"
+    }
+  },
+  "updatedBy": {
+    "$oid": "000000000000000000000000"
+  }
+}

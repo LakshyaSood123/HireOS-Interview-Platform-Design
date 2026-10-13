@@ -1,0 +1,38 @@
+{
+ "examples": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Ten emails, each with a **spam score** (suspicious words, 0 to 10). Someone has checked every email and recorded whether it **really is spam**, so we have the true answers."
+ },
+ "two-classes": {
+  "h": "EXACTLY TWO CLASSES",
+  "t": "Each email belongs to one of **two classes**: not spam (**label 0**) or spam (**label 1**). That is **binary classification**. The 0 and 1 are names, not amounts."
+ },
+ "feature-input": {
+  "h": "THE FEATURE GOES IN",
+  "t": "A new email arrives. Its feature is the **spam score, 7.5**. The classifier will look at it and **choose a class**."
+ },
+ "classifier": {
+  "h": "THE CLASSIFIER DECIDES",
+  "t": "Our simple classifier applies a rule: **score at least 4 means spam**, otherwise not spam. Later lessons show how such rules are built from data."
+ },
+ "prediction": {
+  "h": "A PREDICTED CLASS",
+  "t": "The score **7.5 is at least 4**, so the predicted class is **spam (1)**."
+ },
+ "compare-label": {
+  "h": "COMPARE WITH THE TRUE CLASS",
+  "t": "We also know the **true class** of this email: spam (1). A prediction is **correct when the predicted class equals the true class**."
+ },
+ "correct-example": {
+  "h": "A CORRECT PREDICTION",
+  "t": "**Predicted spam, actually spam:** correct. The classifier's output and the true label agree."
+ },
+ "wrong-example": {
+  "h": "AN INCORRECT PREDICTION",
+  "t": "Another email has score **4.5**. The rule says spam, but it is **real mail (0)**. Predicted and true class differ, so this prediction is **incorrect**."
+ },
+ "binary-task": {
+  "h": "TAKEAWAY",
+  "t": "Features go in, a **predicted class** comes out, and we compare it with the **true class**. On our ten emails this rule is right **8 times and wrong twice**."
+ }
+}

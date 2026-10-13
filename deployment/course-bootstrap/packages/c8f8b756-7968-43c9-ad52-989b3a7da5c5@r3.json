@@ -1,0 +1,123 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322c4e9cccef168ed25"
+  },
+  "assets": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498537"
+    }
+  },
+  "createdBy": {
+    "$oid": "000000000000000000000000"
+  },
+  "css": "body {\n  margin: 0;\n  padding: 16px;\n  box-sizing: border-box;\n  background: #0b1d16;\n  color: #e6f5ec;\n  font-family: system-ui, sans-serif;\n}\n.scene {\n  display: flex;\n  flex-direction: column;\n  gap: 14px;\n}\n.step-label {\n  margin: 0;\n  font-size: 13px;\n  font-weight: 700;\n  letter-spacing: 0.08em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.flow {\n  display: flex;\n  align-items: stretch;\n  justify-content: center;\n  gap: 6px;\n  min-height: 104px;\n}\n.node {\n  flex: 1 1 0;\n  min-width: 0;\n  padding: 10px 8px;\n  border-radius: 12px;\n  border: 1px solid #1db584;\n  background: rgba(29, 181, 132, 0.12);\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  text-align: center;\n  gap: 4px;\n  animation: pop 0.35s ease both;\n}\n.node-title {\n  font-size: 13px;\n  font-weight: 800;\n  color: #e6f5ec;\n}\n.node-sub {\n  font-size: 11px;\n  line-height: 1.35;\n  color: #c9dccf;\n}\n.node.pred {\n  border-color: #38bdf8;\n  background: rgba(56, 189, 248, 0.14);\n}\n.node.pred .node-title {\n  color: #7dd3fc;\n}\n.node.actual {\n  border-color: #e2b44a;\n  background: rgba(226, 180, 74, 0.14);\n}\n.node.actual .node-title {\n  color: #f0cf7a;\n}\n.arrow {\n  flex: 0 0 auto;\n  align-self: center;\n  font-size: 22px;\n  font-weight: 800;\n  color: #a7ce65;\n  animation: pop 0.35s ease both;\n}\n@keyframes pop {\n  from { opacity: 0; transform: translateY(4px); }\n  to { opacity: 1; transform: none; }\n}\n.match {\n  display: none;\n  flex-direction: column;\n  align-items: center;\n  gap: 6px;\n  padding: 10px 12px;\n  border-radius: 12px;\n  border: 1px solid #4fd8a8;\n  background: rgba(79, 216, 168, 0.1);\n  text-align: center;\n}\n.match.on {\n  display: flex;\n  animation: pop 0.4s ease both;\n}\n.match-row {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  flex-wrap: wrap;\n  justify-content: center;\n  font-size: 12px;\n  font-weight: 700;\n}\n.match-pred { color: #7dd3fc; }\n.match-actual { color: #f0cf7a; }\n.match-eq { color: #4fd8a8; font-size: 16px; }\n.match-title {\n  font-size: 12px;\n  font-weight: 800;\n  letter-spacing: 0.12em;\n  color: #4fd8a8;\n}\n.match-text {\n  font-size: 12px;\n  color: #e6f5ec;\n}\n.caption {\n  margin: 0;\n  font-size: 13px;\n  line-height: 1.5;\n  color: #c9dccf;\n  min-height: 40px;\n}\n\n/* ── explanation panel (shared by every generated ML animation) ── */\n.explain {\n  box-sizing: border-box;\n  max-width: 640px;\n  margin-top: 4px;\n  padding: 14px 18px 16px;\n  min-height: 150px;\n  border-radius: 12px;\n  background: rgba(29, 181, 132, 0.10);\n  border: 1px solid rgba(29, 181, 132, 0.45);\n  border-left: 5px solid #1db584;\n}\n.explain-h {\n  margin: 0 0 8px;\n  font-size: 13px;\n  font-weight: 800;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.explain-t {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.55;\n  color: #f1faf4;\n}\n.explain-t strong {\n  font-weight: 800;\n  color: #ffd98a;\n}\n",
+  "html": "<!doctype html>\n<html>\n  <head>\n    <meta charset=\"utf-8\" />\n    <title>What is Machine Learning?</title>\n  </head>\n  <body>\n    <div class=\"scene\">\n      <p class=\"step-label\" id=\"step-label\">Rules</p>\n      <div class=\"flow\" id=\"flow\"></div>\n      <div class=\"match\" id=\"match\">\n        <div class=\"match-row\"><span class=\"match-pred\">Prediction: Spam</span><span class=\"match-eq\">=</span><span class=\"match-actual\">Actual label: Spam ✓</span></div>\n        <div class=\"match-title\">GENERALIZATION</div>\n        <div class=\"match-text\">A model generalizes when it performs well on new data it did not train on.</div>\n      </div>\n      <section class=\"explain\" aria-live=\"polite\">\n        <h3 class=\"explain-h\" id=\"explain-h\"></h3>\n        <p class=\"explain-t\" id=\"caption\"></p>\n      </section>\n    </div>\n  </body>\n</html>\n",
+  "js": "(function () {\n  // Each step lists only the stage cards it needs (no empty boxes). Arrows are\n  // drawn between consecutive cards, so every step reads left to right.\n  // kind: \"\" normal, \"pred\" prediction, \"actual\" actual answer.\n  var steps = [\n    {\n      id: \"rules\",\n      label: \"Rules\",\n      stages: [\n        { title: \"Rules + input\", sub: \"written by a person\" },\n        { title: \"Program\", sub: \"follows the rules\" },\n        { title: \"Output\", sub: \"e.g. spam\" },\n      ],\n      caption: \"Traditional software: a person writes every rule, and the program turns input into output.\",\n    },\n    {\n      id: \"data\",\n      label: \"Data\",\n      stages: [\n        { title: \"Examples\", sub: \"emails marked spam or not\" },\n        { title: \"Learning algorithm\", sub: \"looks for patterns\" },\n        { title: \"Model\", sub: \"the learned result\" },\n      ],\n      caption: \"Machine learning starts from examples instead of hand-written rules.\",\n    },\n    {\n      id: \"train\",\n      label: \"Train\",\n      stages: [\n        { title: \"Examples\", sub: \"emails marked spam or not\" },\n        { title: \"Training\", sub: \"adjusts the model\" },\n        { title: \"Learned pattern\", sub: \"what spam looks like\" },\n      ],\n      caption: \"Training adjusts the model so its pattern fits the examples it was shown.\",\n    },\n    {\n      id: \"unseen-input\",\n      label: \"Unseen input\",\n      stages: [\n        { title: \"New example\", sub: \"\\\"You won a free prize!\\\"\" },\n        { title: \"Trained model\", sub: \"learned from earlier emails\" },\n        { title: \"Prediction\", sub: \"spam or not spam?\", kind: \"pred\" },\n      ],\n      caption: \"A new example the model never saw during training is given to the trained model.\",\n    },\n    {\n      id: \"generalize\",\n      label: \"Generalize\",\n      stages: [\n        { title: \"New example\", sub: \"\\\"You won a free prize!\\\"\" },\n        { title: \"Trained model\", sub: \"learned from earlier emails\" },\n        { title: \"Prediction\", sub: \"Spam\", kind: \"pred\" },\n        { title: \"Actual label\", sub: \"Spam ✓\", kind: \"actual\" },\n      ],\n      match: true,\n      caption: \"A useful model predicts well on data it did not memorize.\",\n    },\n  ];\n\n  var current = 0;\n  var labelEl = document.getElementById(\"step-label\");\n  var captionEl = document.getElementById(\"caption\");\n  var explainHeadEl = document.getElementById(\"explain-h\");\n  // Per-step explanations (mirrors explain.json in this package folder). **bold** markers become <strong>.\n  var EXPLAIN = {\"rules\": {\"h\": \"TRADITIONAL SOFTWARE\", \"t\": \"In traditional software **a person writes every rule**. The program follows those rules to turn an input (say, an email) into an output (spam or not). It can only handle what its rules cover.\"}, \"data\": {\"h\": \"MACHINE LEARNING STARTS FROM EXAMPLES\", \"t\": \"Instead of hand-written rules, we start with **examples**: emails already marked spam or not spam. A **learning algorithm** looks for patterns in them and produces a **model**.\"}, \"train\": {\"h\": \"TRAINING\", \"t\": \"**Training** adjusts the model so its pattern fits the examples it was shown. What the model keeps is a **learned pattern** of what spam looks like, not a list of memorized emails.\"}, \"unseen-input\": {\"h\": \"A NEW EXAMPLE ARRIVES\", \"t\": \"A **new email** that the model **never saw during training** is given to the trained model. The model must now decide, spam or not spam, using only what it learned.\"}, \"generalize\": {\"h\": \"WHY THIS SHOWS GENERALIZATION\", \"t\": \"The model correctly labels a **new email it never saw during training**. Because its prediction matches the actual label, it has learned a pattern that **transfers to unseen data** rather than merely memorizing earlier examples.\"}};\n\n  function setRich(node, str) {\n    node.textContent = \"\";\n    var parts = String(str).split(\"**\");\n    for (var i = 0; i < parts.length; i++) {\n      if (parts[i] === \"\") continue;\n      var seg = document.createElement(i % 2 ? \"strong\" : \"span\");\n      seg.textContent = parts[i];\n      node.appendChild(seg);\n    }\n  }\n\n  function explanationFor(index) {\n    var ex = EXPLAIN[steps[index].id];\n    return ex || { h: \"WHAT IS HAPPENING\", t: steps[index].caption || steps[index].detail || \"\" };\n  }\n\n  function stepMs(index) {\n    var words = String(explanationFor(index).t).replace(/\\*\\*/g, \"\").split(/\\s+/).length;\n    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));\n  }\n\n  function showExplanation(index) {\n    var ex = explanationFor(index);\n    if (explainHeadEl) explainHeadEl.textContent = ex.h;\n    setRich(captionEl, ex.t);\n  }\n  var flowEl = document.getElementById(\"flow\");\n  var matchEl = document.getElementById(\"match\");\n\n  function card(stage) {\n    var el = document.createElement(\"div\");\n    el.className = \"node on\" + (stage.kind ? \" \" + stage.kind : \"\");\n    var t = document.createElement(\"div\");\n    t.className = \"node-title\";\n    t.textContent = stage.title;\n    var s = document.createElement(\"div\");\n    s.className = \"node-sub\";\n    s.textContent = stage.sub;\n    el.appendChild(t);\n    el.appendChild(s);\n    return el;\n  }\n\n  function arrow() {\n    var el = document.createElement(\"div\");\n    el.className = \"arrow\";\n    el.textContent = \"→\";\n    return el;\n  }\n\n  function render(index) {\n    var step = steps[index];\n    labelEl.textContent = step.label;\n    showExplanation(index);\n    flowEl.innerHTML = \"\";\n    step.stages.forEach(function (stage, i) {\n      if (i > 0) flowEl.appendChild(arrow());\n      flowEl.appendChild(card(stage));\n    });\n    matchEl.className = step.match ? \"match on\" : \"match\";\n  }\n\n  function goTo(index) {\n    if (index < 0 || index >= steps.length) return;\n    current = index;\n    render(current);\n    if (window.ReagvisBridge) window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n\n  render(current);\n\n  // Autoplay pace: 4.5 to 10.5 seconds per step (longer for longer explanations), exactly one timer.\n  // PLAY on the final step restarts from the first step and plays again.\n  var timer = null;\n\n  function stopAuto() {\n    if (timer !== null) {\n      clearTimeout(timer);\n      timer = null;\n    }\n  }\n\n  function scheduleNext() {\n    timer = setTimeout(function () {\n      timer = null;\n      if (current >= steps.length - 1) return;\n      goTo(current + 1);\n      if (current < steps.length - 1) scheduleNext();\n    }, stepMs(current));\n  }\n\n  function startAuto() {\n    if (timer !== null) return;\n    if (current >= steps.length - 1) goTo(0);\n    scheduleNext();\n  }\n\n  window.addEventListener(\"pagehide\", stopAuto);\n\n  window.ReagvisAnimation = {\n    stepDuration: stepMs,\n    onCommand: function (type, stepId) {\n      if (type === \"PLAY\") startAuto();\n      else if (type === \"PAUSE\") stopAuto();\n      else if (type === \"NEXT\") { stopAuto(); goTo(current + 1); }\n      else if (type === \"PREVIOUS\") { stopAuto(); goTo(current - 1); }\n      else if (type === \"RESET\") { stopAuto(); goTo(0); }\n      else if (type === \"GOTO_STEP\") {\n        stopAuto();\n        for (var i = 0; i < steps.length; i++) {\n          if (steps[i].id === stepId) { goTo(i); break; }\n        }\n      }\n    },\n  };\n\n  if (window.ReagvisBridge) {\n    window.ReagvisBridge.ready();\n    window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n})();\n",
+  "lastFrozenContentHash": null,
+  "lastFrozenRevisionId": null,
+  "manifest": {
+    "bridgeVersion": {
+      "$numberInt": "1"
+    },
+    "capabilities": [
+      "play",
+      "pause",
+      "next",
+      "previous",
+      "reset",
+      "gotoStep"
+    ],
+    "heightPx": {
+      "$numberInt": "460"
+    },
+    "traceEvents": [
+      "rules",
+      "data",
+      "train",
+      "unseen-input",
+      "generalize"
+    ]
+  },
+  "packageId": "c8f8b756-7968-43c9-ad52-989b3a7da5c5",
+  "packageTrace": {
+    "steps": [
+      {
+        "animationEvent": "rules",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Define the explicit rules a traditional program uses.\nnew_output <- apply_rules(input)",
+          "python": "def apply_rules(x):\n    if x > 10:\n        return \"large\"\n    return \"small\""
+        },
+        "id": "rules",
+        "label": "Explicit rules"
+      },
+      {
+        "animationEvent": "data",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Collect examples that contain the useful input information.\nexamples <- collect_examples()",
+          "python": "examples = [\n    (3, \"small\"),\n    (14, \"large\"),\n    (8, \"small\"),\n]"
+        },
+        "id": "data",
+        "label": "Collect examples"
+      },
+      {
+        "animationEvent": "train",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Use examples to learn a model instead of hard-coding every rule.\nmodel <- learn(examples)",
+          "python": "examples = [(3, \"small\"), (14, \"large\"), (8, \"small\")]\n\n# Learn a cut-off from the examples instead of hard-coding it\nsmall = [x for x, label in examples if label == \"small\"]\nlarge = [x for x, label in examples if label == \"large\"]\nthreshold = (max(small) + min(large)) / 2\nprint(threshold)  # 11.0"
+        },
+        "id": "train",
+        "label": "Learn instead of hard-coding"
+      },
+      {
+        "animationEvent": "unseen-input",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Give the trained model a new example it has not seen.\nnew_example <- 12",
+          "python": "new_example = 12"
+        },
+        "id": "unseen-input",
+        "label": "Try a new example"
+      },
+      {
+        "animationEvent": "generalize",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Use the learned pattern to predict the new example.\nprediction <- model.predict(new_example)",
+          "python": "threshold = 11.0  # learned from the examples in the previous step\nnew_example = 12\nprediction = \"large\" if new_example > threshold else \"small\"\nprint(prediction)  # large"
+        },
+        "id": "generalize",
+        "label": "Predict the new example"
+      }
+    ],
+    "version": {
+      "$numberInt": "1"
+    }
+  },
+  "revision": {
+    "$numberInt": "7"
+  },
+  "revisionId": "r3",
+  "sourceKind": "zip",
+  "status": "frozen",
+  "title": "ML Seed — What is Machine Learning?",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498537"
+    }
+  },
+  "updatedBy": {
+    "$oid": "000000000000000000000000"
+  }
+}

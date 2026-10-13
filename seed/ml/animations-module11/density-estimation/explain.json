@@ -1,0 +1,38 @@
+{
+ "observed-points": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Each dot is one of **16 customers**, placed by average monthly spend. **Density estimation** asks a new kind of question: not “what label?” but **where does the data tend to occur?**"
+ },
+ "number-line": {
+  "h": "SPOT THE PATTERN",
+  "t": "Placed on a number line, the values are **not spread evenly**: they crowd near **2, 5 and 8**, with thin stretches between. Describing that unevenness is the goal."
+ },
+ "histogram-view": {
+  "h": "A FIRST DESCRIPTION",
+  "t": "A histogram counts customers in bins of width 1: **2, 3, 1, 2, 3, 1, 2, 2, 0**. Bar heights show where data concentrates, but the **bin edges are arbitrary**, which is a weakness."
+ },
+ "smooth-curve": {
+  "h": "A SMOOTH CURVE",
+  "t": "Put a small bump on **every observation** and add the bumps up. The result is a smooth **density curve** with no bin edges, high wherever customers crowd together."
+ },
+ "high-density-region": {
+  "h": "HIGH DENSITY",
+  "t": "Near spend **5** the bumps overlap, so the curve is high. A high density means observations in this region are **common**."
+ },
+ "low-density-region": {
+  "h": "LOW DENSITY",
+  "t": "Near spend **10** the curve is almost flat: customers there are **rare**. Low density does not make a value impossible, only unusual."
+ },
+ "new-point": {
+  "h": "A NEW CUSTOMER",
+  "t": "A new customer arrives with spend **5**. The density lets us ask how **typical** that customer is compared with the data we already have."
+ },
+ "relative-plausibility": {
+  "h": "COMPARE PLACES",
+  "t": "The density is **0.159 at spend 5** and **0.013 at spend 10**, so a customer at 5 is far more typical. This compares **places**; it is not the probability of an exact value."
+ },
+ "density-takeaway": {
+  "h": "TAKEAWAY",
+  "t": "**Higher density means nearby observations are more plausible** under the model. For continuous data, the density at one point is **not** the probability of that exact value; probabilities come from areas under the curve."
+ }
+}

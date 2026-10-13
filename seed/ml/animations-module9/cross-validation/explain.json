@@ -1,0 +1,42 @@
+{
+ "classification-dataset": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "You already know K-fold cross-validation. Now we apply it to **classification**: **100 emails**, of which **20 are spam** (pink) and 80 are legitimate (blue)."
+ },
+ "class-imbalance": {
+  "h": "ONLY 20% SPAM",
+  "t": "Spam is the **rare class**: 20 percent. Precision and recall depend on **how many spam emails each validation fold contains**."
+ },
+ "ordinary-split-risk": {
+  "h": "RISK OF AN ORDINARY SPLIT",
+  "t": "If folds are dealt out at random, spam can land unevenly: here the five folds hold **9, 6, 3, 2 and 0** spam emails. The last fold has **no spam at all**, so its recall is undefined, and the others disagree wildly."
+ },
+ "five-folds": {
+  "h": "FIVE FOLDS",
+  "t": "Split the 100 emails into **K = 5 folds of 20 emails** each. Each fold will take a turn as the validation fold."
+ },
+ "stratified-folds": {
+  "h": "STRATIFIED FOLDS",
+  "t": "**Stratified** folds keep the class proportions in every fold: each has **4 spam and 16 legitimate** emails, like the whole set. Now every fold's metrics are comparable."
+ },
+ "fold-one": {
+  "h": "FOLD 1 VALIDATES",
+  "t": "Train on folds 2 to 5 and **validate on fold 1**. Its confusion counts give **precision 0.60 and recall 0.75**."
+ },
+ "rotate-folds": {
+  "h": "ROTATE THE VALIDATION FOLD",
+  "t": "Fold 2 validates next: **precision 0.80, recall 1.00**. Then folds 3, 4 and 5 take their turns, so every email is used for validation exactly once."
+ },
+ "collect-metrics": {
+  "h": "COLLECT THE METRICS",
+  "t": "Each fold gives its own **precision, recall and F1**. The spread across the folds shows **how stable** the estimate is."
+ },
+ "average-metrics": {
+  "h": "AVERAGE THE FOLDS",
+  "t": "Average precision **0.67**, recall **0.80** and F1 **0.73**: a more stable estimate than any single split, and it matches our recurring example."
+ },
+ "final-test-locked": {
+  "h": "TAKEAWAY",
+  "t": "Cross-validation folds are for **choosing and estimating during development**. They are not the final test set, which **stays locked** and is scored once, after all choices are made."
+ }
+}

@@ -17,6 +17,7 @@ import { TrailGuideProvider } from "./assistant/TrailGuideContext"
 import TrailGuideDrawer from "./components/assistant/TrailGuideDrawer"
 import TrailUtilityCluster from "./components/assistant/TrailUtilityCluster"
 import CreatorStudioApp from "./creator/CreatorStudioApp"
+import { usePilotLearnerUi } from "./config/pilotMode"
 
 type Page =
   | "landing"
@@ -53,6 +54,7 @@ function AppContent() {
   const [page, setPage] = useState<Page>(DEVELOPMENT_MODE.DEFAULT_ENTRY as Page)
   const [showDemoNav, setShowDemoNav] = useState(false)
   const { activeProduct, setActiveProduct } = useAppState()
+  const pilot = usePilotLearnerUi()
 
   // Single guarded navigation entry point. Every onNavigate callback passed
   // to a page ultimately calls this, so blocking frozen pages here is
@@ -94,7 +96,7 @@ function AppContent() {
       <TransitionPortal />
 
       {/* Page content */}
-      {page === "creator-studio" ? (
+      {page === "creator-studio" && !pilot ? (
         <CreatorStudioApp onExit={() => handleNavigate("reagvis-trail")} />
       ) : isReagvis ? (
         <ReagvisTrailPage onNavigateHireOS={handleNavigate} />
@@ -110,8 +112,9 @@ function AppContent() {
         </>
       )}
 
-      {/* Floating page navigator — discreet toggle on Reagvis Trails for scenic immersion */}
-      {isReagvis ? (
+      {/* Floating page navigator — discreet toggle on Reagvis Trails for scenic immersion.
+          Development utility: never shown to pilot learners. */}
+      {pilot ? null : isReagvis ? (
         <div className="fixed bottom-3 right-4 z-50 pointer-events-auto">
           {showDemoNav ? (
             <nav

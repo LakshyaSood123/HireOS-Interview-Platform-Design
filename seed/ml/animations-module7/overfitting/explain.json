@@ -1,0 +1,38 @@
+{
+ "dataset": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Our five **training houses** again. They follow a clear **upward trend** with a little scatter."
+ },
+ "simple-model": {
+  "h": "A VERY SIMPLE MODEL",
+  "t": "The simplest model **ignores size** and always predicts the average price, **3.56**. It is a flat line."
+ },
+ "underfit": {
+  "h": "UNDERFITTING",
+  "t": "A flat line misses the trend: the residuals are large almost everywhere, and the **training MSE is 1.2024**. High error even on the training data means **underfitting**, which is not the same as overfitting."
+ },
+ "better-fit": {
+  "h": "A BETTER FIT",
+  "t": "A straight line **w = 1.54, b = 0.48** follows the trend, and its **training MSE drops to 0.0166**. It is simple but captures the pattern."
+ },
+ "flexible-model": {
+  "h": "A VERY FLEXIBLE MODEL",
+  "t": "A **degree-4 curve** has **five parameters for five houses**, enough freedom to bend through every point."
+ },
+ "training-perfect": {
+  "h": "PERFECT ON THE TRAINING SET",
+  "t": "The curve passes exactly through all five houses: **training MSE 0.0**. It looks like the best model, but training error alone cannot tell us whether it learned the **pattern or the noise**."
+ },
+ "validation-data": {
+  "h": "BRING IN VALIDATION HOUSES",
+  "t": "Three houses the model never saw: **(0.75, 1.7), (1.75, 3.3) and (3.4, 5.6)**. They were held back from fitting, so they test **how well each model generalizes**."
+ },
+ "overfit-revealed": {
+  "h": "OVERFITTING REVEALED",
+  "t": "The curve predicts **2.32, 3.32 and 8.54** against true prices **1.7, 3.3 and 5.6**. Its **validation MSE is 3.0073** while the line scores **0.0111**. Training error 0.0 against validation error 3.0073 is overfitting."
+ },
+ "generalization": {
+  "h": "TAKEAWAY",
+  "t": "**Underfit:** high error on both sets. **Good fit:** low on both. **Overfit:** low on training, much higher on new data. We want models that **generalize**."
+ }
+}

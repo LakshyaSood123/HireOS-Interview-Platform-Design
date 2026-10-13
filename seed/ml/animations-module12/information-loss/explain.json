@@ -1,0 +1,42 @@
+{
+ "original-data": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "The six customers with their two original features. We will compress them to one number each, then measure **exactly what was lost**."
+ },
+ "pc1-pc2": {
+  "h": "THE TWO COMPONENTS",
+  "t": "**PC1** (yellow) follows the trend and **PC2** (blue, dashed) is perpendicular to it. Together they describe the same points in rotated axes."
+ },
+ "variance-bars": {
+  "h": "VARIANCE PER COMPONENT",
+  "t": "PC1 carries **6.03 of the 6.20 total (97.2%)** and PC2 carries **0.17 (2.8%)**. A component's explained-variance ratio is its eigenvalue divided by the total."
+ },
+ "keep-both": {
+  "h": "KEEP BOTH: NOTHING LOST",
+  "t": "With **k = 2** we keep both coordinates: **Z = Xc V** is the same data in rotated axes, so **100%** of the variance is kept."
+ },
+ "drop-pc2": {
+  "h": "DROP PC2",
+  "t": "Keeping **k = 1** discards the PC2 coordinates, the short red segments (**0.13, 0.23, −0.43, 0.43, −0.61, 0.24**). These are exactly the information we choose to throw away."
+ },
+ "projected-representation": {
+  "h": "ONE NUMBER LEFT",
+  "t": "Each customer is now just its **PC1 coordinate z**, shown as a dot on the line. The faded originals show what we started from."
+ },
+ "reconstruct": {
+  "h": "RECONSTRUCT",
+  "t": "Mapping each z back with **x̂ = mean + z·v₁** places a hollow ring on the PC1 line. Each ring is near its original customer but not exactly on it."
+ },
+ "reconstruction-error": {
+  "h": "RECONSTRUCTION ERROR",
+  "t": "The red segments from each original to its ring are the error. Their squared lengths add up to **0.863 = 5 × 0.1725**, exactly the variance we dropped."
+ },
+ "explained-variance": {
+  "h": "EXPLAINED VARIANCE",
+  "t": "PC1 keeps **97.2%** of the variance and loses **2.8%**. This measures how much spread is retained. It is **not** a prediction accuracy."
+ },
+ "tradeoff-summary": {
+  "h": "TAKEAWAY",
+  "t": "More components keep more variance but cost more size. **95% explained variance is not 95% accuracy:** the discarded part could hold what a later task needs, so always check the downstream result."
+ }
+}

@@ -1,0 +1,60 @@
+{
+  "title": "Features and targets",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "raw-columns",
+      "label": "Raw columns",
+      "pseudocode": "List what the table contains.",
+      "python": "columns = ['tenure_months', 'monthly_usage_hours', 'support_tickets', 'plan_price', 'days_since_last_activity', 'account_closed_date', 'churned_30d']\nprint(len(columns), 'columns')\n# prints: 7 columns"
+    },
+    {
+      "id": "candidate-features",
+      "label": "Candidate features",
+      "pseudocode": "Candidate features describe the customer.",
+      "python": "features = ['tenure_months', 'monthly_usage_hours', 'support_tickets', 'plan_price', 'days_since_last_activity']\nprint(len(features), 'candidate features')\n# prints: 5 candidate features"
+    },
+    {
+      "id": "target-column",
+      "label": "Target column",
+      "pseudocode": "target = outcome to predict",
+      "python": "target = 'churned_30d'\nlabels = [0, 1, 0, 1, 0, 1]\nprint('target:', target, ' churners among 6 customers:', sum(labels))\n# prints: target: churned_30d  churners among 6 customers: 3"
+    },
+    {
+      "id": "valid-feature",
+      "label": "A valid feature",
+      "pseudocode": "A feature must be known when we predict.",
+      "python": "known_on_day_0 = {'days_since_last_activity': True}\nprint('days_since_last_activity valid:', known_on_day_0['days_since_last_activity'])\n# prints: days_since_last_activity valid: True"
+    },
+    {
+      "id": "another-feature",
+      "label": "Another valid feature",
+      "pseudocode": "Check each feature the same way.",
+      "python": "known_on_day_0 = {'support_tickets': True}\nprint('support_tickets valid:', known_on_day_0['support_tickets'])\n# prints: support_tickets valid: True"
+    },
+    {
+      "id": "leaky-feature",
+      "label": "A leaky feature",
+      "pseudocode": "A perfect predictor may contain the outcome.",
+      "python": "closed = [None, '2024-03-02', None, '2024-03-10', None, '2024-03-18']\nchurned = [0, 1, 0, 1, 0, 1]\nright = sum((c is not None) == bool(y) for c, y in zip(closed, churned))\nprint('closed-date rule right for', right, 'of', len(churned))\n# prints: closed-date rule right for 6 of 6"
+    },
+    {
+      "id": "prediction-time-check",
+      "label": "Prediction-time check",
+      "pseudocode": "Ask: would we know this on the prediction day?",
+      "python": "columns = {'tenure_months': True, 'account_closed_date': False}\nfor name, known in columns.items():\n    print(name, '-> known on day 0:', known)\n# prints: tenure_months -> known on day 0: True\n# prints: account_closed_date -> known on day 0: False"
+    },
+    {
+      "id": "remove-leakage",
+      "label": "Remove the leakage",
+      "pseudocode": "Drop columns that fail the check.",
+      "python": "columns = {'tenure_months': True, 'monthly_usage_hours': True, 'support_tickets': True, 'plan_price': True, 'days_since_last_activity': True, 'account_closed_date': False}\nkept = [c for c, known in columns.items() if known]\nprint('dropped:', [c for c in columns if c not in kept])\n# prints: dropped: ['account_closed_date']"
+    },
+    {
+      "id": "final-feature-set",
+      "label": "Final feature set",
+      "pseudocode": "Build the feature matrix X and target y.",
+      "python": "row = {'tenure_months': 24, 'monthly_usage_hours': 18.5, 'support_tickets': 0, 'plan_price': 20, 'days_since_last_activity': 2, 'churned_30d': 0}\nfeatures = [k for k in row if k != 'churned_30d']\nprint('X row:', [row[k] for k in features], ' y:', row['churned_30d'])\n# prints: X row: [24, 18.5, 0, 20, 2]  y: 0"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+ "base-model": {
+  "h": "TWO KINDS OF SETTINGS",
+  "t": "**Parameters** (left) are learned from the training data. **Hyperparameters** (right) are chosen by us and set outside the fitting, like maximum depth or learning rate."
+ },
+ "hyperparameter": {
+  "h": "THE SETTING WE TUNE",
+  "t": "We will tune **max_depth**: how many questions in a row the tree may ask. We will try the values **1, 2, 4 and 8** and compare the results."
+ },
+ "candidate-a": {
+  "h": "CANDIDATE A",
+  "t": "The first candidate has depth **1**: a single question. Each candidate gets its own column so the settings can be compared side by side."
+ },
+ "candidate-b": {
+  "h": "CANDIDATE B",
+  "t": "The second candidate has depth **2**: two questions in a row. It is the same kind of model with a different value of the hyperparameter."
+ },
+ "candidate-c": {
+  "h": "CANDIDATE C",
+  "t": "The third candidate has depth **4**: four questions in a row, a moderate amount of flexibility."
+ },
+ "candidate-d": {
+  "h": "CANDIDATE D",
+  "t": "The fourth candidate has depth **8**: very flexible. With all four columns in place the experiment is set up, but nothing has been trained yet."
+ },
+ "train-each": {
+  "h": "TRAIN EACH CANDIDATE",
+  "t": "Each depth is trained on the **training data only**. The small grey figures are training F1 scores, which keep rising with depth. They are **not** what we select on."
+ },
+ "validation-results": {
+  "h": "JUDGE ON VALIDATION",
+  "t": "Now each trained model is scored on the **validation data**: **0.46, 0.58, 0.676 and 0.59**. The best score is in the middle, not at the most flexible setting."
+ },
+ "select-setting": {
+  "h": "SELECT BY VALIDATION",
+  "t": "**Depth 4** has the best validation F1 and is highlighted. Choosing by training score would wrongly pick **depth 8**, the overfitted model."
+ },
+ "test-stays-locked": {
+  "h": "TAKEAWAY",
+  "t": "The test set played **no part** in choosing the depth. **Remember:** tune hyperparameters on validation data, and keep the test set locked until the model and settings are final."
+ }
+}

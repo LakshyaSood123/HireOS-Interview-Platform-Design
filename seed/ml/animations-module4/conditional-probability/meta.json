@@ -1,0 +1,48 @@
+{
+  "title": "Conditional probability: restrict, then count again",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "full-population",
+      "label": "All 100 emails",
+      "pseudocode": "Start with every email as equally likely to be picked.",
+      "python": "counts = {\n    (True, True): 24,    # spam, contains 'free'\n    (True, False): 16,   # spam, no 'free'\n    (False, True): 6,    # not spam, contains 'free'\n    (False, False): 54,  # not spam, no 'free'\n}\ntotal = sum(counts.values())\nprint(total)   # 100"
+    },
+    {
+      "id": "event-a",
+      "label": "Event A: the email is spam",
+      "pseudocode": "P(A) = number of spam emails / all emails.",
+      "python": "counts = {\n    (True, True): 24,    # spam, contains 'free'\n    (True, False): 16,   # spam, no 'free'\n    (False, True): 6,    # not spam, contains 'free'\n    (False, False): 54,  # not spam, no 'free'\n}\ntotal = sum(counts.values())\nspam = counts[(True, True)] + counts[(True, False)]\nprint(spam, spam / total)   # 40 0.4"
+    },
+    {
+      "id": "observe-b",
+      "label": "New information: B = contains 'free'",
+      "pseudocode": "We learn the email has the word 'free'. Count how many emails do.",
+      "python": "counts = {\n    (True, True): 24,    # spam, contains 'free'\n    (True, False): 16,   # spam, no 'free'\n    (False, True): 6,    # not spam, contains 'free'\n    (False, False): 54,  # not spam, no 'free'\n}\ntotal = sum(counts.values())\nfree = counts[(True, True)] + counts[(False, True)]\nprint(free)   # 30"
+    },
+    {
+      "id": "restrict-to-b",
+      "label": "Restrict attention to B",
+      "pseudocode": "Throw away every email without 'free'. Only B remains.",
+      "python": "counts = {\n    (True, True): 24,    # spam, contains 'free'\n    (True, False): 16,   # spam, no 'free'\n    (False, True): 6,    # not spam, contains 'free'\n    (False, False): 54,  # not spam, no 'free'\n}\ntotal = sum(counts.values())\nfree = counts[(True, True)] + counts[(False, True)]\nprint(free, 'of', total, 'emails remain')   # 30 of 100 emails remain"
+    },
+    {
+      "id": "overlap",
+      "label": "The overlap: spam AND free",
+      "pseudocode": "Count the emails that are both spam and contain 'free'.",
+      "python": "counts = {\n    (True, True): 24,    # spam, contains 'free'\n    (True, False): 16,   # spam, no 'free'\n    (False, True): 6,    # not spam, contains 'free'\n    (False, False): 54,  # not spam, no 'free'\n}\ntotal = sum(counts.values())\nprint(counts[(True, True)])   # 24"
+    },
+    {
+      "id": "conditional-ratio",
+      "label": "The ratio: overlap / B",
+      "pseudocode": "P(A | B) = count(A and B) / count(B)",
+      "python": "counts = {\n    (True, True): 24,    # spam, contains 'free'\n    (True, False): 16,   # spam, no 'free'\n    (False, True): 6,    # not spam, contains 'free'\n    (False, False): 54,  # not spam, no 'free'\n}\ntotal = sum(counts.values())\nfree = counts[(True, True)] + counts[(False, True)]\nprint(counts[(True, True)] / free)   # 0.8"
+    },
+    {
+      "id": "ml-connection",
+      "label": "Evidence changes the prediction",
+      "pseudocode": "The prediction changes once the evidence is known.",
+      "python": "counts = {\n    (True, True): 24,    # spam, contains 'free'\n    (True, False): 16,   # spam, no 'free'\n    (False, True): 6,    # not spam, contains 'free'\n    (False, False): 54,  # not spam, no 'free'\n}\ntotal = sum(counts.values())\nspam = counts[(True, True)] + counts[(True, False)]\nfree = counts[(True, True)] + counts[(False, True)]\nprint(spam / total, counts[(True, True)] / free)   # 0.4 0.8"
+    }
+  ]
+}

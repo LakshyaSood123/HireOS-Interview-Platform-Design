@@ -23,7 +23,8 @@
     "verify:adapters": "tsx scripts/verifyAdapters.ts",
     "verify:day3": "bash scripts/verify-day3.sh",
     "verify:cms": "tsx scripts/verifyCmsPipeline.ts",
-    "verify:bootstrap": "tsx scripts/verifyBootstrapAtomicity.ts"
+    "verify:bootstrap": "tsx scripts/verifyBootstrapAtomicity.ts",
+    "seed:ml-course": "tsx scripts/seedMlCourse.ts"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",

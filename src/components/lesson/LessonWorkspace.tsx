@@ -15,10 +15,8 @@ import LessonQuickFeedback from "../feedback/LessonQuickFeedback"
 import { useAuth } from "../../auth/AuthContext"
 import { recordAttempt } from "../../learning/services/attemptsApi"
 import { ApiUnavailableError, SessionExpiredError } from "../../learning/services/apiClient"
-
-/** The one course wired to the backend in this phase — matches
- * AppStateContext.tsx's BACKEND_COURSE_ID. */
-const BACKEND_COURSE_ID = "dsa-foundations"
+import { isBackendSyncedCourse } from "../../learning/courseSources"
+import PackageAnimationBlock, { type AnimationPackageLoader } from "./PackageAnimationBlock"
 
 interface LessonWorkspaceProps {
   checkpoint: Checkpoint
@@ -42,6 +40,9 @@ interface LessonWorkspaceProps {
    * has no custom `layout` (the three original per-type branches don't
    * read this prop at all). */
   forceNarrow?: boolean
+  /** Creator Studio preview only: loads custom animation packages through the
+   * creator API (so drafts can be previewed). Absent in the learner runtime. */
+  loadAnimationPackage?: AnimationPackageLoader
   onFailedSubmit: () => void
   /** Performs the actual engine completion (AppStateContext's
    * completeCheckpointById) — synchronous, called once. Returns whether the
@@ -76,6 +77,7 @@ export default function LessonWorkspace({
   moduleId,
   isPreview = false,
   forceNarrow = false,
+  loadAnimationPackage,
   onFailedSubmit,
   onComplete,
   onContinue,
@@ -96,7 +98,7 @@ export default function LessonWorkspace({
   // checkpoint, behave exactly as they did before this existed.
   const { client, reportSessionExpired } = useAuth()
   const handleQuickCheckAnswered = (answer: QuickCheckAnswer) => {
-    if (isPreview || courseId !== BACKEND_COURSE_ID) return
+    if (isPreview || !isBackendSyncedCourse(courseId)) return
     recordAttempt(client, {
       courseId,
       checkpointId: checkpoint.id,
@@ -154,7 +156,7 @@ export default function LessonWorkspace({
 
   // Checkpoint category classification
   const isCoding = Boolean(content.codingActivity)
-  const isAnimation = Boolean(content.animation || content.visual || content.callStackVisual || content.twoPointerVisual)
+  const isAnimation = Boolean(content.animation || content.customAnimation || content.visual || content.callStackVisual || content.twoPointerVisual)
   const isConceptOnly = !isCoding && !isAnimation
 
   // ══════════════════════════════════════════════════════════════════════
@@ -226,6 +228,7 @@ export default function LessonWorkspace({
   const renderAnimationBlock = () => (
     <div className="rounded-2xl bg-[#04100C] border border-[#1DB584]/35 shadow-2xl overflow-hidden p-1 min-w-0 w-full max-w-full box-border h-full">
       {content.animation && <AlgorithmAnimation animation={content.animation} />}
+      {content.customAnimation && <PackageAnimationBlock courseId={courseId} animation={content.customAnimation} loadPackage={loadAnimationPackage} />}
       {content.visual && <BinaryTreeDiagram visual={content.visual} />}
       {content.callStackVisual && <CallStackVisual frames={content.callStackVisual.frames} />}
       {content.twoPointerVisual && <TwoPointerVisual values={content.twoPointerVisual.values} mode={content.twoPointerVisual.mode} />}
@@ -560,6 +563,9 @@ export default function LessonWorkspace({
                 <div className="rounded-2xl bg-[#04100C] border border-[#1DB584]/35 shadow-2xl overflow-hidden p-1 min-w-0 w-full max-w-full box-border">
                   {content.animation && (
                     <AlgorithmAnimation animation={content.animation} />
+                  )}
+                  {content.customAnimation && (
+                    <PackageAnimationBlock courseId={courseId} animation={content.customAnimation} loadPackage={loadAnimationPackage} />
                   )}
                   {content.visual && (
                     <BinaryTreeDiagram visual={content.visual} />

@@ -1,0 +1,72 @@
+{
+  "title": "K-Means vs GMM",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "same-dataset",
+      "label": "The same data",
+      "pseudocode": "One dataset for both methods.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\npoints = [1.5, 2.0, 2.8, 3.4, 4.5, 5.2, 6.1, 6.8, 7.5, 8.3]\nprint(len(points), 'points')\n# prints: 10 points"
+    },
+    {
+      "id": "kmeans-centroids",
+      "label": "K-Means: centroids",
+      "pseudocode": "K-Means with two clusters from centers 3 and 6.",
+      "python": "points = [1.5, 2.0, 2.8, 3.4, 4.5, 5.2, 6.1, 6.8, 7.5, 8.3]\ncenters = [3.0, 6.0]\nfor _ in range(10):\n    labels = [min(range(2), key=lambda k: abs(x - centers[k])) for x in points]\n    centers = [sum(x for x, l in zip(points, labels) if l == k) / labels.count(k) for k in range(2)]\nprint([round(c, 2) for c in centers], labels)\n# prints: [2.84, 6.78] [0, 0, 0, 0, 0, 1, 1, 1, 1, 1]"
+    },
+    {
+      "id": "hard-boundaries",
+      "label": "K-Means: hard boundaries",
+      "pseudocode": "The boundary is halfway between the centers.",
+      "python": "centers = [2.84, 6.78]\nprint('boundary at', round(sum(centers) / 2, 2))\n# prints: boundary at 4.81"
+    },
+    {
+      "id": "ambiguous-point",
+      "label": "A point in the overlap",
+      "pseudocode": "K-Means gives 4.5 one label.",
+      "python": "centers = [2.84, 6.78]\nx = 4.5\nprint('K-Means label:', min(range(2), key=lambda k: abs(x - centers[k])))\n# prints: K-Means label: 0"
+    },
+    {
+      "id": "gmm-components",
+      "label": "GMM: components",
+      "pseudocode": "Fit a GMM with EM.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\npoints = [1.5, 2.0, 2.8, 3.4, 4.5, 5.2, 6.1, 6.8, 7.5, 8.3]\ndef e_step(points, comps):\n    out = []\n    for x in points:\n        sc = [w * pdf(x, m, s) for w, m, s in comps]\n        t = sum(sc)\n        out.append([v / t for v in sc])\n    return out\ndef m_step(points, resp):\n    new = []\n    for k in range(len(resp[0])):\n        n = sum(r[k] for r in resp)\n        mu = sum(r[k] * x for r, x in zip(resp, points)) / n\n        sd = math.sqrt(sum(r[k] * (x - mu) ** 2 for r, x in zip(resp, points)) / n)\n        new.append((n / len(points), mu, sd))\n    return new\ndef loglik(points, comps):\n    return sum(math.log(sum(w * pdf(x, m, s) for w, m, s in comps)) for x in points)\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]\nfor _ in range(60):\n    comps = m_step(points, e_step(points, comps))\nprint([tuple(round(v, 2) for v in c) for c in comps])\n# prints: [(0.37, 2.38, 0.74), (0.63, 6.25, 1.45)]"
+    },
+    {
+      "id": "soft-responsibility",
+      "label": "GMM: soft responsibility",
+      "pseudocode": "Responsibilities for 4.5.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\npoints = [1.5, 2.0, 2.8, 3.4, 4.5, 5.2, 6.1, 6.8, 7.5, 8.3]\ndef e_step(points, comps):\n    out = []\n    for x in points:\n        sc = [w * pdf(x, m, s) for w, m, s in comps]\n        t = sum(sc)\n        out.append([v / t for v in sc])\n    return out\ndef m_step(points, resp):\n    new = []\n    for k in range(len(resp[0])):\n        n = sum(r[k] for r in resp)\n        mu = sum(r[k] * x for r, x in zip(resp, points)) / n\n        sd = math.sqrt(sum(r[k] * (x - mu) ** 2 for r, x in zip(resp, points)) / n)\n        new.append((n / len(points), mu, sd))\n    return new\ndef loglik(points, comps):\n    return sum(math.log(sum(w * pdf(x, m, s) for w, m, s in comps)) for x in points)\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]\nfor _ in range(60):\n    comps = m_step(points, e_step(points, comps))\nprint([round(r, 2) for r in e_step([4.5], comps)[0]])\n# prints: [0.04, 0.96]"
+    },
+    {
+      "id": "shape-flexibility",
+      "label": "Shape flexibility",
+      "pseudocode": "GMM components have their own spread.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\npoints = [1.5, 2.0, 2.8, 3.4, 4.5, 5.2, 6.1, 6.8, 7.5, 8.3]\ndef e_step(points, comps):\n    out = []\n    for x in points:\n        sc = [w * pdf(x, m, s) for w, m, s in comps]\n        t = sum(sc)\n        out.append([v / t for v in sc])\n    return out\ndef m_step(points, resp):\n    new = []\n    for k in range(len(resp[0])):\n        n = sum(r[k] for r in resp)\n        mu = sum(r[k] * x for r, x in zip(resp, points)) / n\n        sd = math.sqrt(sum(r[k] * (x - mu) ** 2 for r, x in zip(resp, points)) / n)\n        new.append((n / len(points), mu, sd))\n    return new\ndef loglik(points, comps):\n    return sum(math.log(sum(w * pdf(x, m, s) for w, m, s in comps)) for x in points)\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]\nfor _ in range(60):\n    comps = m_step(points, e_step(points, comps))\nprint('sigmas differ:', [round(c[2], 2) for c in comps])\n# prints: sigmas differ: [0.74, 1.45]"
+    },
+    {
+      "id": "side-by-side",
+      "label": "Side by side",
+      "pseudocode": "Hard labels versus soft memberships.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\npoints = [1.5, 2.0, 2.8, 3.4, 4.5, 5.2, 6.1, 6.8, 7.5, 8.3]\ndef e_step(points, comps):\n    out = []\n    for x in points:\n        sc = [w * pdf(x, m, s) for w, m, s in comps]\n        t = sum(sc)\n        out.append([v / t for v in sc])\n    return out\ndef m_step(points, resp):\n    new = []\n    for k in range(len(resp[0])):\n        n = sum(r[k] for r in resp)\n        mu = sum(r[k] * x for r, x in zip(resp, points)) / n\n        sd = math.sqrt(sum(r[k] * (x - mu) ** 2 for r, x in zip(resp, points)) / n)\n        new.append((n / len(points), mu, sd))\n    return new\ndef loglik(points, comps):\n    return sum(math.log(sum(w * pdf(x, m, s) for w, m, s in comps)) for x in points)\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]\nfor _ in range(60):\n    comps = m_step(points, e_step(points, comps))\nfor x in (3.4, 4.5, 5.2):\n    print(x, [round(r, 2) for r in e_step([x], comps)[0]])\n# prints: 3.4 [0.76, 0.24]\n# prints: 4.5 [0.04, 0.96]\n# prints: 5.2 [0.0, 1.0]"
+    },
+    {
+      "id": "when-kmeans",
+      "label": "When K-Means is enough",
+      "pseudocode": "Compact groups, one label is fine.",
+      "python": "reasons = ['compact similar groups', 'speed and simplicity', 'one label per point is fine']\nfor r in reasons:\n    print(r)\n# prints: compact similar groups\n# prints: speed and simplicity\n# prints: one label per point is fine"
+    },
+    {
+      "id": "when-gmm",
+      "label": "When a GMM helps",
+      "pseudocode": "Overlap, soft membership, different spreads.",
+      "python": "reasons = ['overlap matters', 'soft membership wanted', 'different spreads or orientations']\nfor r in reasons:\n    print(r)\n# prints: overlap matters\n# prints: soft membership wanted\n# prints: different spreads or orientations"
+    },
+    {
+      "id": "final-summary",
+      "label": "Summary",
+      "pseudocode": "Both need the number of groups.",
+      "python": "choices = {'K-Means': 'number of clusters K', 'GMM': 'number of components'}\nprint(choices)\n# prints: {'K-Means': 'number of clusters K', 'GMM': 'number of components'}"
+    }
+  ]
+}

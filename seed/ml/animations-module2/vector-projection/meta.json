@@ -1,0 +1,48 @@
+{
+  "title": "Projecting one vector onto another",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "target-vector",
+      "label": "Start with the vector to approximate",
+      "pseudocode": "Choose the vector a that we want to approximate.",
+      "python": "a = [4, 3]\nprint(a)"
+    },
+    {
+      "id": "direction",
+      "label": "Choose the direction",
+      "pseudocode": "Choose the direction b. We may only move along the line through b.",
+      "python": "b = [5, 2]\nprint(b)"
+    },
+    {
+      "id": "drop-perpendicular",
+      "label": "Drop a perpendicular onto the line",
+      "pseudocode": "Find the point on the line where a straight drop from the tip of a meets it at a right angle.",
+      "python": "def dot(u, v):\n    return sum(x * y for x, y in zip(u, v))\n\na, b = [4, 3], [5, 2]\nscale = dot(a, b) / dot(b, b)\nprint(round(scale, 3))  # 0.897"
+    },
+    {
+      "id": "projection",
+      "label": "Find the projection",
+      "pseudocode": "Scale b by that amount. The result is the projection of a onto b.",
+      "python": "def dot(u, v):\n    return sum(x * y for x, y in zip(u, v))\n\na, b = [4, 3], [5, 2]\nscale = dot(a, b) / dot(b, b)\nproj = [scale * x for x in b]\nprint([round(x, 2) for x in proj])  # [4.48, 1.79]"
+    },
+    {
+      "id": "residual",
+      "label": "Measure the residual",
+      "pseudocode": "Subtract the projection from a. The residual is perpendicular to b.",
+      "python": "def dot(u, v):\n    return sum(x * y for x, y in zip(u, v))\n\na, b = [4, 3], [5, 2]\nscale = dot(a, b) / dot(b, b)\nproj = [scale * x for x in b]\nresidual = [p - q for p, q in zip(a, proj)]\nprint(round(dot(residual, b), 6))  # 0.0 (perpendicular)"
+    },
+    {
+      "id": "formula",
+      "label": "Write it as a formula",
+      "pseudocode": "proj = ((a . b) / (b . b)) * b. The dot products measure how much a points along b.",
+      "python": "def project(a, b):\n    s = sum(x * y for x, y in zip(a, b)) / sum(x * x for x in b)\n    return [s * x for x in b]\n\nprint(project([3, 1], [1, 1]))  # [2.0, 2.0]"
+    },
+    {
+      "id": "ml-connection",
+      "label": "Use it as a best approximation",
+      "pseudocode": "The projection is the closest point to a along that direction. Least squares and PCA reuse this idea.",
+      "python": "def project(a, b):\n    s = sum(x * y for x, y in zip(a, b)) / sum(x * x for x in b)\n    return [s * x for x in b]\n\nprint(project([4, 3], [5, 2]))"
+    }
+  ]
+}

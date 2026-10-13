@@ -1,0 +1,34 @@
+{
+ "input-data": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Two problems with the same shape: given some features, **predict something**. A **house** with size 2.0, and an **email** with spam score 7.5."
+ },
+ "regression-task": {
+  "h": "REGRESSION: PREDICT A NUMBER",
+  "t": "For the house we want a **price**. The model reads the size and produces an output on a **scale**."
+ },
+ "continuous-output": {
+  "h": "A CONTINUOUS OUTPUT",
+  "t": "The regression output is a number such as **3.7** (that is $370k). Any value on the scale is possible, and **being close counts**: 3.6 is nearly right."
+ },
+ "classification-task": {
+  "h": "CLASSIFICATION: PREDICT A CATEGORY",
+  "t": "For the email we want a **category**. The model reads the spam score and must choose one of a few labels."
+ },
+ "class-output": {
+  "h": "A CLASS LABEL",
+  "t": "The classification output is a **label: spam**. The choices are not on a scale: spam is not “a bit more” than not spam."
+ },
+ "compare": {
+  "h": "COMPARE THE TWO OUTPUTS",
+  "t": "Regression outputs a **quantity** and classification outputs a **category**. The pipeline looks alike, but the output, and **how we judge it**, are different."
+ },
+ "score-preview": {
+  "h": "A SCORE COMES FIRST",
+  "t": "Classifiers often compute a **score** first (here 7.5), then a **decision rule** turns it into a class: a score of at least 4.0 means spam. The next lessons open this box."
+ },
+ "ml-choice": {
+  "h": "TAKEAWAY",
+  "t": "Ask **what the answer looks like**. A quantity on a scale means **regression**. One of a fixed set of categories means **classification**."
+ }
+}

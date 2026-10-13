@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import TrailHUD from "../components/forest/TrailHUD"
 import BiomeTrailMap from "../components/forest/BiomeTrailMap"
 import LessonModal from "../components/forest/LessonModal"
@@ -18,22 +18,26 @@ import AlpinePineTree from "../components/forest/scenic/AlpinePineTree"
 import { MeadowCow } from "../components/forest/scenic/ScenicAnimals"
 import { useAppState } from "../state/AppStateContext"
 import { type TrailNode } from "../data/reagvisCourses"
-import { getCourseById, isCourseAvailable, getAllCheckpointsInOrder } from "../learning/courseRegistry"
+import { isCourseAvailable, getAllCheckpointsInOrder } from "../learning/courseRegistry"
+import { isBackendPinnedCourse, isBackendSyncedCourse } from "../learning/courseSources"
+import PinnedCourseWorld from "../components/course/PinnedCourseWorld"
+import CourseHome from "../components/course/CourseHome"
+import CourseCurriculum from "../components/course/CourseCurriculum"
+import { DSA_HOME } from "../learning/courseHomeConfig"
+import { buildCourseStats, countCompleted } from "../learning/courseHomeStats"
 import { RoutingCodeRunner } from "../learning/services/pistonCodeRunner"
 import { LocalNotesRepository, type NotesRepository } from "../learning/services/notesRepository"
 import { ApiNotesRepository } from "../learning/services/apiNotesRepository"
 import { getUnifiedLibraryCourses } from "../learning/libraryCourseSource"
 import CmsCourseRuntime from "../components/cms/CmsCourseRuntime"
 import { useAuth } from "../auth/AuthContext"
+import { usePilotLearnerUi } from "../config/pilotMode"
+import { DSA_COURSE_ID } from "../learning/courseSources"
 
 // Module-level singletons — one code runner for the whole app.
 // RoutingCodeRunner sends only the MVP-enabled activity (foundations-4) to
 // real Piston execution; every other activity still uses MockCodeRunner.
 const codeRunner = new RoutingCodeRunner()
-// One course wired to the backend notes endpoint in this phase — matches
-// AppStateContext.tsx's BACKEND_COURSE_ID. Any other course keeps using the
-// local-only repository exactly as before.
-const BACKEND_COURSE_ID = "dsa-foundations"
 const localNotesRepository = new LocalNotesRepository()
 
 interface ReagvisTrailPageProps {
@@ -51,7 +55,9 @@ export default function ReagvisTrailPage({ onNavigateHireOS }: ReagvisTrailPageP
     retakeInterview,
     returnToHireOS,
     startLearningTrail,
+    openCourseHome,
     activeCourseId,
+    activeCourse,
     lives,
     viewedModuleId,
     viewedCheckpointId,
@@ -73,13 +79,33 @@ export default function ReagvisTrailPage({ onNavigateHireOS }: ReagvisTrailPageP
   // stays mounted (hidden) underneath so its state is untouched on return.
   const codeLab = useCodeLabNavigation(reagvisView === "workspace")
   const activeLab = getConceptCodeLab(codeLab.request?.animationId)
-  const unifiedLibraryCourses = getUnifiedLibraryCourses()
+  const pilot = usePilotLearnerUi()
+  // Pilot learners only see finished course worlds: the DSA world is not part of the pilot.
+  const unifiedLibraryCourses = getUnifiedLibraryCourses().filter(c => !pilot || c.id !== DSA_COURSE_ID)
 
   const { client } = useAuth()
   const apiNotesRepository = useMemo<NotesRepository>(() => new ApiNotesRepository(client), [client])
-  const notesRepository = activeCourseId === BACKEND_COURSE_ID ? apiNotesRepository : localNotesRepository
+  const notesRepository = isBackendSyncedCourse(activeCourseId) ? apiNotesRepository : localNotesRepository
 
-  const course = getCourseById(activeCourseId)
+  const course = activeCourse
+
+  // Pilot learners never land on the demo DSA world ("map") or the interview-diagnosis
+  // home ("intro"): they start at the Course Library.
+  useEffect(() => {
+    if (pilot && (reagvisView === "map" || reagvisView === "intro")) setReagvisView("library")
+  }, [pilot, reagvisView, setReagvisView])
+
+  // Where the module roadmap's Back button returns: the scenic map when the
+  // module was opened from it, otherwise the course home.
+  const previousView = useRef(reagvisView)
+  const roadmapBackView = useRef<"map" | "course-home">("course-home")
+  useEffect(() => {
+    if (reagvisView === "roadmap") {
+      if (previousView.current === "map") roadmapBackView.current = "map"
+      else if (previousView.current === "course-home") roadmapBackView.current = "course-home"
+    }
+    previousView.current = reagvisView
+  }, [reagvisView])
   const viewedModule = course?.zones.flatMap(z => z.modules).find(m => m.id === viewedModuleId)
   const viewedCheckpoint = viewedModule?.checkpoints.find(cp => cp.id === viewedCheckpointId)
   const orderedCheckpoints = course ? getAllCheckpointsInOrder(course) : []
@@ -224,6 +250,33 @@ export default function ReagvisTrailPage({ onNavigateHireOS }: ReagvisTrailPageP
         {/* ══════════════════════════════════════════════════════
             2. THE PRIMARY SCENIC ALPINE COURSE MAP
             ══════════════════════════════════════════════════════ */}
+        {/* ══════════════════════════════════════════════════════
+            COURSE HOME (static course: Data Structures & Algorithms)
+            ══════════════════════════════════════════════════════ */}
+        {reagvisView === "course-home" && course && (
+          <CourseHome
+            config={DSA_HOME}
+            title={course.title}
+            stats={buildCourseStats({ zones: course.zones, getCheckpointState })}
+            hasProgress={countCompleted(course.zones, getCheckpointState).done > 0}
+            onPrimary={() => setReagvisView("map")}
+            onBack={() => setReagvisView("library")}
+          >
+            <CourseCurriculum
+              zones={course.zones}
+              moduleStates={dsaModuleStates}
+              previewModuleIds={["two-pointers"]}
+              onEnterModule={(module, state) => {
+                if (module.id === "two-pointers" && state === "locked") setPreviewModuleId("two-pointers")
+                enterModule(module.id)
+              }}
+            />
+          </CourseHome>
+        )}
+
+        {/* Backend-pinned course (Machine Learning): loading / error / course home. */}
+        {reagvisView === "pinned-course" && <PinnedCourseWorld />}
+
         {reagvisView === "map" && (
           <div className="animate-fade-up w-full h-full">
             <BiomeTrailMap
@@ -288,7 +341,7 @@ export default function ReagvisTrailPage({ onNavigateHireOS }: ReagvisTrailPageP
               onBack={() => {
                 setQuizOpen(false)
                 setPreviewModuleId(null)
-                setReagvisView("map")
+                setReagvisView(isBackendPinnedCourse(activeCourseId) ? "pinned-course" : roadmapBackView.current)
               }}
             />
           </div>
@@ -351,7 +404,7 @@ export default function ReagvisTrailPage({ onNavigateHireOS }: ReagvisTrailPageP
                   Each engineering discipline forms an explorable alpine environment in the Knowledge Forest.
                 </p>
               </div>
-              {onNavigateHireOS && (
+              {onNavigateHireOS && !pilot && (
                 <button
                   onClick={() => onNavigateHireOS("creator-studio")}
                   className="px-4 py-2.5 rounded-full bg-white border-2 border-[#C2D6B8] hover:border-[#5B8854] text-[#2F6747] font-bold text-xs cursor-pointer transition-all shadow-xs inline-flex items-center gap-2"
@@ -390,8 +443,7 @@ export default function ReagvisTrailPage({ onNavigateHireOS }: ReagvisTrailPageP
                             if (course.source === "cms") {
                               enterCmsCourse(course.id)
                             } else {
-                              startLearningTrail(course.id)
-                              setReagvisView("map")
+                              openCourseHome(course.id)
                             }
                           }}
                           className="px-4 py-2 rounded-full bg-[#5B8854] hover:bg-[#487342] text-white font-bold transition-all shadow-xs cursor-pointer"
@@ -411,87 +463,6 @@ export default function ReagvisTrailPage({ onNavigateHireOS }: ReagvisTrailPageP
                 )
               })}
             </div>
-
-            {/* ── DSA course-world module list (full functional curriculum) ──
-                Course World (the Alpine scenic map) still only shows the
-                original 7 module tiles — see LEARNING_ENGINE_ARCHITECTURE.md's
-                "Course World vs Module Roadmap" note. This plain list is the
-                navigation path to every other real module until the scenic
-                map grows more regions, without touching the Alpine visuals
-                at all. */}
-            {course && (
-              <div className="mt-12">
-                <div className="mb-6">
-                  <span className="text-[10px] font-black uppercase tracking-wider text-[#1DB584] block mb-1">
-                    Data Structures &amp; Algorithms
-                  </span>
-                  <h3 className="text-xl font-black text-[#1B3F2B]">Full DSA Curriculum</h3>
-                  <p className="text-xs text-gray-600 mt-1">
-                    Every module has real lessons — the scenic Course World above still shows the
-                    original 7 destinations until the next world-map phase.
-                  </p>
-                </div>
-
-                {course.zones
-                  .map(zone => (
-                    <div key={zone.id} className="mb-8">
-                      <h4 className="text-xs font-black uppercase tracking-wider text-gray-500 mb-3">{zone.title}</h4>
-                      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {zone.modules
-                          .filter(module => module.checkpoints.length > 0)
-                          .map(module => {
-                            const state = dsaModuleStates[module.id] ?? "locked"
-                            const isTwoPointers = module.id === "two-pointers"
-                            const enterable = state !== "locked" || isTwoPointers
-                            return (
-                              <button
-                                key={module.id}
-                                onClick={() => {
-                                  if (isTwoPointers && state === "locked") {
-                                    setPreviewModuleId("two-pointers")
-                                  }
-                                  if (enterable) enterModule(module.id)
-                                }}
-                                disabled={!enterable}
-                                className={`text-left rounded-2xl border p-4 transition-all ${
-                                  enterable
-                                    ? "bg-white/90 border-[#C2D6B8] hover:bg-white hover:shadow-md cursor-pointer"
-                                    : "bg-white/40 border-[#D8E4D2] opacity-60 cursor-not-allowed"
-                                }`}
-                              >
-                                <div className="flex items-center gap-2.5 mb-1.5">
-                                  <span className="text-lg">{module.icon}</span>
-                                  <span className="text-sm font-black text-[#1B3F2B]">{module.title}</span>
-                                </div>
-                                <p className="text-[11px] text-gray-600 leading-snug mb-2">{module.description}</p>
-                                <div className="flex items-center gap-2">
-                                  <span
-                                    className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${
-                                      state === "completed" || state === "mastered"
-                                        ? "bg-[#1DB584]/15 text-[#128A5B]"
-                                        : state === "current"
-                                          ? "bg-[#1DB584] text-white"
-                                          : state === "available"
-                                            ? "bg-[#E2EED5] text-[#234E35]"
-                                            : "bg-gray-200 text-gray-500"
-                                    }`}
-                                  >
-                                    {state === "locked" ? "🔒 Locked" : state}
-                                  </span>
-                                  {isTwoPointers && state === "locked" && (
-                                    <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-[#3B82F6]/15 text-[#2563EB] border border-[#3B82F6]/30">
-                                      Demo Preview 👁️
-                                    </span>
-                                  )}
-                                </div>
-                              </button>
-                            )
-                          })}
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            )}
           </div>
         )}
 

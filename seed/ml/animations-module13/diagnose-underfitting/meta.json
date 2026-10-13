@@ -1,0 +1,60 @@
+{
+  "title": "Diagnose underfitting",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "training-result",
+      "label": "Training result",
+      "pseudocode": "Measure on training data.",
+      "python": "RESULTS = [(1, 0.48, 0.46), (2, 0.62, 0.58), (4, 0.76, 0.676), (8, 0.97, 0.59)]   # (max_depth, train F1, validation F1)\nprint('depth 1 train F1:', RESULTS[0][1])\n# prints: depth 1 train F1: 0.48"
+    },
+    {
+      "id": "validation-result",
+      "label": "Validation result",
+      "pseudocode": "Measure on validation data.",
+      "python": "RESULTS = [(1, 0.48, 0.46), (2, 0.62, 0.58), (4, 0.76, 0.676), (8, 0.97, 0.59)]   # (max_depth, train F1, validation F1)\nprint('depth 1 validation F1:', RESULTS[0][2])\n# prints: depth 1 validation F1: 0.46"
+    },
+    {
+      "id": "both-poor",
+      "label": "Both are poor",
+      "pseudocode": "Compare the two scores.",
+      "python": "RESULTS = [(1, 0.48, 0.46), (2, 0.62, 0.58), (4, 0.76, 0.676), (8, 0.97, 0.59)]   # (max_depth, train F1, validation F1)\nd, tr, va = RESULTS[0]\nprint('gap:', round(tr - va, 2), ' both below 0.65:', tr < 0.65 and va < 0.65)\n# prints: gap: 0.02  both below 0.65: True"
+    },
+    {
+      "id": "inspect-model",
+      "label": "Inspect the model",
+      "pseudocode": "Look at what the model can express.",
+      "python": "depth = 1\nprint('questions a depth-', depth, ' tree can ask in a row:', depth, sep='')\n# prints: questions a depth-1 tree can ask in a row:1"
+    },
+    {
+      "id": "simple-boundary",
+      "label": "A simple boundary",
+      "pseudocode": "A single cut misses a two-signal pattern.",
+      "python": "points = [(x, y) for x in range(1, 7) for y in range(1, 6)]\nchurn = [x >= 4 and y >= 3 for x, y in points]\nflagged = [x >= 4 for x, y in points]\nprint('wrongly flagged:', sum(f and not c for f, c in zip(flagged, churn)))\n# prints: wrongly flagged: 6"
+    },
+    {
+      "id": "weak-features",
+      "label": "Weak features?",
+      "pseudocode": "Underfitting is a symptom with several causes.",
+      "python": "causes = ['model too simple', 'features carry little signal', 'training stopped early', 'noisy label']\nprint(len(causes), 'possible causes:', causes)\n# prints: 4 possible causes: ['model too simple', 'features carry little signal', 'training stopped early', 'noisy label']"
+    },
+    {
+      "id": "possible-fixes",
+      "label": "Possible fixes",
+      "pseudocode": "Change one thing at a time.",
+      "python": "fixes = ['better features', 'more suitable model', 'check training converged', 'revisit the framing']\nprint(fixes)\n# prints: ['better features', 'more suitable model', 'check training converged', 'revisit the framing']"
+    },
+    {
+      "id": "retry",
+      "label": "Retry",
+      "pseudocode": "Re-measure on validation after a change.",
+      "python": "RESULTS = [(1, 0.48, 0.46), (2, 0.62, 0.58), (4, 0.76, 0.676), (8, 0.97, 0.59)]   # (max_depth, train F1, validation F1)\ndef diagnose(train, valid):\n    gap = train - valid\n    if train < 0.65 and valid < 0.65 and gap < 0.10:\n        return 'underfitting'\n    if gap > 0.20:\n        return 'overfitting'\n    return 'no clear fit problem'\nd, tr, va = RESULTS[1]\nprint('depth', d, 'train', tr, 'validation', va, '->', diagnose(tr, va))\n# prints: depth 2 train 0.62 validation 0.58 -> underfitting"
+    },
+    {
+      "id": "underfit-summary",
+      "label": "Underfitting summary",
+      "pseudocode": "Diagnose from evidence.",
+      "python": "RESULTS = [(1, 0.48, 0.46), (2, 0.62, 0.58), (4, 0.76, 0.676), (8, 0.97, 0.59)]   # (max_depth, train F1, validation F1)\ndef diagnose(train, valid):\n    gap = train - valid\n    if train < 0.65 and valid < 0.65 and gap < 0.10:\n        return 'underfitting'\n    if gap > 0.20:\n        return 'overfitting'\n    return 'no clear fit problem'\nfor d, tr, va in RESULTS[:2]:\n    print('depth', d, '->', diagnose(tr, va))\n# prints: depth 1 -> underfitting\n# prints: depth 2 -> underfitting"
+    }
+  ]
+}

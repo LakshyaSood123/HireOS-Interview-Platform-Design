@@ -1,0 +1,60 @@
+{
+  "title": "Train accuracy vs real performance",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "training-data",
+      "label": "Emails the model trained on",
+      "pseudocode": "The model's parameters are fitted to the training emails.",
+      "python": "train_size = 1000\nprint('fitted on', train_size, 'training emails')\n# prints: fitted on 1000 training emails"
+    },
+    {
+      "id": "high-training-score",
+      "label": "A high training score",
+      "pseudocode": "Score the model on the data it was fitted to.",
+      "python": "train_accuracy = 0.98\nprint('training accuracy:', train_accuracy)\n# prints: training accuracy: 0.98"
+    },
+    {
+      "id": "new-data",
+      "label": "New, unseen emails",
+      "pseudocode": "Validation emails were not used to fit the parameters.",
+      "python": "validation_size = 200\nprint('validation emails never seen:', validation_size)\n# prints: validation emails never seen: 200"
+    },
+    {
+      "id": "performance-drop",
+      "label": "Performance drops",
+      "pseudocode": "Compare training and validation accuracy.",
+      "python": "train_accuracy, validation_accuracy = 0.98, 0.84\nprint('gap:', round(train_accuracy - validation_accuracy, 2))\n# prints: gap: 0.14"
+    },
+    {
+      "id": "imbalanced-data",
+      "label": "A different problem: imbalance",
+      "pseudocode": "Count the classes in an imbalanced mailbox.",
+      "python": "labels = [0] * 95 + [1] * 5\npredictions = [0] * 100\nprint(labels.count(0), 'legitimate,', labels.count(1), 'spam')\n# prints: 95 legitimate, 5 spam"
+    },
+    {
+      "id": "always-negative",
+      "label": "A model that always says legitimate",
+      "pseudocode": "A lazy model predicts the majority class every time.",
+      "python": "labels = [0] * 95 + [1] * 5\npredictions = [0] * 100\nprint(set(predictions))\n# prints: {0}"
+    },
+    {
+      "id": "high-accuracy",
+      "label": "95% accuracy",
+      "pseudocode": "Accuracy = correct predictions / all predictions.",
+      "python": "labels = [0] * 95 + [1] * 5\npredictions = [0] * 100\ncorrect = sum(p == y for p, y in zip(predictions, labels))\nprint('accuracy:', correct / len(labels))\n# prints: accuracy: 0.95"
+    },
+    {
+      "id": "missed-positive-class",
+      "label": "But it misses every spam",
+      "pseudocode": "Count how much of the rare class is caught.",
+      "python": "labels = [0] * 95 + [1] * 5\npredictions = [0] * 100\ncaught = sum(p == 1 and y == 1 for p, y in zip(predictions, labels))\nprint('spam caught:', caught, 'of', labels.count(1))\n# prints: spam caught: 0 of 5"
+    },
+    {
+      "id": "need-better-metrics",
+      "label": "We need better metrics",
+      "pseudocode": "Accuracy hides which class fails; use per-class metrics.",
+      "python": "metrics = ['confusion matrix', 'precision', 'recall', 'F1']\nprint(metrics)\n# prints: ['confusion matrix', 'precision', 'recall', 'F1']"
+    }
+  ]
+}

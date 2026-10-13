@@ -1,0 +1,30 @@
+{
+ "one-variable": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "With a **single weight**, the loss is a curve: the weight runs along the bottom and the loss is the height. This is the picture from the earlier checkpoints."
+ },
+ "two-variables": {
+  "h": "TWO WEIGHTS: A FLOOR OF CHOICES",
+  "t": "With two weights, every choice of **(w₁, w₂)** is a point on a flat floor. **Two numbers** are needed to say where you are standing."
+ },
+ "surface": {
+  "h": "THE LOSS LIFTS INTO A SURFACE",
+  "t": "At each point of the floor, raise the loss as a **height**. The flat floor becomes a **surface**, here a bowl with its lowest point above **(3, 1)**."
+ },
+ "point-on-surface": {
+  "h": "A POINT ON THE SURFACE",
+  "t": "Each position of the model is a point on the surface: the floor point **(1, 3)** holds the weights, and the height above it is the **loss, 12**."
+ },
+ "many-variables": {
+  "h": "MANY WEIGHTS: SAME IDEAS",
+  "t": "Real models have **thousands or millions** of weights. We cannot draw that landscape, but **nothing in the rules changes**."
+ },
+ "parameter-vector": {
+  "h": "A WEIGHT VECTOR AND ITS GRADIENT",
+  "t": "The weights form a **vector w**. The gradient has **one entry per weight**: one partial derivative for each. Same count, same order."
+ },
+ "ml-loss": {
+  "h": "TAKEAWAY",
+  "t": "A tiny model with 3 weights: the weights make a prediction, the prediction gives **one loss number**, and from it we get **one slope for each weight**."
+ }
+}

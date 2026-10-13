@@ -1,0 +1,48 @@
+{
+  "title": "Derivatives: the slope at one point",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "two-points",
+      "label": "Two points on the curve",
+      "pseudocode": "Pick two points on the loss curve: A at w = 1 and B at w = 2.",
+      "python": "def loss(w):\n    return (w - 3) ** 2\n\nA = (1, loss(1))\nB = (2, loss(2))\nprint(A, B)   # (1, 4) (2, 1)"
+    },
+    {
+      "id": "secant-slope",
+      "label": "The slope between them",
+      "pseudocode": "slope = (change in loss) / (change in w)",
+      "python": "def loss(w):\n    return (w - 3) ** 2\n\nslope = (loss(2) - loss(1)) / (2 - 1)\nprint(slope)   # -3.0"
+    },
+    {
+      "id": "points-move-closer",
+      "label": "Slide B closer to A",
+      "pseudocode": "Make the gap h between the two points smaller and smaller, and recompute the slope each time.",
+      "python": "def loss(w):\n    return (w - 3) ** 2\n\nfor h in [1.0, 0.5, 0.1, 0.001]:\n    print(h, round((loss(1 + h) - loss(1)) / h, 3))\n# 1.0 -3.0 / 0.5 -3.5 / 0.1 -3.9 / 0.001 -3.999"
+    },
+    {
+      "id": "tangent",
+      "label": "The line that just touches the curve",
+      "pseudocode": "With a very small gap, the secant line becomes the tangent line.",
+      "python": "def loss(w):\n    return (w - 3) ** 2\n\nh = 0.0001   # a very small gap\nprint(round((loss(1 + h) - loss(1)) / h, 2))   # -4.0"
+    },
+    {
+      "id": "derivative",
+      "label": "That slope is the derivative",
+      "pseudocode": "The derivative dL/dw is the slope the secants settle toward. For this loss it is 2 * (w - 3).",
+      "python": "def derivative(w):\n    return 2 * (w - 3)   # worked out by hand with the power rule\n\nprint(derivative(1))   # -4"
+    },
+    {
+      "id": "positive-negative-zero",
+      "label": "Negative, zero, positive",
+      "pseudocode": "Negative slope: the loss goes down as w grows. Zero: flat. Positive: the loss goes up.",
+      "python": "def derivative(w):\n    return 2 * (w - 3)\n\nfor w in [1, 3, 5]:\n    print(w, derivative(w))   # 1 -4 / 3 0 / 5 4"
+    },
+    {
+      "id": "ml-sensitivity",
+      "label": "What a model learns from it",
+      "pseudocode": "The sign tells which way to move w. The size tells how strongly the loss reacts.",
+      "python": "def derivative(w):\n    return 2 * (w - 3)\n\nchange_in_w = 0.1\nprint(derivative(1) * change_in_w)   # -0.4: about how much the loss changes"
+    }
+  ]
+}

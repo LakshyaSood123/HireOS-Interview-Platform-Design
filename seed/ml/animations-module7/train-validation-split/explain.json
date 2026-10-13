@@ -1,0 +1,34 @@
+{
+ "full-data": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "We have **ten houses with known prices**. If we judged a model on the same houses it learned from, it would always look good, so we split them into **separate roles**."
+ },
+ "split": {
+  "h": "SPLIT INTO THREE ROLES",
+  "t": "**Five** houses to train on, **three** to validate and **two** for the test set. The test houses go into a **locked drawer**; nobody looks at them yet."
+ },
+ "train-models": {
+  "h": "FIT CANDIDATES ON TRAINING ONLY",
+  "t": "Two candidates: a **flat model** (always the average price) and a **straight line**. Their parameters are learned from the **five training houses only**."
+ },
+ "training-results": {
+  "h": "TRAINING RESULTS",
+  "t": "On the training houses the flat model has **MSE 1.2024** and the line **0.0166**. Training error alone would rank models by how flexible they are, so it **cannot choose**."
+ },
+ "validation-results": {
+  "h": "VALIDATION RESULTS",
+  "t": "Now score each model on the **three validation houses** it has never seen: flat **2.5629**, line **0.0111**. The residuals on these houses are the **honest signal**."
+ },
+ "compare": {
+  "h": "COMPARE ON VALIDATION",
+  "t": "**Lower validation MSE is better.** The line is far better than the flat model. Choosing among models, and tuning hyperparameters like the polynomial degree or λ, is the **validation set's job**."
+ },
+ "choose-model": {
+  "h": "CHOOSE THE LINE",
+  "t": "We pick the straight line. Its **parameters came from the training set**; our **choice came from the validation set**. (The overfit curve of the earlier lesson, with validation 3.0073, would have lost too.)"
+ },
+ "test-stays-locked": {
+  "h": "TAKEAWAY",
+  "t": "The test houses were **never used to fit or to choose**. They are scored once, at the very end. Using validation for many choices makes its score slightly optimistic, which is why the test set must **stay untouched**."
+ }
+}

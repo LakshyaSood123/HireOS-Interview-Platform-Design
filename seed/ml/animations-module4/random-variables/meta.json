@@ -1,0 +1,48 @@
+{
+  "title": "Random variables: from outcomes to numbers",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "experiment",
+      "label": "A random experiment",
+      "pseudocode": "Toss a fair coin twice. The result is uncertain.",
+      "python": "import random\n\nrandom.seed(2)\ntosses = [random.choice('HT') for _ in range(2)]\nprint(len(tosses))   # 2 tosses"
+    },
+    {
+      "id": "outcomes",
+      "label": "The four outcomes",
+      "pseudocode": "List the outcomes. They are descriptions, not numbers.",
+      "python": "outcomes = ['HH', 'HT', 'TH', 'TT']\nprint(outcomes)"
+    },
+    {
+      "id": "define-variable",
+      "label": "Define a random variable",
+      "pseudocode": "Define X = the number of heads. X is a rule from an outcome to a number.",
+      "python": "def heads(outcome):\n    return outcome.count('H')   # X: a rule, not a mystery\n\nprint(heads('HT'))   # 1"
+    },
+    {
+      "id": "map-outcomes",
+      "label": "Map each outcome to a number",
+      "pseudocode": "Apply the rule X to every outcome.",
+      "python": "outcomes = {'HH': 0.25, 'HT': 0.25, 'TH': 0.25, 'TT': 0.25}\n\ndef heads(outcome):\n    return outcome.count('H')   # the random variable X\nfor o in outcomes:\n    print(o, heads(o))\n# HH 2 / HT 1 / TH 1 / TT 0"
+    },
+    {
+      "id": "possible-values",
+      "label": "The possible values",
+      "pseudocode": "Collect the distinct values X can take.",
+      "python": "outcomes = {'HH': 0.25, 'HT': 0.25, 'TH': 0.25, 'TT': 0.25}\n\ndef heads(outcome):\n    return outcome.count('H')   # the random variable X\nprint(sorted({heads(o) for o in outcomes}))   # [0, 1, 2]"
+    },
+    {
+      "id": "probabilities",
+      "label": "Probabilities of the values",
+      "pseudocode": "P(X = x) = sum of the probabilities of the outcomes that map to x.",
+      "python": "outcomes = {'HH': 0.25, 'HT': 0.25, 'TH': 0.25, 'TT': 0.25}\n\ndef heads(outcome):\n    return outcome.count('H')   # the random variable X\ndist = {}\nfor o, p in outcomes.items():\n    dist[heads(o)] = dist.get(heads(o), 0) + p\nprint(dict(sorted(dist.items())))   # {0: 0.25, 1: 0.5, 2: 0.25}"
+    },
+    {
+      "id": "ml-connection",
+      "label": "Random variables in ML",
+      "pseudocode": "Labels, features and noise are numbers produced from uncertain outcomes.",
+      "python": "emails = ['free money now', 'meeting at 3']\nlabels = [1 if 'free' in e else 0 for e in emails]   # label y: spam = 1\nprint(labels)   # [1, 0]"
+    }
+  ]
+}

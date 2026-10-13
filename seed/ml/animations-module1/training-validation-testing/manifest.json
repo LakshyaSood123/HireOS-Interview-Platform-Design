@@ -1,0 +1,21 @@
+{
+  "heightPx": 630,
+  "capabilities": [
+    "play",
+    "pause",
+    "next",
+    "previous",
+    "reset",
+    "gotoStep"
+  ],
+  "traceEvents": [
+    "full-dataset",
+    "shuffle",
+    "train-split",
+    "validation-split",
+    "test-split",
+    "training",
+    "validation",
+    "final-test"
+  ]
+}

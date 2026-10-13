@@ -1,0 +1,159 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322c4e9cccef168ed3d"
+  },
+  "assets": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498554"
+    }
+  },
+  "createdBy": {
+    "$oid": "000000000000000000000000"
+  },
+  "css": "body {\r\n  margin: 0;\r\n  padding: 14px;\r\n  box-sizing: border-box;\r\n  background: #0b1d16;\r\n  color: #e6f5ec;\r\n  font-family: system-ui, sans-serif;\r\n}\r\n.scene {\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 8px;\r\n}\r\n.step-label {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  letter-spacing: 0.08em;\r\n  text-transform: uppercase;\r\n  color: #a7ce65;\r\n}\r\nsvg {\r\n  width: 100%;\r\n  height: auto;\r\n  max-width: 640px;\r\n  background: #071510;\r\n  border-radius: 10px;\r\n  border: 1px solid rgba(29, 181, 132, 0.35);\r\n}\r\nsvg g,\r\nsvg line,\r\nsvg polygon,\r\nsvg path,\r\nsvg ellipse,\r\nsvg circle,\r\nsvg rect,\r\nsvg text {\r\n  transition: opacity 0.4s ease, transform 0.6s ease;\r\n}\r\n.axis {\r\n  stroke: rgba(167, 206, 101, 0.3);\r\n  stroke-width: 1;\r\n}\r\n.tick {\r\n  font-size: 10px;\r\n  fill: #8fa89c;\r\n}\r\n.lbl,\r\n.big,\r\n.note,\r\n.mono {\r\n  paint-order: stroke;\r\n  stroke: #071510;\r\n  stroke-width: 3px;\r\n  stroke-linejoin: round;\r\n}\r\n.lbl {\r\n  font-size: 12px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.lbl-g { fill: #1db584; }\r\n.lbl-y { fill: #e2b44a; }\r\n.lbl-p { fill: #f472b6; }\r\n.lbl-b { fill: #38bdf8; }\r\n.lbl-r { fill: #f87171; }\r\n.big {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.note {\r\n  font-size: 11px;\r\n  fill: #c9dccf;\r\n}\r\n.mono {\r\n  font-family: ui-monospace, Consolas, monospace;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.caption {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  line-height: 1.5;\r\n  color: #c9dccf;\r\n  min-height: 40px;\r\n}\r\n.cell rect {\r\n  fill: rgba(255, 255, 255, 0.05);\r\n  stroke: rgba(255, 255, 255, 0.28);\r\n  stroke-width: 1.2;\r\n}\r\n.cell text {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.cell.hl-row rect { fill: rgba(226, 180, 74, 0.25); stroke: #e2b44a; }\r\n.cell.hl-col rect { fill: rgba(29, 181, 132, 0.25); stroke: #1db584; }\r\n.cell.hl-both rect { fill: rgba(244, 114, 182, 0.28); stroke: #f472b6; }\r\n.dim { opacity: 0.25; }\r\n.dash { stroke-dasharray: 5 4; }\r\n.fillA { fill: rgba(56, 189, 248, 0.16); stroke: #38bdf8; stroke-width: 2; }\r\n.fillB { fill: rgba(244, 114, 182, 0.18); stroke: #f472b6; stroke-width: 2; }\r\n.fillG { fill: rgba(29, 181, 132, 0.16); stroke: #1db584; stroke-width: 2; }\r\n.contour { stroke: rgba(56, 189, 248, 0.45); stroke-width: 1.5; }\n.curve { fill: none; stroke: #38bdf8; stroke-width: 3; }\n.curve-y { fill: none; stroke: #e2b44a; stroke-width: 3; }\n.curve-p { fill: none; stroke: #f472b6; stroke-width: 3; }\n.curve-g { fill: none; stroke: #1db584; stroke-width: 3; }\n.ghost { fill: none; stroke: rgba(201, 220, 207, 0.4); stroke-width: 2; }\n.lbl-w { fill: #e6f5ec; }\n.lbl-s { font-size: 11px; font-weight: 600; fill: #c9dccf; }\n.contour-hi { fill: none; stroke: #e2b44a; stroke-width: 3; }\n.feasible { fill: rgba(29, 181, 132, 0.16); stroke: none; }\n.infeasible { fill: rgba(248, 113, 113, 0.14); stroke: none; }\n\n/* ── explanation panel (shared by every generated ML animation) ── */\n.explain {\n  box-sizing: border-box;\n  max-width: 640px;\n  margin-top: 4px;\n  padding: 14px 18px 16px;\n  min-height: 150px;\n  border-radius: 12px;\n  background: rgba(29, 181, 132, 0.10);\n  border: 1px solid rgba(29, 181, 132, 0.45);\n  border-left: 5px solid #1db584;\n}\n.explain-h {\n  margin: 0 0 8px;\n  font-size: 13px;\n  font-weight: 800;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.explain-t {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.55;\n  color: #f1faf4;\n}\n.explain-t strong {\n  font-weight: 800;\n  color: #ffd98a;\n}\n\n",
+  "html": "<div class=\"scene\">\n  <p class=\"step-label\" id=\"step-label\"></p>\n  <svg id=\"scene\" viewBox=\"0 0 640 360\" role=\"img\" aria-label=\"Objective functions: scoring a model's parameters\"></svg>\n  <section class=\"explain\" aria-live=\"polite\">\n    <h3 class=\"explain-h\" id=\"explain-h\"></h3>\n    <p class=\"explain-t\" id=\"caption\"></p>\n  </section>\n</div>\n",
+  "js": "(function () {\n  // ── shared helpers (SVG, tweening) ─────────────────────────────────────────\r\n  var NS = \"http://www.w3.org/2000/svg\";\r\n  var svg = document.getElementById(\"scene\");\r\n  var labelEl = document.getElementById(\"step-label\");\r\n  var captionEl = document.getElementById(\"caption\");\r\n\r\n  function el(name, attrs, parent) {\r\n    var node = document.createElementNS(NS, name);\r\n    for (var key in attrs) node.setAttribute(key, attrs[key]);\r\n    if (parent) parent.appendChild(node);\r\n    return node;\r\n  }\r\n  function txt(parent, x, y, cls, str, anchor) {\r\n    var t = el(\"text\", { x: x, y: y, class: cls }, parent);\r\n    if (anchor) t.setAttribute(\"text-anchor\", anchor);\r\n    t.textContent = str;\r\n    return t;\r\n  }\r\n  function show(node, on) {\r\n    node.setAttribute(\"opacity\", on ? \"1\" : \"0\");\r\n  }\r\n  function place(node, x, y) {\r\n    node.style.transform = \"translate(\" + x + \"px,\" + y + \"px)\";\r\n  }\r\n  function setLine(node, x1, y1, x2, y2) {\r\n    node.setAttribute(\"x1\", x1);\r\n    node.setAttribute(\"y1\", y1);\r\n    node.setAttribute(\"x2\", x2);\r\n    node.setAttribute(\"y2\", y2);\r\n  }\r\n  function lerp(a, b, e) {\r\n    return a + (b - a) * e;\r\n  }\r\n  function round1(v) {\r\n    return (Math.round(v * 10) / 10).toFixed(1);\r\n  }\r\n\r\n  // Eased animation. fn(e) is called with e from 0 to 1. Without\r\n  // requestAnimationFrame (or with ms = 0) it jumps straight to fn(1).\r\n  var animTokens = {};\r\n  function anim(key, ms, fn) {\r\n    var token = (animTokens[key] || 0) + 1;\r\n    animTokens[key] = token;\r\n    if (typeof requestAnimationFrame !== \"function\" || ms <= 0) {\r\n      fn(1);\r\n      return;\r\n    }\r\n    var start = null;\r\n    function frame(now) {\r\n      if (animTokens[key] !== token) return;\r\n      if (start === null) start = now;\r\n      var p = Math.min(1, (now - start) / ms);\r\n      var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;\r\n      fn(e);\r\n      if (p < 1) requestAnimationFrame(frame);\r\n    }\r\n    requestAnimationFrame(frame);\r\n  }\r\n\r\n  // Arrowheads, one marker per colour.\r\n  var COLORS = { g: \"#1DB584\", y: \"#E2B44A\", p: \"#F472B6\", b: \"#38BDF8\", w: \"#c9dccf\", r: \"#F87171\" };\r\n  var defs = el(\"defs\", {}, svg);\r\n  Object.keys(COLORS).forEach(function (k) {\r\n    var m = el(\"marker\", { id: \"ah-\" + k, viewBox: \"0 0 10 10\", refX: 9, refY: 5, markerUnits: \"userSpaceOnUse\", markerWidth: 13, markerHeight: 13, orient: \"auto\" }, defs);\r\n    el(\"path\", { d: \"M0 0 L10 5 L0 10 Z\", fill: COLORS[k] }, m);\r\n  });\r\n  function arrow(parent, colorKey, width) {\r\n    return el(\"line\", { x1: 0, y1: 0, x2: 0, y2: 0, stroke: COLORS[colorKey], \"stroke-width\": width || 3, \"marker-end\": \"url(#ah-\" + colorKey + \")\", \"stroke-linecap\": \"round\" }, parent);\r\n  }\r\n  function polygon(parent, cls) {\r\n    return el(\"polygon\", { points: \"\", class: cls }, parent);\r\n  }\r\n  function setPoly(node, pts) {\r\n    node.setAttribute(\"points\", pts.map(function (p) { return p[0].toFixed(1) + \",\" + p[1].toFixed(1); }).join(\" \"));\r\n  }\r\n  function lerpPts(a, b, e) {\r\n    return a.map(function (p, i) { return [lerp(p[0], b[i][0], e), lerp(p[1], b[i][1], e)]; });\r\n  }\r\n  // Maps maths coordinates (x right, y up) to screen pixels.\r\n  function makePlane(cx, cy, s) {\r\n    return {\r\n      x: function (v) { return cx + s * v; },\r\n      y: function (v) { return cy - s * v; },\r\n      pt: function (p) { return [cx + s * p[0], cy - s * p[1]]; },\r\n      s: s, cx: cx, cy: cy\r\n    };\r\n  }\r\n  function axes(parent, plane, xr, yr) {\r\n    el(\"line\", { x1: plane.x(-xr), y1: plane.y(0), x2: plane.x(xr), y2: plane.y(0), class: \"axis\" }, parent);\r\n    el(\"line\", { x1: plane.x(0), y1: plane.y(-yr), x2: plane.x(0), y2: plane.y(yr), class: \"axis\" }, parent);\r\n  }\r\n\n  // ── Module 3 helpers: graphs, curves, contour plane ───────────────────────\n  // makeGraph maps maths values to pixels with separate x and y scales.\n  function makeGraph(ox, oy, sx, sy) {\n    return {\n      ox: ox, oy: oy, sx: sx, sy: sy,\n      x: function (v) { return ox + sx * v; },\n      y: function (v) { return oy - sy * v; }\n    };\n  }\n  function curveD(g, f, a, b, n) {\n    var d = \"\";\n    for (var i = 0; i <= n; i++) {\n      var v = a + ((b - a) * i) / n;\n      d += (i ? \" L \" : \"M \") + g.x(v).toFixed(1) + \" \" + g.y(f(v)).toFixed(1);\n    }\n    return d;\n  }\n  function setD(node, d) {\n    node.setAttribute(\"d\", d);\n  }\n  function fmt(v, n) {\n    return (Math.round(v * 100000) / 100000).toFixed(n === undefined ? 1 : n);\n  }\n  function drawAxes(parent, g, xmax, ymax, xticks, yticks) {\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(xmax), y2: g.y(0), class: \"axis\" }, parent);\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(0), y2: g.y(ymax), class: \"axis\" }, parent);\n    (xticks || []).forEach(function (t) { txt(parent, g.x(t), g.y(0) + 15, \"tick\", String(t), \"middle\"); });\n    (yticks || []).forEach(function (t) { txt(parent, g.x(0) - 7, g.y(t) + 4, \"tick\", String(t), \"end\"); });\n  }\n  function card(parent, x, y, w, h, cls) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: 10, class: cls || \"fillG\" }, parent);\n  }\n  function ring(parent, cx, cy, rx, ry, cls) {\n    return el(\"ellipse\", { cx: cx, cy: cy, rx: rx, ry: ry, fill: \"none\", class: cls || \"contour\" }, parent);\n  }\n  function clipTo(id, x, y, w, h) {\n    var c = el(\"clipPath\", { id: id }, defs);\n    el(\"rect\", { x: x, y: y, width: w, height: h }, c);\n  }\n\n  // ── Module 4 helpers: seeded randomness, small shapes ─────────────────────\n  function mulberry(seed) {\n    var a = seed;\n    return function () {\n      a |= 0; a = (a + 0x6D2B79F5) | 0;\n      var t = Math.imul(a ^ (a >>> 15), 1 | a);\n      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;\n      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;\n    };\n  }\n  function gaussSource(rand) {\n    return function () {\n      var u = 1 - rand(), v = rand();\n      return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);\n    };\n  }\n  function box(parent, x, y, w, h, fill, stroke, r) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: r === undefined ? 6 : r, fill: fill, stroke: stroke || \"none\", \"stroke-width\": 2 }, parent);\n  }\n  function setBox(node, x, y, w, h) {\n    node.setAttribute(\"x\", x); node.setAttribute(\"y\", y); node.setAttribute(\"width\", Math.max(0, w)); node.setAttribute(\"height\", Math.max(0, h));\n  }\n  function vis(list, on) {\n    list.forEach(function (n) { show(n, on); });\n  }\n\n  // ── Module 5 helpers: coins, and rows of bars over the nine candidate values of p ──\n  function coin(parent, x, y, r, letter) {\n    var g = el(\"g\", {}, parent);\n    var head = letter === \"H\";\n    el(\"circle\", { cx: x, cy: y, r: r, fill: head ? \"rgba(244,114,182,0.35)\" : \"rgba(56,189,248,0.3)\", stroke: head ? \"#f472b6\" : \"#38bdf8\", \"stroke-width\": 3 }, g);\n    var t = txt(g, x, y + r * 0.36, \"big\", letter, \"middle\");\n    t.setAttribute(\"font-size\", String(Math.round(r * 1.05)));\n    return g;\n  }\n  var THETAS = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9];\n  var WEIGHTS = [1, 2, 3, 4, 5, 4, 3, 2, 1];\n  function lik(t, k, n) { return Math.pow(t, k) * Math.pow(1 - t, n - k); }\n  function normalized(arr) {\n    var s = 0;\n    arr.forEach(function (v) { s += v; });\n    return arr.map(function (v) { return v / s; });\n  }\n  function argmaxIndex(arr) {\n    var b = 0;\n    arr.forEach(function (v, i) { if (v > arr[b]) b = i; });\n    return b;\n  }\n  // A row of nine bars. set(values, maxValue) rescales heights so maxValue fills `height`.\n  function barRow(parent, x0, dx, base, bw, height, fill, stroke) {\n    var g = el(\"g\", {}, parent);\n    var bars = THETAS.map(function (t, i) {\n      return box(g, x0 + i * dx - bw / 2, base, bw, 0, fill, stroke || \"none\", 3);\n    });\n    var tick = THETAS.map(function (t, i) {\n      var tt = txt(g, x0 + i * dx, base + 14, \"tick\", String(t), \"middle\");\n      tt.setAttribute(\"opacity\", \"0\");\n      return tt;\n    });\n    return {\n      g: g,\n      bars: bars,\n      ticks: tick,\n      set: function (values, maxValue) {\n        values.forEach(function (v, i) {\n          var h = Math.max(0, (v / maxValue) * height);\n          setBox(bars[i], x0 + i * dx - bw / 2, base - h, bw, h);\n        });\n      },\n      showTicks: function (on) { tick.forEach(function (n) { n.setAttribute(\"opacity\", on ? \"1\" : \"0\"); }); }\n    };\n  }\n\n  // ── Module 6 helpers: the two-weight objective, contours, quick arrows ────\n  function L2(w1, w2) { return (w1 - 3) * (w1 - 3) + 2 * (w2 - 1) * (w2 - 1); }\n  function G2(w1, w2) { return [2 * (w1 - 3), 4 * (w2 - 1)]; }\n  // Contour of L2 at level c, drawn in the plane P (makeGraph) around the minimum (3, 1).\n  function levelEllipse(parent, P, c, cls) {\n    var e = el(\"ellipse\", { cx: P.x(3), cy: P.y(1), rx: Math.sqrt(c) * P.sx, ry: Math.sqrt(c / 2) * P.sy, fill: \"none\", class: cls || \"contour\" }, parent);\n    return e;\n  }\n  function arrowLine(parent, key, width, x1, y1, x2, y2) {\n    var a = arrow(parent, key, width);\n    setLine(a, x1, y1, x2, y2);\n    return a;\n  }\n\n  var EXPLAIN = {\"model-parameter\":{\"h\":\"WHAT YOU ARE LOOKING AT\",\"t\":\"A model has a **knob we can turn**: a parameter **w**. Different settings of w make the model behave differently, and **training means choosing a good setting**.\"},\"objective-rule\":{\"h\":\"THE OBJECTIVE SCORES A SETTING\",\"t\":\"An **objective function** takes a setting of the knob and returns **one number** saying how good or bad it is. Ours is **L(w) = (w − 3)²**. Lower is better, so we want to **minimize** it.\"},\"candidate-one\":{\"h\":\"TRY w = 0\",\"t\":\"Candidate **w = 0** gives **L(0) = (0 − 3)² = 9**. That is a high, and therefore **bad**, score.\"},\"candidate-two\":{\"h\":\"TRY w = 2\",\"t\":\"Candidate **w = 2** gives **L(2) = (2 − 3)² = 1**. That is much better than 9.\"},\"candidate-three\":{\"h\":\"TRY w = 3 AND w = 5\",\"t\":\"**w = 3** gives **L(3) = 0**, the lowest possible score. **w = 5** gives L(5) = 4, worse again. The score **falls and then rises**.\"},\"plot-objective\":{\"h\":\"PLOT THE OBJECTIVE\",\"t\":\"Plotting the score for every w, not just four, shows a **bowl**. The four candidates are points on it.\"},\"find-minimum\":{\"h\":\"FIND THE MINIMUM\",\"t\":\"The bottom of the bowl is at **w = 3**, where the score is **0**. The best parameter is the **minimizer**. Training must find it without being shown the whole bowl.\"},\"ml-training\":{\"h\":\"TAKEAWAY\",\"t\":\"Training a model is this search: **try parameters, score them with the objective, and move toward better scores**. The next lessons say what goes into the objective and how the search moves.\"}};\n  // ── scene ──\n  var steps = [\r\n    { id: \"model-parameter\", label: \"A model has a parameter\", caption: \"A model has a knob we can turn: a parameter w. Different settings of w make the model behave differently. Training means choosing a good setting.\" },\r\n    { id: \"objective-rule\", label: \"The objective scores a setting\", caption: \"An objective function is a rule that takes a setting of the knob and returns one number: how good or bad that setting is. Ours is L(w) = (w − 3)². Lower is better, so we want to minimize it.\" },\r\n    { id: \"candidate-one\", label: \"Try w = 0\", caption: \"Candidate w = 0: L(0) = (0 − 3)² = 9. That is a high (bad) score.\" },\r\n    { id: \"candidate-two\", label: \"Try w = 2\", caption: \"Candidate w = 2: L(2) = (2 − 3)² = 1. Much better than 9.\" },\r\n    { id: \"candidate-three\", label: \"Try w = 3 and w = 5\", caption: \"Candidate w = 3: L(3) = 0, the lowest possible score. Candidate w = 5: L(5) = 4, worse again. The score falls and then rises.\" },\r\n    { id: \"plot-objective\", label: \"Plot the objective\", caption: \"Plot the score for every w, not just four. The objective is a bowl. The four candidates are points on it.\" },\r\n    { id: \"find-minimum\", label: \"Find the minimum\", caption: \"The bottom of the bowl is at w = 3, where the score is 0. The best parameter is the minimizer; its score is the minimum value. Training must find it without being shown the whole bowl.\" },\r\n    { id: \"ml-training\", label: \"Training searches parameter space\", caption: \"Training a model is this search: try parameters, score them with the objective, and move toward parameters with a better score. The next lessons say what goes into the objective and how the search moves.\" }\r\n  ];\r\n\r\n  function Lw(w) { return (w - 3) * (w - 3); }\r\n  var TX = function (w) { return 60 + w * 83; };\r\n\r\n  var trackG = el(\"g\", {}, svg);\r\n  el(\"line\", { x1: TX(0), y1: 52, x2: TX(6), y2: 52, stroke: \"#c9dccf\", \"stroke-width\": 3, \"stroke-linecap\": \"round\" }, trackG);\r\n  for (var t = 0; t <= 6; t++) {\r\n    el(\"line\", { x1: TX(t), y1: 46, x2: TX(t), y2: 58, stroke: \"#c9dccf\", \"stroke-width\": 2 }, trackG);\r\n    txt(trackG, TX(t), 76, \"tick\", String(t), \"middle\");\r\n  }\r\n  txt(trackG, 320, 16, \"lbl lbl-y\", \"model parameter w (the knob)\", \"middle\");\r\n  var knob = el(\"circle\", { r: 11, cy: 52, fill: \"#e2b44a\", stroke: \"#071510\", \"stroke-width\": 3 }, svg);\r\n  var knobLbl = txt(svg, 0, 34, \"lbl lbl-y\", \"\", \"middle\");\r\n\r\n  // Flow: input -> objective -> score.\r\n  var flowG = el(\"g\", {}, svg);\r\n  card(flowG, 60, 104, 120, 66, \"fillA\");\r\n  txt(flowG, 120, 128, \"note\", \"input\", \"middle\");\r\n  var inTxt = txt(flowG, 120, 154, \"big\", \"w = 0\", \"middle\");\r\n  var a1 = arrow(flowG, \"w\", 3); setLine(a1, 184, 137, 226, 137);\r\n  card(flowG, 230, 98, 200, 78, \"fillG\");\r\n  txt(flowG, 330, 122, \"note\", \"objective (the rule)\", \"middle\");\r\n  txt(flowG, 330, 154, \"big\", \"L(w) = (w − 3)²\", \"middle\");\r\n  var a2 = arrow(flowG, \"w\", 3); setLine(a2, 434, 137, 476, 137);\r\n  card(flowG, 480, 104, 120, 66, \"fillB\");\r\n  txt(flowG, 540, 128, \"note\", \"score\", \"middle\");\r\n  var outTxt = txt(flowG, 540, 154, \"big\", \"9\", \"middle\");\r\n  var calcTxt = txt(flowG, 330, 198, \"mono\", \"\", \"middle\");\r\n\r\n  // Scoreboard.\r\n  var boardG = el(\"g\", {}, svg);\r\n  var CANDS = [0, 2, 3, 5];\r\n  var rows = CANDS.map(function (w, i) {\r\n    var y = 222 + i * 30;\r\n    var g = el(\"g\", {}, boardG);\r\n    txt(g, 70, y + 17, \"lbl\", \"w = \" + w, \"start\");\r\n    box(g, 140, y, 400, 22, \"rgba(255,255,255,0.06)\", \"rgba(255,255,255,0.18)\", 4);\r\n    box(g, 140, y, Math.max(2, (Lw(w) / 9) * 400), 22, w === 3 ? \"rgba(29,181,132,0.9)\" : \"rgba(244,114,182,0.8)\", \"none\", 4);\r\n    txt(g, 546, y + 17, \"mono\", \"score \" + Lw(w), \"start\");\r\n    return g;\r\n  });\r\n\r\n  // Plot of the whole objective.\r\n  var g = makeGraph(60, 322, 85, 22);\r\n  var plotG = el(\"g\", {}, svg);\r\n  drawAxes(plotG, g, 6.3, 9.8, [0, 1, 2, 3, 4, 5, 6], [0, 3, 6, 9]);\r\n  txt(plotG, g.x(6.3), g.y(0) + 28, \"note\", \"parameter w\", \"end\");\r\n  txt(plotG, g.x(6.3), g.y(9.8) + 4, \"note\", \"objective L(w)\", \"end\");\r\n  el(\"path\", { class: \"curve\", d: curveD(g, Lw, 0, 6, 70) }, plotG);\r\n  var dots = CANDS.map(function (w) {\r\n    var d = el(\"circle\", { cx: g.x(w), cy: g.y(Lw(w)), r: 7, fill: w === 3 ? \"#1db584\" : \"#e2b44a\", stroke: \"#071510\", \"stroke-width\": 2 }, plotG);\r\n    txt(plotG, g.x(w) + (w === 0 ? 14 : w === 5 ? 12 : 0), g.y(Lw(w)) - 12, \"lbl\", \"w = \" + w + \": \" + Lw(w), w === 0 || w === 5 ? \"start\" : \"middle\");\r\n    return d;\r\n  });\r\n  var minG = el(\"g\", {}, svg);\r\n  el(\"circle\", { cx: g.x(3), cy: g.y(0), r: 13, fill: \"none\", stroke: \"#1db584\", \"stroke-width\": 4 }, minG);\r\n  el(\"line\", { x1: g.x(3), y1: g.y(0) - 16, x2: g.x(3), y2: g.y(6), stroke: \"#1db584\", \"stroke-width\": 3, \"stroke-dasharray\": \"6 4\" }, minG);\r\n  txt(minG, g.x(3), g.y(6) - 8, \"lbl lbl-g\", \"minimum: w = 3, score 0\", \"middle\");\r\n\r\n  var mlG = el(\"g\", {}, svg);\r\n  [[\"parameters\", \"w\", \"fillA\"], [\"objective\", \"scores them\", \"fillG\"], [\"better parameters\", \"move toward lower scores\", \"fillB\"]].forEach(function (b, i) {\r\n    var x = 30 + i * 205;\r\n    card(mlG, x, 110, 180, 90, b[2]);\r\n    txt(mlG, x + 90, 146, \"big\", b[0], \"middle\").setAttribute(\"font-size\", \"14\");\r\n    txt(mlG, x + 90, 172, \"note\", b[1], \"middle\");\r\n    if (i < 2) { var ar = arrow(mlG, \"w\", 3); setLine(ar, x + 184, 155, x + 201, 155); }\r\n  });\r\n  var loopBack = el(\"path\", { d: \"M 520 204 L 520 232 L 120 232 L 120 206\", fill: \"none\", stroke: \"#c9dccf\", \"stroke-width\": 3, \"marker-end\": \"url(#ah-w)\" }, mlG);\r\n  txt(mlG, 320, 256, \"lbl lbl-y\", \"repeat: training is a search through parameter space\", \"middle\");\r\n\r\n  function setCand(w, nRows) {\r\n    knob.setAttribute(\"cx\", TX(w));\r\n    knobLbl.setAttribute(\"x\", TX(w)); knobLbl.textContent = \"w = \" + w;\r\n    inTxt.textContent = \"w = \" + w;\r\n    outTxt.textContent = String(Lw(w));\r\n    calcTxt.textContent = \"(\" + w + \" − 3)² = \" + Lw(w);\r\n    rows.forEach(function (r, i) { show(r, i < nRows); });\r\n  }\r\n\r\n  function render(index, id) {\r\n    var i = index;\r\n    show(trackG, i <= 4);\r\n    show(knob, i <= 4); show(knobLbl, i >= 2 && i <= 4);\r\n    show(flowG, i >= 1 && i <= 4);\r\n    show(calcTxt, i >= 2 && i <= 4);\r\n    show(boardG, i >= 2 && i <= 4);\r\n    show(plotG, i === 5 || i === 6);\r\n    show(minG, i === 6);\r\n    show(mlG, i === 7);\r\n    inTxt.textContent = \"w = 0\"; outTxt.textContent = i === 1 ? \"?\" : \"9\";\r\n    knob.setAttribute(\"cx\", TX(0));\r\n    if (i === 2) setCand(0, 1);\r\n    if (i === 3) setCand(2, 2);\r\n    if (i === 4) { setCand(3, 4); }\r\n    if (i === 1) { rows.forEach(function (r) { show(r, false); }); }\r\n  }\r\n\n\n  // ── shared runtime: stepping, explanation panel, educational autoplay pacing, bridge ──\n  var current = 0;\n  var explainHeadEl = document.getElementById(\"explain-h\");\n\n  // **bold** markers in an explanation become <strong> nodes (built with DOM calls, never innerHTML).\n  function setRich(node, str) {\n    node.textContent = \"\";\n    var parts = String(str).split(\"**\");\n    for (var i = 0; i < parts.length; i++) {\n      if (parts[i] === \"\") continue;\n      var seg = document.createElement(i % 2 ? \"strong\" : \"span\");\n      seg.textContent = parts[i];\n      node.appendChild(seg);\n    }\n  }\n\n  function explanationFor(index) {\n    var ex = (typeof EXPLAIN === \"object\" && EXPLAIN) ? EXPLAIN[steps[index].id] : null;\n    return ex || { h: \"WHAT IS HAPPENING\", t: steps[index].caption };\n  }\n\n  // Autoplay pace: 4.5 to 10.5 seconds per step, longer for longer explanations, so a learner can read.\n  function stepMs(index) {\n    var words = String(explanationFor(index).t).replace(/\\*\\*/g, \"\").split(/\\s+/).length;\n    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));\n  }\n\n  function renderStep(index) {\n    var ex = explanationFor(index);\n    labelEl.textContent = steps[index].label;\n    if (explainHeadEl) explainHeadEl.textContent = ex.h;\n    setRich(captionEl, ex.t);\n    render(index, steps[index].id);\n  }\n\n  function goTo(index) {\n    if (index < 0 || index >= steps.length) return;\n    current = index;\n    renderStep(current);\n    if (window.ReagvisBridge) window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n\n  renderStep(current);\n\n  // Autoplay: exactly one timer, one step per tick, stops on the final step.\n  // PLAY on the final step restarts from the first step and plays again.\n  var timer = null;\n\n  function stopAuto() {\n    if (timer !== null) {\n      clearTimeout(timer);\n      timer = null;\n    }\n  }\n\n  function scheduleNext() {\n    timer = setTimeout(function () {\n      timer = null;\n      if (current >= steps.length - 1) return;\n      goTo(current + 1);\n      if (current < steps.length - 1) scheduleNext();\n    }, stepMs(current));\n  }\n\n  function startAuto() {\n    if (timer !== null) return;\n    if (current >= steps.length - 1) goTo(0);\n    scheduleNext();\n  }\n\n  window.addEventListener(\"pagehide\", stopAuto);\n\n  window.ReagvisAnimation = {\n    stepDuration: stepMs,\n    onCommand: function (type, stepId) {\n      if (type === \"PLAY\") startAuto();\n      else if (type === \"PAUSE\") stopAuto();\n      else if (type === \"NEXT\") { stopAuto(); goTo(current + 1); }\n      else if (type === \"PREVIOUS\") { stopAuto(); goTo(current - 1); }\n      else if (type === \"RESET\") { stopAuto(); goTo(0); }\n      else if (type === \"GOTO_STEP\") {\n        stopAuto();\n        for (var i = 0; i < steps.length; i++) {\n          if (steps[i].id === stepId) { goTo(i); break; }\n        }\n      }\n    },\n  };\n\n  if (window.ReagvisBridge) {\n    window.ReagvisBridge.ready();\n    window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n})();\n",
+  "lastFrozenContentHash": null,
+  "lastFrozenRevisionId": null,
+  "manifest": {
+    "bridgeVersion": {
+      "$numberInt": "1"
+    },
+    "capabilities": [
+      "play",
+      "pause",
+      "next",
+      "previous",
+      "reset",
+      "gotoStep"
+    ],
+    "heightPx": {
+      "$numberInt": "590"
+    },
+    "traceEvents": [
+      "model-parameter",
+      "objective-rule",
+      "candidate-one",
+      "candidate-two",
+      "candidate-three",
+      "plot-objective",
+      "find-minimum",
+      "ml-training"
+    ]
+  },
+  "packageId": "453fa130-40cc-46db-8b40-7a20481e35e8",
+  "packageTrace": {
+    "steps": [
+      {
+        "animationEvent": "model-parameter",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "A model has a parameter w that we can set.",
+          "python": "w = 0.0   # the model's parameter: a knob we can turn\nprint(w)"
+        },
+        "id": "model-parameter",
+        "label": "A model has a parameter"
+      },
+      {
+        "animationEvent": "objective-rule",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "The objective maps a parameter setting to one number: its score.",
+          "python": "def objective(w):\n    return (w - 3) ** 2\n\nprint(objective(0))   # 9"
+        },
+        "id": "objective-rule",
+        "label": "The objective scores a setting"
+      },
+      {
+        "animationEvent": "candidate-one",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Score the candidate w = 0.",
+          "python": "def objective(w):\n    return (w - 3) ** 2\n\nprint(objective(0))   # 9: a bad (high) score"
+        },
+        "id": "candidate-one",
+        "label": "Try w = 0"
+      },
+      {
+        "animationEvent": "candidate-two",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Score the candidate w = 2.",
+          "python": "def objective(w):\n    return (w - 3) ** 2\n\nprint(objective(2))   # 1: much better"
+        },
+        "id": "candidate-two",
+        "label": "Try w = 2"
+      },
+      {
+        "animationEvent": "candidate-three",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Score w = 3 and w = 5. Lower is better.",
+          "python": "def objective(w):\n    return (w - 3) ** 2\n\nprint(objective(3), objective(5))   # 0 4"
+        },
+        "id": "candidate-three",
+        "label": "Try w = 3 and w = 5"
+      },
+      {
+        "animationEvent": "plot-objective",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Evaluate the objective at many values of w to see its shape.",
+          "python": "def objective(w):\n    return (w - 3) ** 2\n\npoints = [(w, objective(w)) for w in range(0, 7)]\nprint(points)   # [(0, 9), (1, 4), (2, 1), (3, 0), (4, 1), (5, 4), (6, 9)]"
+        },
+        "id": "plot-objective",
+        "label": "Plot the objective"
+      },
+      {
+        "animationEvent": "find-minimum",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Search a fine grid for the w with the lowest score.",
+          "python": "def objective(w):\n    return (w - 3) ** 2\n\ncandidates = [i / 10 for i in range(0, 61)]\nbest = min(candidates, key=objective)\nprint(best, objective(best))   # 3.0 0.0"
+        },
+        "id": "find-minimum",
+        "label": "Find the minimum"
+      },
+      {
+        "animationEvent": "ml-training",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Training keeps the parameters with the best objective value.",
+          "python": "def objective(w):\n    return (w - 3) ** 2\n\ncandidates = [0.0, 2.0, 3.0, 5.0]\nscores = {w: objective(w) for w in candidates}\nbest = min(scores, key=scores.get)\nprint(best)   # 3.0: the lowest objective"
+        },
+        "id": "ml-training",
+        "label": "Training searches parameter space"
+      }
+    ],
+    "version": {
+      "$numberInt": "1"
+    }
+  },
+  "revision": {
+    "$numberInt": "5"
+  },
+  "revisionId": "r2",
+  "sourceKind": "zip",
+  "status": "frozen",
+  "title": "ML Module 6 — Objective Functions",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498554"
+    }
+  },
+  "updatedBy": {
+    "$oid": "000000000000000000000000"
+  }
+}

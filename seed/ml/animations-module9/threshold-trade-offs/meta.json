@@ -1,0 +1,78 @@
+{
+  "title": "Threshold trade-offs: precision against recall",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "fixed-probabilities",
+      "label": "Fixed model probabilities",
+      "pseudocode": "The model's probabilities and the true labels.",
+      "python": "probs = [0.92, 0.83, 0.71, 0.62, 0.58, 0.45, 0.38, 0.20]\nlabels = [1, 1, 1, 0, 1, 0, 1, 0]\n\ndef counts(t):\n    preds = [1 if p >= t else 0 for p in probs]\n    tp = sum(1 for p, y in zip(preds, labels) if p and y)\n    fp = sum(1 for p, y in zip(preds, labels) if p and not y)\n    fn = sum(1 for p, y in zip(preds, labels) if not p and y)\n    return tp, fp, fn, len(probs) - tp - fp - fn\nprint(probs)\n# prints: [0.92, 0.83, 0.71, 0.62, 0.58, 0.45, 0.38, 0.2]"
+    },
+    {
+      "id": "threshold-050",
+      "label": "Threshold 0.50",
+      "pseudocode": "Flag an email when its probability reaches the threshold.",
+      "python": "probs = [0.92, 0.83, 0.71, 0.62, 0.58, 0.45, 0.38, 0.20]\nlabels = [1, 1, 1, 0, 1, 0, 1, 0]\n\ndef counts(t):\n    preds = [1 if p >= t else 0 for p in probs]\n    tp = sum(1 for p, y in zip(preds, labels) if p and y)\n    fp = sum(1 for p, y in zip(preds, labels) if p and not y)\n    fn = sum(1 for p, y in zip(preds, labels) if not p and y)\n    return tp, fp, fn, len(probs) - tp - fp - fn\nprint([p for p in probs if p >= 0.5])\n# prints: [0.92, 0.83, 0.71, 0.62, 0.58]"
+    },
+    {
+      "id": "predictions",
+      "label": "Predictions at 0.50",
+      "pseudocode": "Predict every email at threshold 0.50.",
+      "python": "probs = [0.92, 0.83, 0.71, 0.62, 0.58, 0.45, 0.38, 0.20]\nlabels = [1, 1, 1, 0, 1, 0, 1, 0]\n\ndef counts(t):\n    preds = [1 if p >= t else 0 for p in probs]\n    tp = sum(1 for p, y in zip(preds, labels) if p and y)\n    fp = sum(1 for p, y in zip(preds, labels) if p and not y)\n    fn = sum(1 for p, y in zip(preds, labels) if not p and y)\n    return tp, fp, fn, len(probs) - tp - fp - fn\nprint([1 if p >= 0.5 else 0 for p in probs])\n# prints: [1, 1, 1, 1, 1, 0, 0, 0]"
+    },
+    {
+      "id": "matrix",
+      "label": "The confusion matrix at 0.50",
+      "pseudocode": "Count TP, FP, FN, TN at 0.50.",
+      "python": "probs = [0.92, 0.83, 0.71, 0.62, 0.58, 0.45, 0.38, 0.20]\nlabels = [1, 1, 1, 0, 1, 0, 1, 0]\n\ndef counts(t):\n    preds = [1 if p >= t else 0 for p in probs]\n    tp = sum(1 for p, y in zip(preds, labels) if p and y)\n    fp = sum(1 for p, y in zip(preds, labels) if p and not y)\n    fn = sum(1 for p, y in zip(preds, labels) if not p and y)\n    return tp, fp, fn, len(probs) - tp - fp - fn\nprint(counts(0.5))   # (TP, FP, FN, TN)\n# prints: (4, 1, 1, 2)"
+    },
+    {
+      "id": "precision-recall",
+      "label": "Precision and recall at 0.50",
+      "pseudocode": "Compute precision and recall at 0.50.",
+      "python": "probs = [0.92, 0.83, 0.71, 0.62, 0.58, 0.45, 0.38, 0.20]\nlabels = [1, 1, 1, 0, 1, 0, 1, 0]\n\ndef counts(t):\n    preds = [1 if p >= t else 0 for p in probs]\n    tp = sum(1 for p, y in zip(preds, labels) if p and y)\n    fp = sum(1 for p, y in zip(preds, labels) if p and not y)\n    fn = sum(1 for p, y in zip(preds, labels) if not p and y)\n    return tp, fp, fn, len(probs) - tp - fp - fn\ntp, fp, fn, tn = counts(0.5)\nprint(tp / (tp + fp), tp / (tp + fn))\n# prints: 0.8 0.8"
+    },
+    {
+      "id": "lower-threshold",
+      "label": "Lower the threshold to 0.30",
+      "pseudocode": "Only the threshold changes; the probabilities do not.",
+      "python": "probs = [0.92, 0.83, 0.71, 0.62, 0.58, 0.45, 0.38, 0.20]\nlabels = [1, 1, 1, 0, 1, 0, 1, 0]\n\ndef counts(t):\n    preds = [1 if p >= t else 0 for p in probs]\n    tp = sum(1 for p, y in zip(preds, labels) if p and y)\n    fp = sum(1 for p, y in zip(preds, labels) if p and not y)\n    fn = sum(1 for p, y in zip(preds, labels) if not p and y)\n    return tp, fp, fn, len(probs) - tp - fp - fn\nprint(probs == [0.92, 0.83, 0.71, 0.62, 0.58, 0.45, 0.38, 0.20], counts(0.3))\n# prints: True (5, 2, 0, 1)"
+    },
+    {
+      "id": "more-positives",
+      "label": "More emails are flagged",
+      "pseudocode": "A lower threshold flags more emails.",
+      "python": "probs = [0.92, 0.83, 0.71, 0.62, 0.58, 0.45, 0.38, 0.20]\nlabels = [1, 1, 1, 0, 1, 0, 1, 0]\n\ndef counts(t):\n    preds = [1 if p >= t else 0 for p in probs]\n    tp = sum(1 for p, y in zip(preds, labels) if p and y)\n    fp = sum(1 for p, y in zip(preds, labels) if p and not y)\n    fn = sum(1 for p, y in zip(preds, labels) if not p and y)\n    return tp, fp, fn, len(probs) - tp - fp - fn\nprint(sum(p >= 0.3 for p in probs), 'flagged at 0.3 versus', sum(p >= 0.5 for p in probs), 'at 0.5')\n# prints: 7 flagged at 0.3 versus 5 at 0.5"
+    },
+    {
+      "id": "higher-recall",
+      "label": "Recall rises, precision falls",
+      "pseudocode": "Compute precision and recall at 0.30.",
+      "python": "probs = [0.92, 0.83, 0.71, 0.62, 0.58, 0.45, 0.38, 0.20]\nlabels = [1, 1, 1, 0, 1, 0, 1, 0]\n\ndef counts(t):\n    preds = [1 if p >= t else 0 for p in probs]\n    tp = sum(1 for p, y in zip(preds, labels) if p and y)\n    fp = sum(1 for p, y in zip(preds, labels) if p and not y)\n    fn = sum(1 for p, y in zip(preds, labels) if not p and y)\n    return tp, fp, fn, len(probs) - tp - fp - fn\ntp, fp, fn, tn = counts(0.3)\nprint('precision', round(tp / (tp + fp), 3), 'recall', tp / (tp + fn))\n# prints: precision 0.714 recall 1.0"
+    },
+    {
+      "id": "raise-threshold",
+      "label": "Raise the threshold to 0.70",
+      "pseudocode": "A higher threshold flags fewer emails.",
+      "python": "probs = [0.92, 0.83, 0.71, 0.62, 0.58, 0.45, 0.38, 0.20]\nlabels = [1, 1, 1, 0, 1, 0, 1, 0]\n\ndef counts(t):\n    preds = [1 if p >= t else 0 for p in probs]\n    tp = sum(1 for p, y in zip(preds, labels) if p and y)\n    fp = sum(1 for p, y in zip(preds, labels) if p and not y)\n    fn = sum(1 for p, y in zip(preds, labels) if not p and y)\n    return tp, fp, fn, len(probs) - tp - fp - fn\nprint(counts(0.7))\n# prints: (3, 0, 2, 3)"
+    },
+    {
+      "id": "fewer-positives",
+      "label": "Fewer emails are flagged",
+      "pseudocode": "Count flagged emails at 0.70.",
+      "python": "probs = [0.92, 0.83, 0.71, 0.62, 0.58, 0.45, 0.38, 0.20]\nlabels = [1, 1, 1, 0, 1, 0, 1, 0]\n\ndef counts(t):\n    preds = [1 if p >= t else 0 for p in probs]\n    tp = sum(1 for p, y in zip(preds, labels) if p and y)\n    fp = sum(1 for p, y in zip(preds, labels) if p and not y)\n    fn = sum(1 for p, y in zip(preds, labels) if not p and y)\n    return tp, fp, fn, len(probs) - tp - fp - fn\nprint(sum(p >= 0.7 for p in probs), 'flagged at 0.7 versus', sum(p >= 0.5 for p in probs), 'at 0.5')\n# prints: 3 flagged at 0.7 versus 5 at 0.5"
+    },
+    {
+      "id": "precision-recall-change",
+      "label": "Precision rises, recall falls",
+      "pseudocode": "Compute precision and recall at 0.70.",
+      "python": "probs = [0.92, 0.83, 0.71, 0.62, 0.58, 0.45, 0.38, 0.20]\nlabels = [1, 1, 1, 0, 1, 0, 1, 0]\n\ndef counts(t):\n    preds = [1 if p >= t else 0 for p in probs]\n    tp = sum(1 for p, y in zip(preds, labels) if p and y)\n    fp = sum(1 for p, y in zip(preds, labels) if p and not y)\n    fn = sum(1 for p, y in zip(preds, labels) if not p and y)\n    return tp, fp, fn, len(probs) - tp - fp - fn\ntp, fp, fn, tn = counts(0.7)\nprint('precision', tp / (tp + fp), 'recall', tp / (tp + fn))\n# prints: precision 1.0 recall 0.6"
+    },
+    {
+      "id": "compare",
+      "label": "Compare the thresholds",
+      "pseudocode": "Compare all thresholds on the same probabilities.",
+      "python": "probs = [0.92, 0.83, 0.71, 0.62, 0.58, 0.45, 0.38, 0.20]\nlabels = [1, 1, 1, 0, 1, 0, 1, 0]\n\ndef counts(t):\n    preds = [1 if p >= t else 0 for p in probs]\n    tp = sum(1 for p, y in zip(preds, labels) if p and y)\n    fp = sum(1 for p, y in zip(preds, labels) if p and not y)\n    fn = sum(1 for p, y in zip(preds, labels) if not p and y)\n    return tp, fp, fn, len(probs) - tp - fp - fn\nfor t in (0.3, 0.5, 0.7, 0.9):\n    tp, fp, fn, tn = counts(t)\n    print(t, 'precision', round(tp / (tp + fp), 3), 'recall', round(tp / (tp + fn), 2))\n# prints: 0.3 precision 0.714 recall 1.0\n# prints: 0.5 precision 0.8 recall 0.8\n# prints: 0.7 precision 1.0 recall 0.6\n# prints: 0.9 precision 1.0 recall 0.2"
+    }
+  ]
+}

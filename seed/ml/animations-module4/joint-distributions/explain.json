@@ -1,0 +1,30 @@
+{
+ "variable-x": {
+  "h": "A FIRST VARIABLE: BEDROOMS",
+  "t": "Look at houses. Let **X = the number of bedrooms**: 1, 2 or 3. Each house has one value of X."
+ },
+ "variable-y": {
+  "h": "A SECOND VARIABLE: PRICE BAND",
+  "t": "Each house also has a price band. Let **Y = Low or High**. Now every house carries **two values at once**."
+ },
+ "pair-values": {
+  "h": "PAIRS OF VALUES",
+  "t": "Together the two variables give pairs: **(1, Low), (1, High), (2, Low)** and so on. With 3 × 2 choices there are **6 possible pairs**, one per cell of a table."
+ },
+ "grid": {
+  "h": "ONE CELL, ONE PAIR",
+  "t": "Each cell stands for one combination. The highlighted cell is the pair **(3 bedrooms, High price)**. We want a probability for every cell."
+ },
+ "joint-probabilities": {
+  "h": "THE JOINT PROBABILITIES",
+  "t": "**P(X = x, Y = y)** is the probability of both happening together. For example **P(X = 3, Y = High) = 0.25**: 25% of all houses. All six cells **add up to 1**."
+ },
+ "pattern": {
+  "h": "READING THE PATTERN",
+  "t": "Small houses are mostly Low priced (**0.25 versus 0.05**); big houses are mostly High (**0.25 versus 0.05**). The numbers are not spread evenly, so the variables are **related**."
+ },
+ "ml-features": {
+  "h": "TAKEAWAY",
+  "t": "A dataset is a pile of samples from a **joint distribution**: each row holds several variables at once. Models learn how features relate by learning about this **joint behavior**."
+ }
+}

@@ -1,0 +1,30 @@
+{
+ "target-vector": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Here is a vector **a**. Suppose we are only allowed to **move along one direction**."
+ },
+ "direction": {
+  "h": "A DIRECTION b",
+  "t": "That direction is the **line through the vector b**. Which point on this line is **closest to a**?"
+ },
+ "drop-perpendicular": {
+  "h": "DROP A PERPENDICULAR",
+  "t": "Drop a straight line from the tip of a down to the line, meeting it at a **right angle**. The shortest route is always perpendicular."
+ },
+ "projection": {
+  "h": "THE PROJECTION IS THE SHADOW",
+  "t": "Where the perpendicular lands is the **projection** of a onto b: the part of a that points **along b**."
+ },
+ "residual": {
+  "h": "WHAT IS LEFT OVER: THE RESIDUAL",
+  "t": "The leftover part, **a minus its projection**, is the **residual**. It is **perpendicular to b**."
+ },
+ "formula": {
+  "h": "THE FORMULA BEHIND THE PICTURE",
+  "t": "The shadow's length comes from the dot product: **proj = ((a · b) / (b · b)) · b**."
+ },
+ "ml-connection": {
+  "h": "TAKEAWAY",
+  "t": "The projection is the **closest point to a using only direction b**. Least squares and PCA are built on this idea."
+ }
+}

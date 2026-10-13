@@ -25,13 +25,20 @@ interface AdaptOptions {
    * as documented — archiving is out of scope for that comparison since
    * the importer only ever produces "active" entities. */
   activeOnly?: boolean
+  /** When true, a package-backed ("custom") animation is carried through as
+   * `workspace.customAnimation` so the learner Animation block can render it
+   * from the learner-safe package endpoint. Only the backend-pinned learner
+   * loader sets this. The Creator Studio draft preview leaves it false, because
+   * a draft package is not served to learners, and it renders its own custom
+   * animation directly. */
+  includeCustomAnimation?: boolean
 }
 
 function byOrder<T extends { order: number }>(items: T[]): T[] {
   return items.slice().sort((a, b) => a.order - b.order)
 }
 
-function adaptCheckpoint(cp: CmsDsaCheckpoint): Checkpoint {
+function adaptCheckpoint(cp: CmsDsaCheckpoint, options: AdaptOptions): Checkpoint {
   const checkpoint: Checkpoint = {
     id: cp.id,
     title: cp.title,
@@ -45,14 +52,12 @@ function adaptCheckpoint(cp: CmsDsaCheckpoint): Checkpoint {
   if (cp.lesson !== undefined) checkpoint.lesson = cp.lesson
   if (cp.layout !== undefined) checkpoint.layout = cp.layout
   if (cp.workspace !== undefined) {
-    // A "custom" animation source has no learner-runtime equivalent — there
-    // is no `AlgorithmAnimationId` for uploaded HTML, so it can't round-trip
-    // through `AlgorithmAnimationSpec`. It's dropped here (not rendered via
-    // this adapted-Checkpoint path); DsaDraftPreview.tsx renders custom
-    // animations itself, directly from the CMS checkpoint, via
-    // CustomAnimationHost — see its own animation-source branch. The static
-    // importer (dsaImporter.ts) never PRODUCES a "custom" source, so this
-    // never affects the lossless round-trip verifier's actual test domain.
+    // A "custom" animation source is package-backed HTML — it has no
+    // `AlgorithmAnimationId`, so it can't go through `AlgorithmAnimationSpec`.
+    // It travels as `customAnimation` (a frozen-revision reference) and is
+    // rendered by the shared sandbox host inside the normal Animation block.
+    // The static DSA importer never produces a "custom" source, so DSA output
+    // is unchanged.
     const { animation, ...rest } = cp.workspace
     // The cast to `AlgorithmAnimationId` mirrors what this whole adapter
     // already does implicitly for every other id-like field (ids are
@@ -60,6 +65,14 @@ function adaptCheckpoint(cp: CmsDsaCheckpoint): Checkpoint {
     // checked separately by dsaDraftValidation.ts's registered-animation-id
     // check, not by this adapter.
     checkpoint.workspace = { ...rest, animation: animation?.kind === "registered" ? { id: animation.id as AlgorithmAnimationId, title: animation.title } : undefined }
+    if (animation?.kind === "custom" && options.includeCustomAnimation) {
+      checkpoint.workspace.customAnimation = {
+        packageId: animation.packageId,
+        revisionId: animation.revisionId,
+        title: animation.title,
+        bridgeMode: animation.bridgeMode,
+      }
+    }
   }
   if (cp.questionIds !== undefined) checkpoint.questionIds = [...cp.questionIds]
   return checkpoint
@@ -68,7 +81,7 @@ function adaptCheckpoint(cp: CmsDsaCheckpoint): Checkpoint {
 function adaptModule(module: CmsDsaModule, options: AdaptOptions): Module {
   const checkpoints = byOrder(module.checkpoints)
     .filter(cp => !options.activeOnly || cp.state === "active")
-    .map(adaptCheckpoint)
+    .map(cp => adaptCheckpoint(cp, options))
   const result: Module = {
     id: module.id,
     title: module.title,
@@ -98,6 +111,15 @@ function adaptZone(zone: CmsDsaZone, options: AdaptOptions): Zone {
  * this adapter is DSA-specific by design (PART 2: "do not create a second
  * DSA learner renderer" cuts both ways, this must never silently accept
  * non-DSA CMS content and produce something that looks like it). */
+/** The shared CMS-zones → learner-zones conversion. Used by the DSA draft
+ * preview path (below) and by the backend-pinned learner loader for ML
+ * (src/learning/pinnedCourseAdapter.ts), so there is one implementation. */
+export function cmsZonesToLearnerZones(zones: CmsDsaZone[], options: AdaptOptions = {}): Zone[] {
+  return byOrder(zones)
+    .filter(z => !options.activeOnly || z.state === "active")
+    .map(z => adaptZone(z, options))
+}
+
 export function cmsDsaCourseToLearnerCourse(cmsCourse: CreatorCourse, options: AdaptOptions = {}): Course {
   if (cmsCourse.courseType !== "structured-dsa" || !cmsCourse.dsaZones) {
     throw new Error("cmsDsaCourseToLearnerCourse: course is not a structured-dsa course with dsaZones")
@@ -108,8 +130,6 @@ export function cmsDsaCourseToLearnerCourse(cmsCourse: CreatorCourse, options: A
     title: cmsCourse.title,
     description: cmsCourse.description ?? cmsCourse.shortDescription,
     provider: cmsCourse.instructor,
-    zones: byOrder(cmsCourse.dsaZones)
-      .filter(z => !options.activeOnly || z.state === "active")
-      .map(z => adaptZone(z, options)),
+    zones: cmsZonesToLearnerZones(cmsCourse.dsaZones, options),
   }
 }

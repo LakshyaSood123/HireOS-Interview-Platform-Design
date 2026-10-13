@@ -1,0 +1,34 @@
+{
+ "few-samples": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Suppose the coin truly has **p = 0.8**, but we do not know it. After the first 5 flips, the fraction of heads (the **sample mean**) is a rough, jumpy guess."
+ },
+ "running-average": {
+  "h": "TRACK THE RUNNING AVERAGE",
+  "t": "After every new flip we recompute the fraction of heads so far. This is the **running average**: each point is the average of **all flips up to that point**."
+ },
+ "fluctuation": {
+  "h": "EARLY FLUCTUATION",
+  "t": "At the start a single flip is a big share of the sample, so the average jumps around: **1.0, 0.5, 0.67, 0.5, 0.6** over the first five flips, then 0.67, 0.71, 0.63 …"
+ },
+ "more-samples": {
+  "h": "MORE SAMPLES, A SECOND RUN",
+  "t": "Keep flipping. The horizontal axis is the number of flips, drawn on a **log scale**. A second run of the same coin (pink) **wanders along a different path**."
+ },
+ "stabilize": {
+  "h": "THE AVERAGES SETTLE",
+  "t": "By **100 flips** both runs sit near the same level and move much less. By **1000 flips** they are both very close to it."
+ },
+ "true-mean": {
+  "h": "THEY SETTLE NEAR THE TRUE VALUE",
+  "t": "That level is the true **p = 0.8**, the expected value of one flip. The running average gets close **without ever being guaranteed to hit it exactly**."
+ },
+ "lln-idea": {
+  "h": "WHAT THE LAW SAYS (AND DOES NOT)",
+  "t": "The **law of large numbers**: as n grows, the sample mean settles toward the expected value. It does **not** say every new flip helps: the pink run was exactly 0.8 at n = 10, then drifted to 0.63 by n = 30 before coming back."
+ },
+ "ml-connection": {
+  "h": "TAKEAWAY",
+  "t": "An average over more data is a **steadier estimate of an expectation**. That is why the average loss on a big dataset is close to the true expected loss, and why more data gives steadier estimates."
+ }
+}

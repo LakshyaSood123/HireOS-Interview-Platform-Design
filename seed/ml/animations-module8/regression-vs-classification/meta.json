@@ -1,0 +1,54 @@
+{
+  "title": "Regression vs classification: a number or a category",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "input-data",
+      "label": "Two prediction problems",
+      "pseudocode": "Two problems: a house with a size and an email with a spam score.",
+      "python": "house_size = 2.0\nspam_score = 7.5\nprint(house_size, spam_score)\n# prints: 2.0 7.5"
+    },
+    {
+      "id": "regression-task",
+      "label": "Regression: predict a number",
+      "pseudocode": "A regression model maps the size to a price.",
+      "python": "def predict_price(size):\n    return 1.6 * size + 0.5\n\nprint(round(predict_price(2.0), 2))\n# prints: 3.7"
+    },
+    {
+      "id": "continuous-output",
+      "label": "A continuous output",
+      "pseudocode": "The output is a number on a scale; being close counts.",
+      "python": "price = 3.7\nprint(price, round(abs(price - 3.6), 2))\n# prints: 3.7 0.1"
+    },
+    {
+      "id": "classification-task",
+      "label": "Classification: predict a category",
+      "pseudocode": "A classification model chooses one of a fixed set of labels.",
+      "python": "classes = ['not spam', 'spam']\nprint(classes)\n# prints: ['not spam', 'spam']"
+    },
+    {
+      "id": "class-output",
+      "label": "A class label",
+      "pseudocode": "The output is a label, not a quantity.",
+      "python": "classes = ['not spam', 'spam']\nscore = 7.5\nprint(classes[1 if score >= 4.0 else 0])\n# prints: spam"
+    },
+    {
+      "id": "compare",
+      "label": "Compare the two outputs",
+      "pseudocode": "A regression output is a number; a classification output is a label.",
+      "python": "print(type(3.7).__name__, type('spam').__name__)\n# prints: float str"
+    },
+    {
+      "id": "score-preview",
+      "label": "A score comes first",
+      "pseudocode": "Compute a score, then apply a decision rule.",
+      "python": "score = 7.5\nlabel = 'spam' if score >= 4.0 else 'not spam'\nprint(score, label)\n# prints: 7.5 spam"
+    },
+    {
+      "id": "ml-choice",
+      "label": "Which task is it?",
+      "pseudocode": "Quantity on a scale: regression. Category: classification.",
+      "python": "def task(kind):\n    return 'regression' if kind == 'quantity' else 'classification'\n\nprint(task('quantity'), task('category'))\n# prints: regression classification"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+ "objective-contours": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Same objective **L = f(w1, w2) = (w1 − 3)² + 2(w2 − 1)²**. The rings join points of equal loss, and the middle **(3, 1)** is the lowest."
+ },
+ "constraint-curve": {
+  "h": "AN EQUALITY CONSTRAINT",
+  "t": "Now only points **on the yellow line g(w1, w2) = w1 + w2 = 2** are allowed. We want the **lowest contour that still touches that line**."
+ },
+ "candidate-point": {
+  "h": "A CANDIDATE ON THE LINE",
+  "t": "Take **(2, 0)** on the line. Its loss is **3**, and the contour L = 3 (yellow) passes through it. This contour **crosses** the line: part of the line lies inside the ring, where the loss is **lower than 3**."
+ },
+ "move-along-constraint": {
+  "h": "SLIDE ALONG THE CONSTRAINT",
+  "t": "Move along the line toward the inside of the ring. The contour through the moving point **shrinks** as the loss falls: **3.0, 2.8, 2.7 …**"
+ },
+ "better-point": {
+  "h": "A BETTER POINT",
+  "t": "At **(5/3, 1/3)** the loss is **8/3 ≈ 2.67**, lower than 3. Can we do better by sliding further? Let us see what the contour does here."
+ },
+ "tangent-point": {
+  "h": "THE CONTOUR JUST TOUCHES THE LINE",
+  "t": "At (5/3, 1/3) the contour **L = 8/3 touches the line at exactly one point**: they are **tangent**. Slide either way and the loss goes up, so this is the best point on the constraint."
+ },
+ "gradient-objective": {
+  "h": "THE OBJECTIVE'S GRADIENT",
+  "t": "The gradient of the objective, **∇f = [−8/3, −8/3]** here, points uphill and is **perpendicular to the contour**."
+ },
+ "gradient-constraint": {
+  "h": "THE CONSTRAINT'S GRADIENT",
+  "t": "The constraint **g = w1 + w2** has gradient **∇g = [1, 1]**, which is perpendicular to the constraint line."
+ },
+ "parallel-gradients": {
+  "h": "THE GRADIENTS ARE PARALLEL",
+  "t": "Tangent curves share a direction, so their perpendiculars do too: **∇f = λ∇g**. Here [−8/3, −8/3] = λ[1, 1] gives **λ = −8/3**. The number λ is the **Lagrange multiplier**."
+ },
+ "lagrange-form": {
+  "h": "TAKEAWAY",
+  "t": "Pack it into one function, the **Lagrangian: L(w1, w2, λ) = f − λ(g − c)**. Setting its derivatives to zero gives **∇f = λ∇g** and **g = c**. (Many books write + λ(g − c); that only flips the sign of λ.)"
+ }
+}

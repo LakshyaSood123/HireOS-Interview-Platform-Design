@@ -1,0 +1,183 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322c4e9cccef168ecf1"
+  },
+  "assets": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498498"
+    }
+  },
+  "createdBy": {
+    "$oid": "000000000000000000000000"
+  },
+  "css": "body {\n  margin: 0;\n  padding: 14px;\n  box-sizing: border-box;\n  background: #0b1d16;\n  color: #e6f5ec;\n  font-family: system-ui, sans-serif;\n}\n.scene {\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n}\n.header {\n  display: flex;\n  justify-content: space-between;\n  align-items: baseline;\n}\n.step-label {\n  margin: 0;\n  font-size: 13px;\n  font-weight: 700;\n  letter-spacing: 0.08em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\nsvg {\n  width: 100%;\n  height: auto;\n  max-width: 640px;\n  background: #071510;\n  border-radius: 10px;\n  border: 1px solid rgba(29, 181, 132, 0.35);\n}\n.link {\n  stroke: rgba(255, 255, 255, 0.14);\n  stroke-width: 3;\n  transition: stroke 0.5s ease;\n}\n.link.lit {\n  stroke: #1DB584;\n}\n.node-disc {\n  fill: #0f2a20;\n  stroke: rgba(255, 255, 255, 0.25);\n  stroke-width: 2;\n  transition: fill 0.4s ease, stroke 0.4s ease;\n}\n.node.done .node-disc {\n  fill: #164d3a;\n  stroke: #1DB584;\n}\n.node.active .node-disc {\n  fill: #E2B44A;\n  stroke: #ffffff;\n  stroke-width: 3;\n}\n.node-index {\n  font-size: 12px;\n  font-weight: 800;\n  fill: #e6f5ec;\n}\n.node.active .node-index {\n  fill: #0b1d16;\n}\n.node-label {\n  font-size: 11px;\n  font-weight: 700;\n  fill: #c9dccf;\n}\n.node.active .node-label {\n  fill: #E2B44A;\n}\n.token {\n  transition: transform 0.6s ease;\n}\n.token-body {\n  fill: #F9A8D4;\n}\n.token-roof {\n  fill: #ffffff;\n}\n.house {\n  border: 1px solid rgba(29, 181, 132, 0.35);\n  border-radius: 10px;\n  padding: 10px 12px;\n  background: rgba(255, 255, 255, 0.03);\n}\n.house-title {\n  margin: 0 0 4px;\n  font-size: 11px;\n  font-weight: 800;\n  letter-spacing: 0.06em;\n  text-transform: uppercase;\n  color: #F9A8D4;\n}\n.house-detail {\n  margin: 0;\n  font-size: 13px;\n  color: #e6f5ec;\n}\n.caption {\n  margin: 0;\n  font-size: 13px;\n  line-height: 1.5;\n  color: #c9dccf;\n  min-height: 40px;\n}\n\n/* ── explanation panel (shared by every generated ML animation) ── */\n.explain {\n  box-sizing: border-box;\n  max-width: 640px;\n  margin-top: 4px;\n  padding: 14px 18px 16px;\n  min-height: 150px;\n  border-radius: 12px;\n  background: rgba(29, 181, 132, 0.10);\n  border: 1px solid rgba(29, 181, 132, 0.45);\n  border-left: 5px solid #1db584;\n}\n.explain-h {\n  margin: 0 0 8px;\n  font-size: 13px;\n  font-weight: 800;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.explain-t {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.55;\n  color: #f1faf4;\n}\n.explain-t strong {\n  font-weight: 800;\n  color: #ffd98a;\n}\n",
+  "html": "<div class=\"scene\">\n  <div class=\"header\">\n    <p class=\"step-label\" id=\"step-label\">Define the goal</p>\n  </div>\n  <svg id=\"scene\" viewBox=\"0 0 640 330\" role=\"img\" aria-label=\"The machine learning workflow from problem to inference, using house-price prediction\">\n    <g id=\"links\"></g>\n    <g id=\"nodes\"></g>\n    <g id=\"token\"></g>\n  </svg>\n  <div class=\"house\">\n    <p class=\"house-title\" id=\"house-title\"></p>\n    <p class=\"house-detail\" id=\"house-detail\"></p>\n  </div>\n  <section class=\"explain\" aria-live=\"polite\">\n        <h3 class=\"explain-h\" id=\"explain-h\"></h3>\n        <p class=\"explain-t\" id=\"caption\"></p>\n      </section>\n</div>\n",
+  "js": "(function () {\n  var NS = \"http://www.w3.org/2000/svg\";\n\n  var steps = [\n    { id: \"problem\", label: \"Problem\", title: \"Define the goal\", detail: \"Goal: predict the sale price of a house before it is sold.\" },\n    { id: \"data\", label: \"Data\", title: \"Collect past sales\", detail: \"Records of past house sales: area, bedrooms, age and the price each house sold for.\" },\n    { id: \"features-target\", label: \"Features / target\", title: \"Choose X and y\", detail: \"Features X: area, bedrooms, age. Target y: sale price.\" },\n    { id: \"split\", label: \"Split\", title: \"Separate the houses\", detail: \"Train, validation and test houses. A 70/15/15 split is only an example, not a rule.\" },\n    { id: \"model\", label: \"Model\", title: \"Choose a simple model\", detail: \"Simple linear regression: price = w · (area, bedrooms, age) + b.\" },\n    { id: \"train\", label: \"Train\", title: \"Fit the parameters\", detail: \"Adjust w and b using training houses only.\" },\n    { id: \"validate\", label: \"Validate\", title: \"Check on unseen houses\", detail: \"Measure the error on validation houses and compare settings.\" },\n    { id: \"improve\", label: \"Improve\", title: \"Adjust and re-check\", detail: \"Change features or model settings, then check validation error again.\" },\n    { id: \"test\", label: \"Test\", title: \"One final evaluation\", detail: \"Measure the error once on test houses. These houses were never used to train or choose.\" },\n    { id: \"inference\", label: \"Inference\", title: \"Predict a new house\", detail: \"A new house goes in, the trained model runs, and an estimated sale price comes out.\" }\n  ];\n\n  // Ten nodes in two rows of five (viewBox 640 x 330).\n  var POS = [\n    { x: 80, y: 84 }, { x: 200, y: 84 }, { x: 320, y: 84 }, { x: 440, y: 84 }, { x: 560, y: 84 },\n    { x: 560, y: 196 }, { x: 440, y: 196 }, { x: 320, y: 196 }, { x: 200, y: 196 }, { x: 80, y: 196 },\n  ];\n\n  var svg = document.getElementById(\"scene\");\n  var linksLayer = document.getElementById(\"links\");\n  var nodesLayer = document.getElementById(\"nodes\");\n  var tokenLayer = document.getElementById(\"token\");\n  var labelEl = document.getElementById(\"step-label\");\n  var captionEl = document.getElementById(\"caption\");\n  var explainHeadEl = document.getElementById(\"explain-h\");\n  // Per-step explanations (mirrors explain.json in this package folder). **bold** markers become <strong>.\n  var EXPLAIN = {\"problem\": {\"h\": \"STEP 1: DEFINE THE GOAL\", \"t\": \"Every project begins with a **clear goal**: **predict the sale price of a house before it is sold**. The goal decides what data we need and how we will judge success.\"}, \"data\": {\"h\": \"STEP 2: COLLECT DATA\", \"t\": \"We gather **records of past house sales**: area, bedrooms, age and the price each house sold for. Past examples with known answers are the raw material for learning.\"}, \"features-target\": {\"h\": \"STEP 3: CHOOSE X AND y\", \"t\": \"**Features X** are area, bedrooms and age. The **target y** is the sale price. Features are the inputs; the target is the answer the model should predict.\"}, \"split\": {\"h\": \"STEP 4: SPLIT THE HOUSES\", \"t\": \"Houses are separated into **train, validation and test** groups. A 70/15/15 split is only an example, not a rule. The test houses are set aside and **not touched**.\"}, \"model\": {\"h\": \"STEP 5: CHOOSE A SIMPLE MODEL\", \"t\": \"We start simple: **linear regression**, price = w · (area, bedrooms, age) + b. A simple model is easy to understand and a good baseline to beat.\"}, \"train\": {\"h\": \"STEP 6: TRAIN\", \"t\": \"**Adjust w and b using the training houses only.** This is where the model learns from data.\"}, \"validate\": {\"h\": \"STEP 7: VALIDATE\", \"t\": \"Measure the error on the **validation houses** and compare settings. Validation shows how the model behaves on houses it did not train on.\"}, \"improve\": {\"h\": \"STEP 8: IMPROVE\", \"t\": \"Change features or model settings, then **check the validation error again**. Improvement is a loop: change one thing, measure, repeat.\"}, \"test\": {\"h\": \"STEP 9: ONE FINAL TEST\", \"t\": \"Measure the error **once** on the test houses. These houses were **never used to train or choose**, so the result is an honest estimate.\"}, \"inference\": {\"h\": \"TAKEAWAY\", \"t\": \"A **new house goes in, the trained model runs, and an estimated sale price comes out**. This is **inference**: using the finished model on new data.\"}};\n\n  function setRich(node, str) {\n    node.textContent = \"\";\n    var parts = String(str).split(\"**\");\n    for (var i = 0; i < parts.length; i++) {\n      if (parts[i] === \"\") continue;\n      var seg = document.createElement(i % 2 ? \"strong\" : \"span\");\n      seg.textContent = parts[i];\n      node.appendChild(seg);\n    }\n  }\n\n  function explanationFor(index) {\n    var ex = EXPLAIN[steps[index].id];\n    return ex || { h: \"WHAT IS HAPPENING\", t: steps[index].caption || steps[index].detail || \"\" };\n  }\n\n  function stepMs(index) {\n    var words = String(explanationFor(index).t).replace(/\\*\\*/g, \"\").split(/\\s+/).length;\n    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));\n  }\n\n  function showExplanation(index) {\n    var ex = explanationFor(index);\n    if (explainHeadEl) explainHeadEl.textContent = ex.h;\n    setRich(captionEl, ex.t);\n  }\n  var houseTitleEl = document.getElementById(\"house-title\");\n  var houseDetailEl = document.getElementById(\"house-detail\");\n\n  function el(name, attrs, parent) {\n    var node = document.createElementNS(NS, name);\n    for (var key in attrs) node.setAttribute(key, attrs[key]);\n    if (parent) parent.appendChild(node);\n    return node;\n  }\n\n  // Links between consecutive stages.\n  var links = [];\n  for (var i = 0; i < POS.length - 1; i++) {\n    links.push(el(\"line\", {\n      x1: POS[i].x, y1: POS[i].y, x2: POS[i + 1].x, y2: POS[i + 1].y,\n      class: \"link\",\n    }, linksLayer));\n  }\n\n  var nodes = [];\n  steps.forEach(function (step, idx) {\n    var g = el(\"g\", { class: \"node\", \"data-id\": step.id }, nodesLayer);\n    el(\"circle\", { cx: POS[idx].x, cy: POS[idx].y, r: 26, class: \"node-disc\" }, g);\n    el(\"text\", { x: POS[idx].x, y: POS[idx].y + 4, class: \"node-index\", \"text-anchor\": \"middle\" }, g).textContent = String(idx + 1);\n    el(\"text\", { x: POS[idx].x, y: POS[idx].y + 46, class: \"node-label\", \"text-anchor\": \"middle\" }, g).textContent = step.label;\n    nodes.push(g);\n  });\n\n  // A small house token that travels to the active stage.\n  var token = el(\"g\", { class: \"token\" }, tokenLayer);\n  el(\"rect\", { x: -9, y: -2, width: 18, height: 12, rx: 2, class: \"token-body\" }, token);\n  el(\"path\", { d: \"M-12 -1 L0 -11 L12 -1 Z\", class: \"token-roof\" }, token);\n\n  var current = 0;\n\n  function render(index) {\n    var step = steps[index];\n    labelEl.textContent = step.title;\n    showExplanation(index);\n    houseTitleEl.textContent = \"House under study\";\n    houseDetailEl.textContent = index >= 6 && index <= 8\n      ? \"Area 1500 sq ft · 3 bedrooms · 6 years old\"\n      : index === 9\n        ? \"Area 1500 sq ft · 3 bedrooms · 6 years old → model → estimated price\"\n        : \"Area, bedrooms, age and sale price for each past house\";\n\n    nodes.forEach(function (node, i) {\n      var cls = \"node\";\n      if (i < index) cls += \" done\";\n      if (i === index) cls += \" active\";\n      node.setAttribute(\"class\", cls);\n    });\n    links.forEach(function (link, i) {\n      link.setAttribute(\"class\", i < index ? \"link lit\" : \"link\");\n    });\n    token.style.transform = \"translate(\" + POS[index].x + \"px,\" + (POS[index].y - 46) + \"px)\";\n  }\n\n  function emit() {\n    if (window.ReagvisBridge) window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n\n  function go(index) {\n    if (index < 0 || index >= steps.length) return false;\n    current = index;\n    render(current);\n    emit();\n    return true;\n  }\n\n  // Autoplay pace: 4.5 to 10.5 seconds per step (longer for longer explanations), exactly one timer.\n  // PLAY on the final step restarts from the first step and plays again.\n  var timer = null;\n\n  function stopAuto() {\n    if (timer !== null) {\n      clearTimeout(timer);\n      timer = null;\n    }\n  }\n\n  function scheduleNext() {\n    timer = setTimeout(function () {\n      timer = null;\n      if (current >= steps.length - 1) return;\n      go(current + 1);\n      if (current < steps.length - 1) scheduleNext();\n    }, stepMs(current));\n  }\n\n  function startAuto() {\n    if (timer !== null) return;\n    if (current >= steps.length - 1) go(0);\n    scheduleNext();\n  }\n\n  window.addEventListener(\"pagehide\", stopAuto);\n\n  window.ReagvisAnimation = {\n    stepDuration: stepMs,\n    onCommand: function (type, stepId) {\n      if (type === \"PLAY\") startAuto();\n      else if (type === \"PAUSE\") stopAuto();\n      else if (type === \"NEXT\") { stopAuto(); go(current + 1); }\n      else if (type === \"PREVIOUS\") { stopAuto(); go(current - 1); }\n      else if (type === \"RESET\") { stopAuto(); go(0); }\n      else if (type === \"GOTO_STEP\") {\n        stopAuto();\n        for (var i = 0; i < steps.length; i++) {\n          if (steps[i].id === stepId) { go(i); break; }\n        }\n      }\n    },\n  };\n\n  render(current);\n  if (window.ReagvisBridge) {\n    window.ReagvisBridge.ready();\n    window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n})();\n",
+  "lastFrozenContentHash": null,
+  "lastFrozenRevisionId": null,
+  "manifest": {
+    "bridgeVersion": {
+      "$numberInt": "1"
+    },
+    "capabilities": [
+      "play",
+      "pause",
+      "next",
+      "previous",
+      "reset",
+      "gotoStep"
+    ],
+    "heightPx": {
+      "$numberInt": "630"
+    },
+    "traceEvents": [
+      "problem",
+      "data",
+      "features-target",
+      "split",
+      "model",
+      "train",
+      "validate",
+      "improve",
+      "test",
+      "inference"
+    ]
+  },
+  "packageId": "e21974d5-dfac-4855-8438-31e643cb42d1",
+  "packageTrace": {
+    "steps": [
+      {
+        "animationEvent": "problem",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Decide the decision the model supports and the quantity to predict. Here: the sale price of a house.",
+          "python": "goal = {'predict': 'sale price', 'for': 'a house before it is sold'}\nprint(goal['predict'])"
+        },
+        "id": "problem",
+        "label": "Define the problem"
+      },
+      {
+        "animationEvent": "data",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Gather records of past sales and check that they are complete, correct and representative of the houses the model will see.",
+          "python": "sales = [(1200, 2, 10, 45), (1800, 3, 4, 72), (900, 1, 15, 32)]\nprint(len(sales), 'past sales')"
+        },
+        "id": "data",
+        "label": "Collect and understand the data"
+      },
+      {
+        "animationEvent": "features-target",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Pick the inputs X the model may use at prediction time, such as area, bedrooms and age. Pick the target y, the sale price.",
+          "python": "sales = [(1200, 2, 10, 45), (1800, 3, 4, 72), (900, 1, 15, 32)]\nX = [row[:3] for row in sales]\ny = [row[3] for row in sales]\nprint(X[0], y[0])"
+        },
+        "id": "features-target",
+        "label": "Choose features and target"
+      },
+      {
+        "animationEvent": "split",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Separate the houses into training, validation and test groups before fitting anything. Ratios like 70/15/15 are examples.",
+          "python": "sales = [(1200, 2, 10, 45), (1800, 3, 4, 72), (900, 1, 15, 32)]\nn = len(sales)\nn_train = int(n * 0.70)\nprint(n_train, \"houses for training\")"
+        },
+        "id": "split",
+        "label": "Split the data"
+      },
+      {
+        "animationEvent": "model",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Start with a simple model: a weighted sum of the features plus a bias. Its parameters are what training will adjust.",
+          "python": "def predict(x, w, b):\n    return sum(wi * xi for wi, xi in zip(w, x)) + b\n\nprint(predict([1200, 2, 10], [0.01, 5.0, -1.0], 10.0))"
+        },
+        "id": "model",
+        "label": "Choose a simple model"
+      },
+      {
+        "animationEvent": "train",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Adjust the parameters so predictions on training houses match their known prices as closely as possible.",
+          "python": "train_prices = [45, 72]\nestimate = sum(train_prices) / len(train_prices)\nprint(estimate)"
+        },
+        "id": "train",
+        "label": "Train on the training houses"
+      },
+      {
+        "animationEvent": "validate",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Measure error on validation houses that training did not use. Compare candidate settings with this error.",
+          "python": "train_prices = [45, 72]\nestimate = sum(train_prices) / len(train_prices)\nval_prices = [32]\nval_error = abs(estimate - val_prices[0])\nprint(val_error)"
+        },
+        "id": "validate",
+        "label": "Validate on unseen houses"
+      },
+      {
+        "animationEvent": "improve",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "If validation error is too high, change the features or the model, retrain, and validate again. Choices are made only on validation results.",
+          "python": "candidates = {'area only': 9.0, 'area and bedrooms': 6.5}\nbest = min(candidates, key=candidates.get)\nprint(best)"
+        },
+        "id": "improve",
+        "label": "Improve and re-check"
+      },
+      {
+        "animationEvent": "test",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "After all decisions are fixed, measure error once on the test houses. This is the estimate reported for the model.",
+          "python": "train_prices = [45, 72]\nestimate = sum(train_prices) / len(train_prices)\ntest_prices = [60]\nfinal_error = abs(estimate - test_prices[0])\nprint(final_error)"
+        },
+        "id": "test",
+        "label": "Evaluate once on the test houses"
+      },
+      {
+        "animationEvent": "inference",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Give the trained model the features of a new house. It returns an estimated price. No target is needed at this point.",
+          "python": "def predict(x, w, b):\n    return sum(wi * xi for wi, xi in zip(w, x)) + b\n\nnew_house = [1500, 3, 6]\nprint(predict(new_house, [0.01, 5.0, -1.0], 10.0))"
+        },
+        "id": "inference",
+        "label": "Predict a new house"
+      }
+    ],
+    "version": {
+      "$numberInt": "1"
+    }
+  },
+  "revision": {
+    "$numberInt": "7"
+  },
+  "revisionId": "r2",
+  "sourceKind": "zip",
+  "status": "frozen",
+  "title": "ML Module 1 — The Machine Learning Workflow",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498498"
+    }
+  },
+  "updatedBy": {
+    "$oid": "000000000000000000000000"
+  }
+}

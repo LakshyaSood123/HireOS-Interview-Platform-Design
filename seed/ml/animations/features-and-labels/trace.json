@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "steps": [
+    {
+      "id": "raw-table",
+      "label": "The raw table",
+      "animationEvent": "raw-table",
+      "code": {
+        "pseudocode": "Each row is one example. Each column is one piece of information.\ndataset <- rows of (area, bedrooms, age, price)",
+        "python": "dataset = [\n    [1200, 2, 10, 45],\n    [1800, 3, 4, 72],\n    [900, 1, 15, 32],\n]"
+      }
+    },
+    {
+      "id": "features",
+      "label": "Choose features",
+      "animationEvent": "features",
+      "code": {
+        "pseudocode": "Features are the inputs the model receives: area, bedrooms, age.\nx <- [area, bedrooms, age]",
+        "python": "x = [1200, 2, 10]  # features of one house"
+      }
+    },
+    {
+      "id": "label",
+      "label": "Choose the label",
+      "animationEvent": "label",
+      "code": {
+        "pseudocode": "The label is the value to predict: sale price.\ny <- sale_price",
+        "python": "y = 45  # label of the same house"
+      }
+    },
+    {
+      "id": "split",
+      "label": "Split into X and y",
+      "animationEvent": "split",
+      "code": {
+        "pseudocode": "X collects every feature row. y collects every label.\nX <- features of all rows\ny <- labels of all rows",
+        "python": "dataset = [\n    [1200, 2, 10, 45],\n    [1800, 3, 4, 72],\n    [900, 1, 15, 32],\n]\n\nX = [row[:-1] for row in dataset]\ny = [row[-1] for row in dataset]\nprint(X[0], y[0])"
+      }
+    },
+    {
+      "id": "new-sample",
+      "label": "Predict a new house",
+      "animationEvent": "new-sample",
+      "code": {
+        "pseudocode": "A new feature row goes into the trained model.\nprediction <- model.predict([1500, 3, 6])",
+        "python": "# A stand-in formula plays the role of a trained model.\ndef trained_model(x):\n    area, bedrooms, age = x\n    return 0.03 * area + 5 * bedrooms - 0.5 * age\n\nnew_x = [1500, 3, 6]\nprint(round(trained_model(new_x), 1))  # 57.0"
+      }
+    }
+  ]
+}

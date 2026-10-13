@@ -1,0 +1,183 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322c4e9cccef168ee09"
+  },
+  "assets": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498690"
+    }
+  },
+  "createdBy": {
+    "$oid": "000000000000000000000000"
+  },
+  "css": "body {\r\n  margin: 0;\r\n  padding: 14px;\r\n  box-sizing: border-box;\r\n  background: #0b1d16;\r\n  color: #e6f5ec;\r\n  font-family: system-ui, sans-serif;\r\n}\r\n.scene {\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 8px;\r\n}\r\n.step-label {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  letter-spacing: 0.08em;\r\n  text-transform: uppercase;\r\n  color: #a7ce65;\r\n}\r\nsvg {\r\n  width: 100%;\r\n  height: auto;\r\n  max-width: 640px;\r\n  background: #071510;\r\n  border-radius: 10px;\r\n  border: 1px solid rgba(29, 181, 132, 0.35);\r\n}\r\nsvg g,\r\nsvg line,\r\nsvg polygon,\r\nsvg path,\r\nsvg ellipse,\r\nsvg circle,\r\nsvg rect,\r\nsvg text {\r\n  transition: opacity 0.4s ease, transform 0.6s ease;\r\n}\r\n.axis {\r\n  stroke: rgba(167, 206, 101, 0.3);\r\n  stroke-width: 1;\r\n}\r\n.tick {\r\n  font-size: 10px;\r\n  fill: #8fa89c;\r\n}\r\n.lbl,\r\n.big,\r\n.note,\r\n.mono {\r\n  paint-order: stroke;\r\n  stroke: #071510;\r\n  stroke-width: 3px;\r\n  stroke-linejoin: round;\r\n}\r\n.lbl {\r\n  font-size: 12px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.lbl-g { fill: #1db584; }\r\n.lbl-y { fill: #e2b44a; }\r\n.lbl-p { fill: #f472b6; }\r\n.lbl-b { fill: #38bdf8; }\r\n.lbl-r { fill: #f87171; }\r\n.big {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.note {\r\n  font-size: 11px;\r\n  fill: #c9dccf;\r\n}\r\n.mono {\r\n  font-family: ui-monospace, Consolas, monospace;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.caption {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  line-height: 1.5;\r\n  color: #c9dccf;\r\n  min-height: 40px;\r\n}\r\n.cell rect {\r\n  fill: rgba(255, 255, 255, 0.05);\r\n  stroke: rgba(255, 255, 255, 0.28);\r\n  stroke-width: 1.2;\r\n}\r\n.cell text {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.cell.hl-row rect { fill: rgba(226, 180, 74, 0.25); stroke: #e2b44a; }\r\n.cell.hl-col rect { fill: rgba(29, 181, 132, 0.25); stroke: #1db584; }\r\n.cell.hl-both rect { fill: rgba(244, 114, 182, 0.28); stroke: #f472b6; }\r\n.dim { opacity: 0.25; }\r\n.dash { stroke-dasharray: 5 4; }\r\n.fillA { fill: rgba(56, 189, 248, 0.16); stroke: #38bdf8; stroke-width: 2; }\r\n.fillB { fill: rgba(244, 114, 182, 0.18); stroke: #f472b6; stroke-width: 2; }\r\n.fillG { fill: rgba(29, 181, 132, 0.16); stroke: #1db584; stroke-width: 2; }\r\n.contour { stroke: rgba(56, 189, 248, 0.45); stroke-width: 1.5; }\n.curve { fill: none; stroke: #38bdf8; stroke-width: 3; }\n.curve-y { fill: none; stroke: #e2b44a; stroke-width: 3; }\n.curve-p { fill: none; stroke: #f472b6; stroke-width: 3; }\n.curve-g { fill: none; stroke: #1db584; stroke-width: 3; }\n.ghost { fill: none; stroke: rgba(201, 220, 207, 0.4); stroke-width: 2; }\n.lbl-w { fill: #e6f5ec; }\n.lbl-s { font-size: 11px; font-weight: 600; fill: #c9dccf; }\n.contour-hi { fill: none; stroke: #e2b44a; stroke-width: 3; }\n.feasible { fill: rgba(29, 181, 132, 0.16); stroke: none; }\n.infeasible { fill: rgba(248, 113, 113, 0.14); stroke: none; }\n\n/* ── explanation panel (shared by every generated ML animation) ── */\n.explain {\n  box-sizing: border-box;\n  max-width: 640px;\n  margin-top: 4px;\n  padding: 14px 18px 16px;\n  min-height: 150px;\n  border-radius: 12px;\n  background: rgba(29, 181, 132, 0.10);\n  border: 1px solid rgba(29, 181, 132, 0.45);\n  border-left: 5px solid #1db584;\n}\n.explain-h {\n  margin: 0 0 8px;\n  font-size: 13px;\n  font-weight: 800;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.explain-t {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.55;\n  color: #f1faf4;\n}\n.explain-t strong {\n  font-weight: 800;\n  color: #ffd98a;\n}\n\n",
+  "html": "<div class=\"scene\">\n  <p class=\"step-label\" id=\"step-label\"></p>\n  <svg id=\"scene\" viewBox=\"0 0 640 360\" role=\"img\" aria-label=\"KKT conditions\"></svg>\n  <section class=\"explain\" aria-live=\"polite\">\n    <h3 class=\"explain-h\" id=\"explain-h\"></h3>\n    <p class=\"explain-t\" id=\"caption\"></p>\n  </section>\n</div>\n",
+  "js": "(function () {\n  // ── shared helpers (SVG, tweening) ─────────────────────────────────────────\r\n  var NS = \"http://www.w3.org/2000/svg\";\r\n  var svg = document.getElementById(\"scene\");\r\n  var labelEl = document.getElementById(\"step-label\");\r\n  var captionEl = document.getElementById(\"caption\");\r\n\r\n  function el(name, attrs, parent) {\r\n    var node = document.createElementNS(NS, name);\r\n    for (var key in attrs) node.setAttribute(key, attrs[key]);\r\n    if (parent) parent.appendChild(node);\r\n    return node;\r\n  }\r\n  function txt(parent, x, y, cls, str, anchor) {\r\n    var t = el(\"text\", { x: x, y: y, class: cls }, parent);\r\n    if (anchor) t.setAttribute(\"text-anchor\", anchor);\r\n    t.textContent = str;\r\n    return t;\r\n  }\r\n  function show(node, on) {\r\n    node.setAttribute(\"opacity\", on ? \"1\" : \"0\");\r\n  }\r\n  function place(node, x, y) {\r\n    node.style.transform = \"translate(\" + x + \"px,\" + y + \"px)\";\r\n  }\r\n  function setLine(node, x1, y1, x2, y2) {\r\n    node.setAttribute(\"x1\", x1);\r\n    node.setAttribute(\"y1\", y1);\r\n    node.setAttribute(\"x2\", x2);\r\n    node.setAttribute(\"y2\", y2);\r\n  }\r\n  function lerp(a, b, e) {\r\n    return a + (b - a) * e;\r\n  }\r\n  function round1(v) {\r\n    return (Math.round(v * 10) / 10).toFixed(1);\r\n  }\r\n\r\n  // Eased animation. fn(e) is called with e from 0 to 1. Without\r\n  // requestAnimationFrame (or with ms = 0) it jumps straight to fn(1).\r\n  var animTokens = {};\r\n  function anim(key, ms, fn) {\r\n    var token = (animTokens[key] || 0) + 1;\r\n    animTokens[key] = token;\r\n    if (typeof requestAnimationFrame !== \"function\" || ms <= 0) {\r\n      fn(1);\r\n      return;\r\n    }\r\n    var start = null;\r\n    function frame(now) {\r\n      if (animTokens[key] !== token) return;\r\n      if (start === null) start = now;\r\n      var p = Math.min(1, (now - start) / ms);\r\n      var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;\r\n      fn(e);\r\n      if (p < 1) requestAnimationFrame(frame);\r\n    }\r\n    requestAnimationFrame(frame);\r\n  }\r\n\r\n  // Arrowheads, one marker per colour.\r\n  var COLORS = { g: \"#1DB584\", y: \"#E2B44A\", p: \"#F472B6\", b: \"#38BDF8\", w: \"#c9dccf\", r: \"#F87171\" };\r\n  var defs = el(\"defs\", {}, svg);\r\n  Object.keys(COLORS).forEach(function (k) {\r\n    var m = el(\"marker\", { id: \"ah-\" + k, viewBox: \"0 0 10 10\", refX: 9, refY: 5, markerUnits: \"userSpaceOnUse\", markerWidth: 13, markerHeight: 13, orient: \"auto\" }, defs);\r\n    el(\"path\", { d: \"M0 0 L10 5 L0 10 Z\", fill: COLORS[k] }, m);\r\n  });\r\n  function arrow(parent, colorKey, width) {\r\n    return el(\"line\", { x1: 0, y1: 0, x2: 0, y2: 0, stroke: COLORS[colorKey], \"stroke-width\": width || 3, \"marker-end\": \"url(#ah-\" + colorKey + \")\", \"stroke-linecap\": \"round\" }, parent);\r\n  }\r\n  function polygon(parent, cls) {\r\n    return el(\"polygon\", { points: \"\", class: cls }, parent);\r\n  }\r\n  function setPoly(node, pts) {\r\n    node.setAttribute(\"points\", pts.map(function (p) { return p[0].toFixed(1) + \",\" + p[1].toFixed(1); }).join(\" \"));\r\n  }\r\n  function lerpPts(a, b, e) {\r\n    return a.map(function (p, i) { return [lerp(p[0], b[i][0], e), lerp(p[1], b[i][1], e)]; });\r\n  }\r\n  // Maps maths coordinates (x right, y up) to screen pixels.\r\n  function makePlane(cx, cy, s) {\r\n    return {\r\n      x: function (v) { return cx + s * v; },\r\n      y: function (v) { return cy - s * v; },\r\n      pt: function (p) { return [cx + s * p[0], cy - s * p[1]]; },\r\n      s: s, cx: cx, cy: cy\r\n    };\r\n  }\r\n  function axes(parent, plane, xr, yr) {\r\n    el(\"line\", { x1: plane.x(-xr), y1: plane.y(0), x2: plane.x(xr), y2: plane.y(0), class: \"axis\" }, parent);\r\n    el(\"line\", { x1: plane.x(0), y1: plane.y(-yr), x2: plane.x(0), y2: plane.y(yr), class: \"axis\" }, parent);\r\n  }\r\n\n  // ── Module 3 helpers: graphs, curves, contour plane ───────────────────────\n  // makeGraph maps maths values to pixels with separate x and y scales.\n  function makeGraph(ox, oy, sx, sy) {\n    return {\n      ox: ox, oy: oy, sx: sx, sy: sy,\n      x: function (v) { return ox + sx * v; },\n      y: function (v) { return oy - sy * v; }\n    };\n  }\n  function curveD(g, f, a, b, n) {\n    var d = \"\";\n    for (var i = 0; i <= n; i++) {\n      var v = a + ((b - a) * i) / n;\n      d += (i ? \" L \" : \"M \") + g.x(v).toFixed(1) + \" \" + g.y(f(v)).toFixed(1);\n    }\n    return d;\n  }\n  function setD(node, d) {\n    node.setAttribute(\"d\", d);\n  }\n  function fmt(v, n) {\n    return (Math.round(v * 100000) / 100000).toFixed(n === undefined ? 1 : n);\n  }\n  function drawAxes(parent, g, xmax, ymax, xticks, yticks) {\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(xmax), y2: g.y(0), class: \"axis\" }, parent);\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(0), y2: g.y(ymax), class: \"axis\" }, parent);\n    (xticks || []).forEach(function (t) { txt(parent, g.x(t), g.y(0) + 15, \"tick\", String(t), \"middle\"); });\n    (yticks || []).forEach(function (t) { txt(parent, g.x(0) - 7, g.y(t) + 4, \"tick\", String(t), \"end\"); });\n  }\n  function card(parent, x, y, w, h, cls) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: 10, class: cls || \"fillG\" }, parent);\n  }\n  function ring(parent, cx, cy, rx, ry, cls) {\n    return el(\"ellipse\", { cx: cx, cy: cy, rx: rx, ry: ry, fill: \"none\", class: cls || \"contour\" }, parent);\n  }\n  function clipTo(id, x, y, w, h) {\n    var c = el(\"clipPath\", { id: id }, defs);\n    el(\"rect\", { x: x, y: y, width: w, height: h }, c);\n  }\n\n  // ── Module 4 helpers: seeded randomness, small shapes ─────────────────────\n  function mulberry(seed) {\n    var a = seed;\n    return function () {\n      a |= 0; a = (a + 0x6D2B79F5) | 0;\n      var t = Math.imul(a ^ (a >>> 15), 1 | a);\n      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;\n      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;\n    };\n  }\n  function gaussSource(rand) {\n    return function () {\n      var u = 1 - rand(), v = rand();\n      return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);\n    };\n  }\n  function box(parent, x, y, w, h, fill, stroke, r) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: r === undefined ? 6 : r, fill: fill, stroke: stroke || \"none\", \"stroke-width\": 2 }, parent);\n  }\n  function setBox(node, x, y, w, h) {\n    node.setAttribute(\"x\", x); node.setAttribute(\"y\", y); node.setAttribute(\"width\", Math.max(0, w)); node.setAttribute(\"height\", Math.max(0, h));\n  }\n  function vis(list, on) {\n    list.forEach(function (n) { show(n, on); });\n  }\n\n  // ── Module 5 helpers: coins, and rows of bars over the nine candidate values of p ──\n  function coin(parent, x, y, r, letter) {\n    var g = el(\"g\", {}, parent);\n    var head = letter === \"H\";\n    el(\"circle\", { cx: x, cy: y, r: r, fill: head ? \"rgba(244,114,182,0.35)\" : \"rgba(56,189,248,0.3)\", stroke: head ? \"#f472b6\" : \"#38bdf8\", \"stroke-width\": 3 }, g);\n    var t = txt(g, x, y + r * 0.36, \"big\", letter, \"middle\");\n    t.setAttribute(\"font-size\", String(Math.round(r * 1.05)));\n    return g;\n  }\n  var THETAS = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9];\n  var WEIGHTS = [1, 2, 3, 4, 5, 4, 3, 2, 1];\n  function lik(t, k, n) { return Math.pow(t, k) * Math.pow(1 - t, n - k); }\n  function normalized(arr) {\n    var s = 0;\n    arr.forEach(function (v) { s += v; });\n    return arr.map(function (v) { return v / s; });\n  }\n  function argmaxIndex(arr) {\n    var b = 0;\n    arr.forEach(function (v, i) { if (v > arr[b]) b = i; });\n    return b;\n  }\n  // A row of nine bars. set(values, maxValue) rescales heights so maxValue fills `height`.\n  function barRow(parent, x0, dx, base, bw, height, fill, stroke) {\n    var g = el(\"g\", {}, parent);\n    var bars = THETAS.map(function (t, i) {\n      return box(g, x0 + i * dx - bw / 2, base, bw, 0, fill, stroke || \"none\", 3);\n    });\n    var tick = THETAS.map(function (t, i) {\n      var tt = txt(g, x0 + i * dx, base + 14, \"tick\", String(t), \"middle\");\n      tt.setAttribute(\"opacity\", \"0\");\n      return tt;\n    });\n    return {\n      g: g,\n      bars: bars,\n      ticks: tick,\n      set: function (values, maxValue) {\n        values.forEach(function (v, i) {\n          var h = Math.max(0, (v / maxValue) * height);\n          setBox(bars[i], x0 + i * dx - bw / 2, base - h, bw, h);\n        });\n      },\n      showTicks: function (on) { tick.forEach(function (n) { n.setAttribute(\"opacity\", on ? \"1\" : \"0\"); }); }\n    };\n  }\n\n  // ── Module 6 helpers: the two-weight objective, contours, quick arrows ────\n  function L2(w1, w2) { return (w1 - 3) * (w1 - 3) + 2 * (w2 - 1) * (w2 - 1); }\n  function G2(w1, w2) { return [2 * (w1 - 3), 4 * (w2 - 1)]; }\n  // Contour of L2 at level c, drawn in the plane P (makeGraph) around the minimum (3, 1).\n  function levelEllipse(parent, P, c, cls) {\n    var e = el(\"ellipse\", { cx: P.x(3), cy: P.y(1), rx: Math.sqrt(c) * P.sx, ry: Math.sqrt(c / 2) * P.sy, fill: \"none\", class: cls || \"contour\" }, parent);\n    return e;\n  }\n  function arrowLine(parent, key, width, x1, y1, x2, y2) {\n    var a = arrow(parent, key, width);\n    setLine(a, x1, y1, x2, y2);\n    return a;\n  }\n\n  var EXPLAIN = {\"objective\":{\"h\":\"WHAT YOU ARE LOOKING AT\",\"t\":\"Same objective **L = f(w1, w2) = (w1 − 3)² + 2(w2 − 1)²**, lowest at (3, 1). This time the constraints are **limits** rather than exact lines.\"},\"inequality-constraint\":{\"h\":\"AN INEQUALITY CONSTRAINT\",\"t\":\"The budget is a limit, not an exact value: **g(w) = w1 + w2 − 2 ≤ 0**. The line is the edge, and the **green ticks point toward the allowed side**.\"},\"feasible-region\":{\"h\":\"THE FEASIBLE REGION IS AN AREA\",\"t\":\"Everything with **g ≤ 0** is allowed: an area, not just a line. The solution may sit **on the edge or strictly inside**. Deciding that needs extra logic: the **KKT conditions**.\"},\"inactive-constraint\":{\"h\":\"CASE B: AN INACTIVE CONSTRAINT\",\"t\":\"Raise the budget to 6 (**g = w1 + w2 − 6 ≤ 0**). The best unconstrained point (3, 1) is now **inside**: g = −2 < 0. The constraint is **inactive**; delete it and nothing changes. Its multiplier is **μ = 0**.\"},\"active-constraint\":{\"h\":\"CASE A: AN ACTIVE CONSTRAINT\",\"t\":\"With budget 2 the unconstrained optimum is outside, so the answer is **pushed to the edge**: **(5/3, 1/3)**, where g = 0. The constraint is **active**: it is really holding the answer back.\"},\"multiplier\":{\"h\":\"THE MULTIPLIER IS NON-NEGATIVE\",\"t\":\"At the active solution the objective wants to go outward (cyan), and the constraint pushes back inward with strength **μ** (pink). Here **μ = 8/3**. A limit can only push inward, so **μ can never be negative**.\"},\"complementary-slackness\":{\"h\":\"COMPLEMENTARY SLACKNESS\",\"t\":\"Either the constraint is **inactive (g < 0) and its multiplier is zero**, or it is **active (g = 0) and its multiplier may be positive**. In both cases **μ × g = 0**.\"},\"stationarity\":{\"h\":\"STATIONARITY: THE PUSHES BALANCE\",\"t\":\"At the solution the objective's gradient and the active constraint's pull cancel: **∇f + μ∇g = [−8/3, −8/3] + [8/3, 8/3] = [0, 0]**. No direction inside the region improves the loss.\"},\"kkt-summary\":{\"h\":\"THE FOUR KKT CONDITIONS\",\"t\":\"**Primal feasibility:** g ≤ 0. **Dual feasibility:** μ ≥ 0. **Complementary slackness:** μ g = 0. **Stationarity:** ∇f + μ∇g = 0. Case A (μ = 8/3) and case B (μ = 0) satisfy all four.\"},\"ml-connection\":{\"h\":\"TAKEAWAY\",\"t\":\"KKT conditions underlie **support vector machines** and many regularized models. For convex problems a point satisfying them is a **global minimum**; for non-convex problems they only point to **candidates**.\"}};\n  // ── scene ──\n  var steps = [\n    { id: \"objective\", label: \"The objective again\", caption: \"Same objective L = f(w1, w2) = (w1 − 3)² + 2(w2 − 1)², lowest at (3, 1). This time we meet constraints that are LIMITS rather than exact lines.\" },\n    { id: \"inequality-constraint\", label: \"An inequality constraint\", caption: \"The budget is a limit, not an exact value: g(w) = w1 + w2 − 2 ≤ 0. The line is the edge; the green ticks point toward the allowed side.\" },\n    { id: \"feasible-region\", label: \"The feasible region is an area\", caption: \"Everything with g ≤ 0 is allowed: an area, not just a line. The solution may sit on the edge or strictly inside. That choice needs extra logic: the KKT conditions.\" },\n    { id: \"inactive-constraint\", label: \"Case B: an inactive constraint\", caption: \"Raise the budget to 6 (g = w1 + w2 − 6 ≤ 0). The best unconstrained point (3, 1) is now INSIDE the region: g = −2 < 0. The constraint is inactive; delete it and nothing changes. Its multiplier is μ = 0.\" },\n    { id: \"active-constraint\", label: \"Case A: an active constraint\", caption: \"With budget 2 the unconstrained optimum is outside, so the answer is pushed to the edge: (5/3, 1/3), where g = 0. The constraint is active: it is really holding the answer back.\" },\n    { id: \"multiplier\", label: \"The multiplier is non-negative\", caption: \"At the active solution the objective wants to go outward (cyan), and the constraint pushes back inward with strength μ (pink). Here μ = 8/3. A limit can only push inward, so μ can never be negative.\" },\n    { id: \"complementary-slackness\", label: \"Complementary slackness\", caption: \"Either the constraint is inactive (g < 0) and its multiplier is zero, or it is active (g = 0) and its multiplier may be positive. In both cases μ × g = 0.\" },\n    { id: \"stationarity\", label: \"Stationarity: the pushes balance\", caption: \"At the solution the objective's gradient and the active constraint's pull cancel: ∇f + μ∇g = [−8/3, −8/3] + [8/3, 8/3] = [0, 0]. No direction inside the region improves the loss.\" },\n    { id: \"kkt-summary\", label: \"The four KKT conditions\", caption: \"Primal feasibility: g ≤ 0. Dual feasibility: μ ≥ 0. Complementary slackness: μ g = 0. Stationarity: ∇f + μ∇g = 0. Case A (μ = 8/3) and case B (μ = 0) satisfy all four.\" },\n    { id: \"ml-connection\", label: \"Why ML cares\", caption: \"KKT conditions underlie support vector machines and many regularized models. For convex problems a point satisfying them is a global minimum; for non-convex problems they only point to candidates.\" }\n  ];\n\n  var P = makeGraph(70, 250, 50, 55);\n  clipTo(\"kkclip\", 10, 40, 370, 300);\n  var plane = el(\"g\", {}, svg);\n  card(plane, 10, 40, 370, 300, \"fillA\").setAttribute(\"fill\", \"rgba(56,189,248,0.04)\");\n  var clipped = el(\"g\", { \"clip-path\": \"url(#kkclip)\" }, plane);\n  var fea = el(\"polygon\", { class: \"feasible\" }, clipped);\n  [1, 4, 9, 16].forEach(function (c) { levelEllipse(clipped, P, c, \"contour\"); });\n  drawAxes(plane, P, 6.2, 3.3, [0, 1, 2, 3, 4, 5, 6], [1, 2, 3]);\n  txt(plane, P.x(6.2), P.y(0) + 28, \"note\", \"w1\", \"end\");\n  txt(plane, P.x(0) + 8, P.y(3.3) + 12, \"note\", \"w2\", \"start\");\n\n  var conG = el(\"g\", { \"clip-path\": \"url(#kkclip)\" }, svg);\n  var conLine = el(\"line\", { stroke: \"#e2b44a\", \"stroke-width\": 5, \"stroke-linecap\": \"round\" }, conG);\n  var conLbl = txt(svg, 0, 0, \"lbl lbl-y\", \"\", \"start\");\n  var ticks = [];\n  for (var k = 0; k < 6; k++) ticks.push(arrow(svg, \"g\", 3));\n  function setBudget(b) {\n    var p1 = [b - 3.5, 3.5], p2 = [b + 1.5, -1.5];\n    setLine(conLine, P.x(p1[0]), P.y(p1[1]), P.x(p2[0]), P.y(p2[1]));\n    fea.setAttribute(\"points\", [[b - 3.5, 3.5], [b + 1.5, -1.5], [-1, -1.5], [-1, 3.5]].map(function (p) { return P.x(p[0]) + \",\" + P.y(p[1]); }).join(\" \"));\n    ticks.forEach(function (t, j) {\n      var w1 = (b - 3) + (j * 0.75), w2 = b - w1;\n      if (w2 > 3.3 || w2 < -1.3 || w1 < -0.9 || w1 > 6.0) { t.setAttribute(\"data-hide\", \"1\"); return; }\n      t.setAttribute(\"data-hide\", \"0\");\n      var x = P.x(w1), y = P.y(w2);\n      setLine(t, x, y, x - 22, y + 22);\n    });\n  }\n  var solG = el(\"g\", {}, svg);\n  var solDot = el(\"circle\", { r: 9, fill: \"#1db584\", stroke: \"#071510\", \"stroke-width\": 3 }, solG);\n  var solLbl = txt(solG, 0, 0, \"lbl lbl-g\", \"\", \"start\");\n  var minDot = el(\"circle\", { cx: P.x(3), cy: P.y(1), r: 6, fill: \"#8fa89c\" }, svg);\n\n  var S = 0.3;\n  var T = [P.x(5 / 3), P.y(1 / 3)];\n  var forcesG = el(\"g\", {}, svg);\n  arrowLine(forcesG, \"b\", 5, T[0] + 2, T[1] - 2, T[0] + 8 / 3 * S * P.sx, T[1] - 8 / 3 * S * P.sy);\n  txt(forcesG, T[0] + 52, T[1] - 52, \"lbl lbl-b\", \"objective wants this way\", \"start\");\n  arrowLine(forcesG, \"p\", 5, T[0] - 2, T[1] + 4, T[0] - 8 / 3 * S * P.sx, T[1] + 8 / 3 * S * P.sy);\n  txt(forcesG, 24, T[1] + 70, \"lbl lbl-p\", \"constraint pushes back (μ = 8/3)\", \"start\");\n  var balG = el(\"g\", {}, svg);\n  // Both arrows start at the solution and point in opposite directions, so they never overlap:\n  // grad f points uphill for f (down-left), mu * grad g points the other way (up-right).\n  var BX = 8 / 3 * S * P.sx, BY = 8 / 3 * S * P.sy;\n  arrowLine(balG, \"b\", 5, T[0] - 2, T[1] + 2, T[0] - BX, T[1] + BY);\n  arrowLine(balG, \"p\", 5, T[0] + 2, T[1] - 2, T[0] + BX, T[1] - BY);\n  txt(balG, T[0] - BX - 8, T[1] + BY + 14, \"lbl lbl-b\", \"∇f\", \"end\");\n  txt(balG, T[0] + BX + 8, T[1] - BY - 6, \"lbl lbl-p\", \"μ∇g\", \"start\");\n\n  var panel = el(\"g\", {}, svg);\n  card(panel, 392, 40, 236, 300, \"fillG\");\n  var q = [66, 96, 126, 156, 188, 218, 248, 278].map(function (y, k) { return txt(panel, 510, y, k % 3 === 0 ? \"note\" : \"mono\", \"\", \"middle\"); });\n  function setPanel(lines) { q.forEach(function (n, k) { n.textContent = lines[k] || \"\"; }); }\n\n  var compG = el(\"g\", {}, svg);\n  card(compG, 30, 50, 280, 190, \"fillA\");\n  txt(compG, 170, 82, \"lbl lbl-b\", \"CASE B: INACTIVE\", \"middle\");\n  txt(compG, 170, 116, \"mono\", \"g < 0   (g = −2)\", \"middle\");\n  txt(compG, 170, 148, \"big\", \"μ = 0\", \"middle\");\n  txt(compG, 170, 180, \"note\", \"the constraint is not touching\", \"middle\");\n  txt(compG, 170, 198, \"note\", \"the answer; it does nothing\", \"middle\");\n  card(compG, 330, 50, 280, 190, \"fillB\");\n  txt(compG, 470, 82, \"lbl lbl-p\", \"CASE A: ACTIVE\", \"middle\");\n  txt(compG, 470, 116, \"mono\", \"g = 0   (on the edge)\", \"middle\");\n  txt(compG, 470, 148, \"big\", \"μ = 8/3 > 0\", \"middle\");\n  txt(compG, 470, 180, \"note\", \"the constraint is holding\", \"middle\");\n  txt(compG, 470, 198, \"note\", \"the answer back\", \"middle\");\n  txt(compG, 320, 282, \"big\", \"μ × g = 0  in both cases\", \"middle\");\n  txt(compG, 320, 310, \"note\", \"complementary slackness: one of the two factors is always zero\", \"middle\");\n\n  var sumG = el(\"g\", {}, svg);\n  [[\"1  Primal feasibility\", \"g(w) ≤ 0\", \"the point obeys the constraint\"], [\"2  Dual feasibility\", \"μ ≥ 0\", \"a limit can only push inward\"], [\"3  Complementary slackness\", \"μ · g(w) = 0\", \"inactive → μ = 0; active → g = 0\"], [\"4  Stationarity\", \"∇f + μ∇g = 0\", \"objective and constraint pushes balance\"]].forEach(function (b, i) {\n    var x = 30 + (i % 2) * 300, y = 50 + Math.floor(i / 2) * 130;\n    card(sumG, x, y, 280, 112, i === 3 ? \"fillB\" : \"fillG\");\n    txt(sumG, x + 140, y + 28, \"lbl lbl-y\", b[0], \"middle\");\n    txt(sumG, x + 140, y + 62, \"big\", b[1], \"middle\");\n    txt(sumG, x + 140, y + 90, \"note\", b[2], \"middle\");\n  });\n  txt(sumG, 320, 330, \"lbl lbl-g\", \"case A (μ = 8/3) and case B (μ = 0) satisfy all four  ✓\", \"middle\");\n\n  var mlG = el(\"g\", {}, svg);\n  [[\"Support vector machines\", \"the training problem is a constrained optimization\"], [\"Regularized models\", \"a limit on weight size, solved with the same ideas\"], [\"Convex problems\", \"a point satisfying KKT is a global minimum\"]].forEach(function (b, i) {\n    var y = 40 + i * 86;\n    card(mlG, 80, y, 480, 70, i === 2 ? \"fillB\" : \"fillG\");\n    txt(mlG, 320, y + 30, \"big\", b[0], \"middle\");\n    txt(mlG, 320, y + 54, \"note\", b[1], \"middle\");\n  });\n  txt(mlG, 320, 316, \"lbl lbl-y\", \"non-convex problems: KKT points are candidates, not guaranteed optima\", \"middle\");\n\n  function render(index, id) {\n    var i = index;\n    var onPlane = i <= 5 || i === 7;\n    show(plane, onPlane);\n    var budget = i === 3 ? 6 : 2;\n    setBudget(budget);\n    show(fea, i >= 2 && onPlane);\n    show(conG, i >= 1 && onPlane);\n    conLbl.textContent = budget === 6 ? \"g = w1 + w2 − 6 ≤ 0\" : \"g = w1 + w2 − 2 ≤ 0\";\n    conLbl.setAttribute(\"x\", 22); conLbl.setAttribute(\"y\", 326);\n    show(conLbl, i >= 1 && onPlane);\n    ticks.forEach(function (t) { var hide = t.getAttribute(\"data-hide\") === \"1\"; t.setAttribute(\"opacity\", (i >= 1 && i <= 4 && onPlane && !hide) ? \"1\" : \"0\"); });\n    show(minDot, i <= 3);\n    show(solG, (i === 3 || i === 4 || i === 5 || i === 7) && onPlane);\n    show(forcesG, i === 5); show(balG, i === 7);\n    show(panel, onPlane);\n    show(compG, i === 6); show(sumG, i === 8); show(mlG, i === 9);\n    if (i === 3) { solDot.setAttribute(\"cx\", P.x(3)); solDot.setAttribute(\"cy\", P.y(1)); solLbl.setAttribute(\"x\", P.x(3) - 14); solLbl.setAttribute(\"y\", P.y(1) + 40); solLbl.textContent = \"(3, 1) inside: g = −2\"; }\n    if (i === 4 || i === 5 || i === 7) { solDot.setAttribute(\"cx\", T[0]); solDot.setAttribute(\"cy\", T[1]); solLbl.setAttribute(\"x\", 22); solLbl.setAttribute(\"y\", 306); solLbl.setAttribute(\"text-anchor\", \"start\"); solLbl.textContent = i === 4 ? \"(5/3, 1/3) on the edge: g = 0\" : \"\"; }\n    if (i === 3) solLbl.setAttribute(\"text-anchor\", \"end\");\n    setPanel([]);\n    if (i === 0) setPanel([\"objective\", \"(w1−3)² + 2(w2−1)²\", \"\", \"unconstrained best:\", \"(3, 1)\"]);\n    if (i === 1) setPanel([\"inequality constraint\", \"g(w) = w1 + w2 − 2\", \"g(w) ≤ 0\", \"\", \"allowed side: ticks\"]);\n    if (i === 2) setPanel([\"feasible region\", \"g ≤ 0: an AREA\", \"\", \"the answer may be\", \"on the edge or inside\"]);\n    if (i === 3) setPanel([\"case B: budget 6\", \"(3, 1): 3 + 1 = 4 ≤ 6\", \"g = −2 < 0\", \"INACTIVE\", \"multiplier μ = 0\"]);\n    if (i === 4) setPanel([\"case A: budget 2\", \"best allowed point:\", \"(5/3, 1/3)\", \"g = 0   ACTIVE\", \"multiplier μ = 8/3\"]);\n    if (i === 5) setPanel([\"multiplier μ ≥ 0\", \"objective pulls outward\", \"constraint holds it back\", \"strength μ = 8/3\", \"a limit never pulls inward\"]);\n    if (i === 7) setPanel([\"stationarity\", \"∇f = [−8/3, −8/3]\", \"μ∇g = [8/3, 8/3]\", \"sum = [0, 0]\", \"the pushes balance\"]);\n  }\n\n\n  // ── shared runtime: stepping, explanation panel, educational autoplay pacing, bridge ──\n  var current = 0;\n  var explainHeadEl = document.getElementById(\"explain-h\");\n\n  // **bold** markers in an explanation become <strong> nodes (built with DOM calls, never innerHTML).\n  function setRich(node, str) {\n    node.textContent = \"\";\n    var parts = String(str).split(\"**\");\n    for (var i = 0; i < parts.length; i++) {\n      if (parts[i] === \"\") continue;\n      var seg = document.createElement(i % 2 ? \"strong\" : \"span\");\n      seg.textContent = parts[i];\n      node.appendChild(seg);\n    }\n  }\n\n  function explanationFor(index) {\n    var ex = (typeof EXPLAIN === \"object\" && EXPLAIN) ? EXPLAIN[steps[index].id] : null;\n    return ex || { h: \"WHAT IS HAPPENING\", t: steps[index].caption };\n  }\n\n  // Autoplay pace: 4.5 to 10.5 seconds per step, longer for longer explanations, so a learner can read.\n  function stepMs(index) {\n    var words = String(explanationFor(index).t).replace(/\\*\\*/g, \"\").split(/\\s+/).length;\n    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));\n  }\n\n  function renderStep(index) {\n    var ex = explanationFor(index);\n    labelEl.textContent = steps[index].label;\n    if (explainHeadEl) explainHeadEl.textContent = ex.h;\n    setRich(captionEl, ex.t);\n    render(index, steps[index].id);\n  }\n\n  function goTo(index) {\n    if (index < 0 || index >= steps.length) return;\n    current = index;\n    renderStep(current);\n    if (window.ReagvisBridge) window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n\n  renderStep(current);\n\n  // Autoplay: exactly one timer, one step per tick, stops on the final step.\n  // PLAY on the final step restarts from the first step and plays again.\n  var timer = null;\n\n  function stopAuto() {\n    if (timer !== null) {\n      clearTimeout(timer);\n      timer = null;\n    }\n  }\n\n  function scheduleNext() {\n    timer = setTimeout(function () {\n      timer = null;\n      if (current >= steps.length - 1) return;\n      goTo(current + 1);\n      if (current < steps.length - 1) scheduleNext();\n    }, stepMs(current));\n  }\n\n  function startAuto() {\n    if (timer !== null) return;\n    if (current >= steps.length - 1) goTo(0);\n    scheduleNext();\n  }\n\n  window.addEventListener(\"pagehide\", stopAuto);\n\n  window.ReagvisAnimation = {\n    stepDuration: stepMs,\n    onCommand: function (type, stepId) {\n      if (type === \"PLAY\") startAuto();\n      else if (type === \"PAUSE\") stopAuto();\n      else if (type === \"NEXT\") { stopAuto(); goTo(current + 1); }\n      else if (type === \"PREVIOUS\") { stopAuto(); goTo(current - 1); }\n      else if (type === \"RESET\") { stopAuto(); goTo(0); }\n      else if (type === \"GOTO_STEP\") {\n        stopAuto();\n        for (var i = 0; i < steps.length; i++) {\n          if (steps[i].id === stepId) { goTo(i); break; }\n        }\n      }\n    },\n  };\n\n  if (window.ReagvisBridge) {\n    window.ReagvisBridge.ready();\n    window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n})();\n",
+  "lastFrozenContentHash": null,
+  "lastFrozenRevisionId": null,
+  "manifest": {
+    "bridgeVersion": {
+      "$numberInt": "1"
+    },
+    "capabilities": [
+      "play",
+      "pause",
+      "next",
+      "previous",
+      "reset",
+      "gotoStep"
+    ],
+    "heightPx": {
+      "$numberInt": "590"
+    },
+    "traceEvents": [
+      "objective",
+      "inequality-constraint",
+      "feasible-region",
+      "inactive-constraint",
+      "active-constraint",
+      "multiplier",
+      "complementary-slackness",
+      "stationarity",
+      "kkt-summary",
+      "ml-connection"
+    ]
+  },
+  "packageId": "6d8ec6b1-b6b7-4beb-aba1-f588b4e6f946",
+  "packageTrace": {
+    "steps": [
+      {
+        "animationEvent": "objective",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "The unconstrained minimum is where the gradient is zero.",
+          "python": "def grad_f(w1, w2):\n    return (2 * (w1 - 3), 4 * (w2 - 1))\n\nprint(grad_f(3, 1))   # (0, 0)"
+        },
+        "id": "objective",
+        "label": "The objective again"
+      },
+      {
+        "animationEvent": "inequality-constraint",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "g(w) = w1 + w2 - 2 must be at most 0.",
+          "python": "def g(w1, w2):\n    return w1 + w2 - 2\n\nprint(g(1, 1), g(0, 0), g(3, 1))   # 0 -2 2"
+        },
+        "id": "inequality-constraint",
+        "label": "An inequality constraint"
+      },
+      {
+        "animationEvent": "feasible-region",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Feasible means g <= 0.",
+          "python": "def g(w1, w2):\n    return w1 + w2 - 2\n\nfor p in [(0, 0), (1, 1), (3, 1)]:\n    print(p, g(*p) <= 0)   # True / True / False"
+        },
+        "id": "feasible-region",
+        "label": "The feasible region is an area"
+      },
+      {
+        "animationEvent": "inactive-constraint",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "With budget 6 the unconstrained optimum is strictly inside, so mu = 0.",
+          "python": "def g(w1, w2, budget):\n    return w1 + w2 - budget\n\nprint(g(3, 1, 6))   # -2 : strictly inside, the constraint is inactive\nmu = 0              # so its multiplier is zero"
+        },
+        "id": "inactive-constraint",
+        "label": "Case B: an inactive constraint"
+      },
+      {
+        "animationEvent": "active-constraint",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "With budget 2 the best point sits on the edge: g = 0.",
+          "python": "def g(w1, w2, budget):\n    return w1 + w2 - budget\n\nprint(abs(g(5 / 3, 1 / 3, 2)) < 1e-9)   # True : on the edge, the constraint is active"
+        },
+        "id": "active-constraint",
+        "label": "Case A: an active constraint"
+      },
+      {
+        "animationEvent": "multiplier",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Stationarity gives the multiplier: mu = -grad_f[0] / grad_g[0].",
+          "python": "def grad_f(w1, w2):\n    return (2 * (w1 - 3), 4 * (w2 - 1))\n\ngf = grad_f(5 / 3, 1 / 3)\nmu = -gf[0] / 1              # grad g = (1, 1)\nprint(round(mu, 2), mu >= 0)   # 2.67 True"
+        },
+        "id": "multiplier",
+        "label": "The multiplier is at least 0"
+      },
+      {
+        "animationEvent": "complementary-slackness",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "mu * g is zero in both cases.",
+          "python": "cases = {'B (inactive)': (0.0, -2.0), 'A (active)': (8 / 3, 0.0)}   # (mu, g)\nfor name, (mu, g) in cases.items():\n    print(name, abs(mu * g) < 1e-9)   # True / True"
+        },
+        "id": "complementary-slackness",
+        "label": "Complementary slackness"
+      },
+      {
+        "animationEvent": "stationarity",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "grad f + mu * grad g = 0 at the solution.",
+          "python": "def grad_f(w1, w2):\n    return (2 * (w1 - 3), 4 * (w2 - 1))\n\ngf = grad_f(5 / 3, 1 / 3)\nmu = 8 / 3\ntotal = (gf[0] + mu * 1, gf[1] + mu * 1)\nprint(all(abs(t) < 1e-9 for t in total))   # True"
+        },
+        "id": "stationarity",
+        "label": "Stationarity: the pushes balance"
+      },
+      {
+        "animationEvent": "kkt-summary",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Check all four conditions at a candidate solution.",
+          "python": "def grad_f(w1, w2):\n    return (2 * (w1 - 3), 4 * (w2 - 1))\n\ndef check(point, budget, mu):\n    g = point[0] + point[1] - budget\n    gf = grad_f(*point)\n    return {\n        'primal feasible': g <= 1e-9,\n        'dual feasible': mu >= 0,\n        'complementary': abs(mu * g) < 1e-9,\n        'stationary': all(abs(gf[k] + mu) < 1e-9 for k in range(2)),\n    }\n\nprint(all(check((5 / 3, 1 / 3), 2, 8 / 3).values()))   # True : case A\nprint(all(check((3, 1), 6, 0).values()))               # True : case B"
+        },
+        "id": "kkt-summary",
+        "label": "The four KKT conditions"
+      },
+      {
+        "animationEvent": "ml-connection",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "KKT conditions are used to solve constrained learning problems.",
+          "python": "uses = ['support vector machines', 'regularized models', 'constrained fitting']\nfor u in uses:\n    print(u)"
+        },
+        "id": "ml-connection",
+        "label": "Why ML cares"
+      }
+    ],
+    "version": {
+      "$numberInt": "1"
+    }
+  },
+  "revision": {
+    "$numberInt": "5"
+  },
+  "revisionId": "r2",
+  "sourceKind": "zip",
+  "status": "frozen",
+  "title": "ML Module 6 — KKT Conditions",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498690"
+    }
+  },
+  "updatedBy": {
+    "$oid": "000000000000000000000000"
+  }
+}

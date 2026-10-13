@@ -1,0 +1,54 @@
+{
+  "title": "Marginal and conditional distributions",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "joint-grid",
+      "label": "Start from the joint table",
+      "pseudocode": "Start from the joint probabilities of (bedrooms, price band).",
+      "python": "joint = {\n    (1, 'Low'): 0.25, (1, 'High'): 0.05,\n    (2, 'Low'): 0.20, (2, 'High'): 0.20,\n    (3, 'Low'): 0.05, (3, 'High'): 0.25,\n}\nprint(round(sum(joint.values()), 2))   # 1.0"
+    },
+    {
+      "id": "marginalize-y",
+      "label": "Marginal: add across the other variable",
+      "pseudocode": "P(X = x) = sum over y of P(X = x, Y = y)",
+      "python": "joint = {\n    (1, 'Low'): 0.25, (1, 'High'): 0.05,\n    (2, 'Low'): 0.20, (2, 'High'): 0.20,\n    (3, 'Low'): 0.05, (3, 'High'): 0.25,\n}\nprint(round(joint[(1, 'Low')] + joint[(1, 'High')], 2))   # 0.3"
+    },
+    {
+      "id": "x-marginal",
+      "label": "The marginal distribution of X",
+      "pseudocode": "Do this for every x to get the marginal distribution of X.",
+      "python": "joint = {\n    (1, 'Low'): 0.25, (1, 'High'): 0.05,\n    (2, 'Low'): 0.20, (2, 'High'): 0.20,\n    (3, 'Low'): 0.05, (3, 'High'): 0.25,\n}\nxs = [1, 2, 3]\nmarginal_x = {x: sum(p for (a, b), p in joint.items() if a == x) for x in xs}\nprint({x: round(p, 2) for x, p in marginal_x.items()})   # {1: 0.3, 2: 0.4, 3: 0.3}"
+    },
+    {
+      "id": "select-y",
+      "label": "Conditional: we learn that Y = High",
+      "pseudocode": "Keep only the cells where Y = High.",
+      "python": "joint = {\n    (1, 'Low'): 0.25, (1, 'High'): 0.05,\n    (2, 'Low'): 0.20, (2, 'High'): 0.20,\n    (3, 'Low'): 0.05, (3, 'High'): 0.25,\n}\nxs = [1, 2, 3]\nhigh = {x: joint[(x, 'High')] for x in xs}\nprint(high)   # {1: 0.05, 2: 0.2, 3: 0.25}"
+    },
+    {
+      "id": "conditional-slice",
+      "label": "Slice out the High column",
+      "pseudocode": "The slice is not yet a distribution: it does not add up to 1.",
+      "python": "joint = {\n    (1, 'Low'): 0.25, (1, 'High'): 0.05,\n    (2, 'Low'): 0.20, (2, 'High'): 0.20,\n    (3, 'Low'): 0.05, (3, 'High'): 0.25,\n}\nxs = [1, 2, 3]\nhigh = {x: joint[(x, 'High')] for x in xs}\nprint(round(sum(high.values()), 2))   # 0.5"
+    },
+    {
+      "id": "normalize",
+      "label": "Renormalize so it adds to 1",
+      "pseudocode": "Divide each entry by the slice total: P(X = x | Y = High) = P(x, High) / P(High)",
+      "python": "joint = {\n    (1, 'Low'): 0.25, (1, 'High'): 0.05,\n    (2, 'Low'): 0.20, (2, 'High'): 0.20,\n    (3, 'Low'): 0.05, (3, 'High'): 0.25,\n}\nxs = [1, 2, 3]\nhigh = {x: joint[(x, 'High')] for x in xs}\ntotal = sum(high.values())\nconditional = {x: p / total for x, p in high.items()}\nprint({x: round(p, 2) for x, p in conditional.items()})   # {1: 0.1, 2: 0.4, 3: 0.5}"
+    },
+    {
+      "id": "compare",
+      "label": "Marginal versus conditional",
+      "pseudocode": "Compare the marginal with the conditional distribution.",
+      "python": "joint = {\n    (1, 'Low'): 0.25, (1, 'High'): 0.05,\n    (2, 'Low'): 0.20, (2, 'High'): 0.20,\n    (3, 'Low'): 0.05, (3, 'High'): 0.25,\n}\nxs = [1, 2, 3]\nmarginal = {x: round(sum(p for (a, b), p in joint.items() if a == x), 2) for x in xs}\ntotal = sum(joint[(x, 'High')] for x in xs)\nconditional = {x: round(joint[(x, 'High')] / total, 2) for x in xs}\nprint(marginal)      # {1: 0.3, 2: 0.4, 3: 0.3}\nprint(conditional)   # {1: 0.1, 2: 0.4, 3: 0.5}"
+    },
+    {
+      "id": "ml-connection",
+      "label": "Why ML cares",
+      "pseudocode": "Prediction means conditioning on what was observed, then asking about the rest.",
+      "python": "joint = {\n    (1, 'Low'): 0.25, (1, 'High'): 0.05,\n    (2, 'Low'): 0.20, (2, 'High'): 0.20,\n    (3, 'Low'): 0.05, (3, 'High'): 0.25,\n}\nxs = [1, 2, 3]\ntotal = sum(joint[(x, 'High')] for x in xs)\nconditional = {x: joint[(x, 'High')] / total for x in xs}\nprint(max(conditional, key=conditional.get))   # 3: the most likely bedroom count for a High-priced house"
+    }
+  ]
+}

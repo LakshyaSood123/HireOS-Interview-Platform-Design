@@ -1,0 +1,34 @@
+{
+ "region": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Sometimes we may choose only from a **set of allowed solutions**, like the shaded region. Whether the set is well behaved depends on its **shape**. This lesson is about shapes of sets."
+ },
+ "two-points": {
+  "h": "PICK ANY TWO POINTS",
+  "t": "Choose two points inside the region, **x and y**. Any two: the test must work for **every possible pair**, not just this one."
+ },
+ "connect": {
+  "h": "CONNECT THEM WITH A STRAIGHT LINE",
+  "t": "Draw the straight segment from x to y. Its points are **λx + (1 − λ)y** for λ between 0 and 1: λ = 1 is x, λ = 0 is y, and **λ = 0.5 is the midpoint**."
+ },
+ "segment-inside": {
+  "h": "THE SEGMENT STAYS INSIDE",
+  "t": "For this region the whole segment stays inside, and it would for **any other pair** of points. A set with this property is **convex**. A disk is convex."
+ },
+ "convex-example": {
+  "h": "MORE CONVEX SHAPES",
+  "t": "A solid square and a half-plane are convex too: join any two of their points and the segment **never leaves**. Convex shapes have **no dents and no holes**."
+ },
+ "nonconvex-region": {
+  "h": "A SHAPE THAT IS NOT CONVEX",
+  "t": "Now a **ring**: a disk with a hole. Pick two points on opposite sides of the ring, both inside the set: **x = (−2.5, 0)** and **y = (2.5, 0)**."
+ },
+ "segment-leaves": {
+  "h": "THE SEGMENT LEAVES THE SET",
+  "t": "The straight segment between them crosses the hole. The midpoint **(0, 0) is not in the ring**. One failing pair is enough: the ring is **not convex**. A convex function is a different idea, next."
+ },
+ "optimization-connection": {
+  "h": "TAKEAWAY",
+  "t": "Constraints define the **feasible set**. If it is convex, moving between two feasible points stays feasible, and with a convex objective every local best is the global best. A **non-convex set can trap a search** in separate pieces."
+ }
+}

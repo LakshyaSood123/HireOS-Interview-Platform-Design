@@ -1,0 +1,54 @@
+{
+  "title": "Unsupervised learning: structure without labels",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "labeled-data",
+      "label": "Labeled data",
+      "pseudocode": "Every example has features and a known label.",
+      "python": "points = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\nlabels = ['budget'] * 4 + ['heavy buyer'] * 4 + ['big spender'] * 4\nprint(list(zip(points, labels))[:2])\n# prints: [((1, 2), 'budget'), ((1.5, 1.8), 'budget')]"
+    },
+    {
+      "id": "supervised-view",
+      "label": "Supervised learning",
+      "pseudocode": "Features plus labels teach a prediction rule.",
+      "python": "points = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\nlabels = ['budget'] * 4 + ['heavy buyer'] * 4 + ['big spender'] * 4\nprint(len(points), 'examples,', len(set(labels)), 'known classes')\n# prints: 12 examples, 3 known classes"
+    },
+    {
+      "id": "remove-labels",
+      "label": "Remove the labels",
+      "pseudocode": "Drop the labels; only the features remain.",
+      "python": "points = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\nfeatures_only = [p for p in points]\nprint(features_only[:2], '...')\n# prints: [(1, 2), (1.5, 1.8)] ..."
+    },
+    {
+      "id": "unlabeled-data",
+      "label": "Unlabeled data",
+      "pseudocode": "Unsupervised data has no answer key.",
+      "python": "points = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\nprint(len(points), 'points, no labels')\n# prints: 12 points, no labels"
+    },
+    {
+      "id": "look-for-structure",
+      "label": "Look for structure",
+      "pseudocode": "Which points sit together?",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\npoints = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\npairs = sorted((round(distance(a, b), 2), a, b) for i, a in enumerate(points) for b in points[i + 1:])\nprint(pairs[0])\n# prints: (0.54, (1, 2), (1.5, 1.8))"
+    },
+    {
+      "id": "possible-groups",
+      "label": "Possible groups",
+      "pseudocode": "Group points that are close to each other.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\npoints = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\ncenters = [(2, 2), (6.5, 6), (3.5, 8)]\nprint([nearest_center(p, centers) for p in points])\n# prints: [0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2]"
+    },
+    {
+      "id": "cluster-colors",
+      "label": "Clusters, not classes",
+      "pseudocode": "The cluster ids are arbitrary names.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\npoints = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\ncenters = [(6.5, 6), (2, 2), (3.5, 8)]     # same centers, listed in a different order\nprint([nearest_center(p, centers) for p in points])\n# prints: [1, 1, 1, 1, 0, 0, 0, 0, 2, 2, 2, 2]"
+    },
+    {
+      "id": "interpret-carefully",
+      "label": "Interpret carefully",
+      "pseudocode": "Clusters need human interpretation.",
+      "python": "notes = ['not classification', 'ids are arbitrary names', 'a person interprets the groups']\nfor n in notes:\n    print(n)\n# prints: not classification\n# prints: ids are arbitrary names\n# prints: a person interprets the groups"
+    }
+  ]
+}

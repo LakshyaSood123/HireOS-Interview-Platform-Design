@@ -1,0 +1,34 @@
+{
+ "same-mean": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "**A** takes the values 4, 5, 6 with probabilities 0.25, 0.5, 0.25. **B** takes 0, 5, 10 with the same probabilities. Both balance at **5**: their mean is the same."
+ },
+ "different-spread": {
+  "h": "BUT THEY ARE SPREAD DIFFERENTLY",
+  "t": "A stays within **1** of the mean. B stretches **5** away on each side. The mean cannot tell them apart, so we need a second number: the **spread**."
+ },
+ "mean": {
+  "h": "START FROM THE MEAN",
+  "t": "Focus on A. Its mean is **5**. To measure spread we ask, for each value, **how far it is from this mean**."
+ },
+ "deviations": {
+  "h": "DEVIATIONS FROM THE MEAN",
+  "t": "The deviation of a value is its signed distance from the mean: **4 is −1, 5 is 0, 6 is +1**. Averaging these just gives 0, because the minus and plus **cancel**."
+ },
+ "square-deviations": {
+  "h": "SQUARE THE DEVIATIONS",
+  "t": "Squaring removes the signs and punishes bigger misses more: **(−1)² = 1, 0² = 0, (+1)² = 1**. Each square is drawn with that area (tiny here)."
+ },
+ "average": {
+  "h": "AVERAGE THE SQUARES",
+  "t": "Take the probability-weighted average of the squares: **0.25 × 1 + 0.5 × 0 + 0.25 × 1 = 0.5**. That is the **variance: Var(A) = 0.5**."
+ },
+ "compare-variance": {
+  "h": "COMPARE WITH B",
+  "t": "For B the deviations are **−5, 0, +5**, so the squares are **25, 0, 25** (big squares). **Var(B) = 12.5**, which is **25 times larger** than Var(A)."
+ },
+ "ml-connection": {
+  "h": "TAKEAWAY",
+  "t": "Variance tells how **uncertain a prediction is** or how much a feature varies. The standard deviation (its square root) is in the original units: about **0.71 for A and 3.54 for B**."
+ }
+}

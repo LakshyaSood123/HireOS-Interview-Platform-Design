@@ -1,0 +1,34 @@
+{
+ "joint-grid": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Here is the **joint table** of bedrooms (X, rows) and price band (Y, columns). From this one table we can answer **two different kinds of questions**."
+ },
+ "marginalize-y": {
+  "h": "MARGINAL: ADD ACROSS THE OTHER VARIABLE",
+  "t": "To study bedrooms alone, **ignore the price**: add each row across the Low and High columns. We are collapsing the Y axis."
+ },
+ "x-marginal": {
+  "h": "THE MARGINAL DISTRIBUTION OF X",
+  "t": "The row totals are the **marginal distribution**: **P(X = 1) = 0.30, P(X = 2) = 0.40, P(X = 3) = 0.30**. They add up to 1. This is bedrooms over **all** houses."
+ },
+ "select-y": {
+  "h": "CONDITIONAL: WE LEARN THAT Y = HIGH",
+  "t": "Now suppose we are told the house is **High priced**. Low priced houses are no longer possible, so we **keep only the High column** and drop the rest."
+ },
+ "conditional-slice": {
+  "h": "SLICE OUT THE HIGH COLUMN",
+  "t": "The slice holds **0.05, 0.20 and 0.25**. These are probabilities out of **all** houses, and they add up to **0.50, not 1**. It is not yet a distribution."
+ },
+ "normalize": {
+  "h": "RENORMALIZE SO IT ADDS TO 1",
+  "t": "Divide each entry by the slice total **0.50**: **0.10, 0.40, 0.50**. Now they add up to 1. This is the **conditional distribution P(X | Y = High)**."
+ },
+ "compare": {
+  "h": "MARGINAL VERSUS CONDITIONAL",
+  "t": "Marginal: **0.30, 0.40, 0.30** (all houses). Conditional on High: **0.10, 0.40, 0.50**. Knowing the price **shifted the probability toward bigger houses**."
+ },
+ "ml-connection": {
+  "h": "TAKEAWAY",
+  "t": "A **marginal** describes one feature on its own. **Prediction is conditioning**: observe some variables, then ask about the others, always renormalizing. The multivariate normal later does exactly this."
+ }
+}

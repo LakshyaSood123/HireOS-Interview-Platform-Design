@@ -1,0 +1,42 @@
+{
+ "original-point": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "The ringed dot is **customer 5**: usage 6 and spend 4.0. Two numbers describe it. We will follow this one customer all the way down to a single coordinate."
+ },
+ "center-point": {
+  "h": "STEP 1: CENTER IT",
+  "t": "Subtract the training means (4.5, 3.5) and the point becomes **(1.5, 0.5)**: a little above average on both features."
+ },
+ "principal-axis": {
+  "h": "STEP 2: THE AXIS",
+  "t": "The yellow line is **PC1 = (0.754, 0.657)**, a unit direction through the center along the trend."
+ },
+ "drop-perpendicular": {
+  "h": "STEP 3: DROP A PERPENDICULAR",
+  "t": "The shortest path from the point to the axis meets it at a **right angle** (the small square). The place where it lands is the point's projection."
+ },
+ "projected-point": {
+  "h": "STEP 4: THE COORDINATE",
+  "t": "The landing spot is **z = (1.5)(0.754) + (0.5)(0.657) = 1.46** along PC1. This number, **not a direction**, is the point's new one-dimensional description."
+ },
+ "repeat-points": {
+  "h": "REPEAT FOR EVERY POINT",
+  "t": "The same projection is applied to all six customers, giving the coordinates **−3.20, −1.79, −1.03, 1.03, 1.46 and 3.53**."
+ },
+ "one-dimensional-axis": {
+  "h": "THE ONE-DIMENSIONAL AXIS",
+  "t": "Laid out on a line, the six coordinates keep the **order and spacing along the trend**. The reduced dataset is just this column of numbers."
+ },
+ "new-coordinates": {
+  "h": "A NEW CUSTOMER",
+  "t": "A new customer (5, 3.0) is **centered with the training means** to (0.5, −0.5) and projected with the **same direction**: z = 0.048. We never refit PCA on a single new point."
+ },
+ "matrix-view": {
+  "h": "THE MATRIX VIEW",
+  "t": "For all customers at once: **Z = Xc V₁**. A 6 × 2 matrix times a 2 × 1 direction gives a 6 × 1 column of new coordinates. Keeping both directions would only rotate the axes."
+ },
+ "reduced-dataset": {
+  "h": "TAKEAWAY",
+  "t": "Twelve numbers became six while keeping **97.2% of the variance**. The two means and the direction are stored once for the model. **Remember:** projecting keeps the coordinates, not the directions."
+ }
+}

@@ -1,0 +1,60 @@
+{
+  "title": "PCA intuition",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "original-data",
+      "label": "Original data",
+      "pseudocode": "Start from the raw data matrix X.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nprint(len(X), 'rows x', len(X[0]), 'columns')\n# prints: 6 rows x 2 columns"
+    },
+    {
+      "id": "center",
+      "label": "Center",
+      "pseudocode": "Xc = X - means",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nprint('means:', mean)\n# prints: means: [4.5, 3.5]"
+    },
+    {
+      "id": "principal-axis",
+      "label": "Principal axis",
+      "pseudocode": "Find the directions of greatest variance.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\nv1 = (b / k, (lam1 - a) / k)\nv2 = (-v1[1], v1[0])\nprint('PC1:', tuple(round(v, 3) for v in v1), ' PC2:', tuple(round(v, 3) for v in v2))\n# prints: PC1: (0.754, 0.657)  PC2: (-0.657, 0.754)"
+    },
+    {
+      "id": "project",
+      "label": "Project",
+      "pseudocode": "z = dot(centered point, PC1)",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\nv1 = (b / k, (lam1 - a) / k)\nv2 = (-v1[1], v1[0])\nz1 = [r[0] * v1[0] + r[1] * v1[1] for r in Xc]\nz2 = [r[0] * v2[0] + r[1] * v2[1] for r in Xc]\nprint('first point:', Xc[0], '->', round(z1[0], 3))\n# prints: first point: [-2.5, -2.0] -> -3.199"
+    },
+    {
+      "id": "pc1-coordinate",
+      "label": "PC1 coordinates",
+      "pseudocode": "Record the coordinate along PC1.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\nv1 = (b / k, (lam1 - a) / k)\nv2 = (-v1[1], v1[0])\nz1 = [r[0] * v1[0] + r[1] * v1[1] for r in Xc]\nz2 = [r[0] * v2[0] + r[1] * v2[1] for r in Xc]\nprint('PC1 coordinates:', [round(v, 2) for v in z1])\n# prints: PC1 coordinates: [-3.2, -1.79, -1.03, 1.03, 1.46, 3.53]"
+    },
+    {
+      "id": "drop-pc2",
+      "label": "Drop PC2",
+      "pseudocode": "Discard the low-variance coordinate.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\nv1 = (b / k, (lam1 - a) / k)\nv2 = (-v1[1], v1[0])\nz1 = [r[0] * v1[0] + r[1] * v1[1] for r in Xc]\nz2 = [r[0] * v2[0] + r[1] * v2[1] for r in Xc]\nprint('PC2 coordinates:', [round(v, 2) for v in z2])\n# prints: PC2 coordinates: [0.13, 0.23, -0.43, 0.43, -0.61, 0.24]"
+    },
+    {
+      "id": "one-dimensional-data",
+      "label": "One-dimensional data",
+      "pseudocode": "The reduced dataset has one column.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\nv1 = (b / k, (lam1 - a) / k)\nv2 = (-v1[1], v1[0])\nz1 = [r[0] * v1[0] + r[1] * v1[1] for r in Xc]\nz2 = [r[0] * v2[0] + r[1] * v2[1] for r in Xc]\nprint('variance of PC1 coordinates:', round(sum(z * z for z in z1) / (n - 1), 3))\n# prints: variance of PC1 coordinates: 6.027"
+    },
+    {
+      "id": "compare-representations",
+      "label": "Compare",
+      "pseudocode": "Compare size against retained variance.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\nv1 = (b / k, (lam1 - a) / k)\nv2 = (-v1[1], v1[0])\nz1 = [r[0] * v1[0] + r[1] * v1[1] for r in Xc]\nz2 = [r[0] * v2[0] + r[1] * v2[1] for r in Xc]\nprint(len(X) * 2, 'numbers ->', len(z1), 'numbers; variance kept:', round(lam1 / (lam1 + lam2), 3))\n# prints: 12 numbers -> 6 numbers; variance kept: 0.972"
+    },
+    {
+      "id": "pca-summary",
+      "label": "PCA in three moves",
+      "pseudocode": "z = v1 . (x - mean)",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\nv1 = (b / k, (lam1 - a) / k)\nv2 = (-v1[1], v1[0])\nprint('weights:', round(v1[0], 3), 'x (usage - 4.5) +', round(v1[1], 3), 'x (spend - 3.5)')\n# prints: weights: 0.754 x (usage - 4.5) + 0.657 x (spend - 3.5)"
+    }
+  ]
+}

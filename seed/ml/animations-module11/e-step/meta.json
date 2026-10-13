@@ -1,0 +1,60 @@
+{
+  "title": "E-step: compute the responsibilities",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "fixed-components",
+      "label": "The components are fixed",
+      "pseudocode": "Parameters stay fixed in the E-step.",
+      "python": "comps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]      # (weight, mean, sigma)\nx = 4.5\nprint(comps)\n# prints: [(0.4, 3, 1.0), (0.6, 6, 1.5)]"
+    },
+    {
+      "id": "select-point",
+      "label": "Pick a point",
+      "pseudocode": "Select one customer.",
+      "python": "x = 4.5\nprint(x)\n# prints: 4.5"
+    },
+    {
+      "id": "likelihood-a",
+      "label": "How well does A explain it?",
+      "pseudocode": "Density of A at x.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]      # (weight, mean, sigma)\nx = 4.5\nprint(round(pdf(x, 3, 1.0), 4))\n# prints: 0.1295"
+    },
+    {
+      "id": "likelihood-b",
+      "label": "How well does B explain it?",
+      "pseudocode": "Density of B at x.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]      # (weight, mean, sigma)\nx = 4.5\nprint(round(pdf(x, 6, 1.5), 4))\n# prints: 0.1613"
+    },
+    {
+      "id": "apply-weights",
+      "label": "Apply the mixing weights",
+      "pseudocode": "Multiply by the weights.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]      # (weight, mean, sigma)\nx = 4.5\nprint([w for w, m, s in comps])\n# prints: [0.4, 0.6]"
+    },
+    {
+      "id": "unnormalized-scores",
+      "label": "Unnormalized scores",
+      "pseudocode": "Weighted scores.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]      # (weight, mean, sigma)\nx = 4.5\nprint([round(w * pdf(x, m, s), 4) for w, m, s in comps])\n# prints: [0.0518, 0.0968]"
+    },
+    {
+      "id": "normalize",
+      "label": "Normalize across components",
+      "pseudocode": "Divide by the total.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]      # (weight, mean, sigma)\nx = 4.5\nscores = [w * pdf(x, m, s) for w, m, s in comps]\ntotal = sum(scores)\nresp = [sc / total for sc in scores]\nprint(round(total, 4))\n# prints: 0.1486"
+    },
+    {
+      "id": "responsibilities",
+      "label": "The responsibilities",
+      "pseudocode": "The result for this point.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]      # (weight, mean, sigma)\nx = 4.5\nscores = [w * pdf(x, m, s) for w, m, s in comps]\ntotal = sum(scores)\nresp = [sc / total for sc in scores]\nprint([round(r, 4) for r in resp])\n# prints: [0.3486, 0.6514]"
+    },
+    {
+      "id": "e-step-summary",
+      "label": "Every point gets a row",
+      "pseudocode": "Apply the E-step to all points.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\npoints = [1.5, 2.0, 2.8, 3.4, 4.5, 5.2, 6.1, 6.8, 7.5, 8.3]\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]\ndef e_step(points, comps):\n    out = []\n    for x in points:\n        sc = [w * pdf(x, m, s) for w, m, s in comps]\n        t = sum(sc)\n        out.append([v / t for v in sc])\n    return out\nfor x, r in zip(points, e_step(points, comps)):\n    print(x, [round(v, 3) for v in r])\nprint('components unchanged:', comps)\n# prints: 1.5 [0.967, 0.033]\n# prints: 2.0 [0.955, 0.045]\n# prints: 2.8 [0.905, 0.095]\n# prints: 3.4 [0.806, 0.194]\n# prints: 4.5 [0.349, 0.651]\n# prints: 5.2 [0.093, 0.907]\n# prints: 6.1 [0.008, 0.992]\n# prints: 6.8 [0.001, 0.999]\n# prints: 7.5 [0.0, 1.0]\n# prints: 8.3 [0.0, 1.0]\n# prints: components unchanged: [(0.4, 3, 1.0), (0.6, 6, 1.5)]"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+ "raw-table": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "A dataset is a **table**: each **row is one example** (here, a house) and each **column is one piece of information** about it."
+ },
+ "features": {
+  "h": "FEATURES",
+  "t": "**Area, Bedrooms and Age** are the **features**: the information the model receives as input. Highlighting them separates what the model may use from what it must predict."
+ },
+ "label": {
+  "h": "THE LABEL",
+  "t": "**Sale Price** is the **label**: the value the model is trained to **predict**. During training each house comes with its answer; for a new house the answer is unknown."
+ },
+ "split": {
+  "h": "X AND y",
+  "t": "Splitting the table gives **X**, the features, and **y**, the label. Nearly every supervised learning algorithm takes this pair as input: **learn y from X**."
+ },
+ "new-sample": {
+  "h": "USING THE TRAINED MODEL",
+  "t": "A **new house with features [1500, 3, 6]** goes into the trained model, which outputs an **estimated price**. For a new house there is no label yet: the model produces it."
+ }
+}

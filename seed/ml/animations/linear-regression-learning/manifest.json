@@ -1,0 +1,20 @@
+{
+  "heightPx": 550,
+  "capabilities": [
+    "play",
+    "pause",
+    "next",
+    "previous",
+    "reset",
+    "gotoStep"
+  ],
+  "traceEvents": [
+    "plot-data",
+    "initialize",
+    "predict",
+    "error",
+    "loss",
+    "adjust",
+    "better-fit"
+  ]
+}

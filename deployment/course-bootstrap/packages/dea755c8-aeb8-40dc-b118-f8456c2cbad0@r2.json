@@ -1,0 +1,147 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322c4e9cccef168ed15"
+  },
+  "assets": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498524"
+    }
+  },
+  "createdBy": {
+    "$oid": "000000000000000000000000"
+  },
+  "css": "body {\r\n  margin: 0;\r\n  padding: 14px;\r\n  box-sizing: border-box;\r\n  background: #0b1d16;\r\n  color: #e6f5ec;\r\n  font-family: system-ui, sans-serif;\r\n}\r\n.scene {\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 8px;\r\n}\r\n.step-label {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  letter-spacing: 0.08em;\r\n  text-transform: uppercase;\r\n  color: #a7ce65;\r\n}\r\nsvg {\r\n  width: 100%;\r\n  height: auto;\r\n  max-width: 640px;\r\n  background: #071510;\r\n  border-radius: 10px;\r\n  border: 1px solid rgba(29, 181, 132, 0.35);\r\n}\r\nsvg g,\r\nsvg line,\r\nsvg polygon,\r\nsvg path,\r\nsvg ellipse,\r\nsvg circle,\r\nsvg rect,\r\nsvg text {\r\n  transition: opacity 0.4s ease, transform 0.6s ease;\r\n}\r\n.axis {\r\n  stroke: rgba(167, 206, 101, 0.3);\r\n  stroke-width: 1;\r\n}\r\n.tick {\r\n  font-size: 10px;\r\n  fill: #8fa89c;\r\n}\r\n.lbl,\r\n.big,\r\n.note,\r\n.mono {\r\n  paint-order: stroke;\r\n  stroke: #071510;\r\n  stroke-width: 3px;\r\n  stroke-linejoin: round;\r\n}\r\n.lbl {\r\n  font-size: 12px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.lbl-g { fill: #1db584; }\r\n.lbl-y { fill: #e2b44a; }\r\n.lbl-p { fill: #f472b6; }\r\n.lbl-b { fill: #38bdf8; }\r\n.lbl-r { fill: #f87171; }\r\n.big {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.note {\r\n  font-size: 11px;\r\n  fill: #c9dccf;\r\n}\r\n.mono {\r\n  font-family: ui-monospace, Consolas, monospace;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.caption {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  line-height: 1.5;\r\n  color: #c9dccf;\r\n  min-height: 40px;\r\n}\r\n.cell rect {\r\n  fill: rgba(255, 255, 255, 0.05);\r\n  stroke: rgba(255, 255, 255, 0.28);\r\n  stroke-width: 1.2;\r\n}\r\n.cell text {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.cell.hl-row rect { fill: rgba(226, 180, 74, 0.25); stroke: #e2b44a; }\r\n.cell.hl-col rect { fill: rgba(29, 181, 132, 0.25); stroke: #1db584; }\r\n.cell.hl-both rect { fill: rgba(244, 114, 182, 0.28); stroke: #f472b6; }\r\n.dim { opacity: 0.25; }\r\n.dash { stroke-dasharray: 5 4; }\r\n.fillA { fill: rgba(56, 189, 248, 0.16); stroke: #38bdf8; stroke-width: 2; }\r\n.fillB { fill: rgba(244, 114, 182, 0.18); stroke: #f472b6; stroke-width: 2; }\r\n.fillG { fill: rgba(29, 181, 132, 0.16); stroke: #1db584; stroke-width: 2; }\r\n.contour { stroke: rgba(56, 189, 248, 0.45); stroke-width: 1.5; }\n.curve { fill: none; stroke: #38bdf8; stroke-width: 3; }\n.curve-y { fill: none; stroke: #e2b44a; stroke-width: 3; }\n.curve-p { fill: none; stroke: #f472b6; stroke-width: 3; }\n.curve-g { fill: none; stroke: #1db584; stroke-width: 3; }\n.ghost { fill: none; stroke: rgba(201, 220, 207, 0.4); stroke-width: 2; }\n.lbl-w { fill: #e6f5ec; }\n.lbl-s { font-size: 11px; font-weight: 600; fill: #c9dccf; }\n\n/* ── explanation panel (shared by every generated ML animation) ── */\n.explain {\n  box-sizing: border-box;\n  max-width: 640px;\n  margin-top: 4px;\n  padding: 14px 18px 16px;\n  min-height: 150px;\n  border-radius: 12px;\n  background: rgba(29, 181, 132, 0.10);\n  border: 1px solid rgba(29, 181, 132, 0.45);\n  border-left: 5px solid #1db584;\n}\n.explain-h {\n  margin: 0 0 8px;\n  font-size: 13px;\n  font-weight: 800;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.explain-t {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.55;\n  color: #f1faf4;\n}\n.explain-t strong {\n  font-weight: 800;\n  color: #ffd98a;\n}\n\n",
+  "html": "<div class=\"scene\">\n  <p class=\"step-label\" id=\"step-label\"></p>\n  <svg id=\"scene\" viewBox=\"0 0 640 360\" role=\"img\" aria-label=\"Functions and continuity\"></svg>\n  <section class=\"explain\" aria-live=\"polite\">\n    <h3 class=\"explain-h\" id=\"explain-h\"></h3>\n    <p class=\"explain-t\" id=\"caption\"></p>\n  </section>\n</div>\n",
+  "js": "(function () {\n  // ── shared helpers (SVG, tweening) ─────────────────────────────────────────\r\n  var NS = \"http://www.w3.org/2000/svg\";\r\n  var svg = document.getElementById(\"scene\");\r\n  var labelEl = document.getElementById(\"step-label\");\r\n  var captionEl = document.getElementById(\"caption\");\r\n\r\n  function el(name, attrs, parent) {\r\n    var node = document.createElementNS(NS, name);\r\n    for (var key in attrs) node.setAttribute(key, attrs[key]);\r\n    if (parent) parent.appendChild(node);\r\n    return node;\r\n  }\r\n  function txt(parent, x, y, cls, str, anchor) {\r\n    var t = el(\"text\", { x: x, y: y, class: cls }, parent);\r\n    if (anchor) t.setAttribute(\"text-anchor\", anchor);\r\n    t.textContent = str;\r\n    return t;\r\n  }\r\n  function show(node, on) {\r\n    node.setAttribute(\"opacity\", on ? \"1\" : \"0\");\r\n  }\r\n  function place(node, x, y) {\r\n    node.style.transform = \"translate(\" + x + \"px,\" + y + \"px)\";\r\n  }\r\n  function setLine(node, x1, y1, x2, y2) {\r\n    node.setAttribute(\"x1\", x1);\r\n    node.setAttribute(\"y1\", y1);\r\n    node.setAttribute(\"x2\", x2);\r\n    node.setAttribute(\"y2\", y2);\r\n  }\r\n  function lerp(a, b, e) {\r\n    return a + (b - a) * e;\r\n  }\r\n  function round1(v) {\r\n    return (Math.round(v * 10) / 10).toFixed(1);\r\n  }\r\n\r\n  // Eased animation. fn(e) is called with e from 0 to 1. Without\r\n  // requestAnimationFrame (or with ms = 0) it jumps straight to fn(1).\r\n  var animTokens = {};\r\n  function anim(key, ms, fn) {\r\n    var token = (animTokens[key] || 0) + 1;\r\n    animTokens[key] = token;\r\n    if (typeof requestAnimationFrame !== \"function\" || ms <= 0) {\r\n      fn(1);\r\n      return;\r\n    }\r\n    var start = null;\r\n    function frame(now) {\r\n      if (animTokens[key] !== token) return;\r\n      if (start === null) start = now;\r\n      var p = Math.min(1, (now - start) / ms);\r\n      var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;\r\n      fn(e);\r\n      if (p < 1) requestAnimationFrame(frame);\r\n    }\r\n    requestAnimationFrame(frame);\r\n  }\r\n\r\n  // Arrowheads, one marker per colour.\r\n  var COLORS = { g: \"#1DB584\", y: \"#E2B44A\", p: \"#F472B6\", b: \"#38BDF8\", w: \"#c9dccf\", r: \"#F87171\" };\r\n  var defs = el(\"defs\", {}, svg);\r\n  Object.keys(COLORS).forEach(function (k) {\r\n    var m = el(\"marker\", { id: \"ah-\" + k, viewBox: \"0 0 10 10\", refX: 9, refY: 5, markerUnits: \"userSpaceOnUse\", markerWidth: 13, markerHeight: 13, orient: \"auto\" }, defs);\r\n    el(\"path\", { d: \"M0 0 L10 5 L0 10 Z\", fill: COLORS[k] }, m);\r\n  });\r\n  function arrow(parent, colorKey, width) {\r\n    return el(\"line\", { x1: 0, y1: 0, x2: 0, y2: 0, stroke: COLORS[colorKey], \"stroke-width\": width || 3, \"marker-end\": \"url(#ah-\" + colorKey + \")\", \"stroke-linecap\": \"round\" }, parent);\r\n  }\r\n  function polygon(parent, cls) {\r\n    return el(\"polygon\", { points: \"\", class: cls }, parent);\r\n  }\r\n  function setPoly(node, pts) {\r\n    node.setAttribute(\"points\", pts.map(function (p) { return p[0].toFixed(1) + \",\" + p[1].toFixed(1); }).join(\" \"));\r\n  }\r\n  function lerpPts(a, b, e) {\r\n    return a.map(function (p, i) { return [lerp(p[0], b[i][0], e), lerp(p[1], b[i][1], e)]; });\r\n  }\r\n  // Maps maths coordinates (x right, y up) to screen pixels.\r\n  function makePlane(cx, cy, s) {\r\n    return {\r\n      x: function (v) { return cx + s * v; },\r\n      y: function (v) { return cy - s * v; },\r\n      pt: function (p) { return [cx + s * p[0], cy - s * p[1]]; },\r\n      s: s, cx: cx, cy: cy\r\n    };\r\n  }\r\n  function axes(parent, plane, xr, yr) {\r\n    el(\"line\", { x1: plane.x(-xr), y1: plane.y(0), x2: plane.x(xr), y2: plane.y(0), class: \"axis\" }, parent);\r\n    el(\"line\", { x1: plane.x(0), y1: plane.y(-yr), x2: plane.x(0), y2: plane.y(yr), class: \"axis\" }, parent);\r\n  }\r\n\n  // ── Module 3 helpers: graphs, curves, contour plane ───────────────────────\n  // makeGraph maps maths values to pixels with separate x and y scales.\n  function makeGraph(ox, oy, sx, sy) {\n    return {\n      ox: ox, oy: oy, sx: sx, sy: sy,\n      x: function (v) { return ox + sx * v; },\n      y: function (v) { return oy - sy * v; }\n    };\n  }\n  function curveD(g, f, a, b, n) {\n    var d = \"\";\n    for (var i = 0; i <= n; i++) {\n      var v = a + ((b - a) * i) / n;\n      d += (i ? \" L \" : \"M \") + g.x(v).toFixed(1) + \" \" + g.y(f(v)).toFixed(1);\n    }\n    return d;\n  }\n  function setD(node, d) {\n    node.setAttribute(\"d\", d);\n  }\n  function fmt(v, n) {\n    return (Math.round(v * 100000) / 100000).toFixed(n === undefined ? 1 : n);\n  }\n  function drawAxes(parent, g, xmax, ymax, xticks, yticks) {\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(xmax), y2: g.y(0), class: \"axis\" }, parent);\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(0), y2: g.y(ymax), class: \"axis\" }, parent);\n    (xticks || []).forEach(function (t) { txt(parent, g.x(t), g.y(0) + 15, \"tick\", String(t), \"middle\"); });\n    (yticks || []).forEach(function (t) { txt(parent, g.x(0) - 7, g.y(t) + 4, \"tick\", String(t), \"end\"); });\n  }\n  function card(parent, x, y, w, h, cls) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: 10, class: cls || \"fillG\" }, parent);\n  }\n  function ring(parent, cx, cy, rx, ry, cls) {\n    return el(\"ellipse\", { cx: cx, cy: cy, rx: rx, ry: ry, fill: \"none\", class: cls || \"contour\" }, parent);\n  }\n  function clipTo(id, x, y, w, h) {\n    var c = el(\"clipPath\", { id: id }, defs);\n    el(\"rect\", { x: x, y: y, width: w, height: h }, c);\n  }\n\n  var EXPLAIN = {\"input-output\":{\"h\":\"WHAT YOU ARE LOOKING AT\",\"t\":\"A **function** is a rule: you give it an input and it gives back exactly **one output**. For a model, the input is a setting such as the weight **w**, and the output says **how wrong the model is**.\"},\"function-rule\":{\"h\":\"THE RULE IS A FORMULA\",\"t\":\"Our loss rule is **L(w) = (w − 3)²**. Put in **w = 2** and the rule gives **(2 − 3)² = 1**. Different inputs give different outputs.\"},\"plot-function\":{\"h\":\"PLOT EVERY INPUT AND ITS OUTPUT\",\"t\":\"Plot each input along the bottom and its output as the height. The result is a **smooth bowl** with its lowest point at **w = 3**.\"},\"change-input\":{\"h\":\"CHANGE THE INPUT A LITTLE\",\"t\":\"Nudge **w from 2.0 to 2.5**. The loss moves from **1.00 to 0.25**. A small change in, a small change out.\"},\"continuous-change\":{\"h\":\"CONTINUOUS: NO JUMPS\",\"t\":\"Slide w along the curve: the loss changes **smoothly at every point**. You could draw the whole curve without lifting your pen. That is what **continuous** means.\"},\"discontinuity-contrast\":{\"h\":\"CONTRAST: A RULE WITH A JUMP\",\"t\":\"Now a rule that outputs **0 below w = 2 and 1 at or above it**. Right at w = 2 the output **jumps by 1** although w barely moved. This rule is **not continuous**.\"},\"ml-connection\":{\"h\":\"TAKEAWAY\",\"t\":\"Training follows the slope downhill, which only works when **small changes give small changes**. That is why models are trained on a **smooth loss**, not a jumpy one.\"}};\n  // ── scene ──\n  var steps = [\n    { id: \"input-output\", label: \"A function: input in, output out\", caption: \"A function is a rule. You give it an input and it gives back exactly one output. For a model, the input is a setting such as the weight w, and the output says how wrong the model is.\" },\n    { id: \"function-rule\", label: \"The rule is a formula\", caption: \"Our loss rule is L(w) = (w − 3)². Put in w = 2 and the rule gives (2 − 3)² = 1. Different inputs give different outputs.\" },\n    { id: \"plot-function\", label: \"Plot every input and its output\", caption: \"Plot each input along the bottom and its output as the height. The result is a smooth bowl with its lowest point at w = 3.\" },\n    { id: \"change-input\", label: \"Change the input a little\", caption: \"Nudge w from 2.0 to 2.5. The loss moves from 1.00 to 0.25. A small change in, a small change out.\" },\n    { id: \"continuous-change\", label: \"Continuous: no jumps\", caption: \"Slide w along the curve. The loss changes smoothly at every point. You could draw the whole curve without lifting your pen. That is what continuous means.\" },\n    { id: \"discontinuity-contrast\", label: \"Contrast: a rule with a jump\", caption: \"Now a rule that outputs 0 below w = 2 and 1 at or above it. Right at w = 2 the output jumps by 1 although w barely moved. This rule is not continuous.\" },\n    { id: \"ml-connection\", label: \"Why training wants a smooth loss\", caption: \"Training follows the slope downhill, which only works when small changes give small changes. That is why models are trained on a smooth loss, not a jumpy one.\" }\n  ];\n\n  function L(w) { return (w - 3) * (w - 3); }\n  var g = makeGraph(50, 318, 58, 30);\n  var gs = makeGraph(50, 318, 58, 150);\n\n  // Machine view (steps 1-2): input -> rule -> output.\n  var machine = el(\"g\", {}, svg);\n  card(machine, 40, 110, 130, 80, \"fillA\");\n  txt(machine, 105, 138, \"note\", \"input\", \"middle\");\n  var inTxt = txt(machine, 105, 168, \"big\", \"w = 2\", \"middle\");\n  card(machine, 235, 95, 170, 110, \"fillG\");\n  txt(machine, 320, 122, \"note\", \"the function (a rule)\", \"middle\");\n  var ruleTxt = txt(machine, 320, 160, \"big\", \"L\", \"middle\");\n  var ruleSub = txt(machine, 320, 186, \"note\", \"\", \"middle\");\n  card(machine, 470, 110, 130, 80, \"fillB\");\n  txt(machine, 535, 138, \"note\", \"output\", \"middle\");\n  var outTxt = txt(machine, 535, 168, \"big\", \"1\", \"middle\");\n  var a1 = arrow(machine, \"w\", 3); setLine(a1, 172, 150, 232, 150);\n  var a2 = arrow(machine, \"w\", 3); setLine(a2, 407, 150, 467, 150);\n  var table = el(\"g\", {}, svg);\n  [[0, 9], [2, 1], [3, 0], [5, 4]].forEach(function (p, i) {\n    var gx = 50 + i * 145;\n    card(table, gx, 252, 130, 44, \"fillA\");\n    txt(table, gx + 65, 279, \"mono\", \"w = \" + p[0] + \"  →  \" + p[1], \"middle\");\n  });\n  txt(table, 320, 236, \"note\", \"a few inputs and the outputs the rule gives\", \"middle\");\n\n  // Graph view (steps 3-7).\n  var graph = el(\"g\", {}, svg);\n  drawAxes(graph, g, 6.3, 9.8, [0, 1, 2, 3, 4, 5, 6], [0, 3, 6, 9]);\n  txt(graph, g.x(6.3), g.y(0) + 28, \"note\", \"weight w\", \"end\");\n  txt(graph, g.x(0) + 8, g.y(9.8) - 2, \"note\", \"loss L(w)\", \"start\");\n  var bowl = el(\"path\", { class: \"curve\" }, graph);\n  setD(bowl, curveD(g, L, 0, 6, 60));\n  var stepGraph = el(\"g\", {}, svg);\n  drawAxes(stepGraph, gs, 6.3, 1.5, [0, 1, 2, 3, 4, 5, 6], [0, 1]);\n  txt(stepGraph, gs.x(6.3), gs.y(0) + 28, \"note\", \"weight w\", \"end\");\n  txt(stepGraph, gs.x(0) + 8, gs.y(1.5) - 2, \"note\", \"output of the jumpy rule\", \"start\");\n  el(\"line\", { x1: gs.x(0), y1: gs.y(0), x2: gs.x(2), y2: gs.y(0), stroke: \"#f87171\", \"stroke-width\": 3 }, stepGraph);\n  el(\"line\", { x1: gs.x(2), y1: gs.y(1), x2: gs.x(6), y2: gs.y(1), stroke: \"#f87171\", \"stroke-width\": 3 }, stepGraph);\n  el(\"line\", { x1: gs.x(2), y1: gs.y(0), x2: gs.x(2), y2: gs.y(1), stroke: \"#f87171\", \"stroke-width\": 2 }, stepGraph).setAttribute(\"class\", \"dash\");\n  el(\"circle\", { cx: gs.x(2), cy: gs.y(0), r: 5, fill: \"#071510\", stroke: \"#f87171\", \"stroke-width\": 2 }, stepGraph);\n  el(\"circle\", { cx: gs.x(2), cy: gs.y(1), r: 5, fill: \"#f87171\" }, stepGraph);\n\n  // Moving marker with guide lines.\n  var guides = el(\"g\", {}, svg);\n  var gv = el(\"line\", { class: \"dash\", stroke: \"#c9dccf\", \"stroke-width\": 1.5 }, guides);\n  var gh = el(\"line\", { class: \"dash\", stroke: \"#c9dccf\", \"stroke-width\": 1.5 }, guides);\n  var oldDot = el(\"circle\", { r: 5, fill: \"#8fa89c\" }, svg);\n  var marker = el(\"circle\", { r: 7, fill: \"#e2b44a\", stroke: \"#071510\", \"stroke-width\": 2 }, svg);\n  var mLabel = txt(svg, 0, 0, \"lbl lbl-y\", \"\", \"start\");\n\n  // Readout panel.\n  var panel = el(\"g\", {}, svg);\n  card(panel, 420, 44, 200, 96, \"fillG\");\n  var rd1 = txt(panel, 520, 74, \"mono\", \"\", \"middle\");\n  var rd2 = txt(panel, 520, 100, \"mono\", \"\", \"middle\");\n  var rd3 = txt(panel, 520, 126, \"note\", \"\", \"middle\");\n\n  var mw = 2;\n  function putMarker(w, onStep) {\n    mw = w;\n    var cx, cy;\n    if (onStep) { cx = gs.x(w); cy = gs.y(w >= 2 ? 1 : 0); }\n    else { cx = g.x(w); cy = g.y(L(w)); }\n    marker.setAttribute(\"cx\", cx); marker.setAttribute(\"cy\", cy);\n    setLine(gv, cx, cy, cx, (onStep ? gs : g).y(0));\n    setLine(gh, cx, cy, (onStep ? gs : g).x(0), cy);\n    mLabel.setAttribute(\"x\", cx - 70); mLabel.setAttribute(\"y\", cy - 64); // inside the bowl, clear of the curve\n    if (onStep) {\n      rd1.textContent = \"w = \" + fmt(w, 2);\n      rd2.textContent = \"output = \" + (w >= 2 ? 1 : 0);\n    } else {\n      rd1.textContent = \"w = \" + fmt(w, 2);\n      rd2.textContent = \"L(w) = \" + fmt(L(w), 2);\n    }\n  }\n\n  function render(index, id) {\n    var onMachine = id === \"input-output\" || id === \"function-rule\";\n    show(machine, onMachine);\n    show(table, id === \"function-rule\");\n    show(graph, !onMachine && id !== \"discontinuity-contrast\");\n    show(bowl, !onMachine && id !== \"discontinuity-contrast\");\n    show(stepGraph, id === \"discontinuity-contrast\");\n    var showMarker = id === \"plot-function\" || id === \"change-input\" || id === \"continuous-change\" || id === \"discontinuity-contrast\" || id === \"ml-connection\";\n    show(marker, showMarker && id !== \"plot-function\");\n    show(guides, id === \"change-input\" || id === \"continuous-change\" || id === \"discontinuity-contrast\");\n    show(oldDot, id === \"change-input\");\n    show(panel, id === \"change-input\" || id === \"continuous-change\" || id === \"discontinuity-contrast\" || id === \"ml-connection\");\n    mLabel.textContent = \"\";\n    ruleTxt.textContent = id === \"input-output\" ? \"?\" : \"L(w) = (w − 3)²\";\n    ruleSub.textContent = id === \"input-output\" ? \"a rule turns input into output\" : \"\";\n    outTxt.textContent = id === \"input-output\" ? \"?\" : \"1\";\n    inTxt.textContent = \"w = 2\";\n    rd3.textContent = \"\";\n\n    if (id === \"change-input\") {\n      oldDot.setAttribute(\"cx\", g.x(2)); oldDot.setAttribute(\"cy\", g.y(L(2)));\n      putMarker(2, false);\n      anim(\"m\", 1100, function (e) { putMarker(lerp(2, 2.5, e), false); });\n      rd3.textContent = \"small change in, small change out\";\n    } else if (id === \"continuous-change\") {\n      anim(\"m\", 2600, function (e) { putMarker(1.2 + 2.6 * (0.5 - 0.5 * Math.cos(Math.PI * e)), false); });\n      rd3.textContent = \"smooth, no jumps\";\n    } else if (id === \"discontinuity-contrast\") {\n      anim(\"m\", 2200, function (e) {\n        var w = 1.5 + 1.0 * e;\n        putMarker(w, true);\n        rd3.textContent = w >= 2 ? \"it jumped by 1!\" : \"output stays 0 …\";\n      });\n    } else if (id === \"ml-connection\") {\n      putMarker(1, false);\n      mLabel.textContent = \"follow the slope down\";\n      rd3.textContent = \"smooth loss = usable slope\";\n      anim(\"m\", 1800, function (e) { putMarker(lerp(1, 2.6, e), false); mLabel.textContent = \"follow the slope down\"; });\n    } else {\n      putMarker(2, false);\n    }\n  }\n\n\n  // ── shared runtime: stepping, explanation panel, educational autoplay pacing, bridge ──\n  var current = 0;\n  var explainHeadEl = document.getElementById(\"explain-h\");\n\n  // **bold** markers in an explanation become <strong> nodes (built with DOM calls, never innerHTML).\n  function setRich(node, str) {\n    node.textContent = \"\";\n    var parts = String(str).split(\"**\");\n    for (var i = 0; i < parts.length; i++) {\n      if (parts[i] === \"\") continue;\n      var seg = document.createElement(i % 2 ? \"strong\" : \"span\");\n      seg.textContent = parts[i];\n      node.appendChild(seg);\n    }\n  }\n\n  function explanationFor(index) {\n    var ex = (typeof EXPLAIN === \"object\" && EXPLAIN) ? EXPLAIN[steps[index].id] : null;\n    return ex || { h: \"WHAT IS HAPPENING\", t: steps[index].caption };\n  }\n\n  // Autoplay pace: 4.5 to 10.5 seconds per step, longer for longer explanations, so a learner can read.\n  function stepMs(index) {\n    var words = String(explanationFor(index).t).replace(/\\*\\*/g, \"\").split(/\\s+/).length;\n    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));\n  }\n\n  function renderStep(index) {\n    var ex = explanationFor(index);\n    labelEl.textContent = steps[index].label;\n    if (explainHeadEl) explainHeadEl.textContent = ex.h;\n    setRich(captionEl, ex.t);\n    render(index, steps[index].id);\n  }\n\n  function goTo(index) {\n    if (index < 0 || index >= steps.length) return;\n    current = index;\n    renderStep(current);\n    if (window.ReagvisBridge) window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n\n  renderStep(current);\n\n  // Autoplay: exactly one timer, one step per tick, stops on the final step.\n  // PLAY on the final step restarts from the first step and plays again.\n  var timer = null;\n\n  function stopAuto() {\n    if (timer !== null) {\n      clearTimeout(timer);\n      timer = null;\n    }\n  }\n\n  function scheduleNext() {\n    timer = setTimeout(function () {\n      timer = null;\n      if (current >= steps.length - 1) return;\n      goTo(current + 1);\n      if (current < steps.length - 1) scheduleNext();\n    }, stepMs(current));\n  }\n\n  function startAuto() {\n    if (timer !== null) return;\n    if (current >= steps.length - 1) goTo(0);\n    scheduleNext();\n  }\n\n  window.addEventListener(\"pagehide\", stopAuto);\n\n  window.ReagvisAnimation = {\n    stepDuration: stepMs,\n    onCommand: function (type, stepId) {\n      if (type === \"PLAY\") startAuto();\n      else if (type === \"PAUSE\") stopAuto();\n      else if (type === \"NEXT\") { stopAuto(); goTo(current + 1); }\n      else if (type === \"PREVIOUS\") { stopAuto(); goTo(current - 1); }\n      else if (type === \"RESET\") { stopAuto(); goTo(0); }\n      else if (type === \"GOTO_STEP\") {\n        stopAuto();\n        for (var i = 0; i < steps.length; i++) {\n          if (steps[i].id === stepId) { goTo(i); break; }\n        }\n      }\n    },\n  };\n\n  if (window.ReagvisBridge) {\n    window.ReagvisBridge.ready();\n    window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n})();\n",
+  "lastFrozenContentHash": null,
+  "lastFrozenRevisionId": null,
+  "manifest": {
+    "bridgeVersion": {
+      "$numberInt": "1"
+    },
+    "capabilities": [
+      "play",
+      "pause",
+      "next",
+      "previous",
+      "reset",
+      "gotoStep"
+    ],
+    "heightPx": {
+      "$numberInt": "590"
+    },
+    "traceEvents": [
+      "input-output",
+      "function-rule",
+      "plot-function",
+      "change-input",
+      "continuous-change",
+      "discontinuity-contrast",
+      "ml-connection"
+    ]
+  },
+  "packageId": "dea755c8-aeb8-40dc-b118-f8456c2cbad0",
+  "packageTrace": {
+    "steps": [
+      {
+        "animationEvent": "input-output",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "A function takes one input and returns exactly one output.",
+          "python": "def loss(w):\n    return (w - 3) ** 2\n\nprint(loss(2))  # one input in, one number out"
+        },
+        "id": "input-output",
+        "label": "A function: input in, output out"
+      },
+      {
+        "animationEvent": "function-rule",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "The loss rule is L(w) = (w - 3) squared. Different inputs give different outputs.",
+          "python": "def loss(w):\n    return (w - 3) ** 2\n\nfor w in [0, 2, 3, 5]:\n    print(w, loss(w))   # 0 9 / 2 1 / 3 0 / 5 4"
+        },
+        "id": "function-rule",
+        "label": "The rule is a formula"
+      },
+      {
+        "animationEvent": "plot-function",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Put the input w along the bottom and the output L(w) as the height.",
+          "python": "def loss(w):\n    return (w - 3) ** 2\n\npoints = [(w / 2, loss(w / 2)) for w in range(0, 13)]\nprint(points[:4])  # the first few points of the curve"
+        },
+        "id": "plot-function",
+        "label": "Plot every input and its output"
+      },
+      {
+        "animationEvent": "change-input",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Change w from 2.0 to 2.5 and compare the two outputs.",
+          "python": "def loss(w):\n    return (w - 3) ** 2\n\nprint(loss(2.0), loss(2.5))   # 1.0 0.25: a small change"
+        },
+        "id": "change-input",
+        "label": "Change the input a little"
+      },
+      {
+        "animationEvent": "continuous-change",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "For a continuous function, a tiny change in w gives a tiny change in the output.",
+          "python": "def loss(w):\n    return (w - 3) ** 2\n\nprint(round(loss(2.00), 4), round(loss(2.01), 4))   # 1.0 0.9801"
+        },
+        "id": "continuous-change",
+        "label": "Continuous: no jumps"
+      },
+      {
+        "animationEvent": "discontinuity-contrast",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "A step rule outputs 0 below w = 2 and 1 at or above it. At w = 2 the output jumps by 1.",
+          "python": "def step_rule(w):\n    return 0 if w < 2 else 1\n\nprint(step_rule(1.999), step_rule(2.0))   # 0 1: a jump"
+        },
+        "id": "discontinuity-contrast",
+        "label": "Contrast: a rule with a jump"
+      },
+      {
+        "animationEvent": "ml-connection",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Training follows the slope of the loss, so the loss should change smoothly with the weights.",
+          "python": "def loss(w):\n    return (w - 3) ** 2\n\nw = 1.0\nfor _ in range(3):\n    w = w + 0.5          # small steps change the loss smoothly\n    print(w, loss(w))"
+        },
+        "id": "ml-connection",
+        "label": "Why training wants a smooth loss"
+      }
+    ],
+    "version": {
+      "$numberInt": "1"
+    }
+  },
+  "revision": {
+    "$numberInt": "5"
+  },
+  "revisionId": "r2",
+  "sourceKind": "zip",
+  "status": "frozen",
+  "title": "ML Module 3 — Functions and Continuity",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498524"
+    }
+  },
+  "updatedBy": {
+    "$oid": "000000000000000000000000"
+  }
+}

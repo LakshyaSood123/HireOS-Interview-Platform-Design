@@ -1,0 +1,147 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322c4e9cccef168ecf7"
+  },
+  "assets": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498503"
+    }
+  },
+  "createdBy": {
+    "$oid": "000000000000000000000000"
+  },
+  "css": "body {\r\n  margin: 0;\r\n  padding: 14px;\r\n  box-sizing: border-box;\r\n  background: #0b1d16;\r\n  color: #e6f5ec;\r\n  font-family: system-ui, sans-serif;\r\n}\r\n.scene {\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 8px;\r\n}\r\n.step-label {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  letter-spacing: 0.08em;\r\n  text-transform: uppercase;\r\n  color: #a7ce65;\r\n}\r\nsvg {\r\n  width: 100%;\r\n  height: auto;\r\n  max-width: 640px;\r\n  background: #071510;\r\n  border-radius: 10px;\r\n  border: 1px solid rgba(29, 181, 132, 0.35);\r\n}\r\nsvg g,\r\nsvg line,\r\nsvg polygon,\r\nsvg path,\r\nsvg ellipse,\r\nsvg circle,\r\nsvg rect,\r\nsvg text {\r\n  transition: opacity 0.4s ease, transform 0.6s ease;\r\n}\r\n.axis {\r\n  stroke: rgba(167, 206, 101, 0.3);\r\n  stroke-width: 1;\r\n}\r\n.tick {\r\n  font-size: 10px;\r\n  fill: #8fa89c;\r\n}\r\n.lbl,\r\n.big,\r\n.note,\r\n.mono {\r\n  paint-order: stroke;\r\n  stroke: #071510;\r\n  stroke-width: 3px;\r\n  stroke-linejoin: round;\r\n}\r\n.lbl {\r\n  font-size: 12px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.lbl-g { fill: #1db584; }\r\n.lbl-y { fill: #e2b44a; }\r\n.lbl-p { fill: #f472b6; }\r\n.lbl-b { fill: #38bdf8; }\r\n.lbl-r { fill: #f87171; }\r\n.big {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.note {\r\n  font-size: 11px;\r\n  fill: #c9dccf;\r\n}\r\n.mono {\r\n  font-family: ui-monospace, Consolas, monospace;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.caption {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  line-height: 1.5;\r\n  color: #c9dccf;\r\n  min-height: 40px;\r\n}\r\n.cell rect {\r\n  fill: rgba(255, 255, 255, 0.05);\r\n  stroke: rgba(255, 255, 255, 0.28);\r\n  stroke-width: 1.2;\r\n}\r\n.cell text {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.cell.hl-row rect { fill: rgba(226, 180, 74, 0.25); stroke: #e2b44a; }\r\n.cell.hl-col rect { fill: rgba(29, 181, 132, 0.25); stroke: #1db584; }\r\n.cell.hl-both rect { fill: rgba(244, 114, 182, 0.28); stroke: #f472b6; }\r\n.dim { opacity: 0.25; }\r\n.dash { stroke-dasharray: 5 4; }\r\n.fillA { fill: rgba(56, 189, 248, 0.16); stroke: #38bdf8; stroke-width: 2; }\r\n.fillB { fill: rgba(244, 114, 182, 0.18); stroke: #f472b6; stroke-width: 2; }\r\n.fillG { fill: rgba(29, 181, 132, 0.16); stroke: #1db584; stroke-width: 2; }\r\n.contour { stroke: rgba(56, 189, 248, 0.45); stroke-width: 1.5; }\n.curve { fill: none; stroke: #38bdf8; stroke-width: 3; }\n.curve-y { fill: none; stroke: #e2b44a; stroke-width: 3; }\n.curve-p { fill: none; stroke: #f472b6; stroke-width: 3; }\n.curve-g { fill: none; stroke: #1db584; stroke-width: 3; }\n.ghost { fill: none; stroke: rgba(201, 220, 207, 0.4); stroke-width: 2; }\n.lbl-w { fill: #e6f5ec; }\n.lbl-s { font-size: 11px; font-weight: 600; fill: #c9dccf; }\n\n/* ── explanation panel (shared by every generated ML animation) ── */\n.explain {\n  box-sizing: border-box;\n  max-width: 640px;\n  margin-top: 4px;\n  padding: 14px 18px 16px;\n  min-height: 150px;\n  border-radius: 12px;\n  background: rgba(29, 181, 132, 0.10);\n  border: 1px solid rgba(29, 181, 132, 0.45);\n  border-left: 5px solid #1db584;\n}\n.explain-h {\n  margin: 0 0 8px;\n  font-size: 13px;\n  font-weight: 800;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.explain-t {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.55;\n  color: #f1faf4;\n}\n.explain-t strong {\n  font-weight: 800;\n  color: #ffd98a;\n}\n\n",
+  "html": "<div class=\"scene\">\n  <p class=\"step-label\" id=\"step-label\"></p>\n  <svg id=\"scene\" viewBox=\"0 0 640 360\" role=\"img\" aria-label=\"Linear approximation: zoom in until it looks straight\"></svg>\n  <section class=\"explain\" aria-live=\"polite\">\n    <h3 class=\"explain-h\" id=\"explain-h\"></h3>\n    <p class=\"explain-t\" id=\"caption\"></p>\n  </section>\n</div>\n",
+  "js": "(function () {\n  // ── shared helpers (SVG, tweening) ─────────────────────────────────────────\r\n  var NS = \"http://www.w3.org/2000/svg\";\r\n  var svg = document.getElementById(\"scene\");\r\n  var labelEl = document.getElementById(\"step-label\");\r\n  var captionEl = document.getElementById(\"caption\");\r\n\r\n  function el(name, attrs, parent) {\r\n    var node = document.createElementNS(NS, name);\r\n    for (var key in attrs) node.setAttribute(key, attrs[key]);\r\n    if (parent) parent.appendChild(node);\r\n    return node;\r\n  }\r\n  function txt(parent, x, y, cls, str, anchor) {\r\n    var t = el(\"text\", { x: x, y: y, class: cls }, parent);\r\n    if (anchor) t.setAttribute(\"text-anchor\", anchor);\r\n    t.textContent = str;\r\n    return t;\r\n  }\r\n  function show(node, on) {\r\n    node.setAttribute(\"opacity\", on ? \"1\" : \"0\");\r\n  }\r\n  function place(node, x, y) {\r\n    node.style.transform = \"translate(\" + x + \"px,\" + y + \"px)\";\r\n  }\r\n  function setLine(node, x1, y1, x2, y2) {\r\n    node.setAttribute(\"x1\", x1);\r\n    node.setAttribute(\"y1\", y1);\r\n    node.setAttribute(\"x2\", x2);\r\n    node.setAttribute(\"y2\", y2);\r\n  }\r\n  function lerp(a, b, e) {\r\n    return a + (b - a) * e;\r\n  }\r\n  function round1(v) {\r\n    return (Math.round(v * 10) / 10).toFixed(1);\r\n  }\r\n\r\n  // Eased animation. fn(e) is called with e from 0 to 1. Without\r\n  // requestAnimationFrame (or with ms = 0) it jumps straight to fn(1).\r\n  var animTokens = {};\r\n  function anim(key, ms, fn) {\r\n    var token = (animTokens[key] || 0) + 1;\r\n    animTokens[key] = token;\r\n    if (typeof requestAnimationFrame !== \"function\" || ms <= 0) {\r\n      fn(1);\r\n      return;\r\n    }\r\n    var start = null;\r\n    function frame(now) {\r\n      if (animTokens[key] !== token) return;\r\n      if (start === null) start = now;\r\n      var p = Math.min(1, (now - start) / ms);\r\n      var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;\r\n      fn(e);\r\n      if (p < 1) requestAnimationFrame(frame);\r\n    }\r\n    requestAnimationFrame(frame);\r\n  }\r\n\r\n  // Arrowheads, one marker per colour.\r\n  var COLORS = { g: \"#1DB584\", y: \"#E2B44A\", p: \"#F472B6\", b: \"#38BDF8\", w: \"#c9dccf\", r: \"#F87171\" };\r\n  var defs = el(\"defs\", {}, svg);\r\n  Object.keys(COLORS).forEach(function (k) {\r\n    var m = el(\"marker\", { id: \"ah-\" + k, viewBox: \"0 0 10 10\", refX: 9, refY: 5, markerUnits: \"userSpaceOnUse\", markerWidth: 13, markerHeight: 13, orient: \"auto\" }, defs);\r\n    el(\"path\", { d: \"M0 0 L10 5 L0 10 Z\", fill: COLORS[k] }, m);\r\n  });\r\n  function arrow(parent, colorKey, width) {\r\n    return el(\"line\", { x1: 0, y1: 0, x2: 0, y2: 0, stroke: COLORS[colorKey], \"stroke-width\": width || 3, \"marker-end\": \"url(#ah-\" + colorKey + \")\", \"stroke-linecap\": \"round\" }, parent);\r\n  }\r\n  function polygon(parent, cls) {\r\n    return el(\"polygon\", { points: \"\", class: cls }, parent);\r\n  }\r\n  function setPoly(node, pts) {\r\n    node.setAttribute(\"points\", pts.map(function (p) { return p[0].toFixed(1) + \",\" + p[1].toFixed(1); }).join(\" \"));\r\n  }\r\n  function lerpPts(a, b, e) {\r\n    return a.map(function (p, i) { return [lerp(p[0], b[i][0], e), lerp(p[1], b[i][1], e)]; });\r\n  }\r\n  // Maps maths coordinates (x right, y up) to screen pixels.\r\n  function makePlane(cx, cy, s) {\r\n    return {\r\n      x: function (v) { return cx + s * v; },\r\n      y: function (v) { return cy - s * v; },\r\n      pt: function (p) { return [cx + s * p[0], cy - s * p[1]]; },\r\n      s: s, cx: cx, cy: cy\r\n    };\r\n  }\r\n  function axes(parent, plane, xr, yr) {\r\n    el(\"line\", { x1: plane.x(-xr), y1: plane.y(0), x2: plane.x(xr), y2: plane.y(0), class: \"axis\" }, parent);\r\n    el(\"line\", { x1: plane.x(0), y1: plane.y(-yr), x2: plane.x(0), y2: plane.y(yr), class: \"axis\" }, parent);\r\n  }\r\n\n  // ── Module 3 helpers: graphs, curves, contour plane ───────────────────────\n  // makeGraph maps maths values to pixels with separate x and y scales.\n  function makeGraph(ox, oy, sx, sy) {\n    return {\n      ox: ox, oy: oy, sx: sx, sy: sy,\n      x: function (v) { return ox + sx * v; },\n      y: function (v) { return oy - sy * v; }\n    };\n  }\n  function curveD(g, f, a, b, n) {\n    var d = \"\";\n    for (var i = 0; i <= n; i++) {\n      var v = a + ((b - a) * i) / n;\n      d += (i ? \" L \" : \"M \") + g.x(v).toFixed(1) + \" \" + g.y(f(v)).toFixed(1);\n    }\n    return d;\n  }\n  function setD(node, d) {\n    node.setAttribute(\"d\", d);\n  }\n  function fmt(v, n) {\n    return (Math.round(v * 100000) / 100000).toFixed(n === undefined ? 1 : n);\n  }\n  function drawAxes(parent, g, xmax, ymax, xticks, yticks) {\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(xmax), y2: g.y(0), class: \"axis\" }, parent);\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(0), y2: g.y(ymax), class: \"axis\" }, parent);\n    (xticks || []).forEach(function (t) { txt(parent, g.x(t), g.y(0) + 15, \"tick\", String(t), \"middle\"); });\n    (yticks || []).forEach(function (t) { txt(parent, g.x(0) - 7, g.y(t) + 4, \"tick\", String(t), \"end\"); });\n  }\n  function card(parent, x, y, w, h, cls) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: 10, class: cls || \"fillG\" }, parent);\n  }\n  function ring(parent, cx, cy, rx, ry, cls) {\n    return el(\"ellipse\", { cx: cx, cy: cy, rx: rx, ry: ry, fill: \"none\", class: cls || \"contour\" }, parent);\n  }\n  function clipTo(id, x, y, w, h) {\n    var c = el(\"clipPath\", { id: id }, defs);\n    el(\"rect\", { x: x, y: y, width: w, height: h }, c);\n  }\n\n  var EXPLAIN = {\"nonlinear-function\":{\"h\":\"WHAT YOU ARE LOOKING AT\",\"t\":\"Our loss **L(w) = (w − 3)²** is a curve, not a straight line. Curves are harder to work with than lines, so we look for an **easy stand-in**.\"},\"choose-point\":{\"h\":\"CHOOSE THE POINT WE ARE STANDING AT\",\"t\":\"Say the model is at **w = 1**, where the loss is **L(1) = 4**. We want to predict the loss for weights **near this point**.\"},\"tangent-line\":{\"h\":\"DRAW THE TANGENT LINE\",\"t\":\"At w = 1 the slope is **−4**. The tangent line through this point is **4 − 4h**, where h is how far we step from w = 1. Close to the point, the curve and this line almost coincide.\"},\"nearby-point\":{\"h\":\"LOOK AT A NEARBY POINT\",\"t\":\"Step to **w = 1.5**, so **h = 0.5**. The curve sits at **2.25**, while the line sits at **2.0**. They are close but not the same.\"},\"approximation\":{\"h\":\"THE APPROXIMATION AND ITS ERROR\",\"t\":\"Prediction from the line: **4 − 4 × 0.5 = 2.0**. The true loss is **2.25**. The gap, **0.25**, is the **approximation error**.\"},\"error-grows\":{\"h\":\"THE ERROR GROWS WITH DISTANCE\",\"t\":\"Step further and the curve bends away from the line. The error is **h × h**: **0.25 at h = 0.5, 1 at h = 1, and 4 at h = 2**, where the line even predicts a negative loss.\"},\"ml-connection\":{\"h\":\"TAKEAWAY\",\"t\":\"**New loss ≈ old loss + slope × change in w.** This prediction is reliable for **small steps only**, which is why training uses small steps.\"}};\n  // ── scene ──\n  var steps = [\r\n    { id: \"nonlinear-function\", label: \"A curved loss\", caption: \"Our loss L(w) = (w − 3)² is a curve, not a straight line. Curves are harder to work with than lines, so we look for an easy stand-in.\" },\r\n    { id: \"choose-point\", label: \"Choose the point we are standing at\", caption: \"Say the model is at w = 1, where the loss is L(1) = 4. We want to predict the loss for weights near this point.\" },\r\n    { id: \"tangent-line\", label: \"Draw the tangent line\", caption: \"At w = 1 the slope is −4. The tangent line through this point is 4 − 4h, where h is how far we step from w = 1. Close to the point, the curve and this line almost coincide.\" },\r\n    { id: \"nearby-point\", label: \"Look at a nearby point\", caption: \"Step to w = 1.5, so h = 0.5. The curve sits at 2.25, while the line sits at 2.0. They are close but not the same.\" },\r\n    { id: \"approximation\", label: \"The approximation and its error\", caption: \"Prediction from the line: 4 − 4 × 0.5 = 2.0. The true loss is 2.25. The gap, 0.25, is the approximation error.\" },\r\n    { id: \"error-grows\", label: \"The error grows with distance\", caption: \"Step further and the curve bends away from the line. The error is h × h: 0.25 at h = 0.5, 1 at h = 1, and 4 at h = 2, where the line even predicts a negative loss.\" },\r\n    { id: \"ml-connection\", label: \"Why training takes small steps\", caption: \"new loss ≈ old loss + slope × change in w. This prediction is reliable for small steps only, which is why training uses small steps.\" }\r\n  ];\r\n\r\n  function L(w) { return (w - 3) * (w - 3); }\r\n  function line(w) { return 4 - 4 * (w - 1); }\r\n  var g = makeGraph(50, 262, 58, 21);\r\n  drawAxes(svg, g, 6.3, 9.8, [0, 1, 2, 3, 4, 5, 6], [0, 3, 6, 9]);\r\n  txt(svg, g.x(6.3), g.y(0) + 15, \"note\", \"weight w\", \"end\");\r\n  txt(svg, g.x(0) + 8, g.y(9.8) - 2, \"note\", \"loss\", \"start\");\r\n\r\n  var band = el(\"rect\", { x: g.x(0.55), y: g.y(9.6), width: g.x(1.45) - g.x(0.55), height: g.y(0) - g.y(9.6), fill: \"rgba(29,181,132,0.16)\", stroke: \"none\" }, svg);\r\n  var bandLbl = txt(svg, g.x(0.55), g.y(9.6) - 4, \"lbl lbl-g\", \"small step: reliable\", \"start\");\r\n  var farLbl = txt(svg, g.x(4.0), g.y(6.2), \"lbl lbl-r\", \"big step: the line is off\", \"middle\");\r\n\r\n  el(\"path\", { class: \"curve\", d: curveD(g, L, 0, 6, 60) }, svg);\r\n  var tan = el(\"line\", { stroke: \"#e2b44a\", \"stroke-width\": 3, \"stroke-linecap\": \"round\" }, svg);\r\n  setLine(tan, g.x(0.2), g.y(line(0.2)), g.x(2.9), g.y(line(2.9)));\r\n  var tanLbl = txt(svg, g.x(0.25), g.y(line(0.25)) - 10, \"lbl lbl-y\", \"tangent: 4 − 4h\", \"start\");\r\n  var guideV = el(\"line\", { class: \"dash\", stroke: \"#c9dccf\", \"stroke-width\": 1.5 }, svg);\r\n  var guideH = el(\"line\", { class: \"dash\", stroke: \"#c9dccf\", \"stroke-width\": 1.5 }, svg);\r\n  setLine(guideV, g.x(1), g.y(4), g.x(1), g.y(0));\r\n  setLine(guideH, g.x(1), g.y(4), g.x(0), g.y(4));\r\n  var pt = el(\"circle\", { cx: g.x(1), cy: g.y(4), r: 7, fill: \"#e2b44a\", stroke: \"#071510\", \"stroke-width\": 2 }, svg);\r\n  var ptLbl = txt(svg, g.x(1) + 12, g.y(4) - 12, \"lbl lbl-y\", \"a = 1, L = 4\", \"start\");\r\n  var curveP = el(\"circle\", { r: 6, fill: \"#38bdf8\", stroke: \"#071510\", \"stroke-width\": 2 }, svg);\r\n  var lineP = el(\"circle\", { r: 6, fill: \"#e2b44a\", stroke: \"#071510\", \"stroke-width\": 2 }, svg);\r\n  var gap = el(\"line\", { stroke: \"#f87171\", \"stroke-width\": 4, \"stroke-linecap\": \"round\" }, svg);\r\n  var gapLbl = txt(svg, 0, 0, \"lbl lbl-r\", \"\", \"start\");\r\n  var lblCurve = txt(svg, 0, 0, \"lbl lbl-b\", \"\", \"start\");\r\n  var lblLine = txt(svg, 0, 0, \"lbl lbl-y\", \"\", \"end\");\r\n\r\n  var panel = el(\"g\", {}, svg);\r\n  card(panel, 410, 30, 215, 128, \"fillG\");\r\n  var p1 = txt(panel, 517, 56, \"note\", \"\", \"middle\");\r\n  var p2 = txt(panel, 517, 84, \"mono\", \"\", \"middle\");\r\n  var p3 = txt(panel, 517, 110, \"mono\", \"\", \"middle\");\r\n  var p4 = txt(panel, 517, 142, \"big\", \"\", \"middle\");\r\n\r\n  function setGap(h) {\r\n    var w = 1 + h;\r\n    var cy = g.y(L(w)), ly = g.y(line(w));\r\n    curveP.setAttribute(\"cx\", g.x(w)); curveP.setAttribute(\"cy\", cy);\r\n    lineP.setAttribute(\"cx\", g.x(w)); lineP.setAttribute(\"cy\", ly);\r\n    setLine(gap, g.x(w), cy, g.x(w), ly);\r\n    gapLbl.setAttribute(\"x\", g.x(w) + 10); gapLbl.setAttribute(\"y\", (cy + ly) / 2 + 4);\r\n    gapLbl.textContent = \"error \" + fmt(h * h, 2);\r\n    lblCurve.setAttribute(\"x\", g.x(w) + 10); lblCurve.setAttribute(\"y\", cy + (cy < ly ? -10 : 18));\r\n    lblCurve.textContent = \"truth \" + fmt(L(w), 2);\r\n    lblLine.setAttribute(\"x\", g.x(w) - 10); lblLine.setAttribute(\"y\", ly + 4);\r\n    lblLine.textContent = \"line \" + fmt(line(w), 2);\r\n    p1.textContent = \"step h = \" + fmt(h, 2);\r\n    p2.textContent = \"line:  4 − 4×\" + fmt(h, 2) + \" = \" + fmt(line(w), 2);\r\n    p3.textContent = \"truth: L(\" + fmt(w, 2) + \") = \" + fmt(L(w), 2);\r\n    p4.textContent = \"error = \" + fmt(h * h, 2);\r\n  }\r\n\r\n  function render(index, id) {\r\n    var past = id !== \"nonlinear-function\" && id !== \"choose-point\";\r\n    show(band, id === \"ml-connection\");\r\n    show(bandLbl, id === \"ml-connection\");\r\n    show(farLbl, id === \"ml-connection\");\r\n    show(guideV, id === \"choose-point\");\r\n    show(guideH, id === \"choose-point\");\r\n    show(pt, id !== \"nonlinear-function\");\r\n    show(ptLbl, id === \"choose-point\" || id === \"tangent-line\");\r\n    show(tan, past);\r\n    show(tanLbl, id === \"tangent-line\");\r\n    var gapOn = id === \"nearby-point\" || id === \"approximation\" || id === \"error-grows\";\r\n    show(curveP, gapOn); show(lineP, gapOn); show(gap, gapOn); show(gapLbl, gapOn);\r\n    show(lblCurve, gapOn); show(lblLine, gapOn);\r\n    show(panel, id !== \"nonlinear-function\" && id !== \"choose-point\");\r\n    p1.textContent = \"\"; p2.textContent = \"\"; p3.textContent = \"\"; p4.textContent = \"\";\r\n\r\n    if (id === \"tangent-line\") {\r\n      p1.textContent = \"at w = 1\";\r\n      p2.textContent = \"L(1) = 4\";\r\n      p3.textContent = \"slope = −4\";\r\n    } else if (id === \"nearby-point\" || id === \"approximation\") {\r\n      setGap(0.5);\r\n      if (id === \"nearby-point\") { p1.textContent = \"nearby point\"; p2.textContent = \"w = 1.5\"; p3.textContent = \"h = 0.5\"; p4.textContent = \"\"; }\r\n    } else if (id === \"error-grows\") {\r\n      anim(\"h\", 2600, function (e) { setGap(0.5 + 1.5 * e); });\r\n    } else if (id === \"ml-connection\") {\r\n      p1.textContent = \"a step of Δw changes the loss by about\";\r\n      p2.textContent = \"slope × Δw\";\r\n      p3.textContent = \"keep Δw small\";\r\n    }\r\n  }\r\n\n\n  // ── shared runtime: stepping, explanation panel, educational autoplay pacing, bridge ──\n  var current = 0;\n  var explainHeadEl = document.getElementById(\"explain-h\");\n\n  // **bold** markers in an explanation become <strong> nodes (built with DOM calls, never innerHTML).\n  function setRich(node, str) {\n    node.textContent = \"\";\n    var parts = String(str).split(\"**\");\n    for (var i = 0; i < parts.length; i++) {\n      if (parts[i] === \"\") continue;\n      var seg = document.createElement(i % 2 ? \"strong\" : \"span\");\n      seg.textContent = parts[i];\n      node.appendChild(seg);\n    }\n  }\n\n  function explanationFor(index) {\n    var ex = (typeof EXPLAIN === \"object\" && EXPLAIN) ? EXPLAIN[steps[index].id] : null;\n    return ex || { h: \"WHAT IS HAPPENING\", t: steps[index].caption };\n  }\n\n  // Autoplay pace: 4.5 to 10.5 seconds per step, longer for longer explanations, so a learner can read.\n  function stepMs(index) {\n    var words = String(explanationFor(index).t).replace(/\\*\\*/g, \"\").split(/\\s+/).length;\n    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));\n  }\n\n  function renderStep(index) {\n    var ex = explanationFor(index);\n    labelEl.textContent = steps[index].label;\n    if (explainHeadEl) explainHeadEl.textContent = ex.h;\n    setRich(captionEl, ex.t);\n    render(index, steps[index].id);\n  }\n\n  function goTo(index) {\n    if (index < 0 || index >= steps.length) return;\n    current = index;\n    renderStep(current);\n    if (window.ReagvisBridge) window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n\n  renderStep(current);\n\n  // Autoplay: exactly one timer, one step per tick, stops on the final step.\n  // PLAY on the final step restarts from the first step and plays again.\n  var timer = null;\n\n  function stopAuto() {\n    if (timer !== null) {\n      clearTimeout(timer);\n      timer = null;\n    }\n  }\n\n  function scheduleNext() {\n    timer = setTimeout(function () {\n      timer = null;\n      if (current >= steps.length - 1) return;\n      goTo(current + 1);\n      if (current < steps.length - 1) scheduleNext();\n    }, stepMs(current));\n  }\n\n  function startAuto() {\n    if (timer !== null) return;\n    if (current >= steps.length - 1) goTo(0);\n    scheduleNext();\n  }\n\n  window.addEventListener(\"pagehide\", stopAuto);\n\n  window.ReagvisAnimation = {\n    stepDuration: stepMs,\n    onCommand: function (type, stepId) {\n      if (type === \"PLAY\") startAuto();\n      else if (type === \"PAUSE\") stopAuto();\n      else if (type === \"NEXT\") { stopAuto(); goTo(current + 1); }\n      else if (type === \"PREVIOUS\") { stopAuto(); goTo(current - 1); }\n      else if (type === \"RESET\") { stopAuto(); goTo(0); }\n      else if (type === \"GOTO_STEP\") {\n        stopAuto();\n        for (var i = 0; i < steps.length; i++) {\n          if (steps[i].id === stepId) { goTo(i); break; }\n        }\n      }\n    },\n  };\n\n  if (window.ReagvisBridge) {\n    window.ReagvisBridge.ready();\n    window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n})();\n",
+  "lastFrozenContentHash": null,
+  "lastFrozenRevisionId": null,
+  "manifest": {
+    "bridgeVersion": {
+      "$numberInt": "1"
+    },
+    "capabilities": [
+      "play",
+      "pause",
+      "next",
+      "previous",
+      "reset",
+      "gotoStep"
+    ],
+    "heightPx": {
+      "$numberInt": "590"
+    },
+    "traceEvents": [
+      "nonlinear-function",
+      "choose-point",
+      "tangent-line",
+      "nearby-point",
+      "approximation",
+      "error-grows",
+      "ml-connection"
+    ]
+  },
+  "packageId": "c5541f07-8737-4037-8ba5-92d11e67b896",
+  "packageTrace": {
+    "steps": [
+      {
+        "animationEvent": "nonlinear-function",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "The loss is a curve, not a straight line.",
+          "python": "def loss(w):\n    return (w - 3) ** 2\n\nprint(loss(1), loss(2), loss(3))   # 4 1 0: not a straight line"
+        },
+        "id": "nonlinear-function",
+        "label": "A curved loss"
+      },
+      {
+        "animationEvent": "choose-point",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Choose the current point a, and note its loss.",
+          "python": "def loss(w):\n    return (w - 3) ** 2\n\na = 1.0\nprint(a, loss(a))   # 1.0 4.0"
+        },
+        "id": "choose-point",
+        "label": "Choose the point we are standing at"
+      },
+      {
+        "animationEvent": "tangent-line",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "The tangent line at a is: loss(a) + slope * h, where h is the step away from a.",
+          "python": "def slope(w):\n    return 2 * (w - 3)\n\na = 1.0\nprint(slope(a))   # -4.0, so the line is 4 - 4*h"
+        },
+        "id": "tangent-line",
+        "label": "Draw the tangent line"
+      },
+      {
+        "animationEvent": "nearby-point",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Step to a + h and compare the line with the true curve there.",
+          "python": "def loss(w):\n    return (w - 3) ** 2\n\nh = 0.5\nprint(loss(1 + h))   # 2.25 (the curve)"
+        },
+        "id": "nearby-point",
+        "label": "Look at a nearby point"
+      },
+      {
+        "animationEvent": "approximation",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "prediction = loss(a) + slope * h. Then error = true loss - prediction.",
+          "python": "def loss(w):\n    return (w - 3) ** 2\n\ndef slope(w):\n    return 2 * (w - 3)\n\na, h = 1.0, 0.5\nprediction = loss(a) + slope(a) * h\nprint(prediction, loss(a + h), loss(a + h) - prediction)   # 2.0 2.25 0.25"
+        },
+        "id": "approximation",
+        "label": "The approximation and its error"
+      },
+      {
+        "animationEvent": "error-grows",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Try bigger steps h and see how much further off the line becomes.",
+          "python": "def loss(w):\n    return (w - 3) ** 2\n\ndef slope(w):\n    return 2 * (w - 3)\n\nfor h in [0.5, 1.0, 2.0]:\n    prediction = loss(1) + slope(1) * h\n    print(h, prediction, loss(1 + h), loss(1 + h) - prediction)\n# 0.5 2.0 2.25 0.25 / 1.0 0.0 1.0 1.0 / 2.0 -4.0 0.0 4.0"
+        },
+        "id": "error-grows",
+        "label": "The error grows with distance"
+      },
+      {
+        "animationEvent": "ml-connection",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "new loss is about old loss + slope * change in w, and this only holds for small changes.",
+          "python": "def loss(w):\n    return (w - 3) ** 2\n\ndef slope(w):\n    return 2 * (w - 3)\n\nw, change = 1.0, 0.1\nprint(loss(w) + slope(w) * change, loss(w + change))   # 3.6 3.61 (close for a small step)"
+        },
+        "id": "ml-connection",
+        "label": "Why training takes small steps"
+      }
+    ],
+    "version": {
+      "$numberInt": "1"
+    }
+  },
+  "revision": {
+    "$numberInt": "5"
+  },
+  "revisionId": "r2",
+  "sourceKind": "zip",
+  "status": "frozen",
+  "title": "ML Module 3 — Linear Approximation",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498503"
+    }
+  },
+  "updatedBy": {
+    "$oid": "000000000000000000000000"
+  }
+}

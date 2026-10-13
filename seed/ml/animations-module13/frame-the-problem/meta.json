@@ -1,0 +1,60 @@
+{
+  "title": "Frame the problem",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "vague-goal",
+      "label": "Vague goal",
+      "pseudocode": "Start from the business goal, not from an algorithm.",
+      "python": "task = {'goal': 'reduce customer churn'}\nrequired = ['unit', 'target', 'horizon_days', 'data_available', 'success']\nprint('still missing:', [k for k in required if k not in task])\n# prints: still missing: ['unit', 'target', 'horizon_days', 'data_available', 'success']"
+    },
+    {
+      "id": "business-question",
+      "label": "Business question",
+      "pseudocode": "Ask who, and by when.",
+      "python": "question = 'which customers will cancel soon, while we can still act?'\nprint(question)\n# prints: which customers will cancel soon, while we can still act?"
+    },
+    {
+      "id": "prediction-unit",
+      "label": "Prediction unit",
+      "pseudocode": "Decide what one row of data is.",
+      "python": "unit = 'one subscriber on the first day of a month'\nprint('one row =', unit)\n# prints: one row = one subscriber on the first day of a month"
+    },
+    {
+      "id": "define-target",
+      "label": "Define the target",
+      "pseudocode": "target = 1 if cancellation within the horizon else 0",
+      "python": "def churned_30d(days_until_cancel):\n    return 1 if days_until_cancel is not None and days_until_cancel <= 30 else 0\nprint([churned_30d(d) for d in (None, 12, 45)])\n# prints: [0, 1, 0]"
+    },
+    {
+      "id": "prediction-horizon",
+      "label": "Prediction horizon",
+      "pseudocode": "Fix when we predict and when we check.",
+      "python": "predict_day, outcome_day = 0, 30\nprint('horizon:', outcome_day - predict_day, 'days')\n# prints: horizon: 30 days"
+    },
+    {
+      "id": "available-data",
+      "label": "Available data",
+      "pseudocode": "Inputs must exist at prediction time.",
+      "python": "known = ['tenure', 'monthly usage', 'support tickets', 'plan price', 'days since last activity']\nfuture = ['will they cancel?', 'cancellation date']\nprint('allowed:', len(known), ' not allowed:', future)\n# prints: allowed: 5  not allowed: ['will they cancel?', 'cancellation date']"
+    },
+    {
+      "id": "success-metric",
+      "label": "Success criterion",
+      "pseudocode": "Define success before training.",
+      "python": "goal = {'recall': 0.75, 'precision': 0.50}\ncustomers, churners = 150, 30\nprint(goal, ' churn rate:', churners / customers)\nprint('nobody-churns accuracy:', (customers - churners) / customers, ' recall: 0.0')\n# prints: {'recall': 0.75, 'precision': 0.5}  churn rate: 0.2\n# prints: nobody-churns accuracy: 0.8  recall: 0.0"
+    },
+    {
+      "id": "ml-or-not",
+      "label": "ML or not?",
+      "pseudocode": "Check whether ML is needed and possible.",
+      "python": "checks = {'a simple rule is tested as the baseline': True, 'enough history (1,000 observations)': True, 'outcome measurable after the fact': True}\nprint('proceed with ML:', all(checks.values()))\n# prints: proceed with ML: True"
+    },
+    {
+      "id": "framed-problem",
+      "label": "The framed problem",
+      "pseudocode": "A framed problem lists unit, target, horizon, inputs and success.",
+      "python": "frame = {'unit': 'subscriber-month', 'target': 'churned_30d', 'horizon_days': 30, 'inputs': 'known on day 0', 'success': 'recall >= 0.75, precision >= 0.5'}\nprint(len(frame), 'parts defined:', list(frame))\n# prints: 5 parts defined: ['unit', 'target', 'horizon_days', 'inputs', 'success']"
+    }
+  ]
+}

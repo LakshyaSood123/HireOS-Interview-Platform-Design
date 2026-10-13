@@ -1,0 +1,54 @@
+{
+  "title": "Taylor series and optimization",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "objective",
+      "label": "The objective, seen from one point",
+      "pseudocode": "An optimizer only sees the objective near its current point.",
+      "python": "def loss(w):\n    return (w - 3) ** 2\n\nprint(loss(0.0))   # 9.0"
+    },
+    {
+      "id": "current-point",
+      "label": "The current point",
+      "pseudocode": "The current point is w = 0 with loss 9.",
+      "python": "def loss(w):\n    return (w - 3) ** 2\n\nw = 0.0\nslope, curve = 2 * (w - 3), 2   # L'(0) = -6 and L''(0) = 2\nprint(loss(w))   # 9.0"
+    },
+    {
+      "id": "first-order-view",
+      "label": "First-order model: the tangent line",
+      "pseudocode": "first order: L(w + d) = L(w) + slope * d",
+      "python": "def loss(w):\n    return (w - 3) ** 2\n\nw = 0.0\nslope, curve = 2 * (w - 3), 2   # L'(0) = -6 and L''(0) = 2\nd = 0.6\nprint(round(loss(w) + slope * d, 2))   # 5.4"
+    },
+    {
+      "id": "gradient",
+      "label": "The gradient is the slope",
+      "pseudocode": "The slope at the current point is the gradient.",
+      "python": "def loss(w):\n    return (w - 3) ** 2\n\nw = 0.0\nslope, curve = 2 * (w - 3), 2   # L'(0) = -6 and L''(0) = 2\nprint(slope)   # -6.0"
+    },
+    {
+      "id": "curvature",
+      "label": "Curvature: how the slope changes",
+      "pseudocode": "Curvature is how fast the slope itself changes.",
+      "python": "def slope(w):\n    return 2 * (w - 3)\n\nprint([slope(w) for w in [0, 1, 2, 3]])   # [-6, -4, -2, 0]: rises by 2 per unit\nprint(2)                                   # the curvature, L'' = 2"
+    },
+    {
+      "id": "second-order-view",
+      "label": "Second-order model: add the bend",
+      "pseudocode": "second order: L(w + d) = L(w) + slope * d + 0.5 * curvature * d squared",
+      "python": "def loss(w):\n    return (w - 3) ** 2\n\nw = 0.0\nslope, curve = 2 * (w - 3), 2   # L'(0) = -6 and L''(0) = 2\nfor d in [0.6, 3.0]:\n    print(d, round(loss(w) + slope * d + 0.5 * curve * d ** 2, 2))   # 0.6 5.76 / 3.0 0.0"
+    },
+    {
+      "id": "compare-local-models",
+      "label": "Compare the two local models",
+      "pseudocode": "Compare first-order, second-order and the true loss for several steps.",
+      "python": "def loss(w):\n    return (w - 3) ** 2\n\nw = 0.0\nslope, curve = 2 * (w - 3), 2   # L'(0) = -6 and L''(0) = 2\nfor d in [0.6, 3.0, 6.0]:\n    first = loss(w) + slope * d\n    second = first + 0.5 * curve * d ** 2\n    print(d, round(first, 2), round(second, 2), round(loss(w + d), 2))\n# 0.6 5.4 5.76 5.76 / 3.0 -9.0 0.0 0.0 / 6.0 -27.0 9.0 9.0"
+    },
+    {
+      "id": "optimization-connection",
+      "label": "What optimizers do with it",
+      "pseudocode": "A second-order step is -slope / curvature. Here it reaches the minimum.",
+      "python": "def loss(w):\n    return (w - 3) ** 2\n\nw = 0.0\nslope, curve = 2 * (w - 3), 2   # L'(0) = -6 and L''(0) = 2\nstep = -slope / curve\nprint(step, loss(w + step))   # 3.0 0.0"
+    }
+  ]
+}

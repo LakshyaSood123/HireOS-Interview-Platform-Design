@@ -1,7 +1,7 @@
 import { Router, type Request } from "express";
 
 import { currentUserId, requireAuth } from "../../middleware/auth.js";
-import { authRateLimit } from "../../middleware/rateLimit.js";
+import { loginRateLimit, registerRateLimit } from "../../middleware/rateLimit.js";
 import { body, validate } from "../../middleware/validate.js";
 import { sendData } from "../../shared/envelope.js";
 import * as authService from "./auth.service.js";
@@ -24,7 +24,7 @@ export const authRouter = Router();
 
 authRouter.post(
   "/auth/register",
-  authRateLimit,
+  registerRateLimit,
   validate({ body: registerSchema }),
   async (req, res) => {
     const result = await authService.register(body<RegisterInput>(req), sessionContext(req));
@@ -32,7 +32,7 @@ authRouter.post(
   },
 );
 
-authRouter.post("/auth/login", authRateLimit, validate({ body: loginSchema }), async (req, res) => {
+authRouter.post("/auth/login", ...loginRateLimit, validate({ body: loginSchema }), async (req, res) => {
   const result = await authService.login(body<LoginInput>(req), sessionContext(req));
   sendData(res, result);
 });

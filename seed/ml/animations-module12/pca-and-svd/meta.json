@@ -1,0 +1,60 @@
+{
+  "title": "PCA and SVD",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "centered-data-matrix",
+      "label": "Centered data matrix",
+      "pseudocode": "Xc is n samples by d features.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nprint('shape:', len(Xc), 'x', len(Xc[0]), ' first rows:', Xc[:2])\n# prints: shape: 6 x 2  first rows: [[-2.5, -2.0], [-1.5, -1.0]]"
+    },
+    {
+      "id": "covariance-route",
+      "label": "Covariance route",
+      "pseudocode": "S = Xc^T Xc / (n - 1)",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\nprint([[round(v, 2) for v in row] for row in S])\n# prints: [[3.5, 2.9], [2.9, 2.7]]"
+    },
+    {
+      "id": "eigen-route",
+      "label": "Eigen step",
+      "pseudocode": "Eigen-decompose S.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\nv1 = (b / k, (lam1 - a) / k)\nv2 = (-v1[1], v1[0])\nprint('eigenvalues:', round(lam1, 4), round(lam2, 4))\nprint('v1:', tuple(round(v, 3) for v in v1))\n# prints: eigenvalues: 6.0275 0.1725\n# prints: v1: (0.754, 0.657)"
+    },
+    {
+      "id": "svd-route",
+      "label": "SVD route",
+      "pseudocode": "Xc = U Sigma V^T",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\ndef svd_2cols(Xc):\n    a, b = [r[0] for r in Xc], [r[1] for r in Xc]\n    alpha, beta = sum(x * x for x in a), sum(y * y for y in b)\n    gamma = sum(x * y for x, y in zip(a, b))\n    zeta = (beta - alpha) / (2 * gamma)\n    t = (1 if zeta >= 0 else -1) / (abs(zeta) + math.sqrt(1 + zeta * zeta))\n    c = 1 / math.sqrt(1 + t * t)\n    s = c * t\n    cols = [[c * x - s * y for x, y in zip(a, b)], [s * x + c * y for x, y in zip(a, b)]]\n    dirs = [(c, -s), (s, c)]\n    sig = [math.sqrt(sum(v * v for v in col)) for col in cols]\n    U, sigma, Vt = [], [], []\n    for j in sorted(range(2), key=lambda j: -sig[j]):\n        f = -1 if dirs[j][0] < 0 else 1\n        sigma.append(sig[j])\n        Vt.append((f * dirs[j][0], f * dirs[j][1]))\n        U.append([f * v / sig[j] for v in cols[j]])\n    return U, sigma, Vt\nU, sigma, Vt = svd_2cols(Xc)\nprint('singular values:', [round(s, 4) for s in sigma])\n# prints: singular values: [5.4897, 0.9288]"
+    },
+    {
+      "id": "u-sigma-vt",
+      "label": "U, Sigma, Vt",
+      "pseudocode": "Check Xc = U Sigma V^T.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\ndef svd_2cols(Xc):\n    a, b = [r[0] for r in Xc], [r[1] for r in Xc]\n    alpha, beta = sum(x * x for x in a), sum(y * y for y in b)\n    gamma = sum(x * y for x, y in zip(a, b))\n    zeta = (beta - alpha) / (2 * gamma)\n    t = (1 if zeta >= 0 else -1) / (abs(zeta) + math.sqrt(1 + zeta * zeta))\n    c = 1 / math.sqrt(1 + t * t)\n    s = c * t\n    cols = [[c * x - s * y for x, y in zip(a, b)], [s * x + c * y for x, y in zip(a, b)]]\n    dirs = [(c, -s), (s, c)]\n    sig = [math.sqrt(sum(v * v for v in col)) for col in cols]\n    U, sigma, Vt = [], [], []\n    for j in sorted(range(2), key=lambda j: -sig[j]):\n        f = -1 if dirs[j][0] < 0 else 1\n        sigma.append(sig[j])\n        Vt.append((f * dirs[j][0], f * dirs[j][1]))\n        U.append([f * v / sig[j] for v in cols[j]])\n    return U, sigma, Vt\nU, sigma, Vt = svd_2cols(Xc)\nre = [[sum(U[k][i] * sigma[k] * Vt[k][c] for k in range(2)) for c in range(2)] for i in range(n)]\nprint('rebuild matches Xc:', max(abs(re[i][c] - Xc[i][c]) for i in range(n) for c in range(2)) < 1e-9)\n# prints: rebuild matches Xc: True"
+    },
+    {
+      "id": "principal-directions",
+      "label": "Rows of Vt",
+      "pseudocode": "principal directions = rows of V^T",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\ndef svd_2cols(Xc):\n    a, b = [r[0] for r in Xc], [r[1] for r in Xc]\n    alpha, beta = sum(x * x for x in a), sum(y * y for y in b)\n    gamma = sum(x * y for x, y in zip(a, b))\n    zeta = (beta - alpha) / (2 * gamma)\n    t = (1 if zeta >= 0 else -1) / (abs(zeta) + math.sqrt(1 + zeta * zeta))\n    c = 1 / math.sqrt(1 + t * t)\n    s = c * t\n    cols = [[c * x - s * y for x, y in zip(a, b)], [s * x + c * y for x, y in zip(a, b)]]\n    dirs = [(c, -s), (s, c)]\n    sig = [math.sqrt(sum(v * v for v in col)) for col in cols]\n    U, sigma, Vt = [], [], []\n    for j in sorted(range(2), key=lambda j: -sig[j]):\n        f = -1 if dirs[j][0] < 0 else 1\n        sigma.append(sig[j])\n        Vt.append((f * dirs[j][0], f * dirs[j][1]))\n        U.append([f * v / sig[j] for v in cols[j]])\n    return U, sigma, Vt\nU, sigma, Vt = svd_2cols(Xc)\nprint([tuple(round(v, 3) for v in row) for row in Vt])\n# prints: [(0.754, 0.657), (0.657, -0.754)]"
+    },
+    {
+      "id": "singular-values",
+      "label": "Singular values",
+      "pseudocode": "variance = sigma ** 2 / (n - 1)",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\ndef svd_2cols(Xc):\n    a, b = [r[0] for r in Xc], [r[1] for r in Xc]\n    alpha, beta = sum(x * x for x in a), sum(y * y for y in b)\n    gamma = sum(x * y for x, y in zip(a, b))\n    zeta = (beta - alpha) / (2 * gamma)\n    t = (1 if zeta >= 0 else -1) / (abs(zeta) + math.sqrt(1 + zeta * zeta))\n    c = 1 / math.sqrt(1 + t * t)\n    s = c * t\n    cols = [[c * x - s * y for x, y in zip(a, b)], [s * x + c * y for x, y in zip(a, b)]]\n    dirs = [(c, -s), (s, c)]\n    sig = [math.sqrt(sum(v * v for v in col)) for col in cols]\n    U, sigma, Vt = [], [], []\n    for j in sorted(range(2), key=lambda j: -sig[j]):\n        f = -1 if dirs[j][0] < 0 else 1\n        sigma.append(sig[j])\n        Vt.append((f * dirs[j][0], f * dirs[j][1]))\n        U.append([f * v / sig[j] for v in cols[j]])\n    return U, sigma, Vt\nU, sigma, Vt = svd_2cols(Xc)\nprint([round(s, 2) for s in sigma], [round(s * s / (n - 1), 4) for s in sigma])\n# prints: [5.49, 0.93] [6.0275, 0.1725]"
+    },
+    {
+      "id": "same-pc1",
+      "label": "Same PC1",
+      "pseudocode": "Compare the two routes.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\ndef svd_2cols(Xc):\n    a, b = [r[0] for r in Xc], [r[1] for r in Xc]\n    alpha, beta = sum(x * x for x in a), sum(y * y for y in b)\n    gamma = sum(x * y for x, y in zip(a, b))\n    zeta = (beta - alpha) / (2 * gamma)\n    t = (1 if zeta >= 0 else -1) / (abs(zeta) + math.sqrt(1 + zeta * zeta))\n    c = 1 / math.sqrt(1 + t * t)\n    s = c * t\n    cols = [[c * x - s * y for x, y in zip(a, b)], [s * x + c * y for x, y in zip(a, b)]]\n    dirs = [(c, -s), (s, c)]\n    sig = [math.sqrt(sum(v * v for v in col)) for col in cols]\n    U, sigma, Vt = [], [], []\n    for j in sorted(range(2), key=lambda j: -sig[j]):\n        f = -1 if dirs[j][0] < 0 else 1\n        sigma.append(sig[j])\n        Vt.append((f * dirs[j][0], f * dirs[j][1]))\n        U.append([f * v / sig[j] for v in cols[j]])\n    return U, sigma, Vt\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\ne1 = (b / k, (lam1 - a) / k)\nU, sigma, Vt = svd_2cols(Xc)\nprint('eigen route:', tuple(round(v, 4) for v in e1), round(lam1, 4))\nprint('SVD route:  ', tuple(round(v, 4) for v in Vt[0]), round(sigma[0] ** 2 / (n - 1), 4))\n# prints: eigen route: (0.7539, 0.657) 6.0275\n# prints: SVD route:   (0.7539, 0.657) 6.0275"
+    },
+    {
+      "id": "compare-methods",
+      "label": "Compare methods",
+      "pseudocode": "SVD is a route to PCA.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\ndef svd_2cols(Xc):\n    a, b = [r[0] for r in Xc], [r[1] for r in Xc]\n    alpha, beta = sum(x * x for x in a), sum(y * y for y in b)\n    gamma = sum(x * y for x, y in zip(a, b))\n    zeta = (beta - alpha) / (2 * gamma)\n    t = (1 if zeta >= 0 else -1) / (abs(zeta) + math.sqrt(1 + zeta * zeta))\n    c = 1 / math.sqrt(1 + t * t)\n    s = c * t\n    cols = [[c * x - s * y for x, y in zip(a, b)], [s * x + c * y for x, y in zip(a, b)]]\n    dirs = [(c, -s), (s, c)]\n    sig = [math.sqrt(sum(v * v for v in col)) for col in cols]\n    U, sigma, Vt = [], [], []\n    for j in sorted(range(2), key=lambda j: -sig[j]):\n        f = -1 if dirs[j][0] < 0 else 1\n        sigma.append(sig[j])\n        Vt.append((f * dirs[j][0], f * dirs[j][1]))\n        U.append([f * v / sig[j] for v in cols[j]])\n    return U, sigma, Vt\nU, sigma, Vt = svd_2cols(Xc)\nprint('PC1 scores from U and sigma:', [round(U[0][i] * sigma[0], 2) for i in range(n)])\n# prints: PC1 scores from U and sigma: [-3.2, -1.79, -1.03, 1.03, 1.46, 3.53]"
+    }
+  ]
+}

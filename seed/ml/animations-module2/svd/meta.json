@@ -1,0 +1,48 @@
+{
+  "title": "Singular value decomposition",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "original",
+      "label": "Start with unit vectors",
+      "pseudocode": "All unit-length vectors form a circle.",
+      "python": "import math\n\ncircle = [(math.cos(t / 10), math.sin(t / 10)) for t in range(0, 63, 9)]\nprint(len(circle))"
+    },
+    {
+      "id": "rotate-input",
+      "label": "Rotate the input",
+      "pseudocode": "Rotate so the special input directions line up with the axes. A rotation keeps lengths unchanged.",
+      "python": "import math\n\ndef rotate(p, degrees):\n    r = math.radians(degrees)\n    return (p[0] * math.cos(r) - p[1] * math.sin(r), p[0] * math.sin(r) + p[1] * math.cos(r))\n\nprint([round(x, 2) for x in rotate((0.707, 0.707), -45)])  # [1.0, 0.0]"
+    },
+    {
+      "id": "scale",
+      "label": "Stretch along the axes",
+      "pseudocode": "Multiply the first coordinate by 3 and the second by 1. A circle becomes an ellipse.",
+      "python": "sigma = [3, 1]\npoint = [1.0, 0.0]\nprint([s * x for s, x in zip(sigma, point)])  # [3.0, 0.0]"
+    },
+    {
+      "id": "rotate-output",
+      "label": "Rotate the output",
+      "pseudocode": "Rotate the stretched shape into its final position.",
+      "python": "import math\n\ndef rotate(p, degrees):\n    r = math.radians(degrees)\n    return (p[0] * math.cos(r) - p[1] * math.sin(r), p[0] * math.sin(r) + p[1] * math.cos(r))\n\nprint([round(x, 2) for x in rotate((3.0, 0.0), 45)])  # [2.12, 2.12]"
+    },
+    {
+      "id": "singular-values",
+      "label": "Read the singular values",
+      "pseudocode": "The stretch factors, sorted from largest to smallest, are the singular values.",
+      "python": "import math\n\na, b, d = 2, 1, 2  # symmetric matrix [[a, b], [b, d]]\ngap = math.sqrt((a - d) ** 2 + 4 * b * b)\nvalues = [((a + d) + gap) / 2, ((a + d) - gap) / 2]\nprint(values)  # [3.0, 1.0]"
+    },
+    {
+      "id": "rank-approximation",
+      "label": "Keep only the largest singular value",
+      "pseudocode": "Set the small singular value to zero. The shape collapses onto one direction: a rank-1 approximation.",
+      "python": "sigma = [3, 1]\nkept = sigma[0] ** 2 / sum(s ** 2 for s in sigma)\nprint(kept)  # 0.9"
+    },
+    {
+      "id": "ml-connection",
+      "label": "Use it to simplify data",
+      "pseudocode": "Keeping the large singular values gives a smaller, cleaner version of a matrix.",
+      "python": "u = [2 ** -0.5, 2 ** -0.5]\nsigma1 = 3\nrank1 = [[sigma1 * a * b for b in u] for a in u]\nprint([[round(x, 2) for x in row] for row in rank1])  # [[1.5, 1.5], [1.5, 1.5]]"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+ "point-cloud": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "The same six customers, but with the **averages subtracted** so the cloud is centered on the origin. Distances from the center now show how **spread out** the customers are."
+ },
+ "horizontal-spread": {
+  "h": "SPREAD ALONG USAGE",
+  "t": "Dropping every point straight down onto the horizontal axis shows how widely usage varies. The highlighted bar spans the projections, and the **variance of usage is 3.50**."
+ },
+ "vertical-spread": {
+  "h": "SPREAD ALONG SPEND",
+  "t": "Projecting onto the vertical axis shows how much spend varies: the **variance of spend is 2.70**. Both columns separate customers, but each axis alone ignores that they move together."
+ },
+ "choose-direction": {
+  "h": "A TILTED DIRECTION",
+  "t": "We are not limited to the two axes. The dashed line is the direction **(1, 1) / √2**, at 45°: a **mix of usage and spend**. We can ask how spread out the customers are along it."
+ },
+ "project-points": {
+  "h": "PROJECT ONTO IT",
+  "t": "Each point is dropped perpendicularly onto the tilted line. Its **position along the line** is the dot product of the centered point with the direction."
+ },
+ "measure-spread": {
+  "h": "MEASURE THE SPREAD",
+  "t": "The highlighted stretch is the spread of the projected positions: a **variance of 6.00**, far more than along either axis alone (3.50 and 2.70)."
+ },
+ "high-variance": {
+  "h": "HIGH VARIANCE MEANS MUCH TO KEEP",
+  "t": "Along this direction the customers differ a lot, so it carries **most of what distinguishes them**. Dropping it would erase most of the information in the data."
+ },
+ "low-variance": {
+  "h": "LOW VARIANCE MEANS LITTLE TO LOSE",
+  "t": "Along **(1, −1)**, perpendicular to the first line, the projections barely differ: **variance 0.20**. Dropping this direction would lose very little."
+ },
+ "pca-motivation": {
+  "h": "WHY PCA EXISTS",
+  "t": "How the total (**6.20**) splits depends on the direction: 3.50 + 2.70 for the axes, but 6.00 + 0.20 for the tilted pair. PCA searches for the direction with the **largest share**. Variance is a proxy for information, not the same as importance."
+ }
+}

@@ -1,0 +1,38 @@
+{
+ "assigned-groups": {
+  "h": "WHAT HAPPENS IN THE UPDATE STEP",
+  "t": "In the **update step** the memberships from the assignment step are **frozen**. The old centers (diamonds) are still at their starting positions."
+ },
+ "select-cluster": {
+  "h": "PICK ONE CLUSTER",
+  "t": "Take the middle cluster (gold): the customers **(6, 6), (6.5, 5.5) and (7, 6.2)**. The other clusters are dimmed for now."
+ },
+ "collect-x": {
+  "h": "COLLECT THE x VALUES",
+  "t": "Read off the purchases per month of the three members: **6, 6.5 and 7**."
+ },
+ "collect-y": {
+  "h": "COLLECT THE y VALUES",
+  "t": "Read off their average spend, the vertical coordinate: **6, 5.5 and 6.2**. The x and y values are averaged separately."
+ },
+ "average-x": {
+  "h": "AVERAGE THE x VALUES",
+  "t": "**Mean x = (6 + 6.5 + 7) / 3 = 6.5.** The vertical line marks it."
+ },
+ "average-y": {
+  "h": "AVERAGE THE y VALUES",
+  "t": "**Mean y = (6 + 5.5 + 6.2) / 3 = 5.9.** The horizontal line marks it."
+ },
+ "new-centroid": {
+  "h": "THE NEW CENTROID",
+  "t": "The new centroid is **(6.5, 5.9)**, the coordinate-wise mean. It need not be one of the data points."
+ },
+ "move-centroid": {
+  "h": "MOVE THE CENTER",
+  "t": "The center moves from **(5, 3) to (6.5, 5.9)**. The three customers do not move; **only the center does**."
+ },
+ "update-all": {
+  "h": "TAKEAWAY",
+  "t": "Every cluster does the same: the centers move to **(1.68, 2.0), (6.5, 5.9) and (4.3, 7.98)**. Memberships are still the old ones, so the next assignment may change them."
+ }
+}

@@ -35,13 +35,67 @@ function build(options: Partial<Options>) {
   });
 }
 
-/** 10 per 15 min per IP — login and register. */
-export const authRateLimit = build({
-  windowMs: 15 * 60 * 1000,
-  limit: 10,
-  keyGenerator: (req) => ipKeyGenerator(req.ip ?? "unknown"),
-  skipSuccessfulRequests: false,
-});
+/**
+ * Auth throttling — pilot policy (docs/PILOT_DEPLOYMENT.md "Rate limits").
+ *
+ * The earlier policy was ONE shared 10-per-15-minutes-per-IP bucket for register
+ * and login, which locks a whole office or campus behind a single NAT out after
+ * ten people sign up. It is replaced by three narrower buckets:
+ *
+ *  - register:       30 per 15 min per IP. Ten testers onboarding from one IP fit with
+ *                    headroom; an account-creation flood from one address still stops.
+ *  - login/identity: 8 FAILED attempts per 15 min per (IP + email). This is the
+ *                    brute-force guard: one account being guessed is throttled while
+ *                    other people on the same IP are unaffected. Successful logins
+ *                    are not counted.
+ *  - login/IP:       100 FAILED attempts per 15 min per IP. A backstop against one
+ *                    address spraying many different emails.
+ *
+ * Storage is the library's default in-memory store: correct for a single backend
+ * instance (the pilot), NOT shared across instances or restarts. A multi-instance
+ * production deployment must move these to a shared store (e.g. Redis).
+ */
+export interface AuthLimiterOptions {
+  /** Overridable so tests can exercise the real limiters (they are skipped when NODE_ENV=test). */
+  skip?: () => boolean;
+}
+
+/** Normalised identity used as part of the login key. Never logged. */
+export function loginIdentity(req: Request): string {
+  const email = (req.body as { email?: unknown } | undefined)?.email;
+  return typeof email === "string" ? email.trim().toLowerCase().slice(0, 254) : "";
+}
+
+export function createAuthLimiters(options: AuthLimiterOptions = {}) {
+  const skip = options.skip ?? (() => env.isTest);
+  const window15 = 15 * 60 * 1000;
+  return {
+    registerLimit: build({
+      windowMs: window15,
+      limit: 30,
+      keyGenerator: (req) => ipKeyGenerator(req.ip ?? "unknown"),
+      skip,
+    }),
+    loginIdentityLimit: build({
+      windowMs: window15,
+      limit: 8,
+      keyGenerator: (req) => `${ipKeyGenerator(req.ip ?? "unknown")}|${loginIdentity(req)}`,
+      skipSuccessfulRequests: true,
+      skip,
+    }),
+    loginIpLimit: build({
+      windowMs: window15,
+      limit: 100,
+      keyGenerator: (req) => ipKeyGenerator(req.ip ?? "unknown"),
+      skipSuccessfulRequests: true,
+      skip,
+    }),
+  };
+}
+
+const defaultAuthLimiters = createAuthLimiters();
+export const registerRateLimit = defaultAuthLimiters.registerLimit;
+export const loginRateLimit = [defaultAuthLimiters.loginIpLimit, defaultAuthLimiters.loginIdentityLimit];
 
 /** 120 per minute per user — everything else. */
 export const generalRateLimit = build({

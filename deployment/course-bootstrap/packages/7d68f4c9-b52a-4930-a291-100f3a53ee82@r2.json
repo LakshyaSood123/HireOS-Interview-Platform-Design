@@ -1,0 +1,159 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322c4e9cccef168ed0f"
+  },
+  "assets": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498521"
+    }
+  },
+  "createdBy": {
+    "$oid": "000000000000000000000000"
+  },
+  "css": "body {\r\n  margin: 0;\r\n  padding: 14px;\r\n  box-sizing: border-box;\r\n  background: #0b1d16;\r\n  color: #e6f5ec;\r\n  font-family: system-ui, sans-serif;\r\n}\r\n.scene {\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 8px;\r\n}\r\n.step-label {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  letter-spacing: 0.08em;\r\n  text-transform: uppercase;\r\n  color: #a7ce65;\r\n}\r\nsvg {\r\n  width: 100%;\r\n  height: auto;\r\n  max-width: 640px;\r\n  background: #071510;\r\n  border-radius: 10px;\r\n  border: 1px solid rgba(29, 181, 132, 0.35);\r\n}\r\nsvg g,\r\nsvg line,\r\nsvg polygon,\r\nsvg path,\r\nsvg ellipse,\r\nsvg circle,\r\nsvg rect,\r\nsvg text {\r\n  transition: opacity 0.4s ease, transform 0.6s ease;\r\n}\r\n.axis {\r\n  stroke: rgba(167, 206, 101, 0.3);\r\n  stroke-width: 1;\r\n}\r\n.tick {\r\n  font-size: 10px;\r\n  fill: #8fa89c;\r\n}\r\n.lbl,\r\n.big,\r\n.note,\r\n.mono {\r\n  paint-order: stroke;\r\n  stroke: #071510;\r\n  stroke-width: 3px;\r\n  stroke-linejoin: round;\r\n}\r\n.lbl {\r\n  font-size: 12px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.lbl-g { fill: #1db584; }\r\n.lbl-y { fill: #e2b44a; }\r\n.lbl-p { fill: #f472b6; }\r\n.lbl-b { fill: #38bdf8; }\r\n.lbl-r { fill: #f87171; }\r\n.big {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.note {\r\n  font-size: 11px;\r\n  fill: #c9dccf;\r\n}\r\n.mono {\r\n  font-family: ui-monospace, Consolas, monospace;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.caption {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  line-height: 1.5;\r\n  color: #c9dccf;\r\n  min-height: 40px;\r\n}\r\n.cell rect {\r\n  fill: rgba(255, 255, 255, 0.05);\r\n  stroke: rgba(255, 255, 255, 0.28);\r\n  stroke-width: 1.2;\r\n}\r\n.cell text {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.cell.hl-row rect { fill: rgba(226, 180, 74, 0.25); stroke: #e2b44a; }\r\n.cell.hl-col rect { fill: rgba(29, 181, 132, 0.25); stroke: #1db584; }\r\n.cell.hl-both rect { fill: rgba(244, 114, 182, 0.28); stroke: #f472b6; }\r\n.dim { opacity: 0.25; }\r\n.dash { stroke-dasharray: 5 4; }\r\n.fillA { fill: rgba(56, 189, 248, 0.16); stroke: #38bdf8; stroke-width: 2; }\r\n.fillB { fill: rgba(244, 114, 182, 0.18); stroke: #f472b6; stroke-width: 2; }\r\n.fillG { fill: rgba(29, 181, 132, 0.16); stroke: #1db584; stroke-width: 2; }\r\n.contour { stroke: rgba(56, 189, 248, 0.45); stroke-width: 1.5; }\n.curve { fill: none; stroke: #38bdf8; stroke-width: 3; }\n.curve-y { fill: none; stroke: #e2b44a; stroke-width: 3; }\n.curve-p { fill: none; stroke: #f472b6; stroke-width: 3; }\n.curve-g { fill: none; stroke: #1db584; stroke-width: 3; }\n.ghost { fill: none; stroke: rgba(201, 220, 207, 0.4); stroke-width: 2; }\n.lbl-w { fill: #e6f5ec; }\n.lbl-s { font-size: 11px; font-weight: 600; fill: #c9dccf; }\n\n/* ── explanation panel (shared by every generated ML animation) ── */\n.explain {\n  box-sizing: border-box;\n  max-width: 640px;\n  margin-top: 4px;\n  padding: 14px 18px 16px;\n  min-height: 150px;\n  border-radius: 12px;\n  background: rgba(29, 181, 132, 0.10);\n  border: 1px solid rgba(29, 181, 132, 0.45);\n  border-left: 5px solid #1db584;\n}\n.explain-h {\n  margin: 0 0 8px;\n  font-size: 13px;\n  font-weight: 800;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.explain-t {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.55;\n  color: #f1faf4;\n}\n.explain-t strong {\n  font-weight: 800;\n  color: #ffd98a;\n}\n\n",
+  "html": "<div class=\"scene\">\n  <p class=\"step-label\" id=\"step-label\"></p>\n  <svg id=\"scene\" viewBox=\"0 0 640 360\" role=\"img\" aria-label=\"Common distributions: Bernoulli, Binomial, Uniform, Gaussian\"></svg>\n  <section class=\"explain\" aria-live=\"polite\">\n    <h3 class=\"explain-h\" id=\"explain-h\"></h3>\n    <p class=\"explain-t\" id=\"caption\"></p>\n  </section>\n</div>\n",
+  "js": "(function () {\n  // ── shared helpers (SVG, tweening) ─────────────────────────────────────────\r\n  var NS = \"http://www.w3.org/2000/svg\";\r\n  var svg = document.getElementById(\"scene\");\r\n  var labelEl = document.getElementById(\"step-label\");\r\n  var captionEl = document.getElementById(\"caption\");\r\n\r\n  function el(name, attrs, parent) {\r\n    var node = document.createElementNS(NS, name);\r\n    for (var key in attrs) node.setAttribute(key, attrs[key]);\r\n    if (parent) parent.appendChild(node);\r\n    return node;\r\n  }\r\n  function txt(parent, x, y, cls, str, anchor) {\r\n    var t = el(\"text\", { x: x, y: y, class: cls }, parent);\r\n    if (anchor) t.setAttribute(\"text-anchor\", anchor);\r\n    t.textContent = str;\r\n    return t;\r\n  }\r\n  function show(node, on) {\r\n    node.setAttribute(\"opacity\", on ? \"1\" : \"0\");\r\n  }\r\n  function place(node, x, y) {\r\n    node.style.transform = \"translate(\" + x + \"px,\" + y + \"px)\";\r\n  }\r\n  function setLine(node, x1, y1, x2, y2) {\r\n    node.setAttribute(\"x1\", x1);\r\n    node.setAttribute(\"y1\", y1);\r\n    node.setAttribute(\"x2\", x2);\r\n    node.setAttribute(\"y2\", y2);\r\n  }\r\n  function lerp(a, b, e) {\r\n    return a + (b - a) * e;\r\n  }\r\n  function round1(v) {\r\n    return (Math.round(v * 10) / 10).toFixed(1);\r\n  }\r\n\r\n  // Eased animation. fn(e) is called with e from 0 to 1. Without\r\n  // requestAnimationFrame (or with ms = 0) it jumps straight to fn(1).\r\n  var animTokens = {};\r\n  function anim(key, ms, fn) {\r\n    var token = (animTokens[key] || 0) + 1;\r\n    animTokens[key] = token;\r\n    if (typeof requestAnimationFrame !== \"function\" || ms <= 0) {\r\n      fn(1);\r\n      return;\r\n    }\r\n    var start = null;\r\n    function frame(now) {\r\n      if (animTokens[key] !== token) return;\r\n      if (start === null) start = now;\r\n      var p = Math.min(1, (now - start) / ms);\r\n      var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;\r\n      fn(e);\r\n      if (p < 1) requestAnimationFrame(frame);\r\n    }\r\n    requestAnimationFrame(frame);\r\n  }\r\n\r\n  // Arrowheads, one marker per colour.\r\n  var COLORS = { g: \"#1DB584\", y: \"#E2B44A\", p: \"#F472B6\", b: \"#38BDF8\", w: \"#c9dccf\", r: \"#F87171\" };\r\n  var defs = el(\"defs\", {}, svg);\r\n  Object.keys(COLORS).forEach(function (k) {\r\n    var m = el(\"marker\", { id: \"ah-\" + k, viewBox: \"0 0 10 10\", refX: 9, refY: 5, markerUnits: \"userSpaceOnUse\", markerWidth: 13, markerHeight: 13, orient: \"auto\" }, defs);\r\n    el(\"path\", { d: \"M0 0 L10 5 L0 10 Z\", fill: COLORS[k] }, m);\r\n  });\r\n  function arrow(parent, colorKey, width) {\r\n    return el(\"line\", { x1: 0, y1: 0, x2: 0, y2: 0, stroke: COLORS[colorKey], \"stroke-width\": width || 3, \"marker-end\": \"url(#ah-\" + colorKey + \")\", \"stroke-linecap\": \"round\" }, parent);\r\n  }\r\n  function polygon(parent, cls) {\r\n    return el(\"polygon\", { points: \"\", class: cls }, parent);\r\n  }\r\n  function setPoly(node, pts) {\r\n    node.setAttribute(\"points\", pts.map(function (p) { return p[0].toFixed(1) + \",\" + p[1].toFixed(1); }).join(\" \"));\r\n  }\r\n  function lerpPts(a, b, e) {\r\n    return a.map(function (p, i) { return [lerp(p[0], b[i][0], e), lerp(p[1], b[i][1], e)]; });\r\n  }\r\n  // Maps maths coordinates (x right, y up) to screen pixels.\r\n  function makePlane(cx, cy, s) {\r\n    return {\r\n      x: function (v) { return cx + s * v; },\r\n      y: function (v) { return cy - s * v; },\r\n      pt: function (p) { return [cx + s * p[0], cy - s * p[1]]; },\r\n      s: s, cx: cx, cy: cy\r\n    };\r\n  }\r\n  function axes(parent, plane, xr, yr) {\r\n    el(\"line\", { x1: plane.x(-xr), y1: plane.y(0), x2: plane.x(xr), y2: plane.y(0), class: \"axis\" }, parent);\r\n    el(\"line\", { x1: plane.x(0), y1: plane.y(-yr), x2: plane.x(0), y2: plane.y(yr), class: \"axis\" }, parent);\r\n  }\r\n\n  // ── Module 3 helpers: graphs, curves, contour plane ───────────────────────\n  // makeGraph maps maths values to pixels with separate x and y scales.\n  function makeGraph(ox, oy, sx, sy) {\n    return {\n      ox: ox, oy: oy, sx: sx, sy: sy,\n      x: function (v) { return ox + sx * v; },\n      y: function (v) { return oy - sy * v; }\n    };\n  }\n  function curveD(g, f, a, b, n) {\n    var d = \"\";\n    for (var i = 0; i <= n; i++) {\n      var v = a + ((b - a) * i) / n;\n      d += (i ? \" L \" : \"M \") + g.x(v).toFixed(1) + \" \" + g.y(f(v)).toFixed(1);\n    }\n    return d;\n  }\n  function setD(node, d) {\n    node.setAttribute(\"d\", d);\n  }\n  function fmt(v, n) {\n    return (Math.round(v * 100000) / 100000).toFixed(n === undefined ? 1 : n);\n  }\n  function drawAxes(parent, g, xmax, ymax, xticks, yticks) {\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(xmax), y2: g.y(0), class: \"axis\" }, parent);\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(0), y2: g.y(ymax), class: \"axis\" }, parent);\n    (xticks || []).forEach(function (t) { txt(parent, g.x(t), g.y(0) + 15, \"tick\", String(t), \"middle\"); });\n    (yticks || []).forEach(function (t) { txt(parent, g.x(0) - 7, g.y(t) + 4, \"tick\", String(t), \"end\"); });\n  }\n  function card(parent, x, y, w, h, cls) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: 10, class: cls || \"fillG\" }, parent);\n  }\n  function ring(parent, cx, cy, rx, ry, cls) {\n    return el(\"ellipse\", { cx: cx, cy: cy, rx: rx, ry: ry, fill: \"none\", class: cls || \"contour\" }, parent);\n  }\n  function clipTo(id, x, y, w, h) {\n    var c = el(\"clipPath\", { id: id }, defs);\n    el(\"rect\", { x: x, y: y, width: w, height: h }, c);\n  }\n\n  // ── Module 4 helpers: seeded randomness, small shapes ─────────────────────\n  function mulberry(seed) {\n    var a = seed;\n    return function () {\n      a |= 0; a = (a + 0x6D2B79F5) | 0;\n      var t = Math.imul(a ^ (a >>> 15), 1 | a);\n      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;\n      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;\n    };\n  }\n  function gaussSource(rand) {\n    return function () {\n      var u = 1 - rand(), v = rand();\n      return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);\n    };\n  }\n  function box(parent, x, y, w, h, fill, stroke, r) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: r === undefined ? 6 : r, fill: fill, stroke: stroke || \"none\", \"stroke-width\": 2 }, parent);\n  }\n  function setBox(node, x, y, w, h) {\n    node.setAttribute(\"x\", x); node.setAttribute(\"y\", y); node.setAttribute(\"width\", Math.max(0, w)); node.setAttribute(\"height\", Math.max(0, h));\n  }\n  function vis(list, on) {\n    list.forEach(function (n) { show(n, on); });\n  }\n\n  var EXPLAIN = {\"distribution-idea\":{\"h\":\"WHAT A DISTRIBUTION IS\",\"t\":\"A distribution says **which values a random variable can take and how likely each one is**. The taller the bar, the more likely the value. Named distributions are ready-made shapes for common situations.\"},\"bernoulli\":{\"h\":\"BERNOULLI: ONE YES-OR-NO\",\"t\":\"A Bernoulli variable is **0 or 1**. With **p = 0.3**, “spam” (1) has probability **0.3** and “not spam” (0) has **0.7**. Every binary label in classification is a Bernoulli outcome.\"},\"binomial\":{\"h\":\"BINOMIAL: COUNT THE SUCCESSES\",\"t\":\"Count the spam emails among **10**, each spam with probability 0.3. The count is **Binomial**. Three is the most likely (about **0.27**); zero is rare (about **0.03**).\"},\"uniform\":{\"h\":\"UNIFORM: NO FAVORITE\",\"t\":\"A Uniform variable on **[0, 1]** treats every part of the range alike: equal-width slices are **equally likely**. It models “no preference”.\"},\"gaussian\":{\"h\":\"GAUSSIAN: THE BELL CURVE\",\"t\":\"The Gaussian is a symmetric bell around its mean **μ**. Its width is the standard deviation **σ**, and about **68%** of the values fall within one σ of the mean. It fits quantities built from many small effects, like measurement noise.\"},\"compare\":{\"h\":\"THE FOUR SIDE BY SIDE\",\"t\":\"**Bernoulli and Binomial** are for counts of yes/no events. **Uniform and Gaussian** are for continuous values. The shape of each tells what kind of data it describes.\"},\"choose-model\":{\"h\":\"CHOOSING A DISTRIBUTION\",\"t\":\"Start from the question. A yes/no label: **Bernoulli**. How many yeses in n tries: **Binomial**. No preference over a range: **Uniform**. A continuous value clustered around a typical one: **Gaussian**.\"},\"ml-connection\":{\"h\":\"TAKEAWAY\",\"t\":\"Models quietly assume distributions. **Classification treats a label as Bernoulli; linear regression treats the noise as Gaussian.** Choosing the right one is choosing the right model of the data.\"}};\n  // ── scene ──\n  var steps = [\n    { id: \"distribution-idea\", label: \"What a distribution is\", caption: \"A distribution says which values a random variable can take and how likely each one is. The taller the bar, the more likely the value. Named distributions are ready-made shapes for common situations.\" },\n    { id: \"bernoulli\", label: \"Bernoulli: one yes-or-no\", caption: \"A Bernoulli variable is 0 or 1. With p = 0.3, 'spam' (1) has probability 0.3 and 'not spam' (0) has 0.7. Every binary label in classification is a Bernoulli outcome.\" },\n    { id: \"binomial\", label: \"Binomial: count the successes\", caption: \"Count the spam emails among 10, each spam with probability 0.3. The count is Binomial. Three is the most likely (about 0.27); zero is rare (about 0.03).\" },\n    { id: \"uniform\", label: \"Uniform: no favorite\", caption: \"A Uniform variable on [0, 1] treats every part of the range alike: equal-width slices are equally likely. It models 'no preference'.\" },\n    { id: \"gaussian\", label: \"Gaussian: the bell curve\", caption: \"The Gaussian is a symmetric bell around its mean μ. Its width is the standard deviation σ, and about 68% of the values fall within one σ of the mean. It fits quantities built from many small effects, like measurement noise.\" },\n    { id: \"compare\", label: \"The four side by side\", caption: \"Bernoulli and Binomial are for counts of yes/no events. Uniform and Gaussian are for continuous values. The shape of each tells what kind of data it describes.\" },\n    { id: \"choose-model\", label: \"Choosing a distribution\", caption: \"Start from the question. A yes/no label: Bernoulli. How many yeses in n tries: Binomial. No preference over a range: Uniform. A continuous value clustered around a typical one: Gaussian.\" },\n    { id: \"ml-connection\", label: \"Distributions inside ML models\", caption: \"Models quietly assume distributions. Classification treats a label as Bernoulli; linear regression treats the noise as Gaussian. Choosing the right one is choosing the right model of the data.\" }\n  ];\n\n  function pmf(k, n, p) {\n    var c = 1;\n    for (var i = 1; i <= k; i++) c = (c * (n - k + i)) / i;\n    return c * Math.pow(p, k) * Math.pow(1 - p, n - k);\n  }\n\n  function drawIdea(g, bx, by, bw, bh) {\n    var base = by + bh - 24, hMax = bh - 56;\n    el(\"line\", { x1: bx, y1: base, x2: bx + bw, y2: base, class: \"axis\" }, g);\n    var hs = [0.08, 0.2, 0.45, 0.7, 0.45, 0.2, 0.08];\n    hs.forEach(function (h, i) {\n      var x = bx + bw * (0.1 + i * 0.12);\n      box(g, x - bw * 0.04, base - h * hMax, bw * 0.08, h * hMax, \"rgba(56,189,248,0.7)\", \"none\", 3);\n    });\n    txt(g, bx + bw / 2, base + 18, \"note\", \"possible values\", \"middle\");\n    txt(g, bx + 4, by + 14, \"note\", \"how likely\", \"start\");\n  }\n  function drawBern(g, bx, by, bw, bh) {\n    var base = by + bh - 34, hMax = bh - 66;\n    el(\"line\", { x1: bx, y1: base, x2: bx + bw, y2: base, class: \"axis\" }, g);\n    [[0, 0.7, \"0: not spam\", \"rgba(56,189,248,0.8)\"], [1, 0.3, \"1: spam\", \"rgba(244,114,182,0.85)\"]].forEach(function (d) {\n      var cx = bx + bw * (0.32 + 0.36 * d[0]);\n      box(g, cx - bw * 0.08, base - (d[1] / 0.75) * hMax, bw * 0.16, (d[1] / 0.75) * hMax, d[3], \"none\", 4);\n      txt(g, cx, base - (d[1] / 0.75) * hMax - 8, \"big\", String(d[1]), \"middle\");\n      txt(g, cx, base + 18, \"lbl\", d[2], \"middle\");\n    });\n  }\n  function drawBinom(g, bx, by, bw, bh) {\n    var base = by + bh - 28, hMax = bh - 62;\n    el(\"line\", { x1: bx, y1: base, x2: bx + bw, y2: base, class: \"axis\" }, g);\n    for (var k = 0; k <= 10; k++) {\n      var p = pmf(k, 10, 0.3);\n      var h = (p / 0.3) * hMax;\n      var cx = bx + bw * (0.07 + 0.086 * k);\n      box(g, cx - bw * 0.03, base - h, bw * 0.06, Math.max(h, 1), k === 3 ? \"rgba(244,114,182,0.9)\" : \"rgba(56,189,248,0.75)\", \"none\", 2);\n      txt(g, cx, base + 14, \"tick\", String(k), \"middle\");\n    }\n    txt(g, bx + bw * (0.07 + 0.086 * 3), base - (pmf(3, 10, 0.3) / 0.3) * hMax - 8, \"lbl lbl-p\", \"0.27\", \"middle\");\n    txt(g, bx + bw / 2, base + 30, \"note\", \"number of spam emails among 10\", \"middle\");\n  }\n  function drawUnif(g, bx, by, bw, bh) {\n    var base = by + bh - 34, hMax = bh - 70;\n    el(\"line\", { x1: bx, y1: base, x2: bx + bw, y2: base, class: \"axis\" }, g);\n    box(g, bx + bw * 0.2, base - hMax * 0.75, bw * 0.6, hMax * 0.75, \"rgba(226,180,74,0.5)\", \"#e2b44a\", 2);\n    txt(g, bx + bw * 0.2, base + 16, \"lbl\", \"0\", \"middle\");\n    txt(g, bx + bw * 0.8, base + 16, \"lbl\", \"1\", \"middle\");\n    txt(g, bx + bw * 0.5, base - hMax * 0.75 - 8, \"lbl lbl-y\", \"same height everywhere\", \"middle\");\n  }\n  function drawGauss(g, bx, by, bw, bh, withLabels) {\n    var base = by + bh - 34, hMax = bh - 70;\n    el(\"line\", { x1: bx, y1: base, x2: bx + bw, y2: base, class: \"axis\" }, g);\n    var X = function (t) { return bx + bw * (0.5 + t * 0.11); };\n    var Y = function (t) { return base - hMax * Math.exp(-t * t / 2); };\n    var shade = [[X(-1), base]];\n    for (var t = -1; t <= 1.001; t += 0.1) shade.push([X(t), Y(t)]);\n    shade.push([X(1), base]);\n    var poly = el(\"polygon\", { points: shade.map(function (p) { return p[0].toFixed(1) + \",\" + p[1].toFixed(1); }).join(\" \"), fill: \"rgba(29,181,132,0.35)\", stroke: \"none\" }, g);\n    var d = \"\";\n    for (var u = -3.6; u <= 3.61; u += 0.2) d += (d ? \" L \" : \"M \") + X(u).toFixed(1) + \" \" + Y(u).toFixed(1);\n    el(\"path\", { d: d, class: \"curve\" }, g);\n    el(\"line\", { x1: X(0), y1: base, x2: X(0), y2: Y(0), stroke: \"#e2b44a\", \"stroke-width\": 2, \"stroke-dasharray\": \"5 4\" }, g);\n    txt(g, X(0), base + 16, \"lbl lbl-y\", \"μ\", \"middle\");\n    if (withLabels) {\n      txt(g, X(0), base - hMax * 0.45, \"lbl lbl-g\", \"about 68%\", \"middle\");\n      txt(g, X(1), base + 16, \"lbl\", \"μ + σ\", \"middle\");\n      txt(g, X(-1), base + 16, \"lbl\", \"μ − σ\", \"middle\");\n    }\n  }\n\n  function layer(drawFn, title, sub, big) {\n    var g = el(\"g\", {}, svg);\n    if (big) {\n      drawFn(g, 60, 50, 520, 260, true);\n      txt(g, 320, 36, \"lbl lbl-y\", title, \"middle\");\n      txt(g, 320, 338, \"note\", sub, \"middle\");\n    }\n    return g;\n  }\n  var gIdea = layer(drawIdea, \"a distribution: how likely is each value?\", \"tall bar = likely value, short bar = unlikely value\", true);\n  var gBern = layer(drawBern, \"Bernoulli  (p = 0.3)\", \"one trial: success (1) with probability p, failure (0) otherwise\", true);\n  var gBinom = layer(drawBinom, \"Binomial  (n = 10, p = 0.3)\", \"the number of successes in n independent trials\", true);\n  var gUnif = layer(drawUnif, \"Uniform on [0, 1]\", \"no value in the range is favored over another\", true);\n  var gGauss = layer(drawGauss, \"Gaussian  (mean μ, standard deviation σ)\", \"symmetric bell: values near the mean are most likely\", true);\n\n  var gCmp = el(\"g\", {}, svg);\n  [[drawBern, 14, 8, \"Bernoulli\"], [drawBinom, 330, 8, \"Binomial\"], [drawUnif, 14, 184, \"Uniform\"], [drawGauss, 330, 184, \"Gaussian\"]].forEach(function (c) {\n    card(gCmp, c[1], c[2], 296, 166, \"fillA\").setAttribute(\"fill\", \"rgba(56,189,248,0.05)\");\n    c[0](gCmp, c[1] + 12, c[2] + 24, 272, 136, false);\n    txt(gCmp, c[1] + 148, c[2] + 18, \"lbl lbl-y\", c[3], \"middle\");\n  });\n\n  var gChoose = el(\"g\", {}, svg);\n  [\n    [\"Is this email spam? (yes / no)\", \"Bernoulli\", \"fillB\"],\n    [\"How many of 10 emails are spam?\", \"Binomial\", \"fillA\"],\n    [\"A random number, no preference\", \"Uniform\", \"fillG\"],\n    [\"Measurement noise around a typical value\", \"Gaussian\", \"fillB\"]\n  ].forEach(function (r, i) {\n    var y = 24 + i * 80;\n    card(gChoose, 20, y, 330, 56, r[2]);\n    txt(gChoose, 185, y + 34, \"lbl\", r[0], \"middle\");\n    var a = arrow(gChoose, \"w\", 3); setLine(a, 356, y + 28, 424, y + 28);\n    card(gChoose, 430, y, 190, 56, r[2]);\n    txt(gChoose, 525, y + 35, \"big\", r[1], \"middle\");\n  });\n\n  var gML = el(\"g\", {}, svg);\n  [\n    [\"Classification label\", \"assumed Bernoulli\", \"fillB\"],\n    [\"Linear regression noise\", \"assumed Gaussian\", \"fillA\"],\n    [\"Random starting weights\", \"may be drawn Uniform\", \"fillG\"]\n  ].forEach(function (r, i) {\n    var y = 56 + i * 92;\n    card(gML, 40, y, 250, 64, r[2]);\n    txt(gML, 165, y + 39, \"big\", r[0], \"middle\");\n    var a = arrow(gML, \"w\", 3); setLine(a, 296, y + 32, 346, y + 32);\n    card(gML, 352, y, 250, 64, r[2]);\n    txt(gML, 477, y + 39, \"lbl\", r[1], \"middle\");\n  });\n\n  function render(index, id) {\n    var i = index;\n    show(gIdea, i === 0);\n    show(gBern, i === 1);\n    show(gBinom, i === 2);\n    show(gUnif, i === 3);\n    show(gGauss, i === 4);\n    show(gCmp, i === 5);\n    show(gChoose, i === 6);\n    show(gML, i === 7);\n  }\n\n\n  // ── shared runtime: stepping, explanation panel, educational autoplay pacing, bridge ──\n  var current = 0;\n  var explainHeadEl = document.getElementById(\"explain-h\");\n\n  // **bold** markers in an explanation become <strong> nodes (built with DOM calls, never innerHTML).\n  function setRich(node, str) {\n    node.textContent = \"\";\n    var parts = String(str).split(\"**\");\n    for (var i = 0; i < parts.length; i++) {\n      if (parts[i] === \"\") continue;\n      var seg = document.createElement(i % 2 ? \"strong\" : \"span\");\n      seg.textContent = parts[i];\n      node.appendChild(seg);\n    }\n  }\n\n  function explanationFor(index) {\n    var ex = (typeof EXPLAIN === \"object\" && EXPLAIN) ? EXPLAIN[steps[index].id] : null;\n    return ex || { h: \"WHAT IS HAPPENING\", t: steps[index].caption };\n  }\n\n  // Autoplay pace: 4.5 to 10.5 seconds per step, longer for longer explanations, so a learner can read.\n  function stepMs(index) {\n    var words = String(explanationFor(index).t).replace(/\\*\\*/g, \"\").split(/\\s+/).length;\n    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));\n  }\n\n  function renderStep(index) {\n    var ex = explanationFor(index);\n    labelEl.textContent = steps[index].label;\n    if (explainHeadEl) explainHeadEl.textContent = ex.h;\n    setRich(captionEl, ex.t);\n    render(index, steps[index].id);\n  }\n\n  function goTo(index) {\n    if (index < 0 || index >= steps.length) return;\n    current = index;\n    renderStep(current);\n    if (window.ReagvisBridge) window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n\n  renderStep(current);\n\n  // Autoplay: exactly one timer, one step per tick, stops on the final step.\n  // PLAY on the final step restarts from the first step and plays again.\n  var timer = null;\n\n  function stopAuto() {\n    if (timer !== null) {\n      clearTimeout(timer);\n      timer = null;\n    }\n  }\n\n  function scheduleNext() {\n    timer = setTimeout(function () {\n      timer = null;\n      if (current >= steps.length - 1) return;\n      goTo(current + 1);\n      if (current < steps.length - 1) scheduleNext();\n    }, stepMs(current));\n  }\n\n  function startAuto() {\n    if (timer !== null) return;\n    if (current >= steps.length - 1) goTo(0);\n    scheduleNext();\n  }\n\n  window.addEventListener(\"pagehide\", stopAuto);\n\n  window.ReagvisAnimation = {\n    stepDuration: stepMs,\n    onCommand: function (type, stepId) {\n      if (type === \"PLAY\") startAuto();\n      else if (type === \"PAUSE\") stopAuto();\n      else if (type === \"NEXT\") { stopAuto(); goTo(current + 1); }\n      else if (type === \"PREVIOUS\") { stopAuto(); goTo(current - 1); }\n      else if (type === \"RESET\") { stopAuto(); goTo(0); }\n      else if (type === \"GOTO_STEP\") {\n        stopAuto();\n        for (var i = 0; i < steps.length; i++) {\n          if (steps[i].id === stepId) { goTo(i); break; }\n        }\n      }\n    },\n  };\n\n  if (window.ReagvisBridge) {\n    window.ReagvisBridge.ready();\n    window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n})();\n",
+  "lastFrozenContentHash": null,
+  "lastFrozenRevisionId": null,
+  "manifest": {
+    "bridgeVersion": {
+      "$numberInt": "1"
+    },
+    "capabilities": [
+      "play",
+      "pause",
+      "next",
+      "previous",
+      "reset",
+      "gotoStep"
+    ],
+    "heightPx": {
+      "$numberInt": "590"
+    },
+    "traceEvents": [
+      "distribution-idea",
+      "bernoulli",
+      "binomial",
+      "uniform",
+      "gaussian",
+      "compare",
+      "choose-model",
+      "ml-connection"
+    ]
+  },
+  "packageId": "7d68f4c9-b52a-4930-a291-100f3a53ee82",
+  "packageTrace": {
+    "steps": [
+      {
+        "animationEvent": "distribution-idea",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "A distribution lists the possible values and how likely each is. The probabilities add up to 1.",
+          "python": "dist = {1: 0.1, 2: 0.2, 3: 0.4, 4: 0.2, 5: 0.1}\nprint(round(sum(dist.values()), 2))   # 1.0\nprint(max(dist, key=dist.get))        # 3: the most likely value"
+        },
+        "id": "distribution-idea",
+        "label": "What a distribution is"
+      },
+      {
+        "animationEvent": "bernoulli",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Bernoulli(p): the value 1 has probability p and the value 0 has probability 1 - p.",
+          "python": "p = 0.3\nbernoulli = {0: 1 - p, 1: p}\nprint(bernoulli)   # {0: 0.7, 1: 0.3}"
+        },
+        "id": "bernoulli",
+        "label": "Bernoulli: one yes-or-no"
+      },
+      {
+        "animationEvent": "binomial",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Binomial(n, p): the number of successes in n independent Bernoulli trials.",
+          "python": "from math import comb\n\ndef binomial(k, n, p):\n    return comb(n, k) * p ** k * (1 - p) ** (n - k)\nprint(round(binomial(3, 10, 0.3), 3), round(binomial(0, 10, 0.3), 3))   # 0.267 0.028"
+        },
+        "id": "binomial",
+        "label": "Binomial: count the successes"
+      },
+      {
+        "animationEvent": "uniform",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Uniform on [0, 1]: the density is the same at every point of the range.",
+          "python": "def uniform_density(x):\n    return 1.0 if 0 <= x <= 1 else 0.0\n\nprint(uniform_density(0.2), uniform_density(0.9), uniform_density(1.5))   # 1.0 1.0 0.0"
+        },
+        "id": "uniform",
+        "label": "Uniform: no favorite"
+      },
+      {
+        "animationEvent": "gaussian",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "The Gaussian is highest at its mean and about 68% of its values lie within one standard deviation.",
+          "python": "from math import exp, pi, sqrt\n\ndef gaussian(x, mu=0.0, sigma=1.0):\n    return exp(-((x - mu) ** 2) / (2 * sigma ** 2)) / (sigma * sqrt(2 * pi))\nfrom math import erf\n\nprint(round(gaussian(0), 3), round(gaussian(1), 3))   # 0.399 0.242\nprint(round(erf(1 / sqrt(2)), 3))                    # 0.683: share within one sigma"
+        },
+        "id": "gaussian",
+        "label": "Gaussian: the bell curve"
+      },
+      {
+        "animationEvent": "compare",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Each distribution has a mean that summarizes its center.",
+          "python": "p = 0.3\nprint(p, round(10 * p, 1), 0.5, 0.0)   # means: Bernoulli 0.3, Binomial 3.0, Uniform 0.5, Gaussian 0.0"
+        },
+        "id": "compare",
+        "label": "The four side by side"
+      },
+      {
+        "animationEvent": "choose-model",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Match the question about the data to the distribution that models it.",
+          "python": "choices = {\n    'is the email spam? (yes/no)': 'Bernoulli',\n    'how many of 10 emails are spam?': 'Binomial',\n    'a random number, no preference': 'Uniform',\n    'noise around a typical value': 'Gaussian',\n}\nfor question, model in choices.items():\n    print(question, '->', model)"
+        },
+        "id": "choose-model",
+        "label": "Choosing a distribution"
+      },
+      {
+        "animationEvent": "ml-connection",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Models assume distributions for labels and noise.",
+          "python": "assumptions = {\n    'classification label': 'Bernoulli',\n    'linear regression noise': 'Gaussian',\n    'random starting weights': 'Uniform (one common choice)',\n}\nprint(assumptions['linear regression noise'])   # Gaussian"
+        },
+        "id": "ml-connection",
+        "label": "Distributions inside ML models"
+      }
+    ],
+    "version": {
+      "$numberInt": "1"
+    }
+  },
+  "revision": {
+    "$numberInt": "5"
+  },
+  "revisionId": "r2",
+  "sourceKind": "zip",
+  "status": "frozen",
+  "title": "ML Module 4 — Common Probability Distributions",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498521"
+    }
+  },
+  "updatedBy": {
+    "$oid": "000000000000000000000000"
+  }
+}

@@ -1,0 +1,38 @@
+{
+ "training-data": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Eight toy customers: horizontal is **days since last activity**, vertical is whether they **churned** (red, top) or **stayed** (green, bottom). A tiny set lets us watch the whole training loop."
+ },
+ "initial-parameters": {
+  "h": "STARTING POINT",
+  "t": "With **w = 0 and b = 0** the model predicts **0.5 for everyone**, shown as the flat blue line. These parameters have not been learned yet, and the learning rate of 0.5 is **our** choice."
+ },
+ "predictions": {
+  "h": "PREDICTIONS VS REALITY",
+  "t": "The dashed lines show the gap between each prediction and its true label. The churners (red) sit at 1 while the model says 0.5, so it is **far from correct** for them."
+ },
+ "loss": {
+  "h": "THE LOSS",
+  "t": "The **loss** turns all those gaps into one number: **0.693**. A high loss means poor predictions, and training exists to make this number smaller."
+ },
+ "gradient": {
+  "h": "THE GRADIENT",
+  "t": "The gradient shows how the loss changes as each parameter changes: **grad_w = −0.206** and **grad_b = 0.125**. We will move each parameter in the **opposite** direction of the loss rising."
+ },
+ "update": {
+  "h": "ONE UPDATE",
+  "t": "Each parameter moves by **learning rate × gradient**, giving **w = 0.103 and b = −0.063**. The line tilts upward, and the loss drops to **0.667**."
+ },
+ "repeat": {
+  "h": "REPEAT",
+  "t": "The same four moves repeat: **predict, measure the loss, find the gradient, update**. Each faded line is an earlier version of the model. Every step uses the **training data only**."
+ },
+ "loss-decreases": {
+  "h": "THE LOSS GOES DOWN",
+  "t": "The chart shows the loss falling from **0.693 to 0.602** over five updates. A falling loss means the parameters fit the training data better after each step."
+ },
+ "trained-model": {
+  "h": "TAKEAWAY",
+  "t": "The trained parameters are **w = 0.287 and b = −0.378**. **Remember:** training changes **parameters** to reduce the loss on **training data**. Judging it on new data is a separate job for validation."
+ }
+}

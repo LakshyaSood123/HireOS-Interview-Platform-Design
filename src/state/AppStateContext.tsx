@@ -1,9 +1,9 @@
-import { createContext, useContext, useState, useMemo, useEffect } from "react"
+import { createContext, useContext, useState, useMemo, useEffect, useRef } from "react"
 import type { ReactNode } from "react"
 import type { InterviewSessionData } from "../data/placementPrepDemo"
 import { dsaCourseData, type CourseData, type TrailNode } from "../data/reagvisCourses"
 import { DEVELOPMENT_MODE } from "../config/developmentMode"
-import type { ProgressState } from "../learning/types"
+import type { Course, ProgressState } from "../learning/types"
 import type { LearnerProgressState } from "../learning/progressEngine"
 import {
   completeCheckpoint,
@@ -19,12 +19,11 @@ import { deriveLegacyCourseData } from "../learning/legacyAdapter"
 import { LocalProgressRepository } from "../learning/progressRepository"
 import { MockRecommendationProvider } from "../learning/services/recommendationProvider"
 import { completeCheckpointOnBackend, fetchCourseState } from "../learning/services/progressApi"
+import { fetchPinnedCourseContent } from "../learning/services/learnerCourseApi"
+import { pinnedContentToLearnerCourse } from "../learning/pinnedCourseAdapter"
 import { ApiUnavailableError, SessionExpiredError } from "../learning/services/apiClient"
+import { DSA_COURSE_ID, isBackendPinnedCourse, isBackendSyncedCourse } from "../learning/courseSources"
 import { useAuth } from "../auth/AuthContext"
-
-/** The one course wired to backend progress in this phase. Every other
- * course id keeps behaving exactly as it did before (local-only). */
-const BACKEND_COURSE_ID = "dsa-foundations"
 
 export type ProgressSyncStatus = "idle" | "loading" | "synced" | "error"
 
@@ -39,6 +38,21 @@ export type ReagvisView =
   | "roadmap"
   | "workspace"
   | "cms-course"
+  | "pinned-course"
+  | "course-home"
+
+/** Load state of a backend-pinned course (see courseSources.ts). `course` is
+ * only ever set for `status === "ready"`; there is no silent fallback to any
+ * other version or to static content when loading fails. */
+export interface PinnedCourseState {
+  status: "idle" | "loading" | "ready" | "error"
+  courseId: string | null
+  course: Course | null
+  versionId: string | null
+  error: string | null
+}
+
+const IDLE_PINNED_COURSE: PinnedCourseState = { status: "idle", courseId: null, course: null, versionId: null, error: null }
 
 const progressRepository = new LocalProgressRepository()
 const recommendationProvider = new MockRecommendationProvider()
@@ -155,11 +169,26 @@ interface AppStateValue {
    * failed (the locally-cached/demo progress above stays authoritative on
    * screen either way; nothing is blocked or rolled back on this). */
   progressSyncStatus: ProgressSyncStatus
+  /** The Course for `activeCourseId`, resolved from whichever source it
+   * comes from (static registry or the loaded backend-pinned version).
+   * `undefined` while a pinned course is still loading. Pages must use this,
+   * not `getCourseById`, so they work for both kinds. */
+  activeCourse: Course | undefined
+  /** Load state of the backend-pinned course currently being entered (ML). */
+  pinnedCourse: PinnedCourseState
+  /** Re-runs the pinned-course load (content + enrollment state) for the
+   * course in `pinnedCourse.courseId`. Used by the loading/error screen. */
+  retryPinnedCourse: () => void
 
   // Transition & Action helpers
   isTransitioning: boolean
   transitionMessage: string
   startLearningTrail: (courseId?: string) => void
+  /** Opens a course's Course Home from the Course Library. Static courses
+   * (DSA) switch the active course and show the "course-home" view;
+   * backend-pinned courses (ML) load their pinned version and show
+   * "pinned-course". Never touches the diagnostic-transfer intro. */
+  openCourseHome: (courseId: string) => void
   openNodeLesson: (nodeId: number) => void
   completeCurrentLesson: () => void
   /** Returns true only if the checkpoint was actually completed (state was
@@ -217,10 +246,12 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let cancelled = false
     setProgressSyncStatus("loading")
-    fetchCourseState(client, BACKEND_COURSE_ID)
+    fetchCourseState(client, DSA_COURSE_ID)
       .then(state => {
         if (cancelled) return
-        setProgress(state.progress)
+        // Only apply the DSA record if DSA is still the active course — a
+        // learner may have entered Machine Learning while this was in flight.
+        setProgress(prev => (prev.activeCourseId === DSA_COURSE_ID ? state.progress : prev))
         setProgressSyncStatus("synced")
       })
       .catch(error => {
@@ -265,7 +296,47 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [transitionMessage, setTransitionMessage] = useState("")
 
-  const course = getCourseById(progress.activeCourseId)
+  // Backend-pinned course (Machine Learning). Loads the learner's OWN pinned
+  // published version plus their enrollment state. A stale response from an
+  // earlier attempt is ignored via the request counter.
+  const [pinnedCourse, setPinnedCourse] = useState<PinnedCourseState>(IDLE_PINNED_COURSE)
+  const pinnedRequestRef = useRef(0)
+
+  const loadPinnedCourse = (courseId: string) => {
+    const requestId = ++pinnedRequestRef.current
+    setPinnedCourse({ status: "loading", courseId, course: null, versionId: null, error: null })
+    Promise.all([fetchPinnedCourseContent(client, courseId), fetchCourseState(client, courseId)])
+      .then(([content, state]) => {
+        if (requestId !== pinnedRequestRef.current) return
+        const { course: learnerCourse, versionId } = pinnedContentToLearnerCourse(content)
+        setPinnedCourse({ status: "ready", courseId, course: learnerCourse, versionId, error: null })
+        setProgress({ ...state.progress, activeCourseId: courseId })
+      })
+      .catch(error => {
+        if (requestId !== pinnedRequestRef.current) return
+        if (error instanceof SessionExpiredError) {
+          reportSessionExpired()
+          return
+        }
+        // No fallback to another version or to static content: the learner
+        // sees the error and can retry.
+        const message = error instanceof ApiUnavailableError
+          ? "Can't reach the server right now. Check your connection and try again."
+          : "This course could not be loaded. Try again."
+        if (!(error instanceof ApiUnavailableError)) console.error("[reagvis] pinned course load failed", error)
+        setPinnedCourse({ status: "error", courseId, course: null, versionId: null, error: message })
+      })
+  }
+
+  const retryPinnedCourse = () => {
+    if (pinnedCourse.courseId) loadPinnedCourse(pinnedCourse.courseId)
+  }
+
+  // Resolve the Course for the ACTIVE course id. A backend-pinned course is
+  // only available once its own load has finished for that same id.
+  const course: Course | undefined = isBackendPinnedCourse(progress.activeCourseId)
+    ? (pinnedCourse.status === "ready" && pinnedCourse.courseId === progress.activeCourseId ? pinnedCourse.course ?? undefined : undefined)
+    : getCourseById(progress.activeCourseId)
   const courseData = useMemo(() => deriveLegacyCourseData(progress, simulatedReadinessScore), [progress, simulatedReadinessScore])
   const dsaModuleStates = useMemo(() => (course ? resolveAllModuleStates(course, progress) : {}), [course, progress])
   const dsaZoneStates = useMemo(() => (course ? resolveAllZoneStates(course, progress) : {}), [course, progress])
@@ -282,6 +353,17 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     // implemented yet (only DSA has real content today — see
     // LEARNING_ENGINE_ARCHITECTURE.md and courseRegistry.ts).
     const requestedId = courseId ?? recommendationProvider.getHandoff().recommendedCourseId
+
+    // Backend-pinned course: no transition timer and no demo bootstrap. The
+    // course screen loads the learner's pinned version and shows loading /
+    // error / retry until it is ready.
+    if (isBackendPinnedCourse(requestedId)) {
+      setActiveProduct("reagvis")
+      setReagvisView("pinned-course")
+      loadPinnedCourse(requestedId)
+      return
+    }
+
     const resolvedId = isCourseAvailable(requestedId) ? requestedId : progress.activeCourseId
 
     setIsTransitioning(true)
@@ -294,6 +376,29 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       setReagvisView("intro")
       setIsTransitioning(false)
     }, 1200)
+  }
+
+  const openCourseHome = (courseId: string) => {
+    if (isBackendPinnedCourse(courseId)) {
+      setActiveProduct("reagvis")
+      setReagvisView("pinned-course")
+      loadPinnedCourse(courseId)
+      return
+    }
+    if (!isCourseAvailable(courseId)) return
+    if (courseId !== progress.activeCourseId) {
+      setProgress(progressRepository.load(courseId) ?? buildDemoLearnerBootstrap(courseId))
+    }
+    // Static, backend-synced course: refresh its authoritative record.
+    if (isBackendSyncedCourse(courseId)) {
+      fetchCourseState(client, courseId)
+        .then(state => setProgress(prev => (prev.activeCourseId === courseId ? state.progress : prev)))
+        .catch(error => {
+          if (error instanceof SessionExpiredError) reportSessionExpired()
+        })
+    }
+    setActiveProduct("reagvis")
+    setReagvisView("course-home")
   }
 
   const openNodeLesson = (nodeId: number) => {
@@ -330,12 +435,16 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
 
     const nextProgress = completeCheckpoint(course, progress, checkpointId, todayIso())
     setProgress(nextProgress)
-    setSimulatedReadinessScore(74) // Boost estimated readiness from 58 to 74!
 
-    const nextNode = nextProgress.activeCheckpointId
-      ? dsaCourseData.nodes.find(n => String(n.id) === nextProgress.activeCheckpointId)
-      : null
-    if (nextNode) setActiveNode(nextNode)
+    // The DSA HUD's readiness score and legacy TrailNode pointer belong to
+    // DSA alone. Another course's completion must never change them.
+    if (course.id === DSA_COURSE_ID) {
+      setSimulatedReadinessScore(74) // Boost estimated readiness from 58 to 74!
+      const nextNode = nextProgress.activeCheckpointId
+        ? dsaCourseData.nodes.find(n => String(n.id) === nextProgress.activeCheckpointId)
+        : null
+      if (nextNode) setActiveNode(nextNode)
+    }
 
     // Persist the same completion to the backend for dsa-foundations. Fire
     // and reconcile — the local update above already applied, synchronously,
@@ -346,9 +455,11 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     // local completion exactly as it already stands — it does not roll
     // anything back, and it does not touch the auth session unless the
     // session itself is what actually expired.
-    if (course.id === BACKEND_COURSE_ID) {
-      completeCheckpointOnBackend(client, BACKEND_COURSE_ID, checkpointId)
-        .then(result => setProgress(result.progress))
+    if (isBackendSyncedCourse(course.id)) {
+      const completedCourseId = course.id
+      completeCheckpointOnBackend(client, completedCourseId, checkpointId)
+        // Apply the server record only if that course is still the active one.
+        .then(result => setProgress(prev => (prev.activeCourseId === completedCourseId ? result.progress : prev)))
         .catch(error => {
           if (error instanceof SessionExpiredError) {
             reportSessionExpired()
@@ -470,6 +581,9 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       backToRoadmap,
       getCheckpointState,
       progressSyncStatus,
+      activeCourse: course,
+      pinnedCourse,
+      retryPinnedCourse,
       viewedCmsCourseId,
       viewedCmsModuleId,
       viewedCmsActivityId,
@@ -479,6 +593,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       isTransitioning,
       transitionMessage,
       startLearningTrail,
+      openCourseHome,
       openNodeLesson,
       completeCurrentLesson,
       completeCheckpointById,
@@ -507,6 +622,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       viewedCmsCourseId,
       viewedCmsModuleId,
       viewedCmsActivityId,
+      pinnedCourse,
       isTransitioning,
       transitionMessage,
     ],

@@ -1,0 +1,34 @@
+{
+ "unknown-parameter": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "This coin has some true probability **p** of landing heads, but nobody printed it on the coin. **p is a parameter**: a fixed number that describes the coin, and it is **unknown**."
+ },
+ "collect-data": {
+  "h": "COLLECT DATA",
+  "t": "What we can do is **observe data**. Flip the coin 5 times: **H H T H H**, which is 4 heads and 1 tail. The data are visible; p is not."
+ },
+ "sample": {
+  "h": "A SAMPLE FROM A LARGER POPULATION",
+  "t": "These 5 flips are a **sample**, a small piece of the **population** of every flip this coin could ever make. We use the sample to learn about the population."
+ },
+ "candidate-values": {
+  "h": "CANDIDATE VALUES OF p",
+  "t": "Which values of p are plausible? If p were **0.2** we would expect about **1 head** in 5 flips, if p were **0.5** about **2.5**, and if p were **0.8** about **4**."
+ },
+ "compare-candidates": {
+  "h": "COMPARE CANDIDATES WITH THE DATA",
+  "t": "We saw **4 heads**. p = 0.2 expects 1 (off by 3), p = 0.5 expects 2.5 (off by 1.5), p = 0.8 expects 4 (off by 0). **The data match 0.8 best.**"
+ },
+ "estimate": {
+  "h": "THE ESTIMATE",
+  "t": "The rule “**heads divided by flips**” is an **estimator**. Applied to this sample it gives the **estimate 4 / 5 = 0.8**. The rule stays the same; the number depends on the data."
+ },
+ "uncertainty": {
+  "h": "ESTIMATES VARY",
+  "t": "Flip the same coin another 5 times and you may get **H T T H T**: estimate **0.4**. Another sample, **H T H H T**, gives **0.6**. The coin did not change; the **samples** did. So an estimate always carries uncertainty."
+ },
+ "ml-connection": {
+  "h": "TAKEAWAY",
+  "t": "A model's **parameters are estimated from data**, and then they determine its predictions: with p estimated as 0.8, we predict heads on the next flip with probability 0.8."
+ }
+}

@@ -1,0 +1,42 @@
+{
+ "source-distribution": {
+  "h": "THE POPULATION: A FAIR DIE",
+  "t": "We start with a population that is clearly **not bell-shaped**: one roll of a fair die. Each face has probability 1/6, so the shape is **flat**. Its mean is **3.5** and its standard deviation about **1.71**."
+ },
+ "sample": {
+  "h": "TAKE ONE SAMPLE",
+  "t": "Take a sample: roll the die **5 times**. Say we get **2, 6, 6, 1 and 4**."
+ },
+ "sample-mean": {
+  "h": "COMPUTE THE SAMPLE MEAN",
+  "t": "The sample mean is the average: **(2 + 6 + 6 + 1 + 4) / 5 = 3.8**. This **one number**, not the five rolls, is what we now record on the axis."
+ },
+ "repeat": {
+  "h": "REPEAT MANY TIMES",
+  "t": "Do it again with a fresh sample of 5 rolls, and again, and again. Each repetition drops **one more sample mean** onto the axis, and the pile of recorded means starts to take a shape."
+ },
+ "means-histogram": {
+  "h": "HISTOGRAM OF THE SAMPLE MEANS",
+  "t": "After **2000 repetitions** the histogram of the sample **means** (n = 5) is already hump-shaped around **3.5**, even though a single roll is flat. The rolls did not become bell-shaped; **their averages did**."
+ },
+ "larger-n": {
+  "h": "USE BIGGER SAMPLES",
+  "t": "Now let each sample have **n = 30** rolls instead of 5, and again record 2000 sample means. The histogram is **more bell-shaped and much narrower**."
+ },
+ "normal-shape": {
+  "h": "A NORMAL CURVE FITS",
+  "t": "A normal curve with mean **3.5** and spread **σ / √30 ≈ 0.31** hugs the histogram of means. This is the **central limit theorem**: sample means are approximately normally distributed, whatever the shape of the population."
+ },
+ "narrower-spread": {
+  "h": "BIGGER n, NARROWER SPREAD",
+  "t": "With **n = 5** the means spread about **0.76** (σ/√5); with **n = 30** only **0.31** (σ/√30). This spread is the **standard error**. It shrinks like 1/√n: four times the data halves it."
+ },
+ "lln-vs-clt": {
+  "h": "LLN VERSUS CLT",
+  "t": "**LLN** asks where **one** sample mean goes as n grows (toward the true mean). **CLT** asks how **many** sample means are distributed across repeated samples (approximately normal, spread σ/√n). They are different questions."
+ },
+ "ml-connection": {
+  "h": "TAKEAWAY",
+  "t": "This is why averages behave predictably: estimates can carry **error bars**, uncertainty shrinks like **1/√n**, and Gaussian noise is a common assumption. It holds for **averages**, not for raw data."
+ }
+}

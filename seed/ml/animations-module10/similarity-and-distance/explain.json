@@ -1,0 +1,38 @@
+{
+ "two-points": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "To group similar customers we must **compare them**. Take two customers: **P = (1, 2)** and **Q = (2, 2.5)**, described by purchases per month and average spend."
+ },
+ "coordinate-differences": {
+  "h": "DIFFERENCE BY FEATURE",
+  "t": "They differ by **1.0** in purchases per month (the horizontal leg) and by **0.5** in average spend (the vertical leg). Distance starts from these differences."
+ },
+ "distance-line": {
+  "h": "THE STRAIGHT-LINE DISTANCE",
+  "t": "The straight line from P to Q is the **Euclidean distance**, from the Pythagorean theorem: **d = √(1.0² + 0.5²) = 1.118**."
+ },
+ "near-point": {
+  "h": "A NEAR POINT",
+  "t": "Q is **close** to P. A **small distance** means the two customers are alike."
+ },
+ "far-point": {
+  "h": "A FAR POINT",
+  "t": "R = (6, 6) is far from P: **d = √(5² + 4²) = 6.403**. A **large distance** means the customers are different."
+ },
+ "nearest-neighbor": {
+  "h": "THE NEAREST NEIGHBOR",
+  "t": "Comparing P with all eleven others, the nearest is (1.5, 1.8) at distance **0.539**. Finding nearest points is the basis of K-Means."
+ },
+ "two-features": {
+  "h": "FEATURES ON DIFFERENT SCALES",
+  "t": "Now suppose the features are **income in dollars** and **purchases per month**: A = (50000, 2), B = (50100, 10), C = (58000, 2.5). The units are very different."
+ },
+ "scale-problem": {
+  "h": "THE SCALE PROBLEM",
+  "t": "Raw distance says A is far closer to B (**100.3**) than to C (**8000**), even though B buys five times as often. **Income's big numbers dominate.** After scaling, A is closer to C (**0.81**) than to B (**2.0**)."
+ },
+ "distance-meaning": {
+  "h": "TAKEAWAY",
+  "t": "Distance turns similarity into a number, but it is a **modeling choice**. Euclidean distance is common, not required, and different scalings or measures can give different groups."
+ }
+}

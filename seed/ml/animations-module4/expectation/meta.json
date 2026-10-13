@@ -1,0 +1,54 @@
+{
+  "title": "Expectation: the probability-weighted average",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "outcomes",
+      "label": "The values of a fair die",
+      "pseudocode": "X can be 1, 2, 3, 4, 5 or 6.",
+      "python": "values = [1, 2, 3, 4, 5, 6]\nprint(values)"
+    },
+    {
+      "id": "probabilities",
+      "label": "Each value has a probability",
+      "pseudocode": "Every value has probability 1/6.",
+      "python": "dist = {x: 1 / 6 for x in range(1, 7)}\nprint(round(dist[3], 3))   # 0.167"
+    },
+    {
+      "id": "weight-values",
+      "label": "Weight each value by its probability",
+      "pseudocode": "weighted value = x * P(X = x)",
+      "python": "dist = {x: 1 / 6 for x in range(1, 7)}\nweighted = {x: x * p for x, p in dist.items()}\nprint({x: round(w, 3) for x, w in weighted.items()})\n# {1: 0.167, 2: 0.333, 3: 0.5, 4: 0.667, 5: 0.833, 6: 1.0}"
+    },
+    {
+      "id": "contributions",
+      "label": "Each value's contribution",
+      "pseudocode": "Each weighted value is that value's contribution to the average.",
+      "python": "dist = {x: 1 / 6 for x in range(1, 7)}\ncontributions = [round(x * p, 3) for x, p in dist.items()]\nprint(contributions)   # [0.167, 0.333, 0.5, 0.667, 0.833, 1.0]"
+    },
+    {
+      "id": "sum",
+      "label": "Add the contributions",
+      "pseudocode": "Add all contributions: E[X] = sum of x * P(X = x).",
+      "python": "dist = {x: 1 / 6 for x in range(1, 7)}\nprint(round(sum(x * p for x, p in dist.items()), 2))   # 3.5"
+    },
+    {
+      "id": "expected-value",
+      "label": "The expected value",
+      "pseudocode": "E[X] = 3.5, even though no roll can equal 3.5.",
+      "python": "dist = {x: 1 / 6 for x in range(1, 7)}\nexpected = sum(x * p for x, p in dist.items())\nprint(round(expected, 2), 3.5 in dist)   # 3.5 False"
+    },
+    {
+      "id": "repeated-experiment",
+      "label": "Repeat the experiment",
+      "pseudocode": "Keep rolling and track the running average. It settles near E[X].",
+      "python": "rolls = [6, 2, 5, 1, 4, 3, 6, 2, 4, 3, 5, 1]\nrunning = [sum(rolls[:n]) / n for n in range(1, len(rolls) + 1)]\nprint([round(a, 2) for a in running])\n# [6.0, 4.0, 4.33, 3.5, 3.6, 3.5, 3.86, 3.62, 3.67, 3.6, 3.73, 3.5]"
+    },
+    {
+      "id": "ml-loss",
+      "label": "Expectation in ML: expected loss",
+      "pseudocode": "expected loss = sum of (loss value * probability of that loss)",
+      "python": "loss_dist = {0: 0.5, 1: 0.3, 4: 0.2}   # squared error -> probability\nexpected_loss = sum(loss * p for loss, p in loss_dist.items())\nprint(round(expected_loss, 2))   # 1.1"
+    }
+  ]
+}

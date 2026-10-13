@@ -1,0 +1,38 @@
+{
+ "same-point": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Two simple components: **A** (weight 0.4, mean 3, spread 1) and **B** (weight 0.6, mean 6, spread 1.5). One customer sits at spend **x = 4.5**, between them."
+ },
+ "kmeans-hard-choice": {
+  "h": "A HARD CHOICE",
+  "t": "K-Means with centers 3 and 6 finds 4.5 **exactly in the middle**, 1.5 from each. It must still pick one label, and the **doubt is lost**."
+ },
+ "gmm-components": {
+  "h": "THE GMM KEEPS BOTH",
+  "t": "A GMM keeps **both components**. The curves show how each component spreads its customers along the spend axis."
+ },
+ "density-under-a": {
+  "h": "HOW WELL DOES A EXPLAIN x?",
+  "t": "The density of component A at 4.5 is **0.1295**. It measures how typical this spend would be if A generated the customer."
+ },
+ "density-under-b": {
+  "h": "HOW WELL DOES B EXPLAIN x?",
+  "t": "The density of component B at 4.5 is **0.1613**. B is wider, so it reaches further and gives this point a higher density."
+ },
+ "combine-with-weights": {
+  "h": "INCLUDE THE MIXING WEIGHTS",
+  "t": "Each density is scaled by its component's weight: **0.4 × 0.1295 = 0.0518** for A and **0.6 × 0.1613 = 0.0968** for B. These are the weighted scores."
+ },
+ "normalize": {
+  "h": "NORMALIZE",
+  "t": "The weighted scores are not shares yet. Dividing each by their total, **0.0518 + 0.0968 = 0.1486**, makes them add up to **1**."
+ },
+ "responsibilities": {
+  "h": "THE RESPONSIBILITIES",
+  "t": "The responsibilities for this customer are **A: 0.3486** and **B: 0.6514**. They add up to 1 and say how strongly each component is held responsible for the customer."
+ },
+ "soft-membership": {
+  "h": "TAKEAWAY",
+  "t": "Responsibilities belong to **each point**: they differ from the global mixing weights (0.4 and 0.6). **Soft membership** keeps the doubt that a hard label throws away."
+ }
+}

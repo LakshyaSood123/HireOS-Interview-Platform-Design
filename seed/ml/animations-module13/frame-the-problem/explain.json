@@ -1,0 +1,38 @@
+{
+ "vague-goal": {
+  "h": "WHAT IS HAPPENING",
+  "t": "A manager says **“reduce customer churn.”** That is a business wish, not yet a machine learning task: it does not say **which customers, what to predict, or how we will know it worked.** Framing comes before any algorithm."
+ },
+ "business-question": {
+  "h": "WHAT CHANGED",
+  "t": "The wish becomes a question we can act on: **who will cancel soon, while we can still do something about it?** Naming the decision the prediction supports turns a vague goal into something a model could help with."
+ },
+ "prediction-unit": {
+  "h": "HOW TO READ THIS",
+  "t": "Each card is **one subscriber on the first day of a month**. This is the **prediction unit**: one row of data is one customer at one moment, so the model makes one prediction per card."
+ },
+ "define-target": {
+  "h": "WHAT IS THE TARGET?",
+  "t": "The target **churned_30d** is 1 if the customer **cancels within 30 days** and 0 if they stay. Turning the outcome into one measurable label is what lets a model learn to predict it."
+ },
+ "prediction-horizon": {
+  "h": "WHY THE HORIZON MATTERS",
+  "t": "We predict on **day 0** and check the outcome at **day 30**. Fixing this window defines what counts as churn, and it guarantees we only use information that already exists on day 0."
+ },
+ "available-data": {
+  "h": "WHAT THE MODEL MAY USE",
+  "t": "Green items are **known on day 0**, so they are allowed as inputs. Red items, like the cancellation date, happen **after** the prediction. Using them would mean peeking at the answer."
+ },
+ "success-metric": {
+  "h": "DEFINE SUCCESS FIRST",
+  "t": "Before any model we write the goal: **recall of at least 0.75** with **precision of at least 0.50**. The base-rate note shows why: predicting that nobody churns scores **0.80 accuracy** yet catches **no** churners."
+ },
+ "ml-or-not": {
+  "h": "IS ML THE RIGHT TOOL?",
+  "t": "Three checks: could a **simple rule** do it, is there **enough history**, and can the **outcome be measured**? All pass here, so a model is reasonable. If we could not measure the outcome, we could not train or check anything."
+ },
+ "framed-problem": {
+  "h": "TAKEAWAY",
+  "t": "The problem is now **framed**: unit, target, 30-day horizon, day-0 inputs and a success goal. **Remember:** good machine learning starts by defining the question and how success is judged, before choosing any algorithm."
+ }
+}

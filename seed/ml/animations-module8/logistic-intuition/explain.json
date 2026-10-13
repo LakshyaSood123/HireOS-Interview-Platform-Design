@@ -1,0 +1,38 @@
+{
+ "linear-score": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Like linear regression, a logistic classifier starts with a **linear score z = w·x + b**. With **w = 1 and b = −4**, the score is z = spam score − 4."
+ },
+ "unbounded-score": {
+  "h": "AN UNBOUNDED SCORE",
+  "t": "z can be **any number**, from minus infinity to plus infinity. Email 0.5 has z = −3.5 and email 9 has z = 5. But a **probability must stay between 0 and 1**."
+ },
+ "sigmoid": {
+  "h": "THE SIGMOID SQUASHES",
+  "t": "The sigmoid **σ(z) = 1 / (1 + e^(−z))** squeezes any z into the range 0 to 1 and **keeps the order**. Plotted, it is an S-shaped curve."
+ },
+ "map-negative": {
+  "h": "NEGATIVE SCORE, LOW PROBABILITY",
+  "t": "A negative score maps to a low probability: **z = −3 gives σ(−3) = 0.047**. That email is very unlikely to be spam."
+ },
+ "map-zero": {
+  "h": "ZERO SCORE, PROBABILITY 0.5",
+  "t": "A score of exactly **0 maps to probability 0.5**: the model is undecided. This is the **decision boundary**."
+ },
+ "map-positive": {
+  "h": "POSITIVE SCORE, HIGH PROBABILITY",
+  "t": "A positive score maps to a high probability: **z = 3 gives σ(3) = 0.953**. That email is very likely spam. The curve is steep in the middle and flat at the ends."
+ },
+ "probability": {
+  "h": "PROBABILITIES FOR OUR EMAILS",
+  "t": "Each email gets **z = score − 4** and then a probability: score 0.5 gives **0.03**, 4.5 gives **0.62** and 9 gives **0.99**. The order is preserved and nothing leaves the range 0 to 1."
+ },
+ "threshold": {
+  "h": "APPLY A THRESHOLD",
+  "t": "A threshold of **0.5 on the probability** is the same as **z ≥ 0**, which is a spam score of at least 4. So the decision boundary sits exactly where **z = 0**."
+ },
+ "classification": {
+  "h": "TAKEAWAY",
+  "t": "The whole chain: **features → linear score → sigmoid → probability → threshold → class**. For score 7.5: z = 3.5, probability **0.971**, at least 0.5, so spam. **Logistic regression is the model that learns w and b.**"
+ }
+}

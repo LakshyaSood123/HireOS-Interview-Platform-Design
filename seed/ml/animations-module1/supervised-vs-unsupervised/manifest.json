@@ -1,0 +1,19 @@
+{
+  "heightPx": 560,
+  "capabilities": [
+    "play",
+    "pause",
+    "next",
+    "previous",
+    "reset",
+    "gotoStep"
+  ],
+  "traceEvents": [
+    "dataset",
+    "labels",
+    "supervised",
+    "remove-labels",
+    "unsupervised",
+    "compare"
+  ]
+}

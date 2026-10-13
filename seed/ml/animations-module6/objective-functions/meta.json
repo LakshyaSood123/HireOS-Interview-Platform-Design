@@ -1,0 +1,54 @@
+{
+  "title": "Objective functions: scoring a model's parameters",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "model-parameter",
+      "label": "A model has a parameter",
+      "pseudocode": "A model has a parameter w that we can set.",
+      "python": "w = 0.0   # the model's parameter: a knob we can turn\nprint(w)"
+    },
+    {
+      "id": "objective-rule",
+      "label": "The objective scores a setting",
+      "pseudocode": "The objective maps a parameter setting to one number: its score.",
+      "python": "def objective(w):\n    return (w - 3) ** 2\n\nprint(objective(0))   # 9"
+    },
+    {
+      "id": "candidate-one",
+      "label": "Try w = 0",
+      "pseudocode": "Score the candidate w = 0.",
+      "python": "def objective(w):\n    return (w - 3) ** 2\n\nprint(objective(0))   # 9: a bad (high) score"
+    },
+    {
+      "id": "candidate-two",
+      "label": "Try w = 2",
+      "pseudocode": "Score the candidate w = 2.",
+      "python": "def objective(w):\n    return (w - 3) ** 2\n\nprint(objective(2))   # 1: much better"
+    },
+    {
+      "id": "candidate-three",
+      "label": "Try w = 3 and w = 5",
+      "pseudocode": "Score w = 3 and w = 5. Lower is better.",
+      "python": "def objective(w):\n    return (w - 3) ** 2\n\nprint(objective(3), objective(5))   # 0 4"
+    },
+    {
+      "id": "plot-objective",
+      "label": "Plot the objective",
+      "pseudocode": "Evaluate the objective at many values of w to see its shape.",
+      "python": "def objective(w):\n    return (w - 3) ** 2\n\npoints = [(w, objective(w)) for w in range(0, 7)]\nprint(points)   # [(0, 9), (1, 4), (2, 1), (3, 0), (4, 1), (5, 4), (6, 9)]"
+    },
+    {
+      "id": "find-minimum",
+      "label": "Find the minimum",
+      "pseudocode": "Search a fine grid for the w with the lowest score.",
+      "python": "def objective(w):\n    return (w - 3) ** 2\n\ncandidates = [i / 10 for i in range(0, 61)]\nbest = min(candidates, key=objective)\nprint(best, objective(best))   # 3.0 0.0"
+    },
+    {
+      "id": "ml-training",
+      "label": "Training searches parameter space",
+      "pseudocode": "Training keeps the parameters with the best objective value.",
+      "python": "def objective(w):\n    return (w - 3) ** 2\n\ncandidates = [0.0, 2.0, 3.0, 5.0]\nscores = {w: objective(w) for w in candidates}\nbest = min(scores, key=scores.get)\nprint(best)   # 3.0: the lowest objective"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+ "labeled-data": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Twelve customers plotted by **purchases per month** and **average spend**. Here every customer comes with a **known label**: budget, heavy buyer or big spender. This is the supervised setting."
+ },
+ "supervised-view": {
+  "h": "SUPERVISED LEARNING",
+  "t": "With features **and** known labels, supervised learning learns a rule that predicts the **label of a new customer**. The labels act as an answer key."
+ },
+ "remove-labels": {
+  "h": "REMOVE THE LABELS",
+  "t": "Now the labels are taken away: nobody has told us what kind of customer each point is. Only the **positions** remain."
+ },
+ "unlabeled-data": {
+  "h": "UNLABELED DATA",
+  "t": "This is the **unsupervised** setting: only the features remain, so there is **no answer key** to learn from."
+ },
+ "look-for-structure": {
+  "h": "THE GOAL CHANGES",
+  "t": "Instead of predicting a label, we try to **discover structure already in the data**. Do some points sit together more than others?"
+ },
+ "possible-groups": {
+  "h": "POSSIBLE GROUPS",
+  "t": "The points seem to form **three clumps**. **Clustering** is the task of finding such groups of similar points automatically."
+ },
+ "cluster-colors": {
+  "h": "CLUSTERS, NOT CLASSES",
+  "t": "The algorithm returns groups, here colored **0, 1 and 2**. The numbers are **arbitrary names**, not categories that someone defined."
+ },
+ "interpret-carefully": {
+  "h": "TAKEAWAY",
+  "t": "Clustering is **not classification without labels**. Groups found by an algorithm need not match real-world categories, so **a person has to judge** what, if anything, they mean."
+ }
+}

@@ -1,0 +1,60 @@
+{
+  "title": "Density estimation: where does the data occur?",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "observed-points",
+      "label": "Observed customers",
+      "pseudocode": "Start from observed values of one feature.",
+      "python": "spend = [1.3, 1.8, 2.1, 2.4, 2.9, 3.9, 4.4, 4.8, 5.1, 5.4, 5.9, 6.2, 7.3, 7.9, 8.4, 8.9]\nprint(len(spend), 'customers; first values', spend[:4])\n# prints: 16 customers; first values [1.3, 1.8, 2.1, 2.4]"
+    },
+    {
+      "id": "number-line",
+      "label": "Put them on a number line",
+      "pseudocode": "Sort the values along a number line.",
+      "python": "spend = [1.3, 1.8, 2.1, 2.4, 2.9, 3.9, 4.4, 4.8, 5.1, 5.4, 5.9, 6.2, 7.3, 7.9, 8.4, 8.9]\nprint(sorted(spend) == spend, min(spend), max(spend))\n# prints: True 1.3 8.9"
+    },
+    {
+      "id": "histogram-view",
+      "label": "A histogram",
+      "pseudocode": "Count the values in each bin of width 1.",
+      "python": "spend = [1.3, 1.8, 2.1, 2.4, 2.9, 3.9, 4.4, 4.8, 5.1, 5.4, 5.9, 6.2, 7.3, 7.9, 8.4, 8.9]\nprint([sum(1 for x in spend if b <= x < b + 1) for b in range(1, 10)])\n# prints: [2, 3, 1, 2, 3, 1, 2, 2, 0]"
+    },
+    {
+      "id": "smooth-curve",
+      "label": "A smooth density curve",
+      "pseudocode": "Add a small Gaussian bump on every observation.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\nspend = [1.3, 1.8, 2.1, 2.4, 2.9, 3.9, 4.4, 4.8, 5.1, 5.4, 5.9, 6.2, 7.3, 7.9, 8.4, 8.9]\ndensity = lambda x: sum(pdf(x, xi, 0.7) for xi in spend) / len(spend)\nprint([round(density(x), 3) for x in (2, 3.5, 5, 8)])\n# prints: [0.138, 0.098, 0.159, 0.104]"
+    },
+    {
+      "id": "high-density-region",
+      "label": "A high-density region",
+      "pseudocode": "Density is high where observations crowd.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\nspend = [1.3, 1.8, 2.1, 2.4, 2.9, 3.9, 4.4, 4.8, 5.1, 5.4, 5.9, 6.2, 7.3, 7.9, 8.4, 8.9]\ndensity = lambda x: sum(pdf(x, xi, 0.7) for xi in spend) / len(spend)\nprint(round(density(5), 3))\n# prints: 0.159"
+    },
+    {
+      "id": "low-density-region",
+      "label": "A low-density region",
+      "pseudocode": "Density is low where observations are rare.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\nspend = [1.3, 1.8, 2.1, 2.4, 2.9, 3.9, 4.4, 4.8, 5.1, 5.4, 5.9, 6.2, 7.3, 7.9, 8.4, 8.9]\ndensity = lambda x: sum(pdf(x, xi, 0.7) for xi in spend) / len(spend)\nprint(round(density(10), 4))\n# prints: 0.0134"
+    },
+    {
+      "id": "new-point",
+      "label": "A new customer",
+      "pseudocode": "Evaluate the density at a new point.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\nspend = [1.3, 1.8, 2.1, 2.4, 2.9, 3.9, 4.4, 4.8, 5.1, 5.4, 5.9, 6.2, 7.3, 7.9, 8.4, 8.9]\ndensity = lambda x: sum(pdf(x, xi, 0.7) for xi in spend) / len(spend)\nnew = 5\nprint('density at', new, '=', round(density(new), 3))\n# prints: density at 5 = 0.159"
+    },
+    {
+      "id": "relative-plausibility",
+      "label": "Relative plausibility",
+      "pseudocode": "Compare the density at two places.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\nspend = [1.3, 1.8, 2.1, 2.4, 2.9, 3.9, 4.4, 4.8, 5.1, 5.4, 5.9, 6.2, 7.3, 7.9, 8.4, 8.9]\ndensity = lambda x: sum(pdf(x, xi, 0.7) for xi in spend) / len(spend)\nprint(round(density(5) / density(10), 1), 'times as dense at 5 as at 10')\n# prints: 11.9 times as dense at 5 as at 10"
+    },
+    {
+      "id": "density-takeaway",
+      "label": "What density means",
+      "pseudocode": "Density is not the probability of an exact value.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\nprint(round(pdf(0, 0, 0.2), 3), 'is above 1, so it cannot be a probability')\n# prints: 1.995 is above 1, so it cannot be a probability"
+    }
+  ]
+}

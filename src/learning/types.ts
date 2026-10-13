@@ -305,9 +305,22 @@ export interface LessonWorkspaceContent {
   callStackVisual?: CallStackVisualSpec
   twoPointerVisual?: TwoPointerVisualSpec
   animation?: AlgorithmAnimationSpec
+  /** A package-backed (author-uploaded) animation, rendered inside the SAME
+   * Animation block through the shared sandbox host. Only set for
+   * backend-pinned curriculum (courseSources.ts); static DSA content never
+   * sets it. `revisionId` is a frozen published revision, fetched through the
+   * learner-safe package endpoint. */
+  customAnimation?: LearnerCustomAnimation
   codeExamples?: CodeExample[]
   quickCheck?: QuickCheckContent
   codingActivity?: CodingActivityContent
+}
+
+export interface LearnerCustomAnimation {
+  packageId: string
+  revisionId: string
+  title?: string
+  bridgeMode: "standalone" | "controlled" | "synchronized"
 }
 
 // ── Question metadata layer ──────────────────────────────────────────────

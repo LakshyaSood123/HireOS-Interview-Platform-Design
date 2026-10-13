@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Features and Labels</title>
+  </head>
+  <body>
+    <div class="scene">
+      <p class="step-label" id="step-label">Raw table</p>
+      <table class="dataset" id="dataset">
+        <thead>
+          <tr>
+            <th data-col="area">Area</th>
+            <th data-col="bedrooms">Bedrooms</th>
+            <th data-col="age">Age</th>
+            <th data-col="price">Sale Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1200</td><td>2</td><td>10</td><td>45</td></tr>
+          <tr><td>1800</td><td>3</td><td>4</td><td>72</td></tr>
+          <tr><td>900</td><td>1</td><td>15</td><td>32</td></tr>
+        </tbody>
+      </table>
+      <div class="split" id="split">
+        <div class="pane x-pane" id="x-pane"><span class="pane-title">X: input features</span></div>
+        <div class="pane y-pane" id="y-pane"><span class="pane-title">y: target label</span></div>
+      </div>
+      <div class="sample" id="sample">
+        <span id="sample-values">[1500, 3, 6]</span>
+        <span class="arrow">→ model →</span>
+        <span id="prediction-text">Predicted Sale Price (model estimate)</span>
+      </div>
+      <section class="explain" aria-live="polite">
+        <h3 class="explain-h" id="explain-h"></h3>
+        <p class="explain-t" id="caption"></p>
+      </section>
+    </div>
+  </body>
+</html>

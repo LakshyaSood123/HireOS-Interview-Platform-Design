@@ -1,0 +1,60 @@
+{
+  "title": "Covariance and correlation: do variables move together?",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "scatter",
+      "label": "Five houses as points",
+      "pseudocode": "Each house is a pair (size, price).",
+      "python": "x = [1, 2, 3, 4, 5]        # size\ny = [2, 3, 5, 6, 9]        # price\nprint(list(zip(x, y)))"
+    },
+    {
+      "id": "positive",
+      "label": "Positive: they rise together",
+      "pseudocode": "Positive covariance: both tend to be above their means together, or below together.",
+      "python": "def mean(v):\n    return sum(v) / len(v)\n\ndef cov(x, y):\n    mx, my = mean(x), mean(y)\n    return sum((a - mx) * (b - my) for a, b in zip(x, y)) / len(x)\n\ndef corr(x, y):\n    return cov(x, y) / (cov(x, x) ** 0.5 * cov(y, y) ** 0.5)\n\nx = [1, 2, 3, 4, 5]\ny = [2, 3, 5, 6, 9]\nprint(round(cov(x, y), 2))   # 3.4"
+    },
+    {
+      "id": "negative",
+      "label": "Negative: one up, the other down",
+      "pseudocode": "Negative covariance: when one is above its mean, the other tends to be below.",
+      "python": "def mean(v):\n    return sum(v) / len(v)\n\ndef cov(x, y):\n    mx, my = mean(x), mean(y)\n    return sum((a - mx) * (b - my) for a, b in zip(x, y)) / len(x)\n\ndef corr(x, y):\n    return cov(x, y) / (cov(x, x) ** 0.5 * cov(y, y) ** 0.5)\n\nx = [1, 2, 3, 4, 5]\ny = [9, 6, 5, 3, 2]\nprint(round(cov(x, y), 2))   # -3.4"
+    },
+    {
+      "id": "near-zero",
+      "label": "Near zero: no straight-line trend",
+      "pseudocode": "Covariance near zero: no consistent straight-line trend.",
+      "python": "def mean(v):\n    return sum(v) / len(v)\n\ndef cov(x, y):\n    mx, my = mean(x), mean(y)\n    return sum((a - mx) * (b - my) for a, b in zip(x, y)) / len(x)\n\ndef corr(x, y):\n    return cov(x, y) / (cov(x, x) ** 0.5 * cov(y, y) ** 0.5)\n\nx = [1, 2, 3, 4, 5]\ny = [4, 6, 3, 6, 4]\nprint(abs(round(cov(x, y), 2)))   # 0.0"
+    },
+    {
+      "id": "covariance",
+      "label": "How covariance is computed",
+      "pseudocode": "Multiply each point's deviations from the two means, then average the products.",
+      "python": "def mean(v):\n    return sum(v) / len(v)\n\ndef cov(x, y):\n    mx, my = mean(x), mean(y)\n    return sum((a - mx) * (b - my) for a, b in zip(x, y)) / len(x)\n\ndef corr(x, y):\n    return cov(x, y) / (cov(x, x) ** 0.5 * cov(y, y) ** 0.5)\n\nx = [1, 2, 3, 4, 5]\ny = [2, 3, 5, 6, 9]\nmx, my = mean(x), mean(y)\nproducts = [(a - mx) * (b - my) for a, b in zip(x, y)]\nprint(products)                      # [6.0, 2.0, 0.0, 1.0, 8.0]\nprint(round(sum(products) / 5, 2))   # 3.4"
+    },
+    {
+      "id": "rescale",
+      "label": "Covariance depends on the units",
+      "pseudocode": "Multiplying x by 10 multiplies the covariance by 10 but leaves the correlation unchanged.",
+      "python": "def mean(v):\n    return sum(v) / len(v)\n\ndef cov(x, y):\n    mx, my = mean(x), mean(y)\n    return sum((a - mx) * (b - my) for a, b in zip(x, y)) / len(x)\n\ndef corr(x, y):\n    return cov(x, y) / (cov(x, x) ** 0.5 * cov(y, y) ** 0.5)\n\nx = [1, 2, 3, 4, 5]\ny = [2, 3, 5, 6, 9]\nx10 = [10 * v for v in x]\nprint(round(cov(x10, y), 2), round(corr(x10, y), 2))   # 34.0 0.98"
+    },
+    {
+      "id": "correlation",
+      "label": "Correlation removes the units",
+      "pseudocode": "correlation = covariance / (standard deviation of x * standard deviation of y)",
+      "python": "def mean(v):\n    return sum(v) / len(v)\n\ndef cov(x, y):\n    mx, my = mean(x), mean(y)\n    return sum((a - mx) * (b - my) for a, b in zip(x, y)) / len(x)\n\ndef corr(x, y):\n    return cov(x, y) / (cov(x, x) ** 0.5 * cov(y, y) ** 0.5)\n\nx = [1, 2, 3, 4, 5]\ny = [2, 3, 5, 6, 9]\nprint(round(corr(x, y), 2))   # 0.98"
+    },
+    {
+      "id": "zero-not-independence",
+      "label": "Zero correlation is not independence",
+      "pseudocode": "If y = (x - 3) squared, y depends fully on x, but the correlation is 0.",
+      "python": "def mean(v):\n    return sum(v) / len(v)\n\ndef cov(x, y):\n    mx, my = mean(x), mean(y)\n    return sum((a - mx) * (b - my) for a, b in zip(x, y)) / len(x)\n\ndef corr(x, y):\n    return cov(x, y) / (cov(x, x) ** 0.5 * cov(y, y) ** 0.5)\n\nx = [1, 2, 3, 4, 5]\ny = [(v - 3) ** 2 for v in x]\nprint(y)                                                      # [4, 1, 0, 1, 4]\nprint(abs(round(cov(x, y), 2)), abs(round(corr(x, y), 2)))   # 0.0 0.0"
+    },
+    {
+      "id": "ml-connection",
+      "label": "Why ML cares",
+      "pseudocode": "Collect all variances and covariances into a covariance matrix.",
+      "python": "def mean(v):\n    return sum(v) / len(v)\n\ndef cov(x, y):\n    mx, my = mean(x), mean(y)\n    return sum((a - mx) * (b - my) for a, b in zip(x, y)) / len(x)\n\ndef corr(x, y):\n    return cov(x, y) / (cov(x, x) ** 0.5 * cov(y, y) ** 0.5)\n\nx = [1, 2, 3, 4, 5]\ny = [2, 3, 5, 6, 9]\nmatrix = [[cov(x, x), cov(x, y)], [cov(y, x), cov(y, y)]]\nprint([[round(v, 1) for v in row] for row in matrix])   # [[2.0, 3.4], [3.4, 6.0]]"
+    }
+  ]
+}

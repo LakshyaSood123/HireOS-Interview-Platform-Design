@@ -1,0 +1,54 @@
+{
+  "title": "Closed-form least squares: solve instead of iterate",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "data",
+      "label": "The five houses again",
+      "pseudocode": "The same dataset as before.",
+      "python": "sizes = [1.0, 1.5, 2.0, 2.5, 3.0]\nprices = [2.0, 2.8, 3.7, 4.1, 5.2]\nprint(len(sizes), 'houses')\n# prints: 5 houses"
+    },
+    {
+      "id": "feature-matrix",
+      "label": "Build the feature matrix X",
+      "pseudocode": "Each row is [x, 1] so the bias acts like a weight.",
+      "python": "sizes = [1.0, 1.5, 2.0, 2.5, 3.0]\nprices = [2.0, 2.8, 3.7, 4.1, 5.2]\nX = [[x, 1.0] for x in sizes]\nprint(X)\n# prints: [[1.0, 1.0], [1.5, 1.0], [2.0, 1.0], [2.5, 1.0], [3.0, 1.0]]"
+    },
+    {
+      "id": "target-vector",
+      "label": "The target vector y",
+      "pseudocode": "Stack the prices into a vector y.",
+      "python": "sizes = [1.0, 1.5, 2.0, 2.5, 3.0]\nprices = [2.0, 2.8, 3.7, 4.1, 5.2]\ny = prices\nprint(y)\n# prints: [2.0, 2.8, 3.7, 4.1, 5.2]"
+    },
+    {
+      "id": "least-squares-view",
+      "label": "Zero gradient gives equations",
+      "pseudocode": "Setting both gradients to zero gives the normal equations.",
+      "python": "sizes = [1.0, 1.5, 2.0, 2.5, 3.0]\nprices = [2.0, 2.8, 3.7, 4.1, 5.2]\nn = len(sizes)\nsx, sy = sum(sizes), sum(prices)\nsxx = sum(x * x for x in sizes)\nsxy = sum(x * y for x, y in zip(sizes, prices))\nprint([[sxx, sx], [sx, n]], [sxy, sy])\n# prints: [[22.5, 10.0], [10.0, 5]] [39.45, 17.8]"
+    },
+    {
+      "id": "projection",
+      "label": "Projection picture",
+      "pseudocode": "At the best fit the residual vector is perpendicular to every column of X.",
+      "python": "sizes = [1.0, 1.5, 2.0, 2.5, 3.0]\nprices = [2.0, 2.8, 3.7, 4.1, 5.2]\nn = len(sizes)\nsx, sy = sum(sizes), sum(prices)\nsxx = sum(x * x for x in sizes)\nsxy = sum(x * y for x, y in zip(sizes, prices))\ndet = n * sxx - sx * sx\nw = (n * sxy - sx * sy) / det\nb = (sxx * sy - sx * sxy) / det\nr = [(w * x + b) - y for x, y in zip(sizes, prices)]\nprint(abs(sum(r)) < 1e-9, abs(sum(e * x for e, x in zip(r, sizes))) < 1e-9)\n# prints: True True"
+    },
+    {
+      "id": "best-coefficients",
+      "label": "Solve the 2x2 system",
+      "pseudocode": "Solve for w and b with the determinant.",
+      "python": "sizes = [1.0, 1.5, 2.0, 2.5, 3.0]\nprices = [2.0, 2.8, 3.7, 4.1, 5.2]\nn = len(sizes)\nsx, sy = sum(sizes), sum(prices)\nsxx = sum(x * x for x in sizes)\nsxy = sum(x * y for x, y in zip(sizes, prices))\ndet = n * sxx - sx * sx\nw = (n * sxy - sx * sy) / det\nb = (sxx * sy - sx * sxy) / det\nprint(det)\nprint(round(w, 4), round(b, 4))\n# prints: 12.5\n# prints: 1.54 0.48"
+    },
+    {
+      "id": "fitted-line",
+      "label": "The fitted line",
+      "pseudocode": "Evaluate the MSE of the closed-form line.",
+      "python": "sizes = [1.0, 1.5, 2.0, 2.5, 3.0]\nprices = [2.0, 2.8, 3.7, 4.1, 5.2]\nn = len(sizes)\nsx, sy = sum(sizes), sum(prices)\nsxx = sum(x * x for x in sizes)\nsxy = sum(x * y for x, y in zip(sizes, prices))\ndet = n * sxx - sx * sx\nw = (n * sxy - sx * sy) / det\nb = (sxx * sy - sx * sxy) / det\nloss = sum(((w * x + b) - y) ** 2 for x, y in zip(sizes, prices)) / n\nprint(round(w, 3), round(b, 3), round(loss, 4))\n# prints: 1.54 0.48 0.0166"
+    },
+    {
+      "id": "gradient-vs-closed-form",
+      "label": "Gradient descent vs closed form",
+      "pseudocode": "Both reach the same minimum of the same MSE.",
+      "python": "sizes = [1.0, 1.5, 2.0, 2.5, 3.0]\nprices = [2.0, 2.8, 3.7, 4.1, 5.2]\nn = len(sizes)\nsx, sy = sum(sizes), sum(prices)\nsxx = sum(x * x for x in sizes)\nsxy = sum(x * y for x, y in zip(sizes, prices))\ndet = n * sxx - sx * sx\nw = (n * sxy - sx * sy) / det\nb = (sxx * sy - sx * sxy) / det\n\nw2, b2 = 0.0, 0.0\nfor _ in range(500):\n    r = [(w2 * x + b2) - y for x, y in zip(sizes, prices)]\n    w2 -= 0.1 * 2 / n * sum(e * x for e, x in zip(r, sizes))\n    b2 -= 0.1 * 2 / n * sum(r)\nprint(round(w, 3), round(b, 3), round(w2, 3), round(b2, 3))\n# prints: 1.54 0.48 1.54 0.48"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+ "centered-data-matrix": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "**Xc** is the centered data matrix: one row per customer, one column per feature. From here, two routes lead to the same principal directions."
+ },
+ "covariance-route": {
+  "h": "ROUTE 1: COVARIANCE",
+  "t": "The first route forms the small symmetric matrix **S = XcᵀXc / (n − 1)**. It summarizes all the spread in the data in a 2 × 2 table."
+ },
+ "eigen-route": {
+  "h": "ROUTE 1: EIGEN-DECOMPOSE",
+  "t": "Take the eigen-decomposition of S: eigenvalues **6.03 and 0.17**, and eigenvectors **v₁ and v₂**. The eigenvectors are the principal directions."
+ },
+ "svd-route": {
+  "h": "ROUTE 2: SVD",
+  "t": "The second route factors **Xc directly** as **U Σ Vᵀ**, without ever forming the covariance matrix. Software often prefers this because it is numerically safer."
+ },
+ "u-sigma-vt": {
+  "h": "THE THREE FACTORS",
+  "t": "**U** (6 × 2) holds normalized scores, **Σ** (2 × 2) the singular values, and **Vᵀ** (2 × 2) the directions. Multiplying them rebuilds Xc."
+ },
+ "principal-directions": {
+  "h": "ROWS OF Vᵀ",
+  "t": "The first row is **PC1 = (0.754, 0.657)**. The second row comes out as (0.657, −0.754), the **opposite sign** of the eigenvector v₂. A whole row can flip sign and still describe the same axis."
+ },
+ "singular-values": {
+  "h": "SINGULAR VALUES",
+  "t": "Σ holds **5.49 and 0.93**. Squaring them and dividing by n − 1 gives **6.03 and 0.17**, the same eigenvalues as before."
+ },
+ "same-pc1": {
+  "h": "SAME ANSWER",
+  "t": "Both routes give the same first direction, **(0.754, 0.657)**, and the same variance. A program may print the opposite sign, but it is the same axis."
+ },
+ "compare-methods": {
+  "h": "TAKEAWAY",
+  "t": "**PCA is the analysis; SVD is a tool that gets you there.** Libraries prefer SVD because it avoids forming XcᵀXc, which can lose numerical precision."
+ }
+}

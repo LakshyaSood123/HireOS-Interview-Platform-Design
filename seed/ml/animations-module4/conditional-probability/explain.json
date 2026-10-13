@@ -1,0 +1,30 @@
+{
+ "full-population": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Here are **100 emails**. Pick one at random. Every email is equally likely to be the one you get, so **all 100 are in play**."
+ },
+ "event-a": {
+  "h": "EVENT A: THE EMAIL IS SPAM",
+  "t": "**40 of the 100** emails are spam (pink). So **P(spam) = 40 / 100 = 0.4**. This is the probability before we know anything else."
+ },
+ "observe-b": {
+  "h": "NEW INFORMATION: B = CONTAINS “FREE”",
+  "t": "Now you learn that the email contains the word **“free”**. **30 of the 100** emails contain it. We are being told the email is one of these 30."
+ },
+ "restrict-to-b": {
+  "h": "RESTRICT ATTENTION TO B",
+  "t": "Everything outside the dashed box is **ruled out**. The universe we pick from shrank from **100 emails to 30**. That is the heart of conditioning."
+ },
+ "overlap": {
+  "h": "THE OVERLAP: SPAM AND FREE",
+  "t": "Inside the 30 “free” emails, **24 are spam** (bright pink) and **6 are not**. The overlap of A and B is 24 emails."
+ },
+ "conditional-ratio": {
+  "h": "THE RATIO: OVERLAP / B",
+  "t": "**P(spam | free) = P(spam and free) / P(free) = 24/100 ÷ 30/100 = 24 / 30 = 0.8.** The denominator changed from 100 to 30."
+ },
+ "ml-connection": {
+  "h": "TAKEAWAY",
+  "t": "Before seeing the word, spam had probability **0.4**. Given “free”, it is **0.8**. A classifier makes every prediction this way: **conditioned on the evidence it can see**."
+ }
+}

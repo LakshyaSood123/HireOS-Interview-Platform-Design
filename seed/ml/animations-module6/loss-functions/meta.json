@@ -1,0 +1,54 @@
+{
+  "title": "Loss functions: how wrong is the model?",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "prediction",
+      "label": "The model makes a prediction",
+      "pseudocode": "prediction = w * x",
+      "python": "w, x = 2, 3\ny_hat = w * x\nprint(y_hat)   # 6"
+    },
+    {
+      "id": "target",
+      "label": "The true answer",
+      "pseudocode": "The target y is the true answer for that example.",
+      "python": "w, x, y = 2, 3, 9\ny_hat = w * x\nprint(y_hat, y)   # 6 9"
+    },
+    {
+      "id": "error",
+      "label": "The error",
+      "pseudocode": "error = prediction - target",
+      "python": "y_hat, y = 6, 9\nerror = y_hat - y\nprint(error)   # -3"
+    },
+    {
+      "id": "square-error",
+      "label": "Square it to get the loss",
+      "pseudocode": "squared error loss = (prediction - target) squared",
+      "python": "y_hat, y = 6, 9\nloss = (y_hat - y) ** 2\nprint(loss)   # 9"
+    },
+    {
+      "id": "multiple-examples",
+      "label": "Many examples",
+      "pseudocode": "Compute the error and the loss for every example.",
+      "python": "x = [1, 2, 3]\ny = [3, 5, 9]\nw = 2\nerrors = [w * xi - yi for xi, yi in zip(x, y)]\nprint(errors)                      # [-1, -1, -3]\nprint([e ** 2 for e in errors])    # [1, 1, 9]"
+    },
+    {
+      "id": "aggregate-loss",
+      "label": "One score for the dataset",
+      "pseudocode": "Average the per-example losses to get one number.",
+      "python": "x = [1, 2, 3]\ny = [3, 5, 9]\n\ndef predict(w):\n    return [w * xi for xi in x]\n\ndef mse(w):\n    errors = [p - t for p, t in zip(predict(w), y)]\n    return sum(e ** 2 for e in errors) / len(errors)\nprint(round(mse(2), 2))   # 3.67"
+    },
+    {
+      "id": "objective-connection",
+      "label": "Loss versus objective",
+      "pseudocode": "objective = average loss + penalty. The penalty is not part of the loss.",
+      "python": "x = [1, 2, 3]\ny = [3, 5, 9]\n\ndef predict(w):\n    return [w * xi for xi in x]\n\ndef mse(w):\n    errors = [p - t for p, t in zip(predict(w), y)]\n    return sum(e ** 2 for e in errors) / len(errors)\n\ndef objective(w, lam=0.1):\n    return mse(w) + lam * w ** 2\n\nprint(round(mse(2), 2), round(0.1 * 2 ** 2, 2), round(objective(2), 2))   # 3.67 0.4 4.07"
+    },
+    {
+      "id": "ml-training",
+      "label": "Training lowers the objective",
+      "pseudocode": "Compare two settings of w and keep the one with the lower objective.",
+      "python": "x = [1, 2, 3]\ny = [3, 5, 9]\n\ndef predict(w):\n    return [w * xi for xi in x]\n\ndef mse(w):\n    errors = [p - t for p, t in zip(predict(w), y)]\n    return sum(e ** 2 for e in errors) / len(errors)\n\ndef objective(w, lam=0.1):\n    return mse(w) + lam * w ** 2\n\nprint(round(mse(2), 2), round(mse(3), 2))               # 3.67 0.33\nprint(round(objective(2), 2), round(objective(3), 2))   # 4.07 1.23"
+    }
+  ]
+}

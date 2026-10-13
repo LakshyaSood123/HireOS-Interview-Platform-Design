@@ -1,0 +1,34 @@
+{
+ "predictions": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "**Line A: ŷ = 1.5x + 0.5.** For the five houses it predicts **2.0, 2.75, 3.5, 4.25 and 5.0**."
+ },
+ "residuals": {
+  "h": "RESIDUALS",
+  "t": "The residual of each house is **ŷ − y**: 0, −0.05, −0.20, +0.15, −0.20. The red bars show **how far the line is from each true price**."
+ },
+ "signed-errors": {
+  "h": "SIGNS WOULD CANCEL",
+  "t": "Some residuals are positive and some negative. Adding them directly gives **−0.30**, which hides the misses: a line could be wrong everywhere and still sum to zero."
+ },
+ "square-errors": {
+  "h": "SQUARE EACH RESIDUAL",
+  "t": "Squaring makes every miss **positive** and punishes big misses more. Each square's area is **r²**: 0, 0.0025, 0.04, 0.0225, 0.04."
+ },
+ "sum": {
+  "h": "ADD UP THE SQUARES",
+  "t": "The squares add up to **0.105**. This total measures all of the misses together."
+ },
+ "average": {
+  "h": "AVERAGE OVER THE HOUSES",
+  "t": "Divide by the 5 houses: **MSE = 0.105 ÷ 5 = 0.021**. That one number scores the whole line."
+ },
+ "compare-two-lines": {
+  "h": "SCORE A SECOND LINE",
+  "t": "**Line B: ŷ = 1.0x + 1.0** misses far more. Its squares are much bigger and add up to **2.38**, so its **MSE = 0.476**."
+ },
+ "lower-mse": {
+  "h": "TAKEAWAY",
+  "t": "Line A scores **0.021** and Line B scores **0.476**: **a lower MSE means a better fit**. MSE is a useful choice, not the only one, and it is sensitive to outliers."
+ }
+}

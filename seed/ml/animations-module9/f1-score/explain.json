@@ -1,0 +1,38 @@
+{
+ "precision-only": {
+  "h": "JUDGE BY PRECISION ONLY",
+  "t": "Two spam filters. By **precision alone**, Model A (**0.95**) looks much better than Model B (**0.75**)."
+ },
+ "recall-only": {
+  "h": "JUDGE BY RECALL ONLY",
+  "t": "By **recall alone** the picture flips: Model B (**0.75**) finds far more spam than Model A (**0.40**). One metric can tell the opposite story to another."
+ },
+ "imbalanced-pair": {
+  "h": "MODEL A: PRECISION 0.95, RECALL 0.40",
+  "t": "Model A is **very reliable when it flags** an email, but it **misses 60 percent** of the spam. It is a cautious filter."
+ },
+ "balanced-pair": {
+  "h": "MODEL B: PRECISION 0.75, RECALL 0.75",
+  "t": "Model B is less precise but **finds far more spam**. Its two numbers are **balanced**."
+ },
+ "need-combination": {
+  "h": "WHICH IS BETTER?",
+  "t": "It depends on the goal. Often we want **one number that reflects both** precision and recall, so that models can be compared directly."
+ },
+ "f1-formula": {
+  "h": "THE F1 SCORE",
+  "t": "**F1 = 2 × (precision × recall) / (precision + recall).** It is the **harmonic mean** of precision and recall."
+ },
+ "harmonic-balance": {
+  "h": "A MEAN THAT REWARDS BALANCE",
+  "t": "The ordinary average of 0.95 and 0.40 is **0.675**, but the harmonic mean is only **0.563**: it is pulled toward the smaller value. For the balanced pair both means are **0.75**."
+ },
+ "calculate-example": {
+  "h": "OUR RECURRING EXAMPLE",
+  "t": "Precision **0.667** and recall **0.80** give **F1 = 2 × 0.667 × 0.80 / 1.467 = 0.727**, slightly below the plain average of 0.733 and closer to the weaker number."
+ },
+ "interpret": {
+  "h": "TAKEAWAY",
+  "t": "F1 is **high only when both are high** and falls if either is low. It treats precision and recall as equally important, so it is a common summary, **not the best metric for every problem**."
+ }
+}

@@ -1,0 +1,60 @@
+{
+  "title": "Similarity and distance",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "two-points",
+      "label": "Two customers",
+      "pseudocode": "Two points in the plane.",
+      "python": "P, Q = (1, 2), (2, 2.5)\nprint(P, Q)\n# prints: (1, 2) (2, 2.5)"
+    },
+    {
+      "id": "coordinate-differences",
+      "label": "Coordinate differences",
+      "pseudocode": "Difference in each coordinate.",
+      "python": "P, Q = (1, 2), (2, 2.5)\nprint(Q[0] - P[0], Q[1] - P[1])\n# prints: 1 0.5"
+    },
+    {
+      "id": "distance-line",
+      "label": "The straight-line distance",
+      "pseudocode": "d = sqrt(dx^2 + dy^2)",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\nprint(round(distance((1, 2), (2, 2.5)), 3))\n# prints: 1.118"
+    },
+    {
+      "id": "near-point",
+      "label": "A near point",
+      "pseudocode": "A small distance means similar.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\nprint(round(distance((1, 2), (2, 2.5)), 3))\n# prints: 1.118"
+    },
+    {
+      "id": "far-point",
+      "label": "A far point",
+      "pseudocode": "A large distance means different.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\nprint(round(distance((1, 2), (6, 6)), 3))\n# prints: 6.403"
+    },
+    {
+      "id": "nearest-neighbor",
+      "label": "The nearest neighbor",
+      "pseudocode": "Find the nearest of the other points.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\npoints = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\nothers = points[1:]\nnearest = min(others, key=lambda p: distance((1, 2), p))\nprint(nearest, round(distance((1, 2), nearest), 3))\n# prints: (1.5, 1.8) 0.539"
+    },
+    {
+      "id": "two-features",
+      "label": "Features with different scales",
+      "pseudocode": "Income and purchases have very different scales.",
+      "python": "A, B, C = (50000, 2), (50100, 10), (58000, 2.5)\nprint(A, B, C)\n# prints: (50000, 2) (50100, 10) (58000, 2.5)"
+    },
+    {
+      "id": "scale-problem",
+      "label": "The scale problem",
+      "pseudocode": "Raw distance is dominated by the large-scale feature.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\nA, B, C = (50000, 2), (50100, 10), (58000, 2.5)\nprint('raw', round(distance(A, B), 1), round(distance(A, C), 1))\ns = lambda p: (p[0] / 10000, p[1] / 4)\nprint('scaled', round(distance(s(A), s(B)), 2), round(distance(s(A), s(C)), 2))\n# prints: raw 100.3 8000.0\n# prints: scaled 2.0 0.81"
+    },
+    {
+      "id": "distance-meaning",
+      "label": "Distance is a modeling choice",
+      "pseudocode": "Different scalings give different neighbors.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\nA, B, C = (50000, 2), (50100, 10), (58000, 2.5)\nfor scale in [(1, 1), (1 / 10000, 1 / 4)]:\n    s = lambda p: (p[0] * scale[0], p[1] * scale[1])\n    print('closest to A:', 'B' if distance(s(A), s(B)) < distance(s(A), s(C)) else 'C')\n# prints: closest to A: B\n# prints: closest to A: C"
+    }
+  ]
+}

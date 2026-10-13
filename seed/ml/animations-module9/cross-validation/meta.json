@@ -1,0 +1,66 @@
+{
+  "title": "Cross-validation for classifiers",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "classification-dataset",
+      "label": "A classification dataset",
+      "pseudocode": "100 emails with class labels.",
+      "python": "labels = [1] * 20 + [0] * 80\nprint(len(labels), 'emails', sum(labels), 'spam')\n# prints: 100 emails 20 spam"
+    },
+    {
+      "id": "class-imbalance",
+      "label": "Only 20% spam",
+      "pseudocode": "Compute the spam share.",
+      "python": "labels = [1] * 20 + [0] * 80\nprint(sum(labels) / len(labels))\n# prints: 0.2"
+    },
+    {
+      "id": "ordinary-split-risk",
+      "label": "Risk of an ordinary split",
+      "pseudocode": "Random folds can hold very different amounts of spam.",
+      "python": "spam_per_fold = [9, 6, 3, 2, 0]\nprint(sum(spam_per_fold), 'spam in total;', 'fold with no spam: recall not defined' if 0 in spam_per_fold else '')\n# prints: 20 spam in total; fold with no spam: recall not defined"
+    },
+    {
+      "id": "five-folds",
+      "label": "Five folds of 20 emails",
+      "pseudocode": "Split the 100 emails into five folds of 20.",
+      "python": "n, k = 100, 5\nprint(k, 'folds of', n // k, 'emails')\n# prints: 5 folds of 20 emails"
+    },
+    {
+      "id": "stratified-folds",
+      "label": "Stratified folds",
+      "pseudocode": "Each fold keeps the class proportions.",
+      "python": "n, spam, k = 100, 20, 5\nprint('per fold:', spam // k, 'spam and', (n - spam) // k, 'legitimate')\n# prints: per fold: 4 spam and 16 legitimate"
+    },
+    {
+      "id": "fold-one",
+      "label": "Fold 1 validates",
+      "pseudocode": "Metrics from fold 1's counts.",
+      "python": "tp, fp, fn, tn = 3, 2, 1, 14\nprint('precision', tp / (tp + fp), 'recall', tp / (tp + fn))\n# prints: precision 0.6 recall 0.75"
+    },
+    {
+      "id": "rotate-folds",
+      "label": "Rotate the validation fold",
+      "pseudocode": "Fold 2 validates next.",
+      "python": "tp, fp, fn, tn = 4, 1, 0, 15\nprint('precision', tp / (tp + fp), 'recall', tp / (tp + fn))\n# prints: precision 0.8 recall 1.0"
+    },
+    {
+      "id": "collect-metrics",
+      "label": "Collect the metrics",
+      "pseudocode": "Precision and recall from every fold.",
+      "python": "folds = [(3, 2, 1, 14), (4, 1, 0, 15), (3, 2, 1, 14), (3, 1, 1, 15), (3, 2, 1, 14)]   # (TP, FP, FN, TN) per fold\nfor i, (tp, fp, fn, tn) in enumerate(folds, 1):\n    print('fold', i, 'precision', round(tp / (tp + fp), 2), 'recall', round(tp / (tp + fn), 2))\n# prints: fold 1 precision 0.6 recall 0.75\n# prints: fold 2 precision 0.8 recall 1.0\n# prints: fold 3 precision 0.6 recall 0.75\n# prints: fold 4 precision 0.75 recall 0.75\n# prints: fold 5 precision 0.6 recall 0.75"
+    },
+    {
+      "id": "average-metrics",
+      "label": "Average the folds",
+      "pseudocode": "Average the fold metrics.",
+      "python": "folds = [(3, 2, 1, 14), (4, 1, 0, 15), (3, 2, 1, 14), (3, 1, 1, 15), (3, 2, 1, 14)]   # (TP, FP, FN, TN) per fold\nps = [tp / (tp + fp) for tp, fp, fn, tn in folds]\nrs = [tp / (tp + fn) for tp, fp, fn, tn in folds]\nprint('average precision', round(sum(ps) / 5, 2), 'recall', round(sum(rs) / 5, 2))\n# prints: average precision 0.67 recall 0.8"
+    },
+    {
+      "id": "final-test-locked",
+      "label": "The test set stays locked",
+      "pseudocode": "Folds are for development; the test set is scored once.",
+      "python": "test_set_used_in_cv = False\nprint('test set used during cross-validation:', test_set_used_in_cv)\n# prints: test set used during cross-validation: False"
+    }
+  ]
+}

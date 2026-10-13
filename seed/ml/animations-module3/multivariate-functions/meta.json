@@ -1,0 +1,48 @@
+{
+  "title": "Multivariate functions: from a curve to many weights",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "one-variable",
+      "label": "One weight: a curve",
+      "pseudocode": "With one weight w, the loss is a function of one number.",
+      "python": "def loss(w):\n    return (w - 3) ** 2\n\nprint(loss(1))   # 4"
+    },
+    {
+      "id": "two-variables",
+      "label": "Two weights: a floor of choices",
+      "pseudocode": "With two weights, each choice is a pair (w1, w2): a point on a floor.",
+      "python": "choice = (1, 3)   # (w1, w2)\nprint(choice)"
+    },
+    {
+      "id": "surface",
+      "label": "The loss lifts into a surface",
+      "pseudocode": "For every pair (w1, w2), the loss is the height above that point.",
+      "python": "def loss(w1, w2):\n    return (w1 - 3) ** 2 + 2 * (w2 - 1) ** 2\n\nfor point in [(3, 1), (1, 3), (0, 0)]:\n    print(point, loss(*point))   # (3, 1) 0 / (1, 3) 12 / (0, 0) 11"
+    },
+    {
+      "id": "point-on-surface",
+      "label": "A point on the surface",
+      "pseudocode": "The weights say where we stand on the floor. The loss is how high the surface is there.",
+      "python": "def loss(w1, w2):\n    return (w1 - 3) ** 2 + 2 * (w2 - 1) ** 2\n\nw1, w2 = 1, 3\nprint(loss(w1, w2))   # 12"
+    },
+    {
+      "id": "many-variables",
+      "label": "Many weights: same ideas",
+      "pseudocode": "A model can have thousands of weights. The loss is still one number.",
+      "python": "weights = [0.0] * 1000   # a model with 1000 weights\nprint(len(weights))     # 1000"
+    },
+    {
+      "id": "parameter-vector",
+      "label": "A weight vector and its gradient",
+      "pseudocode": "The gradient has one entry for each weight, in the same order.",
+      "python": "x = [1, 2, 3]\ny = 6\nw = [0, 0, 0]\nerror = sum(wi * xi for wi, xi in zip(w, x)) - y\ngradient = [2 * error * xi for xi in x]\nprint(gradient, len(gradient) == len(w))   # [-12, -24, -36] True"
+    },
+    {
+      "id": "ml-loss",
+      "label": "One loss number, many partials",
+      "pseudocode": "weights -> prediction -> one loss number -> one partial derivative per weight",
+      "python": "x = [1, 2, 3]\ny = 6\nw = [0, 0, 0]\n\nprediction = sum(wi * xi for wi, xi in zip(w, x))\nloss = (prediction - y) ** 2\ngradient = [2 * (prediction - y) * xi for xi in x]\nprint(prediction, loss, gradient)   # 0 36 [-12, -24, -36]"
+    }
+  ]
+}

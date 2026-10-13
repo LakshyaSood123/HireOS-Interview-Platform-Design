@@ -1,0 +1,147 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322c4e9cccef168ed11"
+  },
+  "assets": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498522"
+    }
+  },
+  "createdBy": {
+    "$oid": "000000000000000000000000"
+  },
+  "css": "body {\r\n  margin: 0;\r\n  padding: 14px;\r\n  box-sizing: border-box;\r\n  background: #0b1d16;\r\n  color: #e6f5ec;\r\n  font-family: system-ui, sans-serif;\r\n}\r\n.scene {\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 8px;\r\n}\r\n.step-label {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  letter-spacing: 0.08em;\r\n  text-transform: uppercase;\r\n  color: #a7ce65;\r\n}\r\nsvg {\r\n  width: 100%;\r\n  height: auto;\r\n  max-width: 640px;\r\n  background: #071510;\r\n  border-radius: 10px;\r\n  border: 1px solid rgba(29, 181, 132, 0.35);\r\n}\r\nsvg g,\r\nsvg line,\r\nsvg polygon,\r\nsvg path,\r\nsvg ellipse,\r\nsvg circle,\r\nsvg rect,\r\nsvg text {\r\n  transition: opacity 0.4s ease, transform 0.6s ease;\r\n}\r\n.axis {\r\n  stroke: rgba(167, 206, 101, 0.3);\r\n  stroke-width: 1;\r\n}\r\n.tick {\r\n  font-size: 10px;\r\n  fill: #8fa89c;\r\n}\r\n.lbl,\r\n.big,\r\n.note,\r\n.mono {\r\n  paint-order: stroke;\r\n  stroke: #071510;\r\n  stroke-width: 3px;\r\n  stroke-linejoin: round;\r\n}\r\n.lbl {\r\n  font-size: 12px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.lbl-g { fill: #1db584; }\r\n.lbl-y { fill: #e2b44a; }\r\n.lbl-p { fill: #f472b6; }\r\n.lbl-b { fill: #38bdf8; }\r\n.lbl-r { fill: #f87171; }\r\n.big {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.note {\r\n  font-size: 11px;\r\n  fill: #c9dccf;\r\n}\r\n.mono {\r\n  font-family: ui-monospace, Consolas, monospace;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.caption {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  line-height: 1.5;\r\n  color: #c9dccf;\r\n  min-height: 40px;\r\n}\r\n.cell rect {\r\n  fill: rgba(255, 255, 255, 0.05);\r\n  stroke: rgba(255, 255, 255, 0.28);\r\n  stroke-width: 1.2;\r\n}\r\n.cell text {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.cell.hl-row rect { fill: rgba(226, 180, 74, 0.25); stroke: #e2b44a; }\r\n.cell.hl-col rect { fill: rgba(29, 181, 132, 0.25); stroke: #1db584; }\r\n.cell.hl-both rect { fill: rgba(244, 114, 182, 0.28); stroke: #f472b6; }\r\n.dim { opacity: 0.25; }\r\n.dash { stroke-dasharray: 5 4; }\r\n.fillA { fill: rgba(56, 189, 248, 0.16); stroke: #38bdf8; stroke-width: 2; }\r\n.fillB { fill: rgba(244, 114, 182, 0.18); stroke: #f472b6; stroke-width: 2; }\r\n.fillG { fill: rgba(29, 181, 132, 0.16); stroke: #1db584; stroke-width: 2; }\r\n\n/* ── explanation panel (shared by every generated ML animation) ── */\n.explain {\n  box-sizing: border-box;\n  max-width: 640px;\n  margin-top: 4px;\n  padding: 14px 18px 16px;\n  min-height: 150px;\n  border-radius: 12px;\n  background: rgba(29, 181, 132, 0.10);\n  border: 1px solid rgba(29, 181, 132, 0.45);\n  border-left: 5px solid #1db584;\n}\n.explain-h {\n  margin: 0 0 8px;\n  font-size: 13px;\n  font-weight: 800;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.explain-t {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.55;\n  color: #f1faf4;\n}\n.explain-t strong {\n  font-weight: 800;\n  color: #ffd98a;\n}\n\n",
+  "html": "<div class=\"scene\">\n  <p class=\"step-label\" id=\"step-label\"></p>\n  <svg id=\"scene\" viewBox=\"0 0 640 360\" role=\"img\" aria-label=\"Positive definite matrices\"></svg>\n  <section class=\"explain\" aria-live=\"polite\">\n    <h3 class=\"explain-h\" id=\"explain-h\"></h3>\n    <p class=\"explain-t\" id=\"caption\"></p>\n  </section>\n</div>\n",
+  "js": "(function () {\n  // ── shared helpers (SVG, tweening) ─────────────────────────────────────────\r\n  var NS = \"http://www.w3.org/2000/svg\";\r\n  var svg = document.getElementById(\"scene\");\r\n  var labelEl = document.getElementById(\"step-label\");\r\n  var captionEl = document.getElementById(\"caption\");\r\n\r\n  function el(name, attrs, parent) {\r\n    var node = document.createElementNS(NS, name);\r\n    for (var key in attrs) node.setAttribute(key, attrs[key]);\r\n    if (parent) parent.appendChild(node);\r\n    return node;\r\n  }\r\n  function txt(parent, x, y, cls, str, anchor) {\r\n    var t = el(\"text\", { x: x, y: y, class: cls }, parent);\r\n    if (anchor) t.setAttribute(\"text-anchor\", anchor);\r\n    t.textContent = str;\r\n    return t;\r\n  }\r\n  function show(node, on) {\r\n    node.setAttribute(\"opacity\", on ? \"1\" : \"0\");\r\n  }\r\n  function place(node, x, y) {\r\n    node.style.transform = \"translate(\" + x + \"px,\" + y + \"px)\";\r\n  }\r\n  function setLine(node, x1, y1, x2, y2) {\r\n    node.setAttribute(\"x1\", x1);\r\n    node.setAttribute(\"y1\", y1);\r\n    node.setAttribute(\"x2\", x2);\r\n    node.setAttribute(\"y2\", y2);\r\n  }\r\n  function lerp(a, b, e) {\r\n    return a + (b - a) * e;\r\n  }\r\n  function round1(v) {\r\n    return (Math.round(v * 10) / 10).toFixed(1);\r\n  }\r\n\r\n  // Eased animation. fn(e) is called with e from 0 to 1. Without\r\n  // requestAnimationFrame (or with ms = 0) it jumps straight to fn(1).\r\n  var animTokens = {};\r\n  function anim(key, ms, fn) {\r\n    var token = (animTokens[key] || 0) + 1;\r\n    animTokens[key] = token;\r\n    if (typeof requestAnimationFrame !== \"function\" || ms <= 0) {\r\n      fn(1);\r\n      return;\r\n    }\r\n    var start = null;\r\n    function frame(now) {\r\n      if (animTokens[key] !== token) return;\r\n      if (start === null) start = now;\r\n      var p = Math.min(1, (now - start) / ms);\r\n      var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;\r\n      fn(e);\r\n      if (p < 1) requestAnimationFrame(frame);\r\n    }\r\n    requestAnimationFrame(frame);\r\n  }\r\n\r\n  // Arrowheads, one marker per colour.\r\n  var COLORS = { g: \"#1DB584\", y: \"#E2B44A\", p: \"#F472B6\", b: \"#38BDF8\", w: \"#c9dccf\", r: \"#F87171\" };\r\n  var defs = el(\"defs\", {}, svg);\r\n  Object.keys(COLORS).forEach(function (k) {\r\n    var m = el(\"marker\", { id: \"ah-\" + k, viewBox: \"0 0 10 10\", refX: 9, refY: 5, markerUnits: \"userSpaceOnUse\", markerWidth: 13, markerHeight: 13, orient: \"auto\" }, defs);\r\n    el(\"path\", { d: \"M0 0 L10 5 L0 10 Z\", fill: COLORS[k] }, m);\r\n  });\r\n  function arrow(parent, colorKey, width) {\r\n    return el(\"line\", { x1: 0, y1: 0, x2: 0, y2: 0, stroke: COLORS[colorKey], \"stroke-width\": width || 3, \"marker-end\": \"url(#ah-\" + colorKey + \")\", \"stroke-linecap\": \"round\" }, parent);\r\n  }\r\n  function polygon(parent, cls) {\r\n    return el(\"polygon\", { points: \"\", class: cls }, parent);\r\n  }\r\n  function setPoly(node, pts) {\r\n    node.setAttribute(\"points\", pts.map(function (p) { return p[0].toFixed(1) + \",\" + p[1].toFixed(1); }).join(\" \"));\r\n  }\r\n  function lerpPts(a, b, e) {\r\n    return a.map(function (p, i) { return [lerp(p[0], b[i][0], e), lerp(p[1], b[i][1], e)]; });\r\n  }\r\n  // Maps maths coordinates (x right, y up) to screen pixels.\r\n  function makePlane(cx, cy, s) {\r\n    return {\r\n      x: function (v) { return cx + s * v; },\r\n      y: function (v) { return cy - s * v; },\r\n      pt: function (p) { return [cx + s * p[0], cy - s * p[1]]; },\r\n      s: s, cx: cx, cy: cy\r\n    };\r\n  }\r\n  function axes(parent, plane, xr, yr) {\r\n    el(\"line\", { x1: plane.x(-xr), y1: plane.y(0), x2: plane.x(xr), y2: plane.y(0), class: \"axis\" }, parent);\r\n    el(\"line\", { x1: plane.x(0), y1: plane.y(-yr), x2: plane.x(0), y2: plane.y(yr), class: \"axis\" }, parent);\r\n  }\r\n\n  var EXPLAIN = {\"quadratic-form\":{\"h\":\"WHAT YOU ARE LOOKING AT\",\"t\":\"For a matrix A and a vector x, the **quadratic form xᵀ A x** is one number. For **A = [[2, 0], [0, 1]]** it equals **2x₁² + x₂²**.\"},\"directions\":{\"h\":\"TRY MANY DIRECTIONS\",\"t\":\"Evaluate **xᵀ A x** for vectors pointing in many directions. Each arrow shows its value.\"},\"positive-values\":{\"h\":\"EVERY DIRECTION GIVES A POSITIVE VALUE\",\"t\":\"No matter which **non-zero direction** we pick, the value is above zero. That is what **positive definite** means.\"},\"bowl\":{\"h\":\"POSITIVE VALUES MAKE A BOWL\",\"t\":\"Plot the value as height and you get an **upward-curving bowl** with a single lowest point: a **stable minimum**.\"},\"eigenvalues\":{\"h\":\"EQUIVALENT TEST: ALL EIGENVALUES POSITIVE\",\"t\":\"A symmetric matrix is positive definite **exactly when all its eigenvalues are positive**. Here they are **2 and 1**.\"},\"non-pd-contrast\":{\"h\":\"COMPARE WITH AN INDEFINITE MATRIX\",\"t\":\"Take **B = [[1, 0], [0, −1]]**. Its value is positive along one axis but **negative along the other**, so the surface is a **saddle**.\"},\"ml-connection\":{\"h\":\"TAKEAWAY\",\"t\":\"Positive curvature means a loss has a **stable minimum**, and covariance matrices have this property. **Saddles are where optimization gets stuck.**\"}};\n  // ── scene ──\n  var steps = [\r\n    { id: \"quadratic-form\", label: \"A number from a vector and a matrix\", caption: \"For a matrix A and a vector x, the quadratic form xᵀ A x is one number. For A = [[2, 0], [0, 1]] it equals 2x₁² + x₂².\" },\r\n    { id: \"directions\", label: \"Try many directions\", caption: \"Evaluate xᵀ A x for vectors pointing in many directions. Each arrow shows its value.\" },\r\n    { id: \"positive-values\", label: \"Every direction gives a positive value\", caption: \"No matter which non-zero direction we pick, the value is above zero. That is what positive definite means.\" },\r\n    { id: \"bowl\", label: \"Positive values make a bowl\", caption: \"Plot the value as height and you get an upward-curving bowl with a single lowest point: a stable minimum.\" },\r\n    { id: \"eigenvalues\", label: \"Equivalent test: all eigenvalues are positive\", caption: \"A symmetric matrix is positive definite exactly when all its eigenvalues are positive. Here they are 2 and 1.\" },\r\n    { id: \"non-pd-contrast\", label: \"Compare with an indefinite matrix\", caption: \"Take B = [[1, 0], [0, −1]]. Its value is positive along one axis but negative along the other, so the surface is a saddle.\" },\r\n    { id: \"ml-connection\", label: \"Why this matters for ML\", caption: \"Positive curvature means a loss has a stable minimum, and covariance matrices have this property. Saddles are where optimization gets stuck.\" }\r\n  ];\r\n\r\n  var PL = makePlane(165, 190, 32); // left: positive definite\r\n  var PR = makePlane(485, 190, 32); // right: saddle\r\n  function qfA(x, y) { return 2 * x * x + y * y; }\r\n  function qfB(x, y) { return x * x - y * y; }\r\n\r\n  // Left panel axes + title.\r\n  var left = el(\"g\", {}, svg);\r\n  axes(left, PL, 4.5, 4.5);\r\n  txt(left, PL.cx, 34, \"lbl lbl-g\", \"A = [[2, 0], [0, 1]]\", \"middle\");\r\n  var right = el(\"g\", { opacity: 0 }, svg);\r\n  axes(right, PR, 4.5, 4.5);\r\n  txt(right, PR.cx, 34, \"lbl lbl-r\", \"B = [[1, 0], [0, −1]]\", \"middle\");\r\n\r\n  // Contours: ellipses for A (bowl), hyperbolas for B (saddle).\r\n  var contourA = el(\"g\", { opacity: 0 }, left);\r\n  [1, 2, 3.4].forEach(function (c) {\r\n    el(\"ellipse\", { cx: PL.cx, cy: PL.cy, rx: Math.sqrt(c / 2) * PL.s * 1.9, ry: Math.sqrt(c) * PL.s * 1.9, fill: \"none\", stroke: \"#1db584\", \"stroke-width\": 2 }, contourA);\r\n  });\r\n  var ball = el(\"circle\", { cx: PL.cx, cy: PL.cy, r: 7, fill: \"#e2b44a\", opacity: 0 }, left);\r\n  var ballLab = txt(left, PL.cx + 12, PL.cy + 30, \"lbl lbl-y\", \"minimum\", \"start\");\r\n  show(ballLab, false);\r\n\r\n  var contourB = el(\"g\", { opacity: 0 }, right);\r\n  [-1.2, 1.2].forEach(function (c) {\r\n    // x² − y² = c, drawn as four branches\r\n    var pts1 = [], pts2 = [];\r\n    for (var t = -1.6; t <= 1.601; t += 0.1) {\r\n      if (c > 0) {\r\n        var x = Math.sqrt(c) * ((Math.exp(t) + Math.exp(-t)) / 2);\r\n        var y = Math.sqrt(c) * ((Math.exp(t) - Math.exp(-t)) / 2);\r\n        pts1.push(PR.x(x) + \",\" + PR.y(y));\r\n        pts2.push(PR.x(-x) + \",\" + PR.y(y));\r\n      } else {\r\n        var y2 = Math.sqrt(-c) * ((Math.exp(t) + Math.exp(-t)) / 2);\r\n        var x2 = Math.sqrt(-c) * ((Math.exp(t) - Math.exp(-t)) / 2);\r\n        pts1.push(PR.x(x2) + \",\" + PR.y(y2));\r\n        pts2.push(PR.x(x2) + \",\" + PR.y(-y2));\r\n      }\r\n    }\r\n    var color = c > 0 ? \"#1db584\" : \"#f87171\";\r\n    el(\"polyline\", { points: pts1.join(\" \"), fill: \"none\", stroke: color, \"stroke-width\": 2 }, contourB);\r\n    el(\"polyline\", { points: pts2.join(\" \"), fill: \"none\", stroke: color, \"stroke-width\": 2 }, contourB);\r\n  });\r\n  var saddlePt = el(\"circle\", { cx: PR.cx, cy: PR.cy, r: 7, fill: \"#f87171\", opacity: 0 }, right);\r\n  var saddleLab = txt(right, PR.cx + 12, PR.cy + 30, \"lbl lbl-r\", \"saddle\", \"start\");\r\n  show(saddleLab, false);\r\n\r\n  // Direction arrows with values (left panel).\r\n  var dirGroup = el(\"g\", { opacity: 0 }, left);\r\n  var dirTexts = [];\r\n  [0, 45, 90, 135, 180, 225, 270, 315].forEach(function (deg) {\r\n    var r = (deg * Math.PI) / 180;\r\n    var ux = Math.cos(r), uy = Math.sin(r);\r\n    var a = arrow(dirGroup, \"g\", 2.5);\r\n    setLine(a, PL.x(0), PL.y(0), PL.x(ux * 2.3), PL.y(uy * 2.3));\r\n    var t = txt(dirGroup, PL.x(ux * 3.15), PL.y(uy * 3.15) + 4, \"lbl lbl-g\", round1(qfA(ux, uy)), \"middle\");\r\n    dirTexts.push(t);\r\n  });\r\n  // Negative directions (right panel).\r\n  var dirGroupB = el(\"g\", { opacity: 0 }, right);\r\n  [0, 90, 180, 270].forEach(function (deg) {\r\n    var r = (deg * Math.PI) / 180;\r\n    var ux = Math.cos(r), uy = Math.sin(r);\r\n    var v = qfB(ux, uy);\r\n    var a = arrow(dirGroupB, v >= -0.01 ? \"g\" : \"r\", 2.5);\r\n    setLine(a, PR.x(0), PR.y(0), PR.x(ux * 2.3), PR.y(uy * 2.3));\r\n    txt(dirGroupB, PR.x(ux * 3.15), PR.y(uy * 3.15) + 4, v >= -0.01 ? \"lbl lbl-g\" : \"lbl lbl-r\", round1(v), \"middle\");\r\n  });\r\n\r\n  // Eigenvalue bars (left).\r\n  var eig = el(\"g\", { opacity: 0 }, left);\r\n  var ex = el(\"line\", { x1: PL.x(0), y1: PL.y(0), x2: PL.x(3.6), y2: PL.y(0), stroke: \"#e2b44a\", \"stroke-width\": 4, \"marker-end\": \"url(#ah-y)\" }, eig);\r\n  var ey = el(\"line\", { x1: PL.x(0), y1: PL.y(0), x2: PL.x(0), y2: PL.y(3.6 * 0.5), stroke: \"#38bdf8\", \"stroke-width\": 4, \"marker-end\": \"url(#ah-b)\" }, eig);\r\n  txt(eig, PL.x(3.6) - 4, PL.y(0) - 12, \"lbl lbl-y\", \"λ₁ = 2 > 0\", \"end\");\r\n  txt(eig, PL.x(0) + 10, PL.y(1.8) + 4, \"lbl lbl-b\", \"λ₂ = 1 > 0\", \"start\");\r\n  var eigB = el(\"g\", { opacity: 0 }, right);\r\n  txt(eigB, PR.x(0) + 10, PR.y(-2.4), \"lbl lbl-r\", \"λ₂ = −1 < 0\", \"start\");\r\n  txt(eigB, PR.x(3.6) - 4, PR.y(0) - 12, \"lbl lbl-g\", \"λ₁ = 1 > 0\", \"end\");\r\n\r\n  var xArrow = arrow(left, \"y\", 3.5);\r\n  setLine(xArrow, PL.x(0), PL.y(0), PL.x(1.5), PL.y(1.5));\r\n  var xLab = txt(left, PL.x(1.5) + 8, PL.y(1.5) - 6, \"lbl lbl-y\", \"x = [1, 1]\", \"start\");\r\n  show(xArrow, false);\r\n  show(xLab, false);\r\n  var note = txt(svg, 320, 338, \"note\", \"\", \"middle\");\r\n\r\n  function render(index, id) {\r\n    show(left, true);\r\n    show(right, index >= 5);\r\n    show(contourA, id === \"bowl\" || id === \"eigenvalues\" || id === \"ml-connection\" || id === \"non-pd-contrast\");\r\n    show(xArrow, id === \"quadratic-form\");\r\n    show(xLab, id === \"quadratic-form\");\r\n    show(ball, id === \"bowl\" || id === \"ml-connection\");\r\n    show(ballLab, id === \"bowl\" || id === \"ml-connection\");\r\n    show(dirGroup, id === \"directions\" || id === \"positive-values\");\r\n    show(contourB, index >= 5);\r\n    show(dirGroupB, id === \"non-pd-contrast\");\r\n    show(saddlePt, index >= 5);\r\n    show(saddleLab, index >= 5);\r\n    show(eig, id === \"eigenvalues\");\r\n    show(eigB, id === \"non-pd-contrast\");\r\n    dirTexts.forEach(function (t) { show(t, true); });\r\n    note.textContent = \"\";\r\n    if (id === \"quadratic-form\") note.textContent = \"x = [1, 1]   →   xᵀ A x = 2·1 + 1·1 = 3\";\r\n    else if (id === \"positive-values\") note.textContent = \"all values > 0  →  positive definite\";\r\n    else if (id === \"bowl\") note.textContent = \"positive curvature in every direction: one stable minimum\";\r\n    else if (id === \"non-pd-contrast\") note.textContent = \"x = [0, 1]   →   xᵀ B x = −1 (negative): not positive definite\";\r\n    else if (id === \"ml-connection\") note.textContent = \"bowl: gradient descent settles   |   saddle: no stable minimum\";\r\n  }\r\n\n\n  // ── shared runtime: stepping, explanation panel, educational autoplay pacing, bridge ──\n  var current = 0;\n  var explainHeadEl = document.getElementById(\"explain-h\");\n\n  // **bold** markers in an explanation become <strong> nodes (built with DOM calls, never innerHTML).\n  function setRich(node, str) {\n    node.textContent = \"\";\n    var parts = String(str).split(\"**\");\n    for (var i = 0; i < parts.length; i++) {\n      if (parts[i] === \"\") continue;\n      var seg = document.createElement(i % 2 ? \"strong\" : \"span\");\n      seg.textContent = parts[i];\n      node.appendChild(seg);\n    }\n  }\n\n  function explanationFor(index) {\n    var ex = (typeof EXPLAIN === \"object\" && EXPLAIN) ? EXPLAIN[steps[index].id] : null;\n    return ex || { h: \"WHAT IS HAPPENING\", t: steps[index].caption };\n  }\n\n  // Autoplay pace: 4.5 to 10.5 seconds per step, longer for longer explanations, so a learner can read.\n  function stepMs(index) {\n    var words = String(explanationFor(index).t).replace(/\\*\\*/g, \"\").split(/\\s+/).length;\n    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));\n  }\n\n  function renderStep(index) {\n    var ex = explanationFor(index);\n    labelEl.textContent = steps[index].label;\n    if (explainHeadEl) explainHeadEl.textContent = ex.h;\n    setRich(captionEl, ex.t);\n    render(index, steps[index].id);\n  }\n\n  function goTo(index) {\n    if (index < 0 || index >= steps.length) return;\n    current = index;\n    renderStep(current);\n    if (window.ReagvisBridge) window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n\n  renderStep(current);\n\n  // Autoplay: exactly one timer, one step per tick, stops on the final step.\n  // PLAY on the final step restarts from the first step and plays again.\n  var timer = null;\n\n  function stopAuto() {\n    if (timer !== null) {\n      clearTimeout(timer);\n      timer = null;\n    }\n  }\n\n  function scheduleNext() {\n    timer = setTimeout(function () {\n      timer = null;\n      if (current >= steps.length - 1) return;\n      goTo(current + 1);\n      if (current < steps.length - 1) scheduleNext();\n    }, stepMs(current));\n  }\n\n  function startAuto() {\n    if (timer !== null) return;\n    if (current >= steps.length - 1) goTo(0);\n    scheduleNext();\n  }\n\n  window.addEventListener(\"pagehide\", stopAuto);\n\n  window.ReagvisAnimation = {\n    stepDuration: stepMs,\n    onCommand: function (type, stepId) {\n      if (type === \"PLAY\") startAuto();\n      else if (type === \"PAUSE\") stopAuto();\n      else if (type === \"NEXT\") { stopAuto(); goTo(current + 1); }\n      else if (type === \"PREVIOUS\") { stopAuto(); goTo(current - 1); }\n      else if (type === \"RESET\") { stopAuto(); goTo(0); }\n      else if (type === \"GOTO_STEP\") {\n        stopAuto();\n        for (var i = 0; i < steps.length; i++) {\n          if (steps[i].id === stepId) { goTo(i); break; }\n        }\n      }\n    },\n  };\n\n  if (window.ReagvisBridge) {\n    window.ReagvisBridge.ready();\n    window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n})();\n",
+  "lastFrozenContentHash": null,
+  "lastFrozenRevisionId": null,
+  "manifest": {
+    "bridgeVersion": {
+      "$numberInt": "1"
+    },
+    "capabilities": [
+      "play",
+      "pause",
+      "next",
+      "previous",
+      "reset",
+      "gotoStep"
+    ],
+    "heightPx": {
+      "$numberInt": "590"
+    },
+    "traceEvents": [
+      "quadratic-form",
+      "directions",
+      "positive-values",
+      "bowl",
+      "eigenvalues",
+      "non-pd-contrast",
+      "ml-connection"
+    ]
+  },
+  "packageId": "fc153703-2c86-4f76-8ab4-581699d985ad",
+  "packageTrace": {
+    "steps": [
+      {
+        "animationEvent": "quadratic-form",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "For a matrix A and a vector x, compute the single number x^T A x.",
+          "python": "def quad_form(A, x):\n    return sum(x[i] * A[i][j] * x[j] for i in range(len(x)) for j in range(len(x)))\n\nA = [[2, 0], [0, 1]]\nprint(quad_form(A, [1, 1]))  # 3"
+        },
+        "id": "quadratic-form",
+        "label": "Compute the quadratic form"
+      },
+      {
+        "animationEvent": "directions",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Evaluate the quadratic form for vectors pointing in many directions.",
+          "python": "import math\n\ndef quad_form(A, x):\n    return sum(x[i] * A[i][j] * x[j] for i in range(len(x)) for j in range(len(x)))\n\nA = [[2, 0], [0, 1]]\nfor deg in (0, 45, 90, 135):\n    r = math.radians(deg)\n    print(deg, round(quad_form(A, [math.cos(r), math.sin(r)]), 2))"
+        },
+        "id": "directions",
+        "label": "Try many directions"
+      },
+      {
+        "animationEvent": "positive-values",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "If every non-zero direction gives a value above zero, the matrix is positive definite.",
+          "python": "import math\n\ndef quad_form(A, x):\n    return sum(x[i] * A[i][j] * x[j] for i in range(len(x)) for j in range(len(x)))\n\nA = [[2, 0], [0, 1]]\nvalues = [quad_form(A, [math.cos(math.radians(d)), math.sin(math.radians(d))]) for d in range(0, 360, 15)]\nprint(min(values) > 0)  # True"
+        },
+        "id": "positive-values",
+        "label": "Check that every value is positive"
+      },
+      {
+        "animationEvent": "bowl",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Use the value as a height. Positive values in every direction give an upward-curving bowl with one lowest point.",
+          "python": "def height(x, y):\n    return 2 * x * x + y * y  # x^T A x for A = [[2, 0], [0, 1]]\n\nprint(height(0, 0), height(1, 0), height(0, 1))  # 0 2 1: lowest at the origin"
+        },
+        "id": "bowl",
+        "label": "See the bowl"
+      },
+      {
+        "animationEvent": "eigenvalues",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "A symmetric matrix is positive definite exactly when all of its eigenvalues are positive.",
+          "python": "import math\n\ndef eigenvalues_2x2(a, b, d):\n    gap = math.sqrt((a - d) ** 2 + 4 * b * b)\n    return ((a + d) + gap) / 2, ((a + d) - gap) / 2\n\nprint(eigenvalues_2x2(2, 0, 1))  # (2.0, 1.0): both positive"
+        },
+        "id": "eigenvalues",
+        "label": "Check the eigenvalues"
+      },
+      {
+        "animationEvent": "non-pd-contrast",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "If some direction gives a negative value, the surface curves down there and the matrix is not positive definite.",
+          "python": "def quad_form(A, x):\n    return sum(x[i] * A[i][j] * x[j] for i in range(len(x)) for j in range(len(x)))\n\nB = [[1, 0], [0, -1]]\nprint(quad_form(B, [1, 0]), quad_form(B, [0, 1]))  # 1 -1: a saddle"
+        },
+        "id": "non-pd-contrast",
+        "label": "Compare with an indefinite matrix"
+      },
+      {
+        "animationEvent": "ml-connection",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Positive curvature in every direction means a stable minimum. Covariance matrices have this property.",
+          "python": "import math\n\ndef eigenvalues_2x2(a, b, d):\n    gap = math.sqrt((a - d) ** 2 + 4 * b * b)\n    return ((a + d) + gap) / 2, ((a + d) - gap) / 2\n\ncov = (2, 1, 2)  # a covariance-like matrix [[2, 1], [1, 2]]\nprint(all(v > 0 for v in eigenvalues_2x2(*cov)))  # True"
+        },
+        "id": "ml-connection",
+        "label": "Connect it to optimization"
+      }
+    ],
+    "version": {
+      "$numberInt": "1"
+    }
+  },
+  "revision": {
+    "$numberInt": "5"
+  },
+  "revisionId": "r2",
+  "sourceKind": "zip",
+  "status": "frozen",
+  "title": "ML Module 2 — Positive Definite Matrices",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498522"
+    }
+  },
+  "updatedBy": {
+    "$oid": "000000000000000000000000"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "title": "Why reduce dimensions?",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "many-features",
+      "label": "Many features",
+      "pseudocode": "Each feature of an example is one dimension.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nprint(len(X), 'customers,', len(X[0]), 'features each (columns = dimensions)')\n# prints: 6 customers, 2 features each (columns = dimensions)"
+    },
+    {
+      "id": "feature-space",
+      "label": "Customers as points",
+      "pseudocode": "Plot each example as a point in feature space.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nfor i, p in enumerate(X, 1):\n    print('customer', i, p)\n# prints: customer 1 (2, 1.5)\n# prints: customer 2 (3, 2.5)\n# prints: customer 3 (4, 2.5)\n# prints: customer 4 (5, 4.5)\n# prints: customer 5 (6, 4.0)\n# prints: customer 6 (7, 6.0)"
+    },
+    {
+      "id": "correlated-features",
+      "label": "Correlated features",
+      "pseudocode": "Measure how closely two features move together.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\nprint('correlation:', round(S[0][1] / math.sqrt(S[0][0] * S[1][1]), 2))\n# prints: correlation: 0.94"
+    },
+    {
+      "id": "redundancy",
+      "label": "Redundancy",
+      "pseudocode": "If one feature mostly predicts another, they overlap.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\nr = S[0][1] / math.sqrt(S[0][0] * S[1][1])\nprint('share of spend variation that goes with usage (r squared):', round(r * r, 2))\n# prints: share of spend variation that goes with usage (r squared): 0.89"
+    },
+    {
+      "id": "three-d-view",
+      "label": "A third feature",
+      "pseudocode": "More features can still hide a simple structure.",
+      "python": "features = ['usage', 'spend', 'sessions']\nprint(len(features), 'features -> 3 axes; the points still lie near one line (illustration)')\n# prints: 3 features -> 3 axes; the points still lie near one line (illustration)"
+    },
+    {
+      "id": "hard-to-visualize",
+      "label": "Too many axes",
+      "pseudocode": "Visualization and distance both degrade as dimensions grow.",
+      "python": "for d in (2, 3, 40):\n    print(d, 'features ->', d, 'axes')\n# prints: 2 features -> 2 axes\n# prints: 3 features -> 3 axes\n# prints: 40 features -> 40 axes"
+    },
+    {
+      "id": "compress",
+      "label": "Compress",
+      "pseudocode": "Replace two features by one combined feature.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\nv1 = (b / k, (lam1 - a) / k)\nv2 = (-v1[1], v1[0])\nz1 = [r[0] * v1[0] + r[1] * v1[1] for r in Xc]\nz2 = [r[0] * v2[0] + r[1] * v2[1] for r in Xc]\nprint('position along the trend:', [round(v, 2) for v in z1])\n# prints: position along the trend: [-3.2, -1.79, -1.03, 1.03, 1.46, 3.53]"
+    },
+    {
+      "id": "one-d-view",
+      "label": "One number each",
+      "pseudocode": "Store one value per customer.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\nv1 = (b / k, (lam1 - a) / k)\nv2 = (-v1[1], v1[0])\nz1 = [r[0] * v1[0] + r[1] * v1[1] for r in Xc]\nz2 = [r[0] * v2[0] + r[1] * v2[1] for r in Xc]\nprint(len(X) * 2, 'numbers ->', len(z1), 'numbers')\n# prints: 12 numbers -> 6 numbers"
+    },
+    {
+      "id": "preserve-structure",
+      "label": "What is kept",
+      "pseudocode": "Compare what was kept with what was lost.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\nv1 = (b / k, (lam1 - a) / k)\nv2 = (-v1[1], v1[0])\nz1 = [r[0] * v1[0] + r[1] * v1[1] for r in Xc]\nz2 = [r[0] * v2[0] + r[1] * v2[1] for r in Xc]\nprint('largest departure from the trend:', round(max(abs(v) for v in z2), 2))\n# prints: largest departure from the trend: 0.61"
+    }
+  ]
+}

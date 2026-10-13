@@ -1,0 +1,48 @@
+{
+  "title": "Positive definite matrices",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "quadratic-form",
+      "label": "Compute the quadratic form",
+      "pseudocode": "For a matrix A and a vector x, compute the single number x^T A x.",
+      "python": "def quad_form(A, x):\n    return sum(x[i] * A[i][j] * x[j] for i in range(len(x)) for j in range(len(x)))\n\nA = [[2, 0], [0, 1]]\nprint(quad_form(A, [1, 1]))  # 3"
+    },
+    {
+      "id": "directions",
+      "label": "Try many directions",
+      "pseudocode": "Evaluate the quadratic form for vectors pointing in many directions.",
+      "python": "import math\n\ndef quad_form(A, x):\n    return sum(x[i] * A[i][j] * x[j] for i in range(len(x)) for j in range(len(x)))\n\nA = [[2, 0], [0, 1]]\nfor deg in (0, 45, 90, 135):\n    r = math.radians(deg)\n    print(deg, round(quad_form(A, [math.cos(r), math.sin(r)]), 2))"
+    },
+    {
+      "id": "positive-values",
+      "label": "Check that every value is positive",
+      "pseudocode": "If every non-zero direction gives a value above zero, the matrix is positive definite.",
+      "python": "import math\n\ndef quad_form(A, x):\n    return sum(x[i] * A[i][j] * x[j] for i in range(len(x)) for j in range(len(x)))\n\nA = [[2, 0], [0, 1]]\nvalues = [quad_form(A, [math.cos(math.radians(d)), math.sin(math.radians(d))]) for d in range(0, 360, 15)]\nprint(min(values) > 0)  # True"
+    },
+    {
+      "id": "bowl",
+      "label": "See the bowl",
+      "pseudocode": "Use the value as a height. Positive values in every direction give an upward-curving bowl with one lowest point.",
+      "python": "def height(x, y):\n    return 2 * x * x + y * y  # x^T A x for A = [[2, 0], [0, 1]]\n\nprint(height(0, 0), height(1, 0), height(0, 1))  # 0 2 1: lowest at the origin"
+    },
+    {
+      "id": "eigenvalues",
+      "label": "Check the eigenvalues",
+      "pseudocode": "A symmetric matrix is positive definite exactly when all of its eigenvalues are positive.",
+      "python": "import math\n\ndef eigenvalues_2x2(a, b, d):\n    gap = math.sqrt((a - d) ** 2 + 4 * b * b)\n    return ((a + d) + gap) / 2, ((a + d) - gap) / 2\n\nprint(eigenvalues_2x2(2, 0, 1))  # (2.0, 1.0): both positive"
+    },
+    {
+      "id": "non-pd-contrast",
+      "label": "Compare with an indefinite matrix",
+      "pseudocode": "If some direction gives a negative value, the surface curves down there and the matrix is not positive definite.",
+      "python": "def quad_form(A, x):\n    return sum(x[i] * A[i][j] * x[j] for i in range(len(x)) for j in range(len(x)))\n\nB = [[1, 0], [0, -1]]\nprint(quad_form(B, [1, 0]), quad_form(B, [0, 1]))  # 1 -1: a saddle"
+    },
+    {
+      "id": "ml-connection",
+      "label": "Connect it to optimization",
+      "pseudocode": "Positive curvature in every direction means a stable minimum. Covariance matrices have this property.",
+      "python": "import math\n\ndef eigenvalues_2x2(a, b, d):\n    gap = math.sqrt((a - d) ** 2 + 4 * b * b)\n    return ((a + d) + gap) / 2, ((a + d) - gap) / 2\n\ncov = (2, 1, 2)  # a covariance-like matrix [[2, 1], [1, 2]]\nprint(all(v > 0 for v in eigenvalues_2x2(*cov)))  # True"
+    }
+  ]
+}

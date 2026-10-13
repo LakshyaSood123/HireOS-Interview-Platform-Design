@@ -1,0 +1,38 @@
+{
+ "many-features": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "A table of six customers: each **column is one feature**, and each feature is one **dimension**. Here we show two real columns (usage and spend), but real tables can have **dozens or thousands**."
+ },
+ "feature-space": {
+  "h": "FROM TABLE TO POINTS",
+  "t": "Each customer becomes a **point on a plane**: usage frequency runs across and monthly spend runs up. Two features means two dimensions, so we can still see the whole dataset at once."
+ },
+ "correlated-features": {
+  "h": "FEATURES OFTEN MOVE TOGETHER",
+  "t": "The points climb from lower left to upper right, and the dashed line follows them. Customers who **visit more also spend more**: the correlation is **0.94**."
+ },
+ "redundancy": {
+  "h": "REDUNDANCY",
+  "t": "Two columns, but largely **one story: how engaged the customer is**. The short dashed lines show how little each point departs from the trend, so the second column adds little that is new."
+ },
+ "three-d-view": {
+  "h": "MORE FEATURES, SAME STORY",
+  "t": "Adding a third feature, such as sessions, that also tracks engagement keeps the points close to **one line through 3-D space**. This is an illustration, not real data. More columns do not always mean more information."
+ },
+ "hard-to-visualize": {
+  "h": "WHY WE WANT FEWER",
+  "t": "With **40 features** there would be 40 axes. We cannot draw them, and distances between points become less informative. This is a main reason to reduce dimensions."
+ },
+ "compress": {
+  "h": "COMPRESSING",
+  "t": "Each point drops onto the trend line. Its **position along the line** is what we keep, and its small **distance from the line** is the detail we give up."
+ },
+ "one-d-view": {
+  "h": "ONE NUMBER EACH",
+  "t": "Laid out on a number line, each customer is now a single number: its position along the trend. **Six numbers replace twelve.**"
+ },
+ "preserve-structure": {
+  "h": "TAKEAWAY",
+  "t": "We kept the **order and spacing along the trend** and lost only the small departures from it. **Remember:** dimensionality reduction trades a little detail for a much simpler description."
+ }
+}

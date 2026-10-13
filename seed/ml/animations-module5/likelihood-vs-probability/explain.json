@@ -1,0 +1,34 @@
+{
+ "fixed-model": {
+  "h": "PROBABILITY: FIX THE MODEL",
+  "t": "Suppose we **know** the coin has **p = 0.7**. The model is fixed. **Probability** asks: what data could this model produce?"
+ },
+ "possible-data": {
+  "h": "POSSIBLE DATA, WITH PROBABILITIES",
+  "t": "Flip 5 times. The number of heads could be 0 to 5, each with a probability: **0.002, 0.028, 0.132, 0.309, 0.360, 0.168**. The data vary; the parameter does not. These **add up to 1**."
+ },
+ "observe-data": {
+  "h": "WE OBSERVE ONE RESULT",
+  "t": "We flip the coin and see **4 heads out of 5**. Of all the possible data, this is the one that actually happened."
+ },
+ "freeze-data": {
+  "h": "LIKELIHOOD: FREEZE THE DATA",
+  "t": "Now we turn the viewpoint around. The **data are frozen**: 4 heads in 5. We no longer know p. Instead we ask **how well each candidate p explains the frozen data**."
+ },
+ "vary-parameter": {
+  "h": "VARY THE PARAMETER",
+  "t": "Slide p from 0.1 to 0.9 and evaluate the same formula, **5 × p⁴ × (1 − p)**, at each p. The values trace the **likelihood function L(p)**. Now the parameter varies and the data stay fixed."
+ },
+ "compare-likelihood": {
+  "h": "COMPARE CANDIDATE VALUES OF p",
+  "t": "**L(0.7) ≈ 0.360** and **L(0.4) ≈ 0.077**: p = 0.7 explains the observed data about **4.7 times better** than p = 0.4. We are comparing parameter values, not asking whether p is true."
+ },
+ "probability-vs-likelihood": {
+  "h": "SIDE BY SIDE",
+  "t": "**Probability:** model fixed, data vary, values add up to 1. **Likelihood:** data fixed, parameter varies, values do **not** have to add up to 1, and they are **not the probability that a p is true**."
+ },
+ "ml-connection": {
+  "h": "TAKEAWAY",
+  "t": "**Training uses likelihood:** the training data are fixed and the parameters are adjusted to explain them. **Using a trained model asks the probability question:** parameters fixed, what data are likely?"
+ }
+}

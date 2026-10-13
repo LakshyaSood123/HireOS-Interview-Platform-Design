@@ -1,0 +1,60 @@
+{
+  "title": "K-Means intuition: assign, move, repeat",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "dataset",
+      "label": "The customer data",
+      "pseudocode": "Twelve unlabeled points.",
+      "python": "points = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\nprint(len(points), 'points')\n# prints: 12 points"
+    },
+    {
+      "id": "choose-k",
+      "label": "Choose K",
+      "pseudocode": "K is chosen in advance.",
+      "python": "K = 3\nprint('K =', K)\n# prints: K = 3"
+    },
+    {
+      "id": "initial-centers",
+      "label": "Place K initial centers",
+      "pseudocode": "Start with K centers in the data space.",
+      "python": "centers = [(3, 4), (5, 3), (5, 9.5)]\nprint(centers)\n# prints: [(3, 4), (5, 3), (5, 9.5)]"
+    },
+    {
+      "id": "nearest-center",
+      "label": "Find each point's nearest center",
+      "pseudocode": "Each point finds its nearest center.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\npoints = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\ncenters = [(3, 4), (5, 3), (5, 9.5)]\nprint([nearest_center(p, centers) for p in points])\n# prints: [0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2]"
+    },
+    {
+      "id": "assign-groups",
+      "label": "Assign to groups",
+      "pseudocode": "Group points by nearest center.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\npoints = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\ncenters = [(3, 4), (5, 3), (5, 9.5)]\nlabels = [nearest_center(p, centers) for p in points]\nprint([labels.count(i) for i in range(3)], 'points per group')\n# prints: [4, 3, 5] points per group"
+    },
+    {
+      "id": "compute-means",
+      "label": "Compute the group means",
+      "pseudocode": "Average each group.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\npoints = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\ndef mean_point(m):\n    return (sum(p[0] for p in m) / len(m), sum(p[1] for p in m) / len(m))\ncenters = [(3, 4), (5, 3), (5, 9.5)]\nlabels = [nearest_center(p, centers) for p in points]\nfor i in range(3):\n    m = mean_point([p for p, l in zip(points, labels) if l == i])\n    print(i, (round(m[0], 2), round(m[1], 2)))\n# prints: 0 (1.68, 2.0)\n# prints: 1 (6.5, 5.9)\n# prints: 2 (4.3, 7.98)"
+    },
+    {
+      "id": "move-centers",
+      "label": "Move the centers",
+      "pseudocode": "Replace each center by its group's mean.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\npoints = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\ndef mean_point(m):\n    return (sum(p[0] for p in m) / len(m), sum(p[1] for p in m) / len(m))\ncenters = [(3, 4), (5, 3), (5, 9.5)]\ndef kmeans(centers, rounds):\n    for _ in range(rounds):\n        labels = [nearest_center(p, centers) for p in points]\n        centers = [mean_point([p for p, l in zip(points, labels) if l == i]) for i in range(len(centers))]\n    return labels, centers\nlabels, new = kmeans(centers, 1)\nprint([(round(x, 2), round(y, 2)) for x, y in new])\n# prints: [(1.68, 2.0), (6.5, 5.9), (4.3, 7.98)]"
+    },
+    {
+      "id": "repeat",
+      "label": "Repeat",
+      "pseudocode": "Assign and move again.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\npoints = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\ndef mean_point(m):\n    return (sum(p[0] for p in m) / len(m), sum(p[1] for p in m) / len(m))\ncenters = [(3, 4), (5, 3), (5, 9.5)]\ndef kmeans(centers, rounds):\n    for _ in range(rounds):\n        labels = [nearest_center(p, centers) for p in points]\n        centers = [mean_point([p for p, l in zip(points, labels) if l == i]) for i in range(len(centers))]\n    return labels, centers\nlabels, new = kmeans(centers, 2)\nprint(labels)\nprint([(round(x, 2), round(y, 2)) for x, y in new])\n# prints: [0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2]\n# prints: [(1.68, 2.0), (6.58, 6.12), (3.67, 8.28)]"
+    },
+    {
+      "id": "final-clusters",
+      "label": "The final clusters",
+      "pseudocode": "After enough rounds nothing changes.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\npoints = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\ndef mean_point(m):\n    return (sum(p[0] for p in m) / len(m), sum(p[1] for p in m) / len(m))\ncenters = [(3, 4), (5, 3), (5, 9.5)]\ndef kmeans(centers, rounds):\n    for _ in range(rounds):\n        labels = [nearest_center(p, centers) for p in points]\n        centers = [mean_point([p for p, l in zip(points, labels) if l == i]) for i in range(len(centers))]\n    return labels, centers\na = kmeans(centers, 2)\nb = kmeans(centers, 3)\nprint('stable:', a == b)\n# prints: stable: True"
+    }
+  ]
+}

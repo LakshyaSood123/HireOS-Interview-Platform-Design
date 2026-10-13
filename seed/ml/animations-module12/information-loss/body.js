@@ -1,0 +1,72 @@
+
+  var origAx = el("g", {}, svg);
+  el("line", { x1: OP.x(0), y1: OP.y(0), x2: OP.x(8), y2: OP.y(0), class: "axis" }, origAx);
+  el("line", { x1: OP.x(0), y1: OP.y(0), x2: OP.x(0), y2: OP.y(7), class: "axis" }, origAx);
+  txt(origAx, OP.x(8), OP.y(0) + 16, "note", "usage", "end");
+  txt(origAx, OP.x(0) + 6, OP.y(7) + 4, "note", "spend", "start");
+  var cenAx = frameAxes(svg, CP, 4.5, 3.5);
+  var pc1 = dirLine(svg, CP, C_PC1, 3.5), pc2 = dirLine(svg, CP, C_PC2, 2.5, true);
+  setDir(pc1, CP, DV1, 4.5); setDir(pc2, CP, DV2, 3.0);
+  var t1 = txt(svg, CP.x(3.3 * DV1[0]) - 8, CP.y(3.3 * DV1[1]) - 14, "lbl lbl-y", "PC1", "end");
+  var t2 = txt(svg, CP.x(-2.3 * DV2[0]) + 8, CP.y(-2.3 * DV2[1]) + 16, "lbl lbl-b", "PC2", "start");
+  var errs = el("g", {}, svg);
+  var recon = DC.map(function (c, k) { return [DZ1[k] * DV1[0], DZ1[k] * DV1[1]]; });
+  DC.forEach(function (c, k) {
+    var a = CP.pt(c), b = CP.pt(recon[k]);
+    el("line", { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: C_LOSS, "stroke-width": 3 }, errs);
+  });
+  var drops = dropSet(svg, C_LOSS, DN);
+  setDrops(drops, CP, DC, DV1);
+  var rec = recon.map(function (p, k) {
+    var s = CP.pt(p);
+    return el("circle", { cx: s[0], cy: s[1], r: 7, fill: "none", stroke: CUST[k], "stroke-width": 3 }, svg);
+  });
+  var dots = dotsAt(svg, CP, DC, 7);
+  var panel = el("g", {}, svg);
+  card(panel, 410, 62, 222, 200, "fillG");
+  var q1 = txt(panel, 521, 92, "lbl lbl-y", "", "middle");
+  var q2 = txt(panel, 521, 128, "big", "", "middle");
+  var q3 = txt(panel, 521, 160, "note", "", "middle");
+  var q4 = txt(panel, 521, 182, "note", "", "middle");
+  var q5 = txt(panel, 521, 204, "note", "", "middle");
+  var q6 = txt(panel, 521, 226, "note", "", "middle");
+  var vb = el("g", {}, svg);
+  card(vb, 30, 66, 580, 200, "fillA");
+  txt(vb, 320, 94, "lbl lbl-y", "variance along each principal component", "middle");
+  box(vb, 60, 118, DL1 * 62, 34, C_PC1, "none", 5); txt(vb, 60 + DL1 * 62 + 10, 142, "mono", f2(DL1) + "  (" + (DEV1 * 100).toFixed(1) + "%)", "start"); txt(vb, 60, 168, "note", "PC1", "start");
+  box(vb, 60, 186, Math.max(5, DL2 * 62), 34, C_PC2, "none", 5); txt(vb, 60 + Math.max(5, DL2 * 62) + 10, 210, "mono", f2(DL2) + "  (" + ((1 - DEV1) * 100).toFixed(1) + "%)", "start"); txt(vb, 60, 236, "note", "PC2", "start");
+  var ex = el("g", {}, svg);
+  card(ex, 30, 70, 580, 190, "fillG");
+  txt(ex, 320, 100, "big", "explained variance of PC1", "middle");
+  box(ex, 60, 126, 520 * DEV1, 36, C_KEEP, "none", 6); box(ex, 60 + 520 * DEV1, 126, 520 * (1 - DEV1), 36, C_LOSS, "none", 6);
+  txt(ex, 60, 184, "mono", "kept " + (DEV1 * 100).toFixed(1) + "%", "start");
+  txt(ex, 580, 184, "mono", "lost " + ((1 - DEV1) * 100).toFixed(1) + "%", "end");
+  txt(ex, 320, 220, "mono", f2(DL1) + " / (" + f2(DL1) + " + " + f2(DL2) + ") = " + DEV1.toFixed(4), "middle");
+  txt(ex, 320, 244, "note", "retained spread, not predictive accuracy", "middle");
+  var tr = el("g", {}, svg);
+  card(tr, 30, 56, 280, 156, "fillG"); card(tr, 330, 56, 280, 156, "fillB");
+  txt(tr, 170, 86, "lbl lbl-y", "more components", "middle");
+  ["more variance kept", "less reconstruction error", "a larger description"].forEach(function (s, k) { txt(tr, 170, 122 + k * 30, "note", s, "middle"); });
+  txt(tr, 470, 86, "lbl lbl-y", "fewer components", "middle");
+  ["simpler, smaller, faster", "more detail dropped", "check the downstream task"].forEach(function (s, k) { txt(tr, 470, 122 + k * 30, "note", s, "middle"); });
+  txt(tr, 320, 252, "lbl lbl-y", "95% explained variance is not 95% accuracy", "middle");
+  txt(tr, 320, 276, "note", "the dropped 5% could hold what separates the classes", "middle");
+  function setPanel(a, b, c, d, e, f) { q1.textContent = a; q2.textContent = b; q3.textContent = c || ""; q4.textContent = d || ""; q5.textContent = e || ""; q6.textContent = f || ""; }
+  function render(i) {
+    var plotOn = i <= 7 && i !== 2;
+    show(origAx, i === 0); show(cenAx, plotOn && i >= 1);
+    dots.forEach(function (d) { d.setAttribute("opacity", plotOn ? (i === 5 ? "0.3" : "1") : "0"); });
+    show(pc1, plotOn && i >= 1); show(t1, plotOn && i >= 1);
+    show(pc2, plotOn && i >= 1 && i <= 4); show(t2, plotOn && i >= 1 && i <= 4);
+    pc2.setAttribute("opacity", !plotOn ? "0" : (i === 4 ? "0.35" : (i >= 1 && i <= 3 ? "1" : "0")));
+    drops.lines.forEach(function (l, k) { l.setAttribute("stroke-width", "3"); show(l, i === 4); show(drops.feet[k], i === 4 || i === 5 || i === 6); });
+    rec.forEach(function (r) { show(r, i === 6 || i === 7); });
+    show(errs, i === 7);
+    show(panel, i >= 1 && i <= 7 && i !== 2); show(vb, i === 2); show(ex, i === 8); show(tr, i === 9);
+    if (i === 1) setPanel("two principal axes", "PC1 and PC2", "PC1 holds the big spread,", "PC2 holds what is left", "(perpendicular to PC1)");
+    if (i === 3) setPanel("keep both: k = 2", "Z = Xc V", "6 × 2: the same data in", "rotated axes", "nothing is lost: 100%");
+    if (i === 4) setPanel("drop PC2", "k = 1", "the red segments are the", "PC2 coordinates we throw away", "values: " + DZ2.map(s2).join(" "));
+    if (i === 5) setPanel("projected representation", "z only", "each customer keeps one", "number: its PC1 coordinate", DZ1.map(s2).join("  "));
+    if (i === 6) setPanel("reconstruct", "x̂ = mean + z v1", "hollow rings: where each", "customer lands again on the", "PC1 line");
+    if (i === 7) setPanel("reconstruction error", f3(DSSE), "red: distance from the", "original to its ring", "sum of squares = 5 × " + f3(DL2));
+  }

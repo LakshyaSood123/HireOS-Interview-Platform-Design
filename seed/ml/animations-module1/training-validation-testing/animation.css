@@ -1,0 +1,195 @@
+body {
+  margin: 0;
+  padding: 14px;
+  box-sizing: border-box;
+  background: #0b1d16;
+  color: #e6f5ec;
+  font-family: system-ui, sans-serif;
+}
+.scene {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+.step-label {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #a7ce65;
+}
+.counts {
+  margin: 0;
+  font-size: 12px;
+  color: #c9dccf;
+}
+svg {
+  width: 100%;
+  height: auto;
+  max-width: 640px;
+  background: #071510;
+  border-radius: 10px;
+  border: 1px solid rgba(29, 181, 132, 0.35);
+}
+
+/* Unsplit dataset frame (steps 1-2) and regions (row 1) */
+.frame-group,
+.zone-group {
+  transition: opacity 0.4s ease;
+}
+.frame {
+  fill: rgba(255, 255, 255, 0.03);
+  stroke: rgba(201, 220, 207, 0.45);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 5;
+}
+.frame-title {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  fill: #c9dccf;
+}
+.zone {
+  fill: rgba(255, 255, 255, 0.025);
+  stroke-width: 1.5;
+  transition: fill 0.3s ease, stroke-width 0.3s ease;
+}
+.zone-train { stroke: #1db584; }
+.zone-validation { stroke: #e2b44a; }
+.zone-test { stroke: #f472b6; stroke-dasharray: 6 5; }
+.zone.on {
+  fill: rgba(255, 255, 255, 0.08);
+  stroke-width: 2.5;
+}
+.zone-title {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+.zone-title-train { fill: #1db584; }
+.zone-title-validation { fill: #e2b44a; }
+.zone-title-test { fill: #f472b6; }
+.zone-note {
+  font-size: 10px;
+  font-weight: 700;
+  fill: #f9a8d4;
+}
+
+/* Downstream boxes (rows 2 and 3) */
+.box rect {
+  fill: rgba(255, 255, 255, 0.04);
+  stroke: rgba(255, 255, 255, 0.22);
+  stroke-width: 1.2;
+  transition: fill 0.3s ease, stroke 0.3s ease;
+}
+.box-title {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  fill: #c9dccf;
+}
+.box.done rect {
+  stroke: #1db584;
+  fill: rgba(29, 181, 132, 0.08);
+}
+.box-model.active rect {
+  stroke: #1db584;
+  fill: rgba(29, 181, 132, 0.18);
+  stroke-width: 2.2;
+}
+.box-compare.active rect {
+  stroke: #e2b44a;
+  fill: rgba(226, 180, 74, 0.16);
+  stroke-width: 2.2;
+}
+.box-final {
+  /* Visually separate from the model/compare row. */
+}
+.box-final.active rect {
+  stroke: #f472b6;
+  fill: rgba(244, 114, 182, 0.16);
+  stroke-width: 2.6;
+}
+.box.active .box-title {
+  fill: #ffffff;
+}
+.box-sub {
+  font-size: 10.5px;
+  font-weight: 700;
+  fill: #f9a8d4;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.box-sub.on {
+  opacity: 1;
+}
+
+/* Flow arrows */
+.flow-line {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 2;
+  transition: stroke 0.3s ease;
+}
+.flow-line.lit {
+  stroke: rgba(201, 220, 207, 0.55);
+}
+.flow-line.live {
+  stroke: #a7ce65;
+  stroke-width: 3;
+}
+.arrow-head {
+  fill: #a7ce65;
+}
+
+/* Examples */
+.dot {
+  transition: cx 0.6s ease, cy 0.6s ease, r 0.4s ease, fill 0.4s ease;
+  stroke: rgba(0, 0, 0, 0.35);
+  stroke-width: 1;
+}
+.caption {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #c9dccf;
+  min-height: 40px;
+}
+
+/* ── explanation panel (shared by every generated ML animation) ── */
+.explain {
+  box-sizing: border-box;
+  max-width: 640px;
+  margin-top: 4px;
+  padding: 14px 18px 16px;
+  min-height: 150px;
+  border-radius: 12px;
+  background: rgba(29, 181, 132, 0.10);
+  border: 1px solid rgba(29, 181, 132, 0.45);
+  border-left: 5px solid #1db584;
+}
+.explain-h {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #a7ce65;
+}
+.explain-t {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.55;
+  color: #f1faf4;
+}
+.explain-t strong {
+  font-weight: 800;
+  color: #ffd98a;
+}

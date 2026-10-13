@@ -1,0 +1,60 @@
+{
+  "title": "Probabilities and thresholds",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "probability-output",
+      "label": "The model outputs probabilities",
+      "pseudocode": "The model estimates P(spam | x) for each email.",
+      "python": "import math\n\nscores = sorted([0.5, 1.0, 2.0, 3.0, 4.5, 3.5, 5.0, 6.0, 7.5, 9.0])\nlabels_by_score = {0.5: 0, 1.0: 0, 2.0: 0, 3.0: 0, 4.5: 0, 3.5: 1, 5.0: 1, 6.0: 1, 7.5: 1, 9.0: 1}\nprobs = [1 / (1 + math.exp(-(s - 4.0))) for s in scores]\n\ndef decide(p, threshold):\n    return 1 if p >= threshold else 0\nprint([round(p, 3) for p in probs])\n# prints: [0.029, 0.047, 0.119, 0.269, 0.378, 0.622, 0.731, 0.881, 0.971, 0.993]"
+    },
+    {
+      "id": "threshold-05",
+      "label": "Choose a threshold",
+      "pseudocode": "Predict spam when the probability reaches the threshold.",
+      "python": "import math\n\nscores = sorted([0.5, 1.0, 2.0, 3.0, 4.5, 3.5, 5.0, 6.0, 7.5, 9.0])\nlabels_by_score = {0.5: 0, 1.0: 0, 2.0: 0, 3.0: 0, 4.5: 0, 3.5: 1, 5.0: 1, 6.0: 1, 7.5: 1, 9.0: 1}\nprobs = [1 / (1 + math.exp(-(s - 4.0))) for s in scores]\n\ndef decide(p, threshold):\n    return 1 if p >= threshold else 0\nprint(sum(decide(p, 0.5) for p in probs), 'emails predicted spam at 0.5')\n# prints: 5 emails predicted spam at 0.5"
+    },
+    {
+      "id": "class-decision",
+      "label": "Turn probabilities into classes",
+      "pseudocode": "Compare the decisions with the true classes.",
+      "python": "import math\n\nscores = sorted([0.5, 1.0, 2.0, 3.0, 4.5, 3.5, 5.0, 6.0, 7.5, 9.0])\nlabels_by_score = {0.5: 0, 1.0: 0, 2.0: 0, 3.0: 0, 4.5: 0, 3.5: 1, 5.0: 1, 6.0: 1, 7.5: 1, 9.0: 1}\nprobs = [1 / (1 + math.exp(-(s - 4.0))) for s in scores]\n\ndef decide(p, threshold):\n    return 1 if p >= threshold else 0\nfor s, p in zip(scores, probs):\n    if decide(p, 0.5) != labels_by_score[s]:\n        print('wrong at', s, 'p =', round(p, 2))\n# prints: wrong at 3.5 p = 0.38\n# prints: wrong at 4.5 p = 0.62"
+    },
+    {
+      "id": "example-high",
+      "label": "A high probability",
+      "pseudocode": "A high probability gives class spam.",
+      "python": "import math\n\nscores = sorted([0.5, 1.0, 2.0, 3.0, 4.5, 3.5, 5.0, 6.0, 7.5, 9.0])\nlabels_by_score = {0.5: 0, 1.0: 0, 2.0: 0, 3.0: 0, 4.5: 0, 3.5: 1, 5.0: 1, 6.0: 1, 7.5: 1, 9.0: 1}\nprobs = [1 / (1 + math.exp(-(s - 4.0))) for s in scores]\n\ndef decide(p, threshold):\n    return 1 if p >= threshold else 0\nprint(decide(0.971, 0.5))\n# prints: 1"
+    },
+    {
+      "id": "example-low",
+      "label": "A low probability",
+      "pseudocode": "A low probability gives class not spam.",
+      "python": "import math\n\nscores = sorted([0.5, 1.0, 2.0, 3.0, 4.5, 3.5, 5.0, 6.0, 7.5, 9.0])\nlabels_by_score = {0.5: 0, 1.0: 0, 2.0: 0, 3.0: 0, 4.5: 0, 3.5: 1, 5.0: 1, 6.0: 1, 7.5: 1, 9.0: 1}\nprobs = [1 / (1 + math.exp(-(s - 4.0))) for s in scores]\n\ndef decide(p, threshold):\n    return 1 if p >= threshold else 0\nprint(decide(0.119, 0.5))\n# prints: 0"
+    },
+    {
+      "id": "raise-threshold",
+      "label": "Raise the threshold to 0.8",
+      "pseudocode": "A stricter threshold calls fewer emails spam.",
+      "python": "import math\n\nscores = sorted([0.5, 1.0, 2.0, 3.0, 4.5, 3.5, 5.0, 6.0, 7.5, 9.0])\nlabels_by_score = {0.5: 0, 1.0: 0, 2.0: 0, 3.0: 0, 4.5: 0, 3.5: 1, 5.0: 1, 6.0: 1, 7.5: 1, 9.0: 1}\nprobs = [1 / (1 + math.exp(-(s - 4.0))) for s in scores]\n\ndef decide(p, threshold):\n    return 1 if p >= threshold else 0\nprint(sum(decide(p, 0.8) for p in probs), 'emails predicted spam at 0.8')\n# prints: 3 emails predicted spam at 0.8"
+    },
+    {
+      "id": "predictions-change",
+      "label": "Decisions changed, probabilities did not",
+      "pseudocode": "Find the emails whose decision changed between thresholds.",
+      "python": "import math\n\nscores = sorted([0.5, 1.0, 2.0, 3.0, 4.5, 3.5, 5.0, 6.0, 7.5, 9.0])\nlabels_by_score = {0.5: 0, 1.0: 0, 2.0: 0, 3.0: 0, 4.5: 0, 3.5: 1, 5.0: 1, 6.0: 1, 7.5: 1, 9.0: 1}\nprobs = [1 / (1 + math.exp(-(s - 4.0))) for s in scores]\n\ndef decide(p, threshold):\n    return 1 if p >= threshold else 0\nchanged = [s for s, p in zip(scores, probs) if decide(p, 0.5) != decide(p, 0.8)]\nprint(changed)\n# prints: [4.5, 5.0]"
+    },
+    {
+      "id": "lower-threshold",
+      "label": "Lower the threshold to 0.3",
+      "pseudocode": "A looser threshold calls more emails spam.",
+      "python": "import math\n\nscores = sorted([0.5, 1.0, 2.0, 3.0, 4.5, 3.5, 5.0, 6.0, 7.5, 9.0])\nlabels_by_score = {0.5: 0, 1.0: 0, 2.0: 0, 3.0: 0, 4.5: 0, 3.5: 1, 5.0: 1, 6.0: 1, 7.5: 1, 9.0: 1}\nprobs = [1 / (1 + math.exp(-(s - 4.0))) for s in scores]\n\ndef decide(p, threshold):\n    return 1 if p >= threshold else 0\nprint(sum(decide(p, 0.3) for p in probs), 'emails predicted spam at 0.3')\n# prints: 6 emails predicted spam at 0.3"
+    },
+    {
+      "id": "tradeoff-preview",
+      "label": "A preview of the trade-off",
+      "pseudocode": "Count both kinds of mistake at each threshold.",
+      "python": "import math\n\nscores = sorted([0.5, 1.0, 2.0, 3.0, 4.5, 3.5, 5.0, 6.0, 7.5, 9.0])\nlabels_by_score = {0.5: 0, 1.0: 0, 2.0: 0, 3.0: 0, 4.5: 0, 3.5: 1, 5.0: 1, 6.0: 1, 7.5: 1, 9.0: 1}\nprobs = [1 / (1 + math.exp(-(s - 4.0))) for s in scores]\n\ndef decide(p, threshold):\n    return 1 if p >= threshold else 0\nfor t in (0.3, 0.5, 0.8):\n    blocked = sum(1 for s, p in zip(scores, probs) if decide(p, t) == 1 and labels_by_score[s] == 0)\n    missed = sum(1 for s, p in zip(scores, probs) if decide(p, t) == 0 and labels_by_score[s] == 1)\n    print(t, 'real mail blocked', blocked, 'spam missed', missed)\n# prints: 0.3 real mail blocked 1 spam missed 0\n# prints: 0.5 real mail blocked 1 spam missed 1\n# prints: 0.8 real mail blocked 0 spam missed 2"
+    }
+  ]
+}

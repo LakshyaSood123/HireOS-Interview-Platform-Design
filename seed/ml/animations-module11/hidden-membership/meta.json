@@ -1,0 +1,54 @@
+{
+  "title": "Hidden membership: the label you never observe",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "observed-points",
+      "label": "Observed customers",
+      "pseudocode": "Observe only the spend values.",
+      "python": "generated = [('A', 1.9), ('A', 2.3), ('A', 3.4), ('B', 5.1), ('B', 6.4), ('B', 7.8)]\nprint([x for z, x in generated])\n# prints: [1.9, 2.3, 3.4, 5.1, 6.4, 7.8]"
+    },
+    {
+      "id": "visible-features",
+      "label": "What we can see",
+      "pseudocode": "The feature is observed.",
+      "python": "generated = [('A', 1.9), ('A', 2.3), ('A', 3.4), ('B', 5.1), ('B', 6.4), ('B', 7.8)]\nobserved = [x for z, x in generated]\nprint(observed)\n# prints: [1.9, 2.3, 3.4, 5.1, 6.4, 7.8]"
+    },
+    {
+      "id": "hidden-labels",
+      "label": "What we cannot see",
+      "pseudocode": "The generating component is hidden.",
+      "python": "generated = [('A', 1.9), ('A', 2.3), ('A', 3.4), ('B', 5.1), ('B', 6.4), ('B', 7.8)]\nobserved = [x for z, x in generated]\nhidden = [None for x in observed]\nprint(hidden)\n# prints: [None, None, None, None, None, None]"
+    },
+    {
+      "id": "component-a",
+      "label": "Component A",
+      "pseudocode": "Component A generated some customers.",
+      "python": "generated = [('A', 1.9), ('A', 2.3), ('A', 3.4), ('B', 5.1), ('B', 6.4), ('B', 7.8)]\nprint([x for z, x in generated if z == 'A'])\n# prints: [1.9, 2.3, 3.4]"
+    },
+    {
+      "id": "component-b",
+      "label": "Component B",
+      "pseudocode": "Component B generated the others.",
+      "python": "generated = [('A', 1.9), ('A', 2.3), ('A', 3.4), ('B', 5.1), ('B', 6.4), ('B', 7.8)]\nprint([x for z, x in generated if z == 'B'])\n# prints: [5.1, 6.4, 7.8]"
+    },
+    {
+      "id": "ambiguous-point",
+      "label": "An ambiguous customer",
+      "pseudocode": "Density of each component at 4.5.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]      # (weight, mean, sigma)\nx = 4.5\nprint([round(pdf(x, m, s), 4) for w, m, s in comps])\n# prints: [0.1295, 0.1613]"
+    },
+    {
+      "id": "possible-origins",
+      "label": "Possible origins",
+      "pseudocode": "Both components can explain the point.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]      # (weight, mean, sigma)\nx = 4.5\nd = [pdf(x, m, s) for w, m, s in comps]\nprint('plausible under both:', all(v > 0.1 for v in d))\n# prints: plausible under both: True"
+    },
+    {
+      "id": "latent-membership",
+      "label": "Membership is latent",
+      "pseudocode": "Membership has to be estimated.",
+      "python": "known = ['features x']\nunknown = ['which component generated x']\nprint(known, unknown)\n# prints: ['features x'] ['which component generated x']"
+    }
+  ]
+}

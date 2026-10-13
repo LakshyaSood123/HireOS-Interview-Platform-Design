@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "steps": [
+    {
+      "id": "full-dataset",
+      "label": "Start with the full dataset",
+      "animationEvent": "full-dataset",
+      "code": {
+        "pseudocode": "Collect the labelled examples the model could learn from. Keep the whole set together until the split is defined.",
+        "python": "examples = list(range(24))  # 24 labelled examples (illustrative)\nprint(len(examples))"
+      }
+    },
+    {
+      "id": "shuffle",
+      "label": "Shuffle the examples",
+      "animationEvent": "shuffle",
+      "code": {
+        "pseudocode": "Shuffle the examples with a fixed random seed. The order is reproducible but no longer tied to how the data was collected.",
+        "python": "import random\n\nrng = random.Random(7)\norder = list(range(24))\nrng.shuffle(order)\nprint(order[:5])"
+      }
+    },
+    {
+      "id": "train-split",
+      "label": "Assign about 70% to training",
+      "animationEvent": "train-split",
+      "code": {
+        "pseudocode": "Take about 70% of the shuffled examples as the training set. Their targets will be used to learn parameters.",
+        "python": "order = list(range(24))  # shuffled positions from the previous step\nn_train = int(24 * 0.70)\ntrain_positions = order[:n_train]\nprint(len(train_positions))"
+      }
+    },
+    {
+      "id": "validation-split",
+      "label": "Hold out about 15% for validation",
+      "animationEvent": "validation-split",
+      "code": {
+        "pseudocode": "Take about 15% as the validation set. These examples are kept out of training and are used to compare choices.",
+        "python": "order = list(range(24))  # shuffled positions from the previous step\nn_train = int(24 * 0.70)\nn_val = int(24 * 0.15)\nval_positions = order[n_train:n_train + n_val]\nprint(len(val_positions))"
+      }
+    },
+    {
+      "id": "test-split",
+      "label": "Lock away the test set",
+      "animationEvent": "test-split",
+      "code": {
+        "pseudocode": "Reserve the remaining examples as the test set. Do not look at them while developing the model.",
+        "python": "order = list(range(24))  # shuffled positions from the previous step\nn_train = int(24 * 0.70)\nn_val = int(24 * 0.15)\ntest_positions = order[n_train + n_val:]\nprint(len(test_positions))"
+      }
+    },
+    {
+      "id": "training",
+      "label": "Train only on the training set",
+      "animationEvent": "training",
+      "code": {
+        "pseudocode": "Fit the model using only training examples. Its parameters change; validation and test examples are not used here.",
+        "python": "train_targets = [40, 50, 60]\nmodel_value = sum(train_targets) / len(train_targets)  # learned from training data only\nprint(model_value)"
+      }
+    },
+    {
+      "id": "validation",
+      "label": "Compare choices on validation",
+      "animationEvent": "validation",
+      "code": {
+        "pseudocode": "Score candidate models on the validation set. Keep the one that performs best there, and adjust settings if needed.",
+        "python": "train_targets = [40, 50, 60]\nmodel_value = sum(train_targets) / len(train_targets)  # learned from training data only\nval_targets = [55]\nval_error = abs(model_value - val_targets[0])\nprint(val_error)"
+      }
+    },
+    {
+      "id": "final-test",
+      "label": "Evaluate once on the test set",
+      "animationEvent": "final-test",
+      "code": {
+        "pseudocode": "After every choice is fixed, measure performance once on the test set. This is the number reported as the estimate.",
+        "python": "train_targets = [40, 50, 60]\nmodel_value = sum(train_targets) / len(train_targets)  # fixed before the test set is used\ntest_targets = [70]\nfinal_error = abs(model_value - test_targets[0])\nprint(final_error)"
+      }
+    }
+  ]
+}

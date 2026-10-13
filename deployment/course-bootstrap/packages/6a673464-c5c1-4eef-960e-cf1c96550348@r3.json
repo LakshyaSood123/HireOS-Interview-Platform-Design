@@ -1,0 +1,147 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322c4e9cccef168eceb"
+  },
+  "assets": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498492"
+    }
+  },
+  "createdBy": {
+    "$oid": "000000000000000000000000"
+  },
+  "css": "body {\n  margin: 0;\n  padding: 16px;\n  box-sizing: border-box;\n  background: #0b1d16;\n  color: #e6f5ec;\n  font-family: system-ui, sans-serif;\n}\n.scene {\n  display: flex;\n  flex-direction: column;\n  gap: 10px;\n}\n.header {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: space-between;\n  align-items: baseline;\n  gap: 8px;\n}\n.step-label {\n  margin: 0;\n  font-size: 13px;\n  font-weight: 700;\n  letter-spacing: 0.08em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.stats {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 12px;\n  font-size: 12px;\n  color: #c9dccf;\n}\n.stats strong {\n  color: #7ee8bd;\n}\ncanvas {\n  width: 100%;\n  height: auto;\n  max-width: 560px;\n  border-radius: 10px;\n  border: 1px solid rgba(29, 181, 132, 0.35);\n  background: #071510;\n}\n.caption {\n  margin: 0;\n  font-size: 13px;\n  line-height: 1.5;\n  color: #c9dccf;\n  min-height: 40px;\n}\n\n/* ── explanation panel (shared by every generated ML animation) ── */\n.explain {\n  box-sizing: border-box;\n  max-width: 640px;\n  margin-top: 4px;\n  padding: 14px 18px 16px;\n  min-height: 150px;\n  border-radius: 12px;\n  background: rgba(29, 181, 132, 0.10);\n  border: 1px solid rgba(29, 181, 132, 0.45);\n  border-left: 5px solid #1db584;\n}\n.explain-h {\n  margin: 0 0 8px;\n  font-size: 13px;\n  font-weight: 800;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.explain-t {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.55;\n  color: #f1faf4;\n}\n.explain-t strong {\n  font-weight: 800;\n  color: #ffd98a;\n}\n",
+  "html": "<!doctype html>\n<html>\n  <head>\n    <meta charset=\"utf-8\" />\n    <title>Linear Regression — The Line That Learns</title>\n  </head>\n  <body>\n    <div class=\"scene\">\n      <div class=\"header\">\n        <p class=\"step-label\" id=\"step-label\">Plot data</p>\n        <div class=\"stats\">\n          <span>w = <strong id=\"stat-w\">0</strong></span>\n          <span>b = <strong id=\"stat-b\">0</strong></span>\n          <span>MSE = <strong id=\"stat-mse\">—</strong></span>\n        </div>\n      </div>\n      <canvas id=\"plot\" width=\"560\" height=\"300\"></canvas>\n      <section class=\"explain\" aria-live=\"polite\">\n        <h3 class=\"explain-h\" id=\"explain-h\"></h3>\n        <p class=\"explain-t\" id=\"caption\"></p>\n      </section>\n    </div>\n  </body>\n</html>\n",
+  "js": "(function () {\n  // Data: hours studied -> exam score. States are precomputed so the browser\n  // never iterates: (w, b) and the mean squared error of that line.\n  var DATA_X = [1, 2, 3, 4, 5];\n  var DATA_Y = [42, 51, 61, 68, 78];\n  var FLAT = { w: 0, b: 0, mse: 3758.8 };\n  var ADJUSTED = { w: 5, b: 20, mse: 655.8 };\n  var BETTER = { w: 9, b: 33, mse: 0.4 };\n\n  var steps = [\n    { id: \"plot-data\", label: \"Plot the data points\", state: null, caption: \"Each dot is one student: hours studied on the x-axis, exam score on the y-axis.\", showLine: false },\n    { id: \"initialize\", label: \"Start with a flat line\", state: FLAT, caption: \"Our model is a line: prediction = w * hours + b. Start with w = 0 and b = 0, a flat line that predicts 0 for everyone.\", showLine: true },\n    { id: \"predict\", label: \"Predict with the line\", state: FLAT, caption: \"For each student, the prediction is the point where their hours meet the line.\", showLine: true, showPredictions: true },\n    { id: \"error\", label: \"Measure each error\", state: FLAT, caption: \"The error (residual) is actual score minus predicted score: the vertical gap between a dot and the line.\", showLine: true, showPredictions: true, showResiduals: true },\n    { id: \"loss\", label: \"Average the squared errors (MSE)\", state: FLAT, caption: \"Square each error, then average them. This number is the MSE. A big MSE means a poor fit.\", showLine: true, showResiduals: true, showMse: true },\n    { id: \"adjust\", label: \"Adjust w and b\", state: ADJUSTED, caption: \"Training changes w and b. This line is closer to the dots, so the errors and the MSE are smaller.\", showLine: true, showResiduals: true, showMse: true },\n    { id: \"better-fit\", label: \"A better-fitting line\", state: BETTER, caption: \"With w = 9 and b = 33 the line passes almost through every dot, and the MSE is only 0.4.\", showLine: true, showResiduals: true, showMse: true },\n  ];\n\n  var current = 0;\n  var canvas = document.getElementById(\"plot\");\n  var ctx = canvas.getContext(\"2d\");\n  var labelEl = document.getElementById(\"step-label\");\n  var captionEl = document.getElementById(\"caption\");\n  var explainHeadEl = document.getElementById(\"explain-h\");\n  // Per-step explanations (mirrors explain.json in this package folder). **bold** markers become <strong>.\n  var EXPLAIN = {\"plot-data\": {\"h\": \"WHAT YOU ARE LOOKING AT\", \"t\": \"Each dot is **one student**: **hours studied** on the x-axis and **exam score** on the y-axis. More hours tend to mean higher scores, so a line might describe the trend.\"}, \"initialize\": {\"h\": \"START WITH A FLAT LINE\", \"t\": \"Our model is a line: **prediction = w × hours + b**. We start with **w = 0 and b = 0**, a flat line that predicts **0 for everyone**. This is only a starting guess.\"}, \"predict\": {\"h\": \"PREDICT WITH THE LINE\", \"t\": \"For each student the **prediction is the point where their hours meet the line**. Every prediction here is 0, far below the real scores.\"}, \"error\": {\"h\": \"MEASURE EACH ERROR\", \"t\": \"The **error (residual)** is **actual score minus predicted score**: the vertical gap between a dot and the line. Big gaps mean the line fits that student badly.\"}, \"loss\": {\"h\": \"AVERAGE THE SQUARED ERRORS (MSE)\", \"t\": \"Squaring each error makes it positive and punishes big misses, and averaging gives one number: the **MSE**. **A big MSE means a poor fit**, and training tries to shrink it.\"}, \"adjust\": {\"h\": \"ADJUST w AND b\", \"t\": \"**Training changes w and b.** This new line is closer to the dots, so the errors and the **MSE are smaller**. The model learned by reducing its own error.\"}, \"better-fit\": {\"h\": \"TAKEAWAY\", \"t\": \"With **w = 9 and b = 33** the line passes almost through every dot and the **MSE is only 0.4**. Learning a linear model means **adjusting w and b until the errors are as small as possible**.\"}};\n\n  function setRich(node, str) {\n    node.textContent = \"\";\n    var parts = String(str).split(\"**\");\n    for (var i = 0; i < parts.length; i++) {\n      if (parts[i] === \"\") continue;\n      var seg = document.createElement(i % 2 ? \"strong\" : \"span\");\n      seg.textContent = parts[i];\n      node.appendChild(seg);\n    }\n  }\n\n  function explanationFor(index) {\n    var ex = EXPLAIN[steps[index].id];\n    return ex || { h: \"WHAT IS HAPPENING\", t: steps[index].caption || steps[index].detail || \"\" };\n  }\n\n  function stepMs(index) {\n    var words = String(explanationFor(index).t).replace(/\\*\\*/g, \"\").split(/\\s+/).length;\n    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));\n  }\n\n  function showExplanation(index) {\n    var ex = explanationFor(index);\n    if (explainHeadEl) explainHeadEl.textContent = ex.h;\n    setRich(captionEl, ex.t);\n  }\n  var statW = document.getElementById(\"stat-w\");\n  var statB = document.getElementById(\"stat-b\");\n  var statMse = document.getElementById(\"stat-mse\");\n\n  var X_MIN = 0, X_MAX = 6, Y_MIN = 0, Y_MAX = 100;\n  function px(x) { return 40 + ((x - X_MIN) / (X_MAX - X_MIN)) * (canvas.width - 60); }\n  function py(y) { return canvas.height - 30 - ((y - Y_MIN) / (Y_MAX - Y_MIN)) * (canvas.height - 50); }\n\n  function draw(step) {\n    var st = step.state;\n    ctx.clearRect(0, 0, canvas.width, canvas.height);\n\n    ctx.strokeStyle = \"rgba(29,181,132,0.18)\";\n    ctx.lineWidth = 1;\n    ctx.beginPath();\n    ctx.moveTo(40, canvas.height - 30); ctx.lineTo(canvas.width - 20, canvas.height - 30);\n    ctx.moveTo(40, 20); ctx.lineTo(40, canvas.height - 30);\n    ctx.stroke();\n    ctx.fillStyle = \"#8FA89C\";\n    ctx.font = \"11px system-ui\";\n    ctx.fillText(\"hours studied\", canvas.width - 100, canvas.height - 10);\n    ctx.fillText(\"score\", 6, 16);\n\n    if (st && step.showLine) {\n      ctx.strokeStyle = \"#e2b44a\";\n      ctx.lineWidth = 2;\n      ctx.beginPath();\n      ctx.moveTo(px(X_MIN), py(st.w * X_MIN + st.b));\n      ctx.lineTo(px(X_MAX), py(st.w * X_MAX + st.b));\n      ctx.stroke();\n    }\n\n    if (st && step.showResiduals) {\n      ctx.strokeStyle = \"rgba(255,120,120,0.85)\";\n      ctx.lineWidth = 1.5;\n      for (var i = 0; i < DATA_X.length; i++) {\n        var pred = st.w * DATA_X[i] + st.b;\n        ctx.beginPath();\n        ctx.moveTo(px(DATA_X[i]), py(pred));\n        ctx.lineTo(px(DATA_X[i]), py(DATA_Y[i]));\n        ctx.stroke();\n      }\n    }\n\n    if (st && step.showPredictions) {\n      ctx.fillStyle = \"#e2b44a\";\n      for (var j = 0; j < DATA_X.length; j++) {\n        ctx.beginPath();\n        ctx.arc(px(DATA_X[j]), py(st.w * DATA_X[j] + st.b), 4, 0, Math.PI * 2);\n        ctx.fill();\n      }\n    }\n\n    ctx.fillStyle = \"#7ee8bd\";\n    for (var k = 0; k < DATA_X.length; k++) {\n      ctx.beginPath();\n      ctx.arc(px(DATA_X[k]), py(DATA_Y[k]), 6, 0, Math.PI * 2);\n      ctx.fill();\n    }\n  }\n\n  function render(index) {\n    var step = steps[index];\n    var st = step.state;\n    labelEl.textContent = step.label;\n    showExplanation(index);\n    statW.textContent = st ? String(st.w) : \"-\";\n    statB.textContent = st ? String(st.b) : \"-\";\n    statMse.textContent = step.showMse && st ? String(st.mse) : \"-\";\n    draw(step);\n  }\n\n  function goTo(index) {\n    if (index < 0 || index >= steps.length) return;\n    current = index;\n    render(current);\n    if (window.ReagvisBridge) window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n\n  render(current);\n\n  // Autoplay pace: 4.5 to 10.5 seconds per step (longer for longer explanations), exactly one timer.\n  // PLAY on the final step restarts from the first step and plays again.\n  var timer = null;\n\n  function stopAuto() {\n    if (timer !== null) {\n      clearTimeout(timer);\n      timer = null;\n    }\n  }\n\n  function scheduleNext() {\n    timer = setTimeout(function () {\n      timer = null;\n      if (current >= steps.length - 1) return;\n      goTo(current + 1);\n      if (current < steps.length - 1) scheduleNext();\n    }, stepMs(current));\n  }\n\n  function startAuto() {\n    if (timer !== null) return;\n    if (current >= steps.length - 1) goTo(0);\n    scheduleNext();\n  }\n\n  window.addEventListener(\"pagehide\", stopAuto);\n\n  window.ReagvisAnimation = {\n    stepDuration: stepMs,\n    onCommand: function (type, stepId) {\n      if (type === \"PLAY\") startAuto();\n      else if (type === \"PAUSE\") stopAuto();\n      else if (type === \"NEXT\") { stopAuto(); goTo(current + 1); }\n      else if (type === \"PREVIOUS\") { stopAuto(); goTo(current - 1); }\n      else if (type === \"RESET\") { stopAuto(); goTo(0); }\n      else if (type === \"GOTO_STEP\") {\n        stopAuto();\n        for (var i = 0; i < steps.length; i++) {\n          if (steps[i].id === stepId) { goTo(i); break; }\n        }\n      }\n    },\n  };\n\n  if (window.ReagvisBridge) {\n    window.ReagvisBridge.ready();\n    window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n})();\n",
+  "lastFrozenContentHash": null,
+  "lastFrozenRevisionId": null,
+  "manifest": {
+    "bridgeVersion": {
+      "$numberInt": "1"
+    },
+    "capabilities": [
+      "play",
+      "pause",
+      "next",
+      "previous",
+      "reset",
+      "gotoStep"
+    ],
+    "heightPx": {
+      "$numberInt": "550"
+    },
+    "traceEvents": [
+      "plot-data",
+      "initialize",
+      "predict",
+      "error",
+      "loss",
+      "adjust",
+      "better-fit"
+    ]
+  },
+  "packageId": "6a673464-c5c1-4eef-960e-cf1c96550348",
+  "packageTrace": {
+    "steps": [
+      {
+        "animationEvent": "plot-data",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Treat each student as one point: hours studied is the input x, exam score is the target y.",
+          "python": "hours = [1, 2, 3, 4, 5]\nscores = [42, 51, 61, 68, 78]\npoints = list(zip(hours, scores))\nprint(points[0])"
+        },
+        "id": "plot-data",
+        "label": "Plot the data points"
+      },
+      {
+        "animationEvent": "initialize",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Choose starting values for the line prediction = w * x + b. With w = 0 and b = 0 the line predicts 0 for every student.",
+          "python": "def predict(x, w, b):\n    return w * x + b\n\ndef mse(w, b):\n    errors = [(predict(x, w, b) - y) ** 2 for x, y in zip(hours, scores)]\n    return sum(errors) / len(errors)\nprint(predict(3, 0, 0))"
+        },
+        "id": "initialize",
+        "label": "Start with a flat line"
+      },
+      {
+        "animationEvent": "predict",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "For each student, plug their hours into the line to get a predicted score.",
+          "python": "hours = [1, 2, 3, 4, 5]\nscores = [42, 51, 61, 68, 78]\ndef predict(x, w, b):\n    return w * x + b\n\nprint([predict(x, 9, 33) for x in hours])"
+        },
+        "id": "predict",
+        "label": "Predict with the line"
+      },
+      {
+        "animationEvent": "error",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "For each student, subtract the predicted score from the actual score. That difference is the error, or residual.",
+          "python": "hours = [1, 2, 3, 4, 5]\nscores = [42, 51, 61, 68, 78]\npredictions = [0 * x + 0 for x in hours]\nerrors = [y - p for y, p in zip(scores, predictions)]\nprint(errors)"
+        },
+        "id": "error",
+        "label": "Measure each error"
+      },
+      {
+        "animationEvent": "loss",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Square every error so negatives do not cancel and big misses count more, then take the average. That is the MSE.",
+          "python": "hours = [1, 2, 3, 4, 5]\nscores = [42, 51, 61, 68, 78]\ndef predict(x, w, b):\n    return w * x + b\n\ndef mse(w, b):\n    errors = [(predict(x, w, b) - y) ** 2 for x, y in zip(hours, scores)]\n    return sum(errors) / len(errors)\nprint(round(mse(0, 0), 1))"
+        },
+        "id": "loss",
+        "label": "Average the squared errors (MSE)"
+      },
+      {
+        "animationEvent": "adjust",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Try different values of w and b, and keep the ones that give a smaller MSE. Training automates this search.",
+          "python": "hours = [1, 2, 3, 4, 5]\nscores = [42, 51, 61, 68, 78]\ndef predict(x, w, b):\n    return w * x + b\n\ndef mse(w, b):\n    errors = [(predict(x, w, b) - y) ** 2 for x, y in zip(hours, scores)]\n    return sum(errors) / len(errors)\nprint(round(mse(0, 0), 1), round(mse(5, 20), 1))"
+        },
+        "id": "adjust",
+        "label": "Adjust w and b"
+      },
+      {
+        "animationEvent": "better-fit",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "The line with the smallest MSE fits the data best. Here w = 9 and b = 33 give an MSE of 0.4.",
+          "python": "hours = [1, 2, 3, 4, 5]\nscores = [42, 51, 61, 68, 78]\ndef predict(x, w, b):\n    return w * x + b\n\ndef mse(w, b):\n    errors = [(predict(x, w, b) - y) ** 2 for x, y in zip(hours, scores)]\n    return sum(errors) / len(errors)\nprint(round(mse(9, 33), 1))"
+        },
+        "id": "better-fit",
+        "label": "A better-fitting line"
+      }
+    ],
+    "version": {
+      "$numberInt": "1"
+    }
+  },
+  "revision": {
+    "$numberInt": "6"
+  },
+  "revisionId": "r3",
+  "sourceKind": "zip",
+  "status": "frozen",
+  "title": "ML Seed — Linear Regression: The Line That Learns",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498492"
+    }
+  },
+  "updatedBy": {
+    "$oid": "000000000000000000000000"
+  }
+}

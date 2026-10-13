@@ -1,0 +1,30 @@
+{
+ "nonlinear-function": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Our loss **L(w) = (w − 3)²** is a curve, not a straight line. Curves are harder to work with than lines, so we look for an **easy stand-in**."
+ },
+ "choose-point": {
+  "h": "CHOOSE THE POINT WE ARE STANDING AT",
+  "t": "Say the model is at **w = 1**, where the loss is **L(1) = 4**. We want to predict the loss for weights **near this point**."
+ },
+ "tangent-line": {
+  "h": "DRAW THE TANGENT LINE",
+  "t": "At w = 1 the slope is **−4**. The tangent line through this point is **4 − 4h**, where h is how far we step from w = 1. Close to the point, the curve and this line almost coincide."
+ },
+ "nearby-point": {
+  "h": "LOOK AT A NEARBY POINT",
+  "t": "Step to **w = 1.5**, so **h = 0.5**. The curve sits at **2.25**, while the line sits at **2.0**. They are close but not the same."
+ },
+ "approximation": {
+  "h": "THE APPROXIMATION AND ITS ERROR",
+  "t": "Prediction from the line: **4 − 4 × 0.5 = 2.0**. The true loss is **2.25**. The gap, **0.25**, is the **approximation error**."
+ },
+ "error-grows": {
+  "h": "THE ERROR GROWS WITH DISTANCE",
+  "t": "Step further and the curve bends away from the line. The error is **h × h**: **0.25 at h = 0.5, 1 at h = 1, and 4 at h = 2**, where the line even predicts a negative loss."
+ },
+ "ml-connection": {
+  "h": "TAKEAWAY",
+  "t": "**New loss ≈ old loss + slope × change in w.** This prediction is reliable for **small steps only**, which is why training uses small steps."
+ }
+}

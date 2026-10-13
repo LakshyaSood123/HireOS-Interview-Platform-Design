@@ -1,0 +1,34 @@
+{
+ "observed-points": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Six customers, shown by their average monthly spend: **1.9, 2.3, 3.4, 5.1, 6.4 and 7.8**. This is everything we can actually observe about them."
+ },
+ "visible-features": {
+  "h": "WHAT WE CAN SEE",
+  "t": "The **feature** (spend) is observed: we can read it off for every customer. Features are the visible part of the story."
+ },
+ "hidden-labels": {
+  "h": "WHAT WE CANNOT SEE",
+  "t": "We do not observe **which mixture component generated** each customer. That identity is a **latent variable z**, hidden from us, and the question marks stand for it."
+ },
+ "component-a": {
+  "h": "COMPONENT A (THE HIDDEN STORY)",
+  "t": "Suppose component A (weight **0.4**, mean **3**, spread **1**) generated some customers: here **1.9, 2.3 and 3.4**. In real data nobody records this."
+ },
+ "component-b": {
+  "h": "COMPONENT B (THE HIDDEN STORY)",
+  "t": "Component B (weight **0.6**, mean **6**, spread **1.5**) generated the others: **5.1, 6.4 and 7.8**. The colors are the hidden truth, not part of the data."
+ },
+ "ambiguous-point": {
+  "h": "AN AMBIGUOUS CUSTOMER",
+  "t": "A customer with spend **4.5** lies between the components. Under A the density at 4.5 is **0.1295**; under B it is **0.1613**."
+ },
+ "possible-origins": {
+  "h": "POSSIBLE ORIGINS",
+  "t": "Both components could plausibly have produced this customer. From spend alone we **cannot say with certainty** whether it came from A or from B."
+ },
+ "latent-membership": {
+  "h": "TAKEAWAY",
+  "t": "**Observed:** the features. **Hidden:** which component generated them. Because membership is uncertain, we describe it with **degrees rather than one label**, which is the next idea."
+ }
+}

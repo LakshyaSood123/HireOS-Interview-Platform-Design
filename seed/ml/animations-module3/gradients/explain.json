@@ -1,0 +1,34 @@
+{
+ "loss-surface": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "We look down on the loss of two weights like a **hiking map**. Each ring joins points with the same loss. The lowest point, the minimum, is in the middle at **(3, 1)**."
+ },
+ "current-point": {
+  "h": "WHERE THE MODEL IS NOW",
+  "t": "The model's weights are currently **(w₁, w₂) = (1, 3)**, on a high ring where the loss is **12**. Which way should we move to go down?"
+ },
+ "slope-x": {
+  "h": "THE SLOPE ALONG w₁",
+  "t": "Along w₁ the slope is **∂L/∂w₁ = −4**. The uphill direction along w₁ is to the **left**, so this arrow points left. It has length 4."
+ },
+ "slope-y": {
+  "h": "THE SLOPE ALONG w₂",
+  "t": "Along w₂ the slope is **∂L/∂w₂ = +8**. Uphill along w₂ is **up**, so this arrow points up, and it is **twice as long**: w₂ is the steeper direction."
+ },
+ "gradient-vector": {
+  "h": "COMBINE THEM INTO THE GRADIENT",
+  "t": "Put the two partial derivatives together: **∇L = [−4, 8]**. The gradient is **one arrow whose parts are the two slopes**. It starts at the current point."
+ },
+ "steepest-up": {
+  "h": "THE GRADIENT POINTS STEEPEST UPHILL",
+  "t": "Of all the directions we could step, the gradient points the way the loss **grows fastest**. Its length, about **8.9**, tells how steep that climb is."
+ },
+ "negative-gradient": {
+  "h": "FLIP IT TO GO DOWNHILL",
+  "t": "To lower the loss fastest, go the **opposite** way: **−∇L = [4, −8]**. The weights should move right in w₁ and down in w₂."
+ },
+ "ml-connection": {
+  "h": "TAKEAWAY",
+  "t": "Take a small step against the gradient, recompute the gradient at the new point, and step again. The path curves in toward the minimum. **This is gradient descent.**"
+ }
+}

@@ -1,0 +1,34 @@
+{
+ "dataset": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Five training houses: **size x** (in 100 m²) against **price y** (in $100k). Bigger houses cost more, and the points lie **close to a line**, though not exactly on it."
+ },
+ "initial-line": {
+  "h": "A FIRST GUESS AT A LINE",
+  "t": "A linear model is **ŷ = w·x + b**. Our first guess is **w = 0.5, b = 2.0**: a gentle line that clearly misses the cloud of houses."
+ },
+ "change-slope": {
+  "h": "CHANGE THE SLOPE w",
+  "t": "The weight **w is the slope**. Raising it from 0.5 to **1.5** tilts the line upward until it climbs as steeply as the houses do. It still sits **too high** above every house, so the other parameter must change too."
+ },
+ "change-intercept": {
+  "h": "CHANGE THE INTERCEPT b",
+  "t": "The bias **b is the intercept**. Lowering it from 2.0 to **0.5** slides the whole line down, and now it runs through the middle of the houses."
+ },
+ "predictions": {
+  "h": "PREDICTIONS ON THE LINE",
+  "t": "For each house the prediction **ŷ is the height of the line** at its size: **2.0, 2.75, 3.5, 4.25 and 5.0**."
+ },
+ "residuals": {
+  "h": "RESIDUALS: PREDICTION MINUS TARGET",
+  "t": "Each residual is **ŷ − y**: **0, −0.05, −0.20, +0.15, −0.20**. Positive means the line is too high; negative means it is too low."
+ },
+ "compare-fit": {
+  "h": "COMPARE THE TWO LINES",
+  "t": "The tuned line leaves **much smaller residuals** than the first guess. A good line is one whose residuals are small overall."
+ },
+ "training-question": {
+  "h": "TAKEAWAY",
+  "t": "**Training means choosing w and b so the residuals are small overall.** To compare lines we need one number that summarizes all five residuals: that is the next lesson."
+ }
+}

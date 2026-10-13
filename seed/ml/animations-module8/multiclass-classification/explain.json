@@ -1,0 +1,34 @@
+{
+ "three-classes": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Now emails come in **three kinds**: personal, promotional or spam. This is **multiclass classification**: more than two classes, and each email still has **exactly one**."
+ },
+ "input-example": {
+  "h": "ONE EMAIL TO CLASSIFY",
+  "t": "A new email arrives with two features: **7 suspicious words** and **3 promotional words**. The model must choose one of the three classes."
+ },
+ "class-scores": {
+  "h": "ONE SCORE PER CLASS",
+  "t": "A common design gives **one score per class**: personal 0.5, promotional 1.2, spam 2.1. These are **raw scores, not yet probabilities**."
+ },
+ "compare-scores": {
+  "h": "COMPARE THE SCORES",
+  "t": "Compare the three scores with each other: **2.1 beats 1.2 beats 0.5**. No single threshold is involved; the classes **compete**."
+ },
+ "probabilities": {
+  "h": "SCORES BECOME PROBABILITIES",
+  "t": "**Softmax** turns the class scores into probabilities that sum to 1 and keeps the order: personal **0.126**, promotional **0.253**, spam **0.622**. Its purpose is just this conversion."
+ },
+ "choose-largest": {
+  "h": "CHOOSE THE LARGEST",
+  "t": "The predicted class is the one with the **largest probability**: spam. A class can win with less than 0.5, for example 0.40 against 0.35 and 0.25."
+ },
+ "decision-regions": {
+  "h": "DECISION REGIONS",
+  "t": "In feature space each class **owns a region**, and the boundaries meet between regions. Our email lands in the **spam region**."
+ },
+ "ml-example": {
+  "h": "TAKEAWAY",
+  "t": "Two ways to build it: **one-versus-rest** trains one binary classifier per class and picks the most confident, while **a single model with class scores and softmax** compares all classes at once. Both predict exactly one class."
+ }
+}

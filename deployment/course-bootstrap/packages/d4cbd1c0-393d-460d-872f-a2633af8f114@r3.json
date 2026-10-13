@@ -1,0 +1,159 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322c4e9cccef168ed29"
+  },
+  "assets": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498540"
+    }
+  },
+  "createdBy": {
+    "$oid": "000000000000000000000000"
+  },
+  "css": "body {\n  margin: 0;\n  padding: 14px;\n  box-sizing: border-box;\n  background: #0b1d16;\n  color: #e6f5ec;\n  font-family: system-ui, sans-serif;\n}\n.scene {\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n}\n.header {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: space-between;\n  align-items: baseline;\n  gap: 8px;\n}\n.step-label {\n  margin: 0;\n  font-size: 13px;\n  font-weight: 700;\n  letter-spacing: 0.08em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.counts {\n  margin: 0;\n  font-size: 12px;\n  color: #c9dccf;\n}\nsvg {\n  width: 100%;\n  height: auto;\n  max-width: 640px;\n  background: #071510;\n  border-radius: 10px;\n  border: 1px solid rgba(29, 181, 132, 0.35);\n}\n\n/* Unsplit dataset frame (steps 1-2) and regions (row 1) */\n.frame-group,\n.zone-group {\n  transition: opacity 0.4s ease;\n}\n.frame {\n  fill: rgba(255, 255, 255, 0.03);\n  stroke: rgba(201, 220, 207, 0.45);\n  stroke-width: 1.5;\n  stroke-dasharray: 3 5;\n}\n.frame-title {\n  font-size: 12px;\n  font-weight: 800;\n  letter-spacing: 0.08em;\n  fill: #c9dccf;\n}\n.zone {\n  fill: rgba(255, 255, 255, 0.025);\n  stroke-width: 1.5;\n  transition: fill 0.3s ease, stroke-width 0.3s ease;\n}\n.zone-train { stroke: #1db584; }\n.zone-validation { stroke: #e2b44a; }\n.zone-test { stroke: #f472b6; stroke-dasharray: 6 5; }\n.zone.on {\n  fill: rgba(255, 255, 255, 0.08);\n  stroke-width: 2.5;\n}\n.zone-title {\n  font-size: 12px;\n  font-weight: 800;\n  letter-spacing: 0.08em;\n}\n.zone-title-train { fill: #1db584; }\n.zone-title-validation { fill: #e2b44a; }\n.zone-title-test { fill: #f472b6; }\n.zone-note {\n  font-size: 10px;\n  font-weight: 700;\n  fill: #f9a8d4;\n}\n\n/* Downstream boxes (rows 2 and 3) */\n.box rect {\n  fill: rgba(255, 255, 255, 0.04);\n  stroke: rgba(255, 255, 255, 0.22);\n  stroke-width: 1.2;\n  transition: fill 0.3s ease, stroke 0.3s ease;\n}\n.box-title {\n  font-size: 12px;\n  font-weight: 800;\n  letter-spacing: 0.06em;\n  fill: #c9dccf;\n}\n.box.done rect {\n  stroke: #1db584;\n  fill: rgba(29, 181, 132, 0.08);\n}\n.box-model.active rect {\n  stroke: #1db584;\n  fill: rgba(29, 181, 132, 0.18);\n  stroke-width: 2.2;\n}\n.box-compare.active rect {\n  stroke: #e2b44a;\n  fill: rgba(226, 180, 74, 0.16);\n  stroke-width: 2.2;\n}\n.box-final {\n  /* Visually separate from the model/compare row. */\n}\n.box-final.active rect {\n  stroke: #f472b6;\n  fill: rgba(244, 114, 182, 0.16);\n  stroke-width: 2.6;\n}\n.box.active .box-title {\n  fill: #ffffff;\n}\n.box-sub {\n  font-size: 10.5px;\n  font-weight: 700;\n  fill: #f9a8d4;\n  opacity: 0;\n  transition: opacity 0.3s ease;\n}\n.box-sub.on {\n  opacity: 1;\n}\n\n/* Flow arrows */\n.flow-line {\n  stroke: rgba(255, 255, 255, 0.2);\n  stroke-width: 2;\n  transition: stroke 0.3s ease;\n}\n.flow-line.lit {\n  stroke: rgba(201, 220, 207, 0.55);\n}\n.flow-line.live {\n  stroke: #a7ce65;\n  stroke-width: 3;\n}\n.arrow-head {\n  fill: #a7ce65;\n}\n\n/* Examples */\n.dot {\n  transition: cx 0.6s ease, cy 0.6s ease, r 0.4s ease, fill 0.4s ease;\n  stroke: rgba(0, 0, 0, 0.35);\n  stroke-width: 1;\n}\n.caption {\n  margin: 0;\n  font-size: 13px;\n  line-height: 1.5;\n  color: #c9dccf;\n  min-height: 40px;\n}\n\n/* ── explanation panel (shared by every generated ML animation) ── */\n.explain {\n  box-sizing: border-box;\n  max-width: 640px;\n  margin-top: 4px;\n  padding: 14px 18px 16px;\n  min-height: 150px;\n  border-radius: 12px;\n  background: rgba(29, 181, 132, 0.10);\n  border: 1px solid rgba(29, 181, 132, 0.45);\n  border-left: 5px solid #1db584;\n}\n.explain-h {\n  margin: 0 0 8px;\n  font-size: 13px;\n  font-weight: 800;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.explain-t {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.55;\n  color: #f1faf4;\n}\n.explain-t strong {\n  font-weight: 800;\n  color: #ffd98a;\n}\n",
+  "html": "<div class=\"scene\">\n  <div class=\"header\">\n    <p class=\"step-label\" id=\"step-label\">Full dataset</p>\n    <p class=\"counts\" id=\"counts\"></p>\n  </div>\n  <svg id=\"scene\" viewBox=\"0 0 640 400\" role=\"img\" aria-label=\"A dataset split into train, validation and test groups. Train fits the model, validation compares choices, and test is used once for the final evaluation.\">\n    <g id=\"frame\"></g>\n    <g id=\"zones\"></g>\n    <g id=\"flow\"></g>\n    <g id=\"boxes\"></g>\n    <g id=\"dots\"></g>\n  </svg>\n  <section class=\"explain\" aria-live=\"polite\">\n        <h3 class=\"explain-h\" id=\"explain-h\"></h3>\n        <p class=\"explain-t\" id=\"caption\"></p>\n      </section>\n</div>\n",
+  "js": "(function () {\n  var NS = \"http://www.w3.org/2000/svg\";\n  var N = 24;\n  var TRAIN_COUNT = 17;\n  var VALIDATION_COUNT = 4;\n\n  var steps = [\n    { id: \"full-dataset\", label: \"Full dataset\", caption: \"Start with one collection of 24 labelled examples. Nothing has been separated yet.\" },\n    { id: \"shuffle\", label: \"Shuffle\", caption: \"Shuffle first, so the split does not depend on the order the data was collected in.\" },\n    { id: \"train-split\", label: \"Train split\", caption: \"About 70% go to TRAIN. This ratio is an illustration, not a required rule.\" },\n    { id: \"validation-split\", label: \"Validation split\", caption: \"About 15% go to VALIDATION. They are held out from training and used to compare choices.\" },\n    { id: \"test-split\", label: \"Test split\", caption: \"The rest, about 15%, go to TEST. They stay locked away until the very end.\" },\n    { id: \"training\", label: \"Training\", caption: \"Only TRAIN examples fit the model's parameters.\" },\n    { id: \"validation\", label: \"Validation\", caption: \"VALIDATION scores compare candidate models and settings. The best one is chosen here.\" },\n    { id: \"final-test\", label: \"Final test\", caption: \"TEST is used once, for an unbiased estimate. It was never used to train or to choose.\" }\n  ];\n\n  // Deterministic shuffle so every run looks identical.\n  var seed = 7;\n  function rnd() {\n    seed = (seed * 9301 + 49297) % 233280;\n    return seed / 233280;\n  }\n  var order = [];\n  for (var i = 0; i < N; i++) order.push(i);\n  for (var j = N - 1; j > 0; j--) {\n    var k = Math.floor(rnd() * (j + 1));\n    var tmp = order[j];\n    order[j] = order[k];\n    order[k] = tmp;\n  }\n  var groupOf = [];\n  for (var p = 0; p < N; p++) {\n    var sample = order[p];\n    groupOf[sample] = p < TRAIN_COUNT ? \"train\" : p < TRAIN_COUNT + VALIDATION_COUNT ? \"validation\" : \"test\";\n  }\n\n  var COLOR = { none: \"#8FA89C\", train: \"#1DB584\", validation: \"#E2B44A\", test: \"#F472B6\" };\n  var DIM = \"rgba(143,168,156,0.3)\";\n  var labelEl = document.getElementById(\"step-label\");\n  var captionEl = document.getElementById(\"caption\");\n  var explainHeadEl = document.getElementById(\"explain-h\");\n  // Per-step explanations (mirrors explain.json in this package folder). **bold** markers become <strong>.\n  var EXPLAIN = {\"full-dataset\": {\"h\": \"WHAT YOU ARE LOOKING AT\", \"t\": \"We start with one collection of **24 labelled examples**. Nothing has been separated yet, so any score measured now would not be a fair test.\"}, \"shuffle\": {\"h\": \"SHUFFLE\", \"t\": \"**Shuffle first**, so the split does not depend on the order the data happened to be collected in.\"}, \"train-split\": {\"h\": \"TRAIN SPLIT\", \"t\": \"About **70%** go to **TRAIN**. This ratio is an illustration, not a required rule. This is the data the model **learns from**.\"}, \"validation-split\": {\"h\": \"VALIDATION SPLIT\", \"t\": \"About **15%** go to **VALIDATION**. They are **held out from training** and used to compare choices, such as which model or setting works best.\"}, \"test-split\": {\"h\": \"TEST SPLIT\", \"t\": \"The rest, about **15%**, go to **TEST**. They stay **locked away until the very end**, so they can give an honest final score.\"}, \"training\": {\"h\": \"TRAINING\", \"t\": \"Only the **TRAIN** examples fit the model's parameters. The validation and test examples play no part in learning.\"}, \"validation\": {\"h\": \"VALIDATION\", \"t\": \"**VALIDATION** scores compare candidate models and settings. The best one is chosen here, using data the model did not train on.\"}, \"final-test\": {\"h\": \"TAKEAWAY\", \"t\": \"**TEST** is used **once**, for an unbiased estimate. It was **never used to train or to choose**, which is why its score can be trusted.\"}};\n\n  function setRich(node, str) {\n    node.textContent = \"\";\n    var parts = String(str).split(\"**\");\n    for (var i = 0; i < parts.length; i++) {\n      if (parts[i] === \"\") continue;\n      var seg = document.createElement(i % 2 ? \"strong\" : \"span\");\n      seg.textContent = parts[i];\n      node.appendChild(seg);\n    }\n  }\n\n  function explanationFor(index) {\n    var ex = EXPLAIN[steps[index].id];\n    return ex || { h: \"WHAT IS HAPPENING\", t: steps[index].caption || steps[index].detail || \"\" };\n  }\n\n  function stepMs(index) {\n    var words = String(explanationFor(index).t).replace(/\\*\\*/g, \"\").split(/\\s+/).length;\n    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));\n  }\n\n  function showExplanation(index) {\n    var ex = explanationFor(index);\n    if (explainHeadEl) explainHeadEl.textContent = ex.h;\n    setRich(captionEl, ex.t);\n  }\n  var countsEl = document.getElementById(\"counts\");\n  var frameLayer = document.getElementById(\"frame\");\n  var zonesLayer = document.getElementById(\"zones\");\n  var flowLayer = document.getElementById(\"flow\");\n  var boxesLayer = document.getElementById(\"boxes\");\n  var dotsLayer = document.getElementById(\"dots\");\n\n  function el(name, attrs, parent) {\n    var node = document.createElementNS(NS, name);\n    for (var key in attrs) node.setAttribute(key, attrs[key]);\n    if (parent) parent.appendChild(node);\n    return node;\n  }\n  function text(parent, x, y, cls, content, anchor) {\n    var t = el(\"text\", { x: x, y: y, class: cls }, parent);\n    if (anchor) t.setAttribute(\"text-anchor\", anchor);\n    t.textContent = content;\n    return t;\n  }\n\n  // Layout (viewBox 640 x 400). Row 1: three regions. Row 2: Model and\n  // Compare/Tune. Row 3: Final Evaluation. Every row has its own band, so\n  // nothing overlaps.\n  var ZONE = {\n    train: { x: 10, y: 28, w: 280, h: 160 },\n    validation: { x: 305, y: 28, w: 160, h: 160 },\n    test: { x: 480, y: 28, w: 150, h: 160 }\n  };\n  var BOX = {\n    model: { x: 30, y: 232, w: 220, h: 60 },\n    compare: { x: 300, y: 232, w: 160, h: 60 },\n    final: { x: 400, y: 322, w: 230, h: 64 }\n  };\n\n  // One arrowhead shared by every flow line.\n  var defs = el(\"defs\", {}, flowLayer);\n  var marker = el(\"marker\", { id: \"arrowhead\", viewBox: \"0 0 10 10\", refX: 8, refY: 5, markerWidth: 7, markerHeight: 7, orient: \"auto\" }, defs);\n  el(\"path\", { d: \"M0 0 L10 5 L0 10 Z\", class: \"arrow-head\" }, marker);\n\n  // One frame for the unsplit dataset (steps 1 and 2). Nothing is assigned yet.\n  var frameGroup = el(\"g\", { class: \"frame-group\" }, frameLayer);\n  el(\"rect\", { x: 10, y: 28, width: 620, height: 160, rx: 12, class: \"frame\" }, frameGroup);\n  text(frameGroup, 22, 48, \"frame-title\", \"DATASET\");\n\n  // Examples that are not assigned yet wait in a dashed REMAINING frame. It is\n  // never one of the three regions, so nothing looks assigned before its step.\n  var poolGroup = el(\"g\", { class: \"frame-group\" }, frameLayer);\n  var poolRect = el(\"rect\", { x: 305, y: 28, width: 325, height: 160, rx: 12, class: \"frame\" }, poolGroup);\n  var poolTitle = text(poolGroup, 317, 48, \"frame-title\", \"REMAINING\");\n\n  var ZONE_LABEL = { train: \"TRAIN\", validation: \"VALIDATION\", test: \"TEST\" };\n  var zoneGroups = {};\n  [\"train\", \"validation\", \"test\"].forEach(function (name) {\n    var z = ZONE[name];\n    var g = el(\"g\", { class: \"zone-group\" }, zonesLayer);\n    el(\"rect\", { x: z.x, y: z.y, width: z.w, height: z.h, rx: 12, class: \"zone zone-\" + name }, g);\n    text(g, z.x + 12, z.y + 20, \"zone-title zone-title-\" + name, ZONE_LABEL[name]);\n    if (name === \"test\") {\n      text(g, z.x + z.w / 2, z.y + z.h - 30, \"zone-note\", \"Held out until the end\", \"middle\");\n      text(g, z.x + z.w / 2, z.y + z.h - 14, \"zone-note\", \"Do not train on this\", \"middle\");\n    }\n    zoneGroups[name] = g;\n  });\n\n  function box(name, title) {\n    var b = BOX[name];\n    var g = el(\"g\", { class: \"box box-\" + name }, boxesLayer);\n    el(\"rect\", { x: b.x, y: b.y, width: b.w, height: b.h, rx: 10 }, g);\n    text(g, b.x + b.w / 2, b.y + (name === \"final\" ? 18 : 20), \"box-title\", title, \"middle\");\n  }\n  box(\"model\", \"MODEL\");\n  box(\"compare\", \"COMPARE / TUNE\");\n  box(\"final\", \"FINAL EVALUATION\");\n  var finalSub = text(boxesLayer, BOX.final.x + BOX.final.w / 2, BOX.final.y + BOX.final.h - 8, \"box-sub\", \"Once, after all choices are fixed\", \"middle\");\n\n  function arrow(x1, y1, x2, y2) {\n    return el(\"line\", { x1: x1, y1: y1, x2: x2, y2: y2, class: \"flow-line\", \"marker-end\": \"url(#arrowhead)\" }, flowLayer);\n  }\n  var compareCenter = BOX.compare.x + BOX.compare.w / 2;\n  var finalMid = BOX.final.y + BOX.final.h / 2;\n  var arrows = {\n    trainModel: arrow(130, ZONE.train.y + ZONE.train.h + 2, 130, BOX.model.y - 4),\n    valCompare: arrow(compareCenter, ZONE.validation.y + ZONE.validation.h + 2, compareCenter, BOX.compare.y - 4),\n    modelCompare: arrow(BOX.model.x + BOX.model.w + 2, 262, BOX.compare.x - 4, 262),\n    // Elbow: down from Compare/Tune, then right into Final Evaluation.\n    compareFinal: el(\"path\", { d: \"M\" + compareCenter + \" \" + (BOX.compare.y + BOX.compare.h + 2) + \" V\" + finalMid + \" H\" + (BOX.final.x - 4), class: \"flow-line\", fill: \"none\", \"marker-end\": \"url(#arrowhead)\" }, flowLayer),\n    testFinal: arrow(555, ZONE.test.y + ZONE.test.h + 2, 555, BOX.final.y - 4)\n  };\n\n  var dots = [];\n  for (var s = 0; s < N; s++) {\n    dots.push(el(\"circle\", { r: 8, class: \"dot\", fill: COLOR.none }, dotsLayer));\n  }\n\n  function place(node, x, y, r) {\n    node.style.cx = x + \"px\";\n    node.style.cy = y + \"px\";\n    node.style.r = r + \"px\";\n  }\n\n  var slotInGroup = [];\n  var rankOf = [];\n  var counters = { train: 0, validation: 0, test: 0 };\n  for (var q = 0; q < N; q++) {\n    var sampleIdx = order[q];\n    var gname = groupOf[sampleIdx];\n    slotInGroup[sampleIdx] = counters[gname]++;\n    rankOf[sampleIdx] = q;\n  }\n\n  function gridPosition(index) {\n    return { x: 80 + (index % 8) * 70, y: 70 + Math.floor(index / 8) * 50 };\n  }\n  function scatterPosition(index) {\n    return { x: 50 + (((index * 97) % 23) / 23) * 540, y: 56 + (((index * 53) % 17) / 17) * 110 };\n  }\n  // Examples not yet assigned wait here as neutral gray dots, in a stable spot\n  // by shuffled rank, so they do not jump when the others leave.\n  function poolPosition(rank, stepId) {\n    var idx = rank - TRAIN_COUNT;\n    if (stepId === \"validation-split\") {\n      // Only the TEST examples remain: three in a row, right-hand frame.\n      return { x: 510 + (idx - VALIDATION_COUNT) * 45, y: 96 };\n    }\n    return { x: 345 + (idx % 4) * 70, y: 86 + Math.floor(idx / 4) * 44 };\n  }\n  // Slot inside its region (row 1).\n  function zoneSlot(name, slot) {\n    var z = ZONE[name];\n    if (name === \"train\") return { x: z.x + 30 + (slot % 6) * 44, y: z.y + 54 + Math.floor(slot / 6) * 38 };\n    if (name === \"validation\") return { x: z.x + 50 + (slot % 2) * 60, y: z.y + 62 + Math.floor(slot / 2) * 40 };\n    return { x: z.x + 30 + (slot % 3) * 45, y: z.y + 62 };\n  }\n  // Small slot inside a downstream box (rows 2 and 3).\n  function boxSlot(name, slot, count) {\n    var b = BOX[name];\n    if (name === \"final\") return { x: b.x + b.w / 2 - 14 + slot * 14, y: b.y + 36 };\n    var spacing = 12;\n    var rowWidth = (count - 1) * spacing;\n    return { x: b.x + b.w / 2 - rowWidth / 2 + slot * spacing, y: b.y + 44 };\n  }\n\n  var current = 0;\n  function setClass(node, cls, on) {\n    if (on) node.classList.add(cls);\n    else node.classList.remove(cls);\n  }\n\n  function render(index) {\n    var step = steps[index];\n    labelEl.textContent = step.label;\n    showExplanation(index);\n    var id = step.id;\n    var testCount = N - TRAIN_COUNT - VALIDATION_COUNT;\n    // The counter only reports what has actually been assigned by this step.\n    countsEl.textContent =\n      index < 2 ? N + \" examples\"\n      : index === 2 ? \"Train \" + TRAIN_COUNT\n      : index === 3 ? \"Train \" + TRAIN_COUNT + \" · Validation \" + VALIDATION_COUNT\n      : \"Train \" + TRAIN_COUNT + \" · Validation \" + VALIDATION_COUNT + \" · Test \" + testCount;\n\n    // Steps 1-2: one unsplit dataset frame, no regions. Then regions appear one by one.\n    frameGroup.setAttribute(\"opacity\", index < 2 ? \"1\" : \"0\");\n    // Each region appears only at its own split step.\n    zoneGroups.train.setAttribute(\"opacity\", index >= 2 ? \"1\" : \"0\");\n    zoneGroups.validation.setAttribute(\"opacity\", index >= 3 ? \"1\" : \"0\");\n    zoneGroups.test.setAttribute(\"opacity\", index >= 4 ? \"1\" : \"0\");\n    // The REMAINING frame covers whatever has not been assigned yet.\n    poolGroup.setAttribute(\"opacity\", index === 2 || index === 3 ? \"1\" : \"0\");\n    if (index === 2) { poolRect.setAttribute(\"x\", 305); poolRect.setAttribute(\"width\", 325); poolTitle.setAttribute(\"x\", 317); }\n    if (index === 3) { poolRect.setAttribute(\"x\", 480); poolRect.setAttribute(\"width\", 150); poolTitle.setAttribute(\"x\", 492); }\n    zonesLayer.querySelectorAll(\".zone\").forEach(function (node) { node.classList.remove(\"on\"); });\n    var zoneOn = { \"train-split\": \"train\", \"validation-split\": \"validation\", \"test-split\": \"test\", training: \"train\", validation: \"validation\", \"final-test\": \"test\" }[id];\n    if (zoneOn) zonesLayer.querySelector(\".zone-\" + zoneOn).classList.add(\"on\");\n\n    dots.forEach(function (node, i) {\n      var group = groupOf[i];\n      var slot = slotInGroup[i];\n      var pos;\n      var fill = COLOR.none;\n      var r = 8;\n      if (id === \"full-dataset\") {\n        pos = gridPosition(i);\n      } else if (id === \"shuffle\") {\n        pos = scatterPosition(i);\n      } else if (id === \"train-split\") {\n        if (group === \"train\") { pos = zoneSlot(\"train\", slot); fill = COLOR.train; }\n        else pos = poolPosition(rankOf[i], id);\n      } else if (id === \"validation-split\") {\n        if (group === \"test\") pos = poolPosition(rankOf[i], id);\n        else { pos = zoneSlot(group, slot); fill = COLOR[group]; }\n      } else if (id === \"test-split\") {\n        pos = zoneSlot(group, slot);\n        fill = COLOR[group];\n      } else if (id === \"training\") {\n        if (group === \"train\") { pos = boxSlot(\"model\", slot, TRAIN_COUNT); fill = COLOR.train; r = 4.5; }\n        else { pos = zoneSlot(group, slot); fill = DIM; }\n      } else if (id === \"validation\") {\n        if (group === \"validation\") { pos = boxSlot(\"compare\", slot, VALIDATION_COUNT); fill = COLOR.validation; r = 4.5; }\n        else if (group === \"train\") { pos = boxSlot(\"model\", slot, TRAIN_COUNT); fill = DIM; r = 4.5; }\n        else { pos = zoneSlot(group, slot); fill = DIM; }\n      } else {\n        // final-test\n        if (group === \"test\") { pos = boxSlot(\"final\", slot, 3); fill = COLOR.test; r = 5; }\n        else if (group === \"train\") { pos = boxSlot(\"model\", slot, TRAIN_COUNT); fill = DIM; r = 4.5; }\n        else { pos = boxSlot(\"compare\", slot, VALIDATION_COUNT); fill = DIM; r = 4.5; }\n      }\n      node.setAttribute(\"fill\", fill);\n      place(node, pos.x, pos.y, r);\n    });\n\n    // Downstream boxes: active now, done earlier, or idle.\n    var state = {\n      model: id === \"training\" ? \"active\" : index > 5 ? \"done\" : \"\",\n      compare: id === \"validation\" ? \"active\" : index > 6 ? \"done\" : \"\",\n      final: id === \"final-test\" ? \"active\" : \"\"\n    };\n    [\"model\", \"compare\", \"final\"].forEach(function (name) {\n      var node = boxesLayer.querySelector(\".box-\" + name);\n      setClass(node, \"active\", state[name] === \"active\");\n      setClass(node, \"done\", state[name] === \"done\");\n    });\n    finalSub.setAttribute(\"class\", \"box-sub\" + (id === \"final-test\" ? \" on\" : \"\"));\n\n    // Arrows stay subtle; one is highlighted only while its own step is active.\n    var live = { trainModel: id === \"training\", valCompare: id === \"validation\", modelCompare: id === \"validation\", compareFinal: id === \"final-test\", testFinal: id === \"final-test\" };\n    Object.keys(arrows).forEach(function (key) {\n      arrows[key].setAttribute(\"class\", \"flow-line\" + (live[key] ? \" live\" : \"\"));\n    });\n  }\n\n  function goTo(index) {\n    if (index < 0 || index >= steps.length) return;\n    current = index;\n    render(current);\n    if (window.ReagvisBridge) window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n\n  render(current);\n\n  // Autoplay pace: 4.5 to 10.5 seconds per step (longer for longer explanations), exactly one timer.\n  // PLAY on the final step restarts from the first step and plays again.\n  var timer = null;\n\n  function stopAuto() {\n    if (timer !== null) {\n      clearTimeout(timer);\n      timer = null;\n    }\n  }\n\n  function scheduleNext() {\n    timer = setTimeout(function () {\n      timer = null;\n      if (current >= steps.length - 1) return;\n      goTo(current + 1);\n      if (current < steps.length - 1) scheduleNext();\n    }, stepMs(current));\n  }\n\n  function startAuto() {\n    if (timer !== null) return;\n    if (current >= steps.length - 1) goTo(0);\n    scheduleNext();\n  }\n\n  window.addEventListener(\"pagehide\", stopAuto);\n\n  window.ReagvisAnimation = {\n    stepDuration: stepMs,\n    onCommand: function (type, stepId) {\n      if (type === \"PLAY\") startAuto();\n      else if (type === \"PAUSE\") stopAuto();\n      else if (type === \"NEXT\") { stopAuto(); goTo(current + 1); }\n      else if (type === \"PREVIOUS\") { stopAuto(); goTo(current - 1); }\n      else if (type === \"RESET\") { stopAuto(); goTo(0); }\n      else if (type === \"GOTO_STEP\") {\n        stopAuto();\n        for (var i = 0; i < steps.length; i++) {\n          if (steps[i].id === stepId) { goTo(i); break; }\n        }\n      }\n    },\n  };\n\n  if (window.ReagvisBridge) {\n    window.ReagvisBridge.ready();\n    window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n})();\n",
+  "lastFrozenContentHash": null,
+  "lastFrozenRevisionId": null,
+  "manifest": {
+    "bridgeVersion": {
+      "$numberInt": "1"
+    },
+    "capabilities": [
+      "play",
+      "pause",
+      "next",
+      "previous",
+      "reset",
+      "gotoStep"
+    ],
+    "heightPx": {
+      "$numberInt": "630"
+    },
+    "traceEvents": [
+      "full-dataset",
+      "shuffle",
+      "train-split",
+      "validation-split",
+      "test-split",
+      "training",
+      "validation",
+      "final-test"
+    ]
+  },
+  "packageId": "d4cbd1c0-393d-460d-872f-a2633af8f114",
+  "packageTrace": {
+    "steps": [
+      {
+        "animationEvent": "full-dataset",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Collect the labelled examples the model could learn from. Keep the whole set together until the split is defined.",
+          "python": "examples = list(range(24))  # 24 labelled examples (illustrative)\nprint(len(examples))"
+        },
+        "id": "full-dataset",
+        "label": "Start with the full dataset"
+      },
+      {
+        "animationEvent": "shuffle",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Shuffle the examples with a fixed random seed. The order is reproducible but no longer tied to how the data was collected.",
+          "python": "import random\n\nrng = random.Random(7)\norder = list(range(24))\nrng.shuffle(order)\nprint(order[:5])"
+        },
+        "id": "shuffle",
+        "label": "Shuffle the examples"
+      },
+      {
+        "animationEvent": "train-split",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Take about 70% of the shuffled examples as the training set. Their targets will be used to learn parameters.",
+          "python": "order = list(range(24))  # shuffled positions from the previous step\nn_train = int(24 * 0.70)\ntrain_positions = order[:n_train]\nprint(len(train_positions))"
+        },
+        "id": "train-split",
+        "label": "Assign about 70% to training"
+      },
+      {
+        "animationEvent": "validation-split",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Take about 15% as the validation set. These examples are kept out of training and are used to compare choices.",
+          "python": "order = list(range(24))  # shuffled positions from the previous step\nn_train = int(24 * 0.70)\nn_val = int(24 * 0.15)\nval_positions = order[n_train:n_train + n_val]\nprint(len(val_positions))"
+        },
+        "id": "validation-split",
+        "label": "Hold out about 15% for validation"
+      },
+      {
+        "animationEvent": "test-split",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Reserve the remaining examples as the test set. Do not look at them while developing the model.",
+          "python": "order = list(range(24))  # shuffled positions from the previous step\nn_train = int(24 * 0.70)\nn_val = int(24 * 0.15)\ntest_positions = order[n_train + n_val:]\nprint(len(test_positions))"
+        },
+        "id": "test-split",
+        "label": "Lock away the test set"
+      },
+      {
+        "animationEvent": "training",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Fit the model using only training examples. Its parameters change; validation and test examples are not used here.",
+          "python": "train_targets = [40, 50, 60]\nmodel_value = sum(train_targets) / len(train_targets)  # learned from training data only\nprint(model_value)"
+        },
+        "id": "training",
+        "label": "Train only on the training set"
+      },
+      {
+        "animationEvent": "validation",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Score candidate models on the validation set. Keep the one that performs best there, and adjust settings if needed.",
+          "python": "train_targets = [40, 50, 60]\nmodel_value = sum(train_targets) / len(train_targets)  # learned from training data only\nval_targets = [55]\nval_error = abs(model_value - val_targets[0])\nprint(val_error)"
+        },
+        "id": "validation",
+        "label": "Compare choices on validation"
+      },
+      {
+        "animationEvent": "final-test",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "After every choice is fixed, measure performance once on the test set. This is the number reported as the estimate.",
+          "python": "train_targets = [40, 50, 60]\nmodel_value = sum(train_targets) / len(train_targets)  # fixed before the test set is used\ntest_targets = [70]\nfinal_error = abs(model_value - test_targets[0])\nprint(final_error)"
+        },
+        "id": "final-test",
+        "label": "Evaluate once on the test set"
+      }
+    ],
+    "version": {
+      "$numberInt": "1"
+    }
+  },
+  "revision": {
+    "$numberInt": "9"
+  },
+  "revisionId": "r3",
+  "sourceKind": "zip",
+  "status": "frozen",
+  "title": "ML Module 1 — Training, Validation & Testing",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498540"
+    }
+  },
+  "updatedBy": {
+    "$oid": "000000000000000000000000"
+  }
+}

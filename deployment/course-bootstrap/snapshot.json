@@ -1,0 +1,2198 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322018739780a5061ab"
+  },
+  "checkpoints": [
+    {
+      "hasCodingActivity": false,
+      "id": "ml-foundations-1",
+      "masteryXp": null,
+      "moduleId": "ml-foundations",
+      "order": {
+        "$numberInt": "1"
+      },
+      "prerequisites": [],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "ml-foundations-2",
+      "masteryXp": null,
+      "moduleId": "ml-foundations",
+      "order": {
+        "$numberInt": "2"
+      },
+      "prerequisites": [
+        "ml-foundations-1"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "ml-foundations-3",
+      "masteryXp": null,
+      "moduleId": "ml-foundations",
+      "order": {
+        "$numberInt": "3"
+      },
+      "prerequisites": [
+        "ml-foundations-2"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "ml-foundations-4",
+      "masteryXp": null,
+      "moduleId": "ml-foundations",
+      "order": {
+        "$numberInt": "4"
+      },
+      "prerequisites": [
+        "ml-foundations-3"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "ml-foundations-5",
+      "masteryXp": null,
+      "moduleId": "ml-foundations",
+      "order": {
+        "$numberInt": "5"
+      },
+      "prerequisites": [
+        "ml-foundations-4"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "ml-foundations-6",
+      "masteryXp": null,
+      "moduleId": "ml-foundations",
+      "order": {
+        "$numberInt": "6"
+      },
+      "prerequisites": [
+        "ml-foundations-5"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "ml-foundations-7",
+      "masteryXp": null,
+      "moduleId": "ml-foundations",
+      "order": {
+        "$numberInt": "7"
+      },
+      "prerequisites": [
+        "ml-foundations-6"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "linear-algebra-1",
+      "masteryXp": null,
+      "moduleId": "linear-algebra",
+      "order": {
+        "$numberInt": "1"
+      },
+      "prerequisites": [],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "linear-algebra-2",
+      "masteryXp": null,
+      "moduleId": "linear-algebra",
+      "order": {
+        "$numberInt": "2"
+      },
+      "prerequisites": [
+        "linear-algebra-1"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "linear-algebra-3",
+      "masteryXp": null,
+      "moduleId": "linear-algebra",
+      "order": {
+        "$numberInt": "3"
+      },
+      "prerequisites": [
+        "linear-algebra-2"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "linear-algebra-4",
+      "masteryXp": null,
+      "moduleId": "linear-algebra",
+      "order": {
+        "$numberInt": "4"
+      },
+      "prerequisites": [
+        "linear-algebra-3"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "linear-algebra-5",
+      "masteryXp": null,
+      "moduleId": "linear-algebra",
+      "order": {
+        "$numberInt": "5"
+      },
+      "prerequisites": [
+        "linear-algebra-4"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "linear-algebra-6",
+      "masteryXp": null,
+      "moduleId": "linear-algebra",
+      "order": {
+        "$numberInt": "6"
+      },
+      "prerequisites": [
+        "linear-algebra-5"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "linear-algebra-7",
+      "masteryXp": null,
+      "moduleId": "linear-algebra",
+      "order": {
+        "$numberInt": "7"
+      },
+      "prerequisites": [
+        "linear-algebra-6"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "linear-algebra-8",
+      "masteryXp": null,
+      "moduleId": "linear-algebra",
+      "order": {
+        "$numberInt": "8"
+      },
+      "prerequisites": [
+        "linear-algebra-7"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "linear-algebra-9",
+      "masteryXp": null,
+      "moduleId": "linear-algebra",
+      "order": {
+        "$numberInt": "9"
+      },
+      "prerequisites": [
+        "linear-algebra-8"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "calculus-1",
+      "masteryXp": null,
+      "moduleId": "calculus",
+      "order": {
+        "$numberInt": "1"
+      },
+      "prerequisites": [],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "calculus-2",
+      "masteryXp": null,
+      "moduleId": "calculus",
+      "order": {
+        "$numberInt": "2"
+      },
+      "prerequisites": [
+        "calculus-1"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "calculus-3",
+      "masteryXp": null,
+      "moduleId": "calculus",
+      "order": {
+        "$numberInt": "3"
+      },
+      "prerequisites": [
+        "calculus-2"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "calculus-4",
+      "masteryXp": null,
+      "moduleId": "calculus",
+      "order": {
+        "$numberInt": "4"
+      },
+      "prerequisites": [
+        "calculus-3"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "calculus-5",
+      "masteryXp": null,
+      "moduleId": "calculus",
+      "order": {
+        "$numberInt": "5"
+      },
+      "prerequisites": [
+        "calculus-4",
+        "calculus-2"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "calculus-6",
+      "masteryXp": null,
+      "moduleId": "calculus",
+      "order": {
+        "$numberInt": "6"
+      },
+      "prerequisites": [
+        "calculus-5"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "calculus-7",
+      "masteryXp": null,
+      "moduleId": "calculus",
+      "order": {
+        "$numberInt": "7"
+      },
+      "prerequisites": [
+        "calculus-6"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "calculus-8",
+      "masteryXp": null,
+      "moduleId": "calculus",
+      "order": {
+        "$numberInt": "8"
+      },
+      "prerequisites": [
+        "calculus-7",
+        "calculus-5"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "probability-foundations-1",
+      "masteryXp": null,
+      "moduleId": "probability-foundations",
+      "order": {
+        "$numberInt": "1"
+      },
+      "prerequisites": [],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "probability-foundations-2",
+      "masteryXp": null,
+      "moduleId": "probability-foundations",
+      "order": {
+        "$numberInt": "2"
+      },
+      "prerequisites": [
+        "probability-foundations-1"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "probability-foundations-3",
+      "masteryXp": null,
+      "moduleId": "probability-foundations",
+      "order": {
+        "$numberInt": "3"
+      },
+      "prerequisites": [
+        "probability-foundations-2"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "probability-foundations-4",
+      "masteryXp": null,
+      "moduleId": "probability-foundations",
+      "order": {
+        "$numberInt": "4"
+      },
+      "prerequisites": [
+        "probability-foundations-3"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "probability-foundations-5",
+      "masteryXp": null,
+      "moduleId": "probability-foundations",
+      "order": {
+        "$numberInt": "5"
+      },
+      "prerequisites": [
+        "probability-foundations-4"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "probability-foundations-6",
+      "masteryXp": null,
+      "moduleId": "probability-foundations",
+      "order": {
+        "$numberInt": "6"
+      },
+      "prerequisites": [
+        "probability-foundations-5"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "probability-foundations-7",
+      "masteryXp": null,
+      "moduleId": "probability-foundations",
+      "order": {
+        "$numberInt": "7"
+      },
+      "prerequisites": [
+        "probability-foundations-6"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "probability-foundations-8",
+      "masteryXp": null,
+      "moduleId": "probability-foundations",
+      "order": {
+        "$numberInt": "8"
+      },
+      "prerequisites": [
+        "probability-foundations-7"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "probability-foundations-9",
+      "masteryXp": null,
+      "moduleId": "probability-foundations",
+      "order": {
+        "$numberInt": "9"
+      },
+      "prerequisites": [
+        "probability-foundations-8"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "probability-foundations-10",
+      "masteryXp": null,
+      "moduleId": "probability-foundations",
+      "order": {
+        "$numberInt": "10"
+      },
+      "prerequisites": [
+        "probability-foundations-9"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "probability-foundations-11",
+      "masteryXp": null,
+      "moduleId": "probability-foundations",
+      "order": {
+        "$numberInt": "11"
+      },
+      "prerequisites": [
+        "probability-foundations-10"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "estimation-uncertainty-1",
+      "masteryXp": null,
+      "moduleId": "estimation-uncertainty",
+      "order": {
+        "$numberInt": "1"
+      },
+      "prerequisites": [],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "estimation-uncertainty-2",
+      "masteryXp": null,
+      "moduleId": "estimation-uncertainty",
+      "order": {
+        "$numberInt": "2"
+      },
+      "prerequisites": [
+        "estimation-uncertainty-1",
+        "probability-foundations-7"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "estimation-uncertainty-3",
+      "masteryXp": null,
+      "moduleId": "estimation-uncertainty",
+      "order": {
+        "$numberInt": "3"
+      },
+      "prerequisites": [
+        "estimation-uncertainty-2"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "estimation-uncertainty-4",
+      "masteryXp": null,
+      "moduleId": "estimation-uncertainty",
+      "order": {
+        "$numberInt": "4"
+      },
+      "prerequisites": [
+        "estimation-uncertainty-3",
+        "probability-foundations-3"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "estimation-uncertainty-5",
+      "masteryXp": null,
+      "moduleId": "estimation-uncertainty",
+      "order": {
+        "$numberInt": "5"
+      },
+      "prerequisites": [
+        "estimation-uncertainty-4"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "estimation-uncertainty-6",
+      "masteryXp": null,
+      "moduleId": "estimation-uncertainty",
+      "order": {
+        "$numberInt": "6"
+      },
+      "prerequisites": [
+        "estimation-uncertainty-5"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "estimation-uncertainty-7",
+      "masteryXp": null,
+      "moduleId": "estimation-uncertainty",
+      "order": {
+        "$numberInt": "7"
+      },
+      "prerequisites": [
+        "estimation-uncertainty-6",
+        "probability-foundations-5"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "estimation-uncertainty-8",
+      "masteryXp": null,
+      "moduleId": "estimation-uncertainty",
+      "order": {
+        "$numberInt": "8"
+      },
+      "prerequisites": [
+        "estimation-uncertainty-7"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "optimization-1",
+      "masteryXp": null,
+      "moduleId": "optimization",
+      "order": {
+        "$numberInt": "1"
+      },
+      "prerequisites": [],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "optimization-2",
+      "masteryXp": null,
+      "moduleId": "optimization",
+      "order": {
+        "$numberInt": "2"
+      },
+      "prerequisites": [
+        "optimization-1"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "optimization-3",
+      "masteryXp": null,
+      "moduleId": "optimization",
+      "order": {
+        "$numberInt": "3"
+      },
+      "prerequisites": [
+        "optimization-2",
+        "calculus-5"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "optimization-4",
+      "masteryXp": null,
+      "moduleId": "optimization",
+      "order": {
+        "$numberInt": "4"
+      },
+      "prerequisites": [
+        "optimization-3"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "optimization-5",
+      "masteryXp": null,
+      "moduleId": "optimization",
+      "order": {
+        "$numberInt": "5"
+      },
+      "prerequisites": [
+        "optimization-4",
+        "calculus-6"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "optimization-6",
+      "masteryXp": null,
+      "moduleId": "optimization",
+      "order": {
+        "$numberInt": "6"
+      },
+      "prerequisites": [
+        "optimization-5",
+        "calculus-7"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "optimization-7",
+      "masteryXp": null,
+      "moduleId": "optimization",
+      "order": {
+        "$numberInt": "7"
+      },
+      "prerequisites": [
+        "optimization-6"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "optimization-8",
+      "masteryXp": null,
+      "moduleId": "optimization",
+      "order": {
+        "$numberInt": "8"
+      },
+      "prerequisites": [
+        "optimization-7"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "optimization-9",
+      "masteryXp": null,
+      "moduleId": "optimization",
+      "order": {
+        "$numberInt": "9"
+      },
+      "prerequisites": [
+        "optimization-8"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "optimization-10",
+      "masteryXp": null,
+      "moduleId": "optimization",
+      "order": {
+        "$numberInt": "10"
+      },
+      "prerequisites": [
+        "optimization-9"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "optimization-11",
+      "masteryXp": null,
+      "moduleId": "optimization",
+      "order": {
+        "$numberInt": "11"
+      },
+      "prerequisites": [
+        "optimization-10"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "regression-practice-1",
+      "masteryXp": null,
+      "moduleId": "regression-practice",
+      "order": {
+        "$numberInt": "1"
+      },
+      "prerequisites": [],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "regression-practice-2",
+      "masteryXp": null,
+      "moduleId": "regression-practice",
+      "order": {
+        "$numberInt": "2"
+      },
+      "prerequisites": [
+        "regression-practice-1"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "regression-practice-3",
+      "masteryXp": null,
+      "moduleId": "regression-practice",
+      "order": {
+        "$numberInt": "3"
+      },
+      "prerequisites": [
+        "regression-practice-2"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "regression-practice-4",
+      "masteryXp": null,
+      "moduleId": "regression-practice",
+      "order": {
+        "$numberInt": "4"
+      },
+      "prerequisites": [
+        "regression-practice-3",
+        "linear-algebra-5"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "regression-practice-5",
+      "masteryXp": null,
+      "moduleId": "regression-practice",
+      "order": {
+        "$numberInt": "5"
+      },
+      "prerequisites": [
+        "regression-practice-4",
+        "estimation-uncertainty-2"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "regression-practice-6",
+      "masteryXp": null,
+      "moduleId": "regression-practice",
+      "order": {
+        "$numberInt": "6"
+      },
+      "prerequisites": [
+        "regression-practice-5"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "regression-practice-7",
+      "masteryXp": null,
+      "moduleId": "regression-practice",
+      "order": {
+        "$numberInt": "7"
+      },
+      "prerequisites": [
+        "regression-practice-6"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "regression-practice-8",
+      "masteryXp": null,
+      "moduleId": "regression-practice",
+      "order": {
+        "$numberInt": "8"
+      },
+      "prerequisites": [
+        "regression-practice-7",
+        "ml-foundations-4"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "regression-practice-9",
+      "masteryXp": null,
+      "moduleId": "regression-practice",
+      "order": {
+        "$numberInt": "9"
+      },
+      "prerequisites": [
+        "regression-practice-8"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "regression-practice-10",
+      "masteryXp": null,
+      "moduleId": "regression-practice",
+      "order": {
+        "$numberInt": "10"
+      },
+      "prerequisites": [
+        "regression-practice-9"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "classification-foundations-1",
+      "masteryXp": null,
+      "moduleId": "classification-foundations",
+      "order": {
+        "$numberInt": "1"
+      },
+      "prerequisites": [],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "classification-foundations-2",
+      "masteryXp": null,
+      "moduleId": "classification-foundations",
+      "order": {
+        "$numberInt": "2"
+      },
+      "prerequisites": [
+        "classification-foundations-1"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "classification-foundations-3",
+      "masteryXp": null,
+      "moduleId": "classification-foundations",
+      "order": {
+        "$numberInt": "3"
+      },
+      "prerequisites": [
+        "classification-foundations-2"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "classification-foundations-4",
+      "masteryXp": null,
+      "moduleId": "classification-foundations",
+      "order": {
+        "$numberInt": "4"
+      },
+      "prerequisites": [
+        "classification-foundations-3"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "classification-foundations-5",
+      "masteryXp": null,
+      "moduleId": "classification-foundations",
+      "order": {
+        "$numberInt": "5"
+      },
+      "prerequisites": [
+        "classification-foundations-4"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "classification-foundations-6",
+      "masteryXp": null,
+      "moduleId": "classification-foundations",
+      "order": {
+        "$numberInt": "6"
+      },
+      "prerequisites": [
+        "classification-foundations-5"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "classification-foundations-7",
+      "masteryXp": null,
+      "moduleId": "classification-foundations",
+      "order": {
+        "$numberInt": "7"
+      },
+      "prerequisites": [
+        "classification-foundations-6"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "model-evaluation-1",
+      "masteryXp": null,
+      "moduleId": "model-evaluation",
+      "order": {
+        "$numberInt": "1"
+      },
+      "prerequisites": [
+        "classification-foundations-7"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "model-evaluation-2",
+      "masteryXp": null,
+      "moduleId": "model-evaluation",
+      "order": {
+        "$numberInt": "2"
+      },
+      "prerequisites": [
+        "model-evaluation-1"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "model-evaluation-3",
+      "masteryXp": null,
+      "moduleId": "model-evaluation",
+      "order": {
+        "$numberInt": "3"
+      },
+      "prerequisites": [
+        "model-evaluation-2"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "model-evaluation-4",
+      "masteryXp": null,
+      "moduleId": "model-evaluation",
+      "order": {
+        "$numberInt": "4"
+      },
+      "prerequisites": [
+        "model-evaluation-3"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "model-evaluation-5",
+      "masteryXp": null,
+      "moduleId": "model-evaluation",
+      "order": {
+        "$numberInt": "5"
+      },
+      "prerequisites": [
+        "model-evaluation-4"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "model-evaluation-6",
+      "masteryXp": null,
+      "moduleId": "model-evaluation",
+      "order": {
+        "$numberInt": "6"
+      },
+      "prerequisites": [
+        "model-evaluation-5",
+        "classification-foundations-4"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "model-evaluation-7",
+      "masteryXp": null,
+      "moduleId": "model-evaluation",
+      "order": {
+        "$numberInt": "7"
+      },
+      "prerequisites": [
+        "model-evaluation-6"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "model-evaluation-8",
+      "masteryXp": null,
+      "moduleId": "model-evaluation",
+      "order": {
+        "$numberInt": "8"
+      },
+      "prerequisites": [
+        "model-evaluation-7",
+        "regression-practice-9"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "clustering-1",
+      "masteryXp": null,
+      "moduleId": "clustering",
+      "order": {
+        "$numberInt": "1"
+      },
+      "prerequisites": [],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "clustering-2",
+      "masteryXp": null,
+      "moduleId": "clustering",
+      "order": {
+        "$numberInt": "2"
+      },
+      "prerequisites": [
+        "clustering-1"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "clustering-3",
+      "masteryXp": null,
+      "moduleId": "clustering",
+      "order": {
+        "$numberInt": "3"
+      },
+      "prerequisites": [
+        "clustering-2"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "clustering-4",
+      "masteryXp": null,
+      "moduleId": "clustering",
+      "order": {
+        "$numberInt": "4"
+      },
+      "prerequisites": [
+        "clustering-3"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "clustering-5",
+      "masteryXp": null,
+      "moduleId": "clustering",
+      "order": {
+        "$numberInt": "5"
+      },
+      "prerequisites": [
+        "clustering-4"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "clustering-6",
+      "masteryXp": null,
+      "moduleId": "clustering",
+      "order": {
+        "$numberInt": "6"
+      },
+      "prerequisites": [
+        "clustering-5"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "clustering-7",
+      "masteryXp": null,
+      "moduleId": "clustering",
+      "order": {
+        "$numberInt": "7"
+      },
+      "prerequisites": [
+        "clustering-6"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "gaussian-mixtures-1",
+      "masteryXp": null,
+      "moduleId": "gaussian-mixtures",
+      "order": {
+        "$numberInt": "1"
+      },
+      "prerequisites": [
+        "estimation-uncertainty-2"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "gaussian-mixtures-2",
+      "masteryXp": null,
+      "moduleId": "gaussian-mixtures",
+      "order": {
+        "$numberInt": "2"
+      },
+      "prerequisites": [
+        "gaussian-mixtures-1"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "gaussian-mixtures-3",
+      "masteryXp": null,
+      "moduleId": "gaussian-mixtures",
+      "order": {
+        "$numberInt": "3"
+      },
+      "prerequisites": [
+        "gaussian-mixtures-2"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "gaussian-mixtures-4",
+      "masteryXp": null,
+      "moduleId": "gaussian-mixtures",
+      "order": {
+        "$numberInt": "4"
+      },
+      "prerequisites": [
+        "gaussian-mixtures-3"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "gaussian-mixtures-5",
+      "masteryXp": null,
+      "moduleId": "gaussian-mixtures",
+      "order": {
+        "$numberInt": "5"
+      },
+      "prerequisites": [
+        "gaussian-mixtures-4"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "gaussian-mixtures-6",
+      "masteryXp": null,
+      "moduleId": "gaussian-mixtures",
+      "order": {
+        "$numberInt": "6"
+      },
+      "prerequisites": [
+        "gaussian-mixtures-5"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "gaussian-mixtures-7",
+      "masteryXp": null,
+      "moduleId": "gaussian-mixtures",
+      "order": {
+        "$numberInt": "7"
+      },
+      "prerequisites": [
+        "gaussian-mixtures-6"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "gaussian-mixtures-8",
+      "masteryXp": null,
+      "moduleId": "gaussian-mixtures",
+      "order": {
+        "$numberInt": "8"
+      },
+      "prerequisites": [
+        "gaussian-mixtures-7"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "gaussian-mixtures-9",
+      "masteryXp": null,
+      "moduleId": "gaussian-mixtures",
+      "order": {
+        "$numberInt": "9"
+      },
+      "prerequisites": [
+        "gaussian-mixtures-8",
+        "clustering-6"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "dimensionality-reduction-1",
+      "masteryXp": null,
+      "moduleId": "dimensionality-reduction",
+      "order": {
+        "$numberInt": "1"
+      },
+      "prerequisites": [],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "dimensionality-reduction-2",
+      "masteryXp": null,
+      "moduleId": "dimensionality-reduction",
+      "order": {
+        "$numberInt": "2"
+      },
+      "prerequisites": [
+        "dimensionality-reduction-1",
+        "probability-foundations-6"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "dimensionality-reduction-3",
+      "masteryXp": null,
+      "moduleId": "dimensionality-reduction",
+      "order": {
+        "$numberInt": "3"
+      },
+      "prerequisites": [
+        "dimensionality-reduction-2",
+        "probability-foundations-10"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "dimensionality-reduction-4",
+      "masteryXp": null,
+      "moduleId": "dimensionality-reduction",
+      "order": {
+        "$numberInt": "4"
+      },
+      "prerequisites": [
+        "dimensionality-reduction-3",
+        "linear-algebra-6"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "dimensionality-reduction-5",
+      "masteryXp": null,
+      "moduleId": "dimensionality-reduction",
+      "order": {
+        "$numberInt": "5"
+      },
+      "prerequisites": [
+        "dimensionality-reduction-4"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "dimensionality-reduction-6",
+      "masteryXp": null,
+      "moduleId": "dimensionality-reduction",
+      "order": {
+        "$numberInt": "6"
+      },
+      "prerequisites": [
+        "dimensionality-reduction-5",
+        "linear-algebra-6"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "dimensionality-reduction-7",
+      "masteryXp": null,
+      "moduleId": "dimensionality-reduction",
+      "order": {
+        "$numberInt": "7"
+      },
+      "prerequisites": [
+        "dimensionality-reduction-6",
+        "linear-algebra-8"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "dimensionality-reduction-8",
+      "masteryXp": null,
+      "moduleId": "dimensionality-reduction",
+      "order": {
+        "$numberInt": "8"
+      },
+      "prerequisites": [
+        "dimensionality-reduction-7"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "dimensionality-reduction-9",
+      "masteryXp": null,
+      "moduleId": "dimensionality-reduction",
+      "order": {
+        "$numberInt": "9"
+      },
+      "prerequisites": [
+        "dimensionality-reduction-8"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "reliable-ml-systems-1",
+      "masteryXp": null,
+      "moduleId": "reliable-ml-systems",
+      "order": {
+        "$numberInt": "1"
+      },
+      "prerequisites": [
+        "ml-foundations-7"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "reliable-ml-systems-2",
+      "masteryXp": null,
+      "moduleId": "reliable-ml-systems",
+      "order": {
+        "$numberInt": "2"
+      },
+      "prerequisites": [
+        "reliable-ml-systems-1"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "reliable-ml-systems-3",
+      "masteryXp": null,
+      "moduleId": "reliable-ml-systems",
+      "order": {
+        "$numberInt": "3"
+      },
+      "prerequisites": [
+        "reliable-ml-systems-2",
+        "regression-practice-8"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "reliable-ml-systems-4",
+      "masteryXp": null,
+      "moduleId": "reliable-ml-systems",
+      "order": {
+        "$numberInt": "4"
+      },
+      "prerequisites": [
+        "reliable-ml-systems-3",
+        "classification-foundations-6"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "reliable-ml-systems-5",
+      "masteryXp": null,
+      "moduleId": "reliable-ml-systems",
+      "order": {
+        "$numberInt": "5"
+      },
+      "prerequisites": [
+        "reliable-ml-systems-4",
+        "optimization-3"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "reliable-ml-systems-6",
+      "masteryXp": null,
+      "moduleId": "reliable-ml-systems",
+      "order": {
+        "$numberInt": "6"
+      },
+      "prerequisites": [
+        "reliable-ml-systems-5",
+        "model-evaluation-7"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "reliable-ml-systems-7",
+      "masteryXp": null,
+      "moduleId": "reliable-ml-systems",
+      "order": {
+        "$numberInt": "7"
+      },
+      "prerequisites": [
+        "reliable-ml-systems-6",
+        "ml-foundations-5"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "reliable-ml-systems-8",
+      "masteryXp": null,
+      "moduleId": "reliable-ml-systems",
+      "order": {
+        "$numberInt": "8"
+      },
+      "prerequisites": [
+        "reliable-ml-systems-7",
+        "regression-practice-6"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "reliable-ml-systems-9",
+      "masteryXp": null,
+      "moduleId": "reliable-ml-systems",
+      "order": {
+        "$numberInt": "9"
+      },
+      "prerequisites": [
+        "reliable-ml-systems-8",
+        "regression-practice-8"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "reliable-ml-systems-10",
+      "masteryXp": null,
+      "moduleId": "reliable-ml-systems",
+      "order": {
+        "$numberInt": "10"
+      },
+      "prerequisites": [
+        "reliable-ml-systems-9",
+        "model-evaluation-8"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    },
+    {
+      "hasCodingActivity": false,
+      "id": "reliable-ml-systems-11",
+      "masteryXp": null,
+      "moduleId": "reliable-ml-systems",
+      "order": {
+        "$numberInt": "11"
+      },
+      "prerequisites": [
+        "reliable-ml-systems-10"
+      ],
+      "type": "lesson",
+      "xp": {
+        "$numberInt": "30"
+      }
+    }
+  ],
+  "courseId": "machine-learning-foundations",
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498824"
+    }
+  },
+  "frontendCommit": null,
+  "isActive": true,
+  "modules": [
+    {
+      "checkpointIds": [
+        "ml-foundations-1",
+        "ml-foundations-2",
+        "ml-foundations-3",
+        "ml-foundations-4",
+        "ml-foundations-5",
+        "ml-foundations-6",
+        "ml-foundations-7"
+      ],
+      "id": "ml-foundations",
+      "order": {
+        "$numberInt": "1"
+      },
+      "title": "Machine Learning Foundations",
+      "zoneId": "ml-basecamp"
+    },
+    {
+      "checkpointIds": [
+        "linear-algebra-1",
+        "linear-algebra-2",
+        "linear-algebra-3",
+        "linear-algebra-4",
+        "linear-algebra-5",
+        "linear-algebra-6",
+        "linear-algebra-7",
+        "linear-algebra-8",
+        "linear-algebra-9"
+      ],
+      "id": "linear-algebra",
+      "order": {
+        "$numberInt": "2"
+      },
+      "title": "Linear Algebra for Machine Learning",
+      "zoneId": "mathematics-meadow"
+    },
+    {
+      "checkpointIds": [
+        "calculus-1",
+        "calculus-2",
+        "calculus-3",
+        "calculus-4",
+        "calculus-5",
+        "calculus-6",
+        "calculus-7",
+        "calculus-8"
+      ],
+      "id": "calculus",
+      "order": {
+        "$numberInt": "3"
+      },
+      "title": "Calculus for Learning",
+      "zoneId": "mathematics-meadow"
+    },
+    {
+      "checkpointIds": [
+        "probability-foundations-1",
+        "probability-foundations-2",
+        "probability-foundations-3",
+        "probability-foundations-4",
+        "probability-foundations-5",
+        "probability-foundations-6",
+        "probability-foundations-7",
+        "probability-foundations-8",
+        "probability-foundations-9",
+        "probability-foundations-10",
+        "probability-foundations-11"
+      ],
+      "id": "probability-foundations",
+      "order": {
+        "$numberInt": "4"
+      },
+      "title": "Probability Foundations",
+      "zoneId": "probability-grove"
+    },
+    {
+      "checkpointIds": [
+        "estimation-uncertainty-1",
+        "estimation-uncertainty-2",
+        "estimation-uncertainty-3",
+        "estimation-uncertainty-4",
+        "estimation-uncertainty-5",
+        "estimation-uncertainty-6",
+        "estimation-uncertainty-7",
+        "estimation-uncertainty-8"
+      ],
+      "id": "estimation-uncertainty",
+      "order": {
+        "$numberInt": "5"
+      },
+      "title": "Estimation & Uncertainty",
+      "zoneId": "probability-grove"
+    },
+    {
+      "checkpointIds": [
+        "optimization-1",
+        "optimization-2",
+        "optimization-3",
+        "optimization-4",
+        "optimization-5",
+        "optimization-6",
+        "optimization-7",
+        "optimization-8",
+        "optimization-9",
+        "optimization-10",
+        "optimization-11"
+      ],
+      "id": "optimization",
+      "order": {
+        "$numberInt": "6"
+      },
+      "title": "Optimization for Machine Learning",
+      "zoneId": "optimization-ridge"
+    },
+    {
+      "checkpointIds": [
+        "regression-practice-1",
+        "regression-practice-2",
+        "regression-practice-3",
+        "regression-practice-4",
+        "regression-practice-5",
+        "regression-practice-6",
+        "regression-practice-7",
+        "regression-practice-8",
+        "regression-practice-9",
+        "regression-practice-10"
+      ],
+      "id": "regression-practice",
+      "order": {
+        "$numberInt": "7"
+      },
+      "title": "Regression in Practice",
+      "zoneId": "optimization-ridge"
+    },
+    {
+      "checkpointIds": [
+        "classification-foundations-1",
+        "classification-foundations-2",
+        "classification-foundations-3",
+        "classification-foundations-4",
+        "classification-foundations-5",
+        "classification-foundations-6",
+        "classification-foundations-7"
+      ],
+      "id": "classification-foundations",
+      "order": {
+        "$numberInt": "8"
+      },
+      "title": "Classification Foundations",
+      "zoneId": "classification-woods"
+    },
+    {
+      "checkpointIds": [
+        "model-evaluation-1",
+        "model-evaluation-2",
+        "model-evaluation-3",
+        "model-evaluation-4",
+        "model-evaluation-5",
+        "model-evaluation-6",
+        "model-evaluation-7",
+        "model-evaluation-8"
+      ],
+      "id": "model-evaluation",
+      "order": {
+        "$numberInt": "9"
+      },
+      "title": "Model Evaluation",
+      "zoneId": "classification-woods"
+    },
+    {
+      "checkpointIds": [
+        "clustering-1",
+        "clustering-2",
+        "clustering-3",
+        "clustering-4",
+        "clustering-5",
+        "clustering-6",
+        "clustering-7"
+      ],
+      "id": "clustering",
+      "order": {
+        "$numberInt": "10"
+      },
+      "title": "Clustering",
+      "zoneId": "unsupervised-valley"
+    },
+    {
+      "checkpointIds": [
+        "gaussian-mixtures-1",
+        "gaussian-mixtures-2",
+        "gaussian-mixtures-3",
+        "gaussian-mixtures-4",
+        "gaussian-mixtures-5",
+        "gaussian-mixtures-6",
+        "gaussian-mixtures-7",
+        "gaussian-mixtures-8",
+        "gaussian-mixtures-9"
+      ],
+      "id": "gaussian-mixtures",
+      "order": {
+        "$numberInt": "11"
+      },
+      "title": "Gaussian Mixture Models",
+      "zoneId": "unsupervised-valley"
+    },
+    {
+      "checkpointIds": [
+        "dimensionality-reduction-1",
+        "dimensionality-reduction-2",
+        "dimensionality-reduction-3",
+        "dimensionality-reduction-4",
+        "dimensionality-reduction-5",
+        "dimensionality-reduction-6",
+        "dimensionality-reduction-7",
+        "dimensionality-reduction-8",
+        "dimensionality-reduction-9"
+      ],
+      "id": "dimensionality-reduction",
+      "order": {
+        "$numberInt": "12"
+      },
+      "title": "Dimensionality Reduction",
+      "zoneId": "unsupervised-valley"
+    },
+    {
+      "checkpointIds": [
+        "reliable-ml-systems-1",
+        "reliable-ml-systems-2",
+        "reliable-ml-systems-3",
+        "reliable-ml-systems-4",
+        "reliable-ml-systems-5",
+        "reliable-ml-systems-6",
+        "reliable-ml-systems-7",
+        "reliable-ml-systems-8",
+        "reliable-ml-systems-9",
+        "reliable-ml-systems-10",
+        "reliable-ml-systems-11"
+      ],
+      "id": "reliable-ml-systems",
+      "order": {
+        "$numberInt": "13"
+      },
+      "title": "Building Reliable ML Systems",
+      "zoneId": "model-summit"
+    }
+  ],
+  "structureHash": "a6b60cf32a61acef133061d3e8d2b13f43fbba856d9b489479eae2ccdcaa64c4",
+  "title": "Machine Learning Foundations",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498824"
+    }
+  },
+  "version": "v18",
+  "zones": [
+    {
+      "id": "ml-basecamp",
+      "moduleIds": [
+        "ml-foundations"
+      ],
+      "order": {
+        "$numberInt": "1"
+      },
+      "title": "ML Basecamp"
+    },
+    {
+      "id": "mathematics-meadow",
+      "moduleIds": [
+        "linear-algebra",
+        "calculus"
+      ],
+      "order": {
+        "$numberInt": "2"
+      },
+      "title": "Mathematics Meadow"
+    },
+    {
+      "id": "probability-grove",
+      "moduleIds": [
+        "probability-foundations",
+        "estimation-uncertainty"
+      ],
+      "order": {
+        "$numberInt": "3"
+      },
+      "title": "Probability Grove"
+    },
+    {
+      "id": "optimization-ridge",
+      "moduleIds": [
+        "optimization",
+        "regression-practice"
+      ],
+      "order": {
+        "$numberInt": "4"
+      },
+      "title": "Optimization Ridge"
+    },
+    {
+      "id": "classification-woods",
+      "moduleIds": [
+        "classification-foundations",
+        "model-evaluation"
+      ],
+      "order": {
+        "$numberInt": "5"
+      },
+      "title": "Classification Woods"
+    },
+    {
+      "id": "unsupervised-valley",
+      "moduleIds": [
+        "clustering",
+        "gaussian-mixtures",
+        "dimensionality-reduction"
+      ],
+      "order": {
+        "$numberInt": "6"
+      },
+      "title": "Unsupervised Valley"
+    },
+    {
+      "id": "model-summit",
+      "moduleIds": [
+        "reliable-ml-systems"
+      ],
+      "order": {
+        "$numberInt": "7"
+      },
+      "title": "Model Summit"
+    }
+  ]
+}

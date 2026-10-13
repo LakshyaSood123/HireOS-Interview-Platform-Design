@@ -1,0 +1,121 @@
+body {
+  margin: 0;
+  padding: 14px;
+  box-sizing: border-box;
+  background: #0b1d16;
+  color: #e6f5ec;
+  font-family: system-ui, sans-serif;
+}
+.scene {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.step-label {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #a7ce65;
+}
+svg {
+  width: 100%;
+  height: auto;
+  max-width: 640px;
+  background: #071510;
+  border-radius: 10px;
+  border: 1px solid rgba(29, 181, 132, 0.35);
+}
+.pt {
+  stroke: rgba(0, 0, 0, 0.4);
+  stroke-width: 1;
+  transition: cx 0.7s ease, cy 0.7s ease, fill 0.5s ease;
+}
+.pt-quiet {
+  fill: #8FA89C;
+}
+.boundary {
+  stroke: rgba(226, 180, 74, 0);
+  stroke-width: 2;
+  stroke-dasharray: 6 4;
+  transition: stroke 0.5s ease;
+}
+.boundary.on {
+  stroke: #E2B44A;
+}
+.new-point {
+  fill: #ffffff;
+  stroke: #0b1d16;
+  stroke-width: 1.5;
+  transition: transform 0.6s ease, opacity 0.4s ease;
+}
+.new-point.hidden {
+  opacity: 0;
+}
+.new-point.on {
+  opacity: 1;
+}
+.new-label {
+  text-anchor: middle;
+  font-size: 11px;
+  font-weight: 700;
+  fill: #e6f5ec;
+}
+.divider {
+  stroke: rgba(255, 255, 255, 0.2);
+}
+.panel-title {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+.panel-supervised {
+  fill: #38BDF8;
+}
+.panel-unsupervised {
+  fill: #FBBF24;
+}
+.caption {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #c9dccf;
+  min-height: 40px;
+}
+
+/* ── explanation panel (shared by every generated ML animation) ── */
+.explain {
+  box-sizing: border-box;
+  max-width: 640px;
+  margin-top: 4px;
+  padding: 14px 18px 16px;
+  min-height: 150px;
+  border-radius: 12px;
+  background: rgba(29, 181, 132, 0.10);
+  border: 1px solid rgba(29, 181, 132, 0.45);
+  border-left: 5px solid #1db584;
+}
+.explain-h {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #a7ce65;
+}
+.explain-t {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.55;
+  color: #f1faf4;
+}
+.explain-t strong {
+  font-weight: 800;
+  color: #ffd98a;
+}

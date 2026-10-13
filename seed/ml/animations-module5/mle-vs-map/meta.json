@@ -1,0 +1,54 @@
+{
+  "title": "MLE versus MAP",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "small-dataset",
+      "label": "A small dataset",
+      "pseudocode": "Start with only 5 flips: 4 heads.",
+      "python": "k, n = 4, 5\nprint(k, 'heads in', n, 'flips')"
+    },
+    {
+      "id": "mle",
+      "label": "MLE: listen to the data only",
+      "pseudocode": "MLE ignores the prior.",
+      "python": "thetas = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]\nweights = [1, 2, 3, 4, 5, 4, 3, 2, 1]\nprior = [w / sum(weights) for w in weights]\nlike = [t ** 4 * (1 - t) for t in thetas]   # H H T H H\nprior = dict(zip(thetas, weights))\n\ndef best(k, n, use_prior):\n    def score(t):\n        s = t ** k * (1 - t) ** (n - k)\n        return s * (prior[t] if use_prior else 1)\n    return max(thetas, key=score)\nprint(best(4, 5, False))   # 0.8"
+    },
+    {
+      "id": "prior",
+      "label": "Our prior belief",
+      "pseudocode": "The prior favors values near 0.5.",
+      "python": "thetas = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]\nweights = [1, 2, 3, 4, 5, 4, 3, 2, 1]\nprior = [w / sum(weights) for w in weights]\nlike = [t ** 4 * (1 - t) for t in thetas]   # H H T H H\nprior = dict(zip(thetas, weights))\n\ndef best(k, n, use_prior):\n    def score(t):\n        s = t ** k * (1 - t) ** (n - k)\n        return s * (prior[t] if use_prior else 1)\n    return max(thetas, key=score)\nprint(max(prior, key=prior.get))   # 0.5"
+    },
+    {
+      "id": "map",
+      "label": "MAP: data plus prior",
+      "pseudocode": "MAP multiplies the likelihood by the prior.",
+      "python": "thetas = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]\nweights = [1, 2, 3, 4, 5, 4, 3, 2, 1]\nprior = [w / sum(weights) for w in weights]\nlike = [t ** 4 * (1 - t) for t in thetas]   # H H T H H\nprior = dict(zip(thetas, weights))\n\ndef best(k, n, use_prior):\n    def score(t):\n        s = t ** k * (1 - t) ** (n - k)\n        return s * (prior[t] if use_prior else 1)\n    return max(thetas, key=score)\nprint(best(4, 5, True))   # 0.7"
+    },
+    {
+      "id": "compare-small-data",
+      "label": "Small data: they disagree",
+      "pseudocode": "With little data the prior still has a say.",
+      "python": "thetas = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]\nweights = [1, 2, 3, 4, 5, 4, 3, 2, 1]\nprior = [w / sum(weights) for w in weights]\nlike = [t ** 4 * (1 - t) for t in thetas]   # H H T H H\nprior = dict(zip(thetas, weights))\n\ndef best(k, n, use_prior):\n    def score(t):\n        s = t ** k * (1 - t) ** (n - k)\n        return s * (prior[t] if use_prior else 1)\n    return max(thetas, key=score)\nprint(best(4, 5, False), best(4, 5, True))   # 0.8 0.7"
+    },
+    {
+      "id": "more-data",
+      "label": "Now collect more data",
+      "pseudocode": "Same share of heads, more flips.",
+      "python": "thetas = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]\nweights = [1, 2, 3, 4, 5, 4, 3, 2, 1]\nprior = [w / sum(weights) for w in weights]\nlike = [t ** 4 * (1 - t) for t in thetas]   # H H T H H\nprior = dict(zip(thetas, weights))\n\ndef best(k, n, use_prior):\n    def score(t):\n        s = t ** k * (1 - t) ** (n - k)\n        return s * (prior[t] if use_prior else 1)\n    return max(thetas, key=score)\nfor n in [10, 20, 50]:\n    k = round(0.8 * n)\n    print(n, best(k, n, False), best(k, n, True))\n# 10 0.8 0.7\n# 20 0.8 0.8\n# 50 0.8 0.8"
+    },
+    {
+      "id": "estimates-converge",
+      "label": "With enough data they agree",
+      "pseudocode": "Once the likelihood is sharp enough, MAP lands on the MLE.",
+      "python": "thetas = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]\nweights = [1, 2, 3, 4, 5, 4, 3, 2, 1]\nprior = [w / sum(weights) for w in weights]\nlike = [t ** 4 * (1 - t) for t in thetas]   # H H T H H\nprior = dict(zip(thetas, weights))\n\ndef best(k, n, use_prior):\n    def score(t):\n        s = t ** k * (1 - t) ** (n - k)\n        return s * (prior[t] if use_prior else 1)\n    return max(thetas, key=score)\nn = 50\nk = round(0.8 * n)\nprint(best(k, n, False) == best(k, n, True))   # True"
+    },
+    {
+      "id": "ml-connection",
+      "label": "Why ML cares",
+      "pseudocode": "With very little data MLE can be extreme; a prior tempers it.",
+      "python": "thetas = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]\nweights = [1, 2, 3, 4, 5, 4, 3, 2, 1]\nprior = [w / sum(weights) for w in weights]\nlike = [t ** 4 * (1 - t) for t in thetas]   # H H T H H\nprior = dict(zip(thetas, weights))\n\ndef best(k, n, use_prior):\n    def score(t):\n        s = t ** k * (1 - t) ** (n - k)\n        return s * (prior[t] if use_prior else 1)\n    return max(thetas, key=score)\nprint(3 / 3)                 # 1.0: MLE after 3 heads in 3 flips says tails is impossible\nprint(best(3, 3, True))     # 0.7 on this grid: the prior keeps the estimate moderate"
+    }
+  ]
+}

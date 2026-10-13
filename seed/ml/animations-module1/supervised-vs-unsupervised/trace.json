@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "steps": [
+    {
+      "id": "dataset",
+      "label": "Examples described by features X",
+      "animationEvent": "dataset",
+      "code": {
+        "pseudocode": "Each example has features X. No target is attached, so the groups are not known yet.",
+        "python": "X = [[1.0, 2.0], [1.2, 2.1], [5.0, 6.0]]\nprint(len(X), 'examples with features only')"
+      }
+    },
+    {
+      "id": "labels",
+      "label": "Known labels y",
+      "animationEvent": "labels",
+      "code": {
+        "pseudocode": "Attach a known target y to each example. These answers are the training signal for supervised learning.",
+        "python": "X = [[1.0, 2.0], [1.2, 2.1], [5.0, 6.0]]\ny = [0, 0, 1]\nprint(list(zip(X, y)))"
+      }
+    },
+    {
+      "id": "supervised",
+      "label": "Learn from X and y to predict",
+      "animationEvent": "supervised",
+      "code": {
+        "pseudocode": "Learn a rule from the labelled pairs (X, y). Use it to predict the label of a new example that has features but no label.",
+        "python": "def predict(x, class_centers):\n    distances = [(x[0] - c[0]) ** 2 + (x[1] - c[1]) ** 2 for c in class_centers]\n    return distances.index(min(distances))\n\nprint(predict([4.8, 5.9], [[1.0, 2.0], [5.0, 6.0]]))"
+      }
+    },
+    {
+      "id": "remove-labels",
+      "label": "Hide the labels",
+      "animationEvent": "remove-labels",
+      "code": {
+        "pseudocode": "Drop y completely. The algorithm now receives only the features X, with no answer to copy.",
+        "python": "X = [[1.0, 2.0], [1.2, 2.1], [5.0, 6.0]]\nunlabelled = [x for x in X]  # features only, no y\nprint(len(unlabelled))"
+      }
+    },
+    {
+      "id": "unsupervised",
+      "label": "Group similar points",
+      "animationEvent": "unsupervised",
+      "code": {
+        "pseudocode": "Start with a few group centres. Assign each point to its nearest centre, move each centre to the mean of its points, and repeat.",
+        "python": "def nearest(point, centers):\n    distances = [(point[0] - c[0]) ** 2 + (point[1] - c[1]) ** 2 for c in centers]\n    return distances.index(min(distances))\n\nprint(nearest([1.1, 2.0], [[1.0, 2.0], [5.0, 6.0]]))"
+      }
+    },
+    {
+      "id": "compare",
+      "label": "Supervised versus unsupervised",
+      "animationEvent": "compare",
+      "code": {
+        "pseudocode": "Supervised learning needs X and y and learns to predict a known target. Unsupervised learning uses X alone and reports structure, such as groups.",
+        "python": "setting = {'supervised': ('X', 'y'), 'unsupervised': ('X',)}\nprint(setting['supervised'], setting['unsupervised'])"
+      }
+    }
+  ]
+}

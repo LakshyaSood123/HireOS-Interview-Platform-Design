@@ -1,0 +1,38 @@
+{
+ "loss-curve": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Our objective is **L(w) = (w − 3)²**, a bowl. Training wants its lowest point, but a real model **cannot see the whole curve**: it only knows where it is standing."
+ },
+ "start-point": {
+  "h": "START SOMEWHERE",
+  "t": "We start at **w = 0**, where the loss is **L(0) = 9**. That is all we know for sure: our **current position and its score**."
+ },
+ "compute-gradient": {
+  "h": "COMPUTE THE GRADIENT",
+  "t": "The slope under our feet is the **gradient**: **dL/dw = 2(w − 3) = −6** at w = 0. The tangent line shows it. The gradient points **uphill**: the curve climbs toward the left."
+ },
+ "downhill-direction": {
+  "h": "DOWNHILL IS THE NEGATIVE GRADIENT",
+  "t": "To go down we go the **opposite way**: −gradient = **+6**, which says move right, toward larger w. The sign gives the direction; the size says how steep the ground is."
+ },
+ "take-step": {
+  "h": "TAKE A STEP",
+  "t": "**w_new = w_old − η × gradient.** With learning rate **η = 0.1**: w_new = 0 − 0.1 × (−6) = **0.6**. The step length is η × 6 = 0.6."
+ },
+ "new-point": {
+  "h": "WE ARE AT A NEW POINT",
+  "t": "Now **w = 0.6** and the loss has fallen from **9 to 5.76**. We are lower on the bowl, and the gradient here is **−4.8**, a bit gentler."
+ },
+ "repeat": {
+  "h": "REPEAT",
+  "t": "Recompute the gradient at the new point and step again: w = **1.08, 1.464, 1.771, 2.017**. Each step is a little **smaller**, because the ground flattens."
+ },
+ "approach-minimum": {
+  "h": "APPROACH THE MINIMUM",
+  "t": "After 10 steps **w ≈ 2.68** and the loss is about **0.10**. The point creeps toward w = 3, where the gradient is 0 and the steps shrink to nothing."
+ },
+ "ml-connection": {
+  "h": "TAKEAWAY",
+  "t": "Training is this loop: **compute the loss, compute the gradient, update the parameters against it, repeat.** Gradient descent is an iterative search, not magic."
+ }
+}

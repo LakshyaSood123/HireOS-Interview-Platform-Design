@@ -6,6 +6,10 @@ import { sendData } from "../../shared/envelope.js";
 import * as cmsService from "./cms.service.js";
 import * as animationPackageService from "./animationPackage.service.js";
 import { courseIdParams, saveDraftSchema, versionIdParams, type CourseIdParams, type SaveDraftInput, type VersionIdParams } from "./cms.schema.js";
+import { z } from "zod";
+import { curriculumId } from "../../shared/ids.js";
+const learnerPackageRevisionParams = z.object({ courseId: curriculumId, packageId: z.string().trim().min(1).max(64), revisionId: z.string().trim().min(1).max(32) });
+type LearnerPackageRevisionParams = z.infer<typeof learnerPackageRevisionParams>;
 import {
   createPackageSchema,
   packageIdParams,
@@ -261,3 +265,18 @@ cmsRouter.get("/me/courses/:courseId/content", requireAuth, validate({ params: c
   const { courseId } = params<CourseIdParams>(req);
   sendData(res, await cmsService.getPinnedPublishedContent(courseId, currentUserId(req)));
 });
+
+/**
+ * Learner-side frozen package read — see `getLearnerReferencedPackageRevision`.
+ * `requireAuth` only (no admin role); the package must be referenced by the
+ * caller's own pinned published version, so this is never a general CMS read.
+ */
+cmsRouter.get(
+  "/me/courses/:courseId/animation-packages/:packageId/revisions/:revisionId",
+  requireAuth,
+  validate({ params: learnerPackageRevisionParams }),
+  async (req, res) => {
+    const { courseId, packageId, revisionId } = params<LearnerPackageRevisionParams>(req);
+    sendData(res, await cmsService.getLearnerReferencedPackageRevision(courseId, currentUserId(req), packageId, revisionId));
+  },
+);

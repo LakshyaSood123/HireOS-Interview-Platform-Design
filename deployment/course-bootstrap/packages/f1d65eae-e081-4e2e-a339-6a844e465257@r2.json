@@ -1,0 +1,159 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322c4e9cccef168ed1d"
+  },
+  "assets": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498531"
+    }
+  },
+  "createdBy": {
+    "$oid": "000000000000000000000000"
+  },
+  "css": "body {\r\n  margin: 0;\r\n  padding: 14px;\r\n  box-sizing: border-box;\r\n  background: #0b1d16;\r\n  color: #e6f5ec;\r\n  font-family: system-ui, sans-serif;\r\n}\r\n.scene {\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 8px;\r\n}\r\n.step-label {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  letter-spacing: 0.08em;\r\n  text-transform: uppercase;\r\n  color: #a7ce65;\r\n}\r\nsvg {\r\n  width: 100%;\r\n  height: auto;\r\n  max-width: 640px;\r\n  background: #071510;\r\n  border-radius: 10px;\r\n  border: 1px solid rgba(29, 181, 132, 0.35);\r\n}\r\nsvg g,\r\nsvg line,\r\nsvg polygon,\r\nsvg path,\r\nsvg ellipse,\r\nsvg circle,\r\nsvg rect,\r\nsvg text {\r\n  transition: opacity 0.4s ease, transform 0.6s ease;\r\n}\r\n.axis {\r\n  stroke: rgba(167, 206, 101, 0.3);\r\n  stroke-width: 1;\r\n}\r\n.tick {\r\n  font-size: 10px;\r\n  fill: #8fa89c;\r\n}\r\n.lbl,\r\n.big,\r\n.note,\r\n.mono {\r\n  paint-order: stroke;\r\n  stroke: #071510;\r\n  stroke-width: 3px;\r\n  stroke-linejoin: round;\r\n}\r\n.lbl {\r\n  font-size: 12px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.lbl-g { fill: #1db584; }\r\n.lbl-y { fill: #e2b44a; }\r\n.lbl-p { fill: #f472b6; }\r\n.lbl-b { fill: #38bdf8; }\r\n.lbl-r { fill: #f87171; }\r\n.big {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.note {\r\n  font-size: 11px;\r\n  fill: #c9dccf;\r\n}\r\n.mono {\r\n  font-family: ui-monospace, Consolas, monospace;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.caption {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  line-height: 1.5;\r\n  color: #c9dccf;\r\n  min-height: 40px;\r\n}\r\n.cell rect {\r\n  fill: rgba(255, 255, 255, 0.05);\r\n  stroke: rgba(255, 255, 255, 0.28);\r\n  stroke-width: 1.2;\r\n}\r\n.cell text {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.cell.hl-row rect { fill: rgba(226, 180, 74, 0.25); stroke: #e2b44a; }\r\n.cell.hl-col rect { fill: rgba(29, 181, 132, 0.25); stroke: #1db584; }\r\n.cell.hl-both rect { fill: rgba(244, 114, 182, 0.28); stroke: #f472b6; }\r\n.dim { opacity: 0.25; }\r\n.dash { stroke-dasharray: 5 4; }\r\n.fillA { fill: rgba(56, 189, 248, 0.16); stroke: #38bdf8; stroke-width: 2; }\r\n.fillB { fill: rgba(244, 114, 182, 0.18); stroke: #f472b6; stroke-width: 2; }\r\n.fillG { fill: rgba(29, 181, 132, 0.16); stroke: #1db584; stroke-width: 2; }\r\n.contour { stroke: rgba(56, 189, 248, 0.45); stroke-width: 1.5; }\n.curve { fill: none; stroke: #38bdf8; stroke-width: 3; }\n.curve-y { fill: none; stroke: #e2b44a; stroke-width: 3; }\n.curve-p { fill: none; stroke: #f472b6; stroke-width: 3; }\n.curve-g { fill: none; stroke: #1db584; stroke-width: 3; }\n.ghost { fill: none; stroke: rgba(201, 220, 207, 0.4); stroke-width: 2; }\n.lbl-w { fill: #e6f5ec; }\n.lbl-s { font-size: 11px; font-weight: 600; fill: #c9dccf; }\n\n/* ── explanation panel (shared by every generated ML animation) ── */\n.explain {\n  box-sizing: border-box;\n  max-width: 640px;\n  margin-top: 4px;\n  padding: 14px 18px 16px;\n  min-height: 150px;\n  border-radius: 12px;\n  background: rgba(29, 181, 132, 0.10);\n  border: 1px solid rgba(29, 181, 132, 0.45);\n  border-left: 5px solid #1db584;\n}\n.explain-h {\n  margin: 0 0 8px;\n  font-size: 13px;\n  font-weight: 800;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.explain-t {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.55;\n  color: #f1faf4;\n}\n.explain-t strong {\n  font-weight: 800;\n  color: #ffd98a;\n}\n\n",
+  "html": "<div class=\"scene\">\n  <p class=\"step-label\" id=\"step-label\"></p>\n  <svg id=\"scene\" viewBox=\"0 0 640 360\" role=\"img\" aria-label=\"Likelihood versus probability\"></svg>\n  <section class=\"explain\" aria-live=\"polite\">\n    <h3 class=\"explain-h\" id=\"explain-h\"></h3>\n    <p class=\"explain-t\" id=\"caption\"></p>\n  </section>\n</div>\n",
+  "js": "(function () {\n  // ── shared helpers (SVG, tweening) ─────────────────────────────────────────\r\n  var NS = \"http://www.w3.org/2000/svg\";\r\n  var svg = document.getElementById(\"scene\");\r\n  var labelEl = document.getElementById(\"step-label\");\r\n  var captionEl = document.getElementById(\"caption\");\r\n\r\n  function el(name, attrs, parent) {\r\n    var node = document.createElementNS(NS, name);\r\n    for (var key in attrs) node.setAttribute(key, attrs[key]);\r\n    if (parent) parent.appendChild(node);\r\n    return node;\r\n  }\r\n  function txt(parent, x, y, cls, str, anchor) {\r\n    var t = el(\"text\", { x: x, y: y, class: cls }, parent);\r\n    if (anchor) t.setAttribute(\"text-anchor\", anchor);\r\n    t.textContent = str;\r\n    return t;\r\n  }\r\n  function show(node, on) {\r\n    node.setAttribute(\"opacity\", on ? \"1\" : \"0\");\r\n  }\r\n  function place(node, x, y) {\r\n    node.style.transform = \"translate(\" + x + \"px,\" + y + \"px)\";\r\n  }\r\n  function setLine(node, x1, y1, x2, y2) {\r\n    node.setAttribute(\"x1\", x1);\r\n    node.setAttribute(\"y1\", y1);\r\n    node.setAttribute(\"x2\", x2);\r\n    node.setAttribute(\"y2\", y2);\r\n  }\r\n  function lerp(a, b, e) {\r\n    return a + (b - a) * e;\r\n  }\r\n  function round1(v) {\r\n    return (Math.round(v * 10) / 10).toFixed(1);\r\n  }\r\n\r\n  // Eased animation. fn(e) is called with e from 0 to 1. Without\r\n  // requestAnimationFrame (or with ms = 0) it jumps straight to fn(1).\r\n  var animTokens = {};\r\n  function anim(key, ms, fn) {\r\n    var token = (animTokens[key] || 0) + 1;\r\n    animTokens[key] = token;\r\n    if (typeof requestAnimationFrame !== \"function\" || ms <= 0) {\r\n      fn(1);\r\n      return;\r\n    }\r\n    var start = null;\r\n    function frame(now) {\r\n      if (animTokens[key] !== token) return;\r\n      if (start === null) start = now;\r\n      var p = Math.min(1, (now - start) / ms);\r\n      var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;\r\n      fn(e);\r\n      if (p < 1) requestAnimationFrame(frame);\r\n    }\r\n    requestAnimationFrame(frame);\r\n  }\r\n\r\n  // Arrowheads, one marker per colour.\r\n  var COLORS = { g: \"#1DB584\", y: \"#E2B44A\", p: \"#F472B6\", b: \"#38BDF8\", w: \"#c9dccf\", r: \"#F87171\" };\r\n  var defs = el(\"defs\", {}, svg);\r\n  Object.keys(COLORS).forEach(function (k) {\r\n    var m = el(\"marker\", { id: \"ah-\" + k, viewBox: \"0 0 10 10\", refX: 9, refY: 5, markerUnits: \"userSpaceOnUse\", markerWidth: 13, markerHeight: 13, orient: \"auto\" }, defs);\r\n    el(\"path\", { d: \"M0 0 L10 5 L0 10 Z\", fill: COLORS[k] }, m);\r\n  });\r\n  function arrow(parent, colorKey, width) {\r\n    return el(\"line\", { x1: 0, y1: 0, x2: 0, y2: 0, stroke: COLORS[colorKey], \"stroke-width\": width || 3, \"marker-end\": \"url(#ah-\" + colorKey + \")\", \"stroke-linecap\": \"round\" }, parent);\r\n  }\r\n  function polygon(parent, cls) {\r\n    return el(\"polygon\", { points: \"\", class: cls }, parent);\r\n  }\r\n  function setPoly(node, pts) {\r\n    node.setAttribute(\"points\", pts.map(function (p) { return p[0].toFixed(1) + \",\" + p[1].toFixed(1); }).join(\" \"));\r\n  }\r\n  function lerpPts(a, b, e) {\r\n    return a.map(function (p, i) { return [lerp(p[0], b[i][0], e), lerp(p[1], b[i][1], e)]; });\r\n  }\r\n  // Maps maths coordinates (x right, y up) to screen pixels.\r\n  function makePlane(cx, cy, s) {\r\n    return {\r\n      x: function (v) { return cx + s * v; },\r\n      y: function (v) { return cy - s * v; },\r\n      pt: function (p) { return [cx + s * p[0], cy - s * p[1]]; },\r\n      s: s, cx: cx, cy: cy\r\n    };\r\n  }\r\n  function axes(parent, plane, xr, yr) {\r\n    el(\"line\", { x1: plane.x(-xr), y1: plane.y(0), x2: plane.x(xr), y2: plane.y(0), class: \"axis\" }, parent);\r\n    el(\"line\", { x1: plane.x(0), y1: plane.y(-yr), x2: plane.x(0), y2: plane.y(yr), class: \"axis\" }, parent);\r\n  }\r\n\n  // ── Module 3 helpers: graphs, curves, contour plane ───────────────────────\n  // makeGraph maps maths values to pixels with separate x and y scales.\n  function makeGraph(ox, oy, sx, sy) {\n    return {\n      ox: ox, oy: oy, sx: sx, sy: sy,\n      x: function (v) { return ox + sx * v; },\n      y: function (v) { return oy - sy * v; }\n    };\n  }\n  function curveD(g, f, a, b, n) {\n    var d = \"\";\n    for (var i = 0; i <= n; i++) {\n      var v = a + ((b - a) * i) / n;\n      d += (i ? \" L \" : \"M \") + g.x(v).toFixed(1) + \" \" + g.y(f(v)).toFixed(1);\n    }\n    return d;\n  }\n  function setD(node, d) {\n    node.setAttribute(\"d\", d);\n  }\n  function fmt(v, n) {\n    return (Math.round(v * 100000) / 100000).toFixed(n === undefined ? 1 : n);\n  }\n  function drawAxes(parent, g, xmax, ymax, xticks, yticks) {\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(xmax), y2: g.y(0), class: \"axis\" }, parent);\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(0), y2: g.y(ymax), class: \"axis\" }, parent);\n    (xticks || []).forEach(function (t) { txt(parent, g.x(t), g.y(0) + 15, \"tick\", String(t), \"middle\"); });\n    (yticks || []).forEach(function (t) { txt(parent, g.x(0) - 7, g.y(t) + 4, \"tick\", String(t), \"end\"); });\n  }\n  function card(parent, x, y, w, h, cls) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: 10, class: cls || \"fillG\" }, parent);\n  }\n  function ring(parent, cx, cy, rx, ry, cls) {\n    return el(\"ellipse\", { cx: cx, cy: cy, rx: rx, ry: ry, fill: \"none\", class: cls || \"contour\" }, parent);\n  }\n  function clipTo(id, x, y, w, h) {\n    var c = el(\"clipPath\", { id: id }, defs);\n    el(\"rect\", { x: x, y: y, width: w, height: h }, c);\n  }\n\n  // ── Module 4 helpers: seeded randomness, small shapes ─────────────────────\n  function mulberry(seed) {\n    var a = seed;\n    return function () {\n      a |= 0; a = (a + 0x6D2B79F5) | 0;\n      var t = Math.imul(a ^ (a >>> 15), 1 | a);\n      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;\n      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;\n    };\n  }\n  function gaussSource(rand) {\n    return function () {\n      var u = 1 - rand(), v = rand();\n      return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);\n    };\n  }\n  function box(parent, x, y, w, h, fill, stroke, r) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: r === undefined ? 6 : r, fill: fill, stroke: stroke || \"none\", \"stroke-width\": 2 }, parent);\n  }\n  function setBox(node, x, y, w, h) {\n    node.setAttribute(\"x\", x); node.setAttribute(\"y\", y); node.setAttribute(\"width\", Math.max(0, w)); node.setAttribute(\"height\", Math.max(0, h));\n  }\n  function vis(list, on) {\n    list.forEach(function (n) { show(n, on); });\n  }\n\n  // ── Module 5 helpers: coins, and rows of bars over the nine candidate values of p ──\n  function coin(parent, x, y, r, letter) {\n    var g = el(\"g\", {}, parent);\n    var head = letter === \"H\";\n    el(\"circle\", { cx: x, cy: y, r: r, fill: head ? \"rgba(244,114,182,0.35)\" : \"rgba(56,189,248,0.3)\", stroke: head ? \"#f472b6\" : \"#38bdf8\", \"stroke-width\": 3 }, g);\n    var t = txt(g, x, y + r * 0.36, \"big\", letter, \"middle\");\n    t.setAttribute(\"font-size\", String(Math.round(r * 1.05)));\n    return g;\n  }\n  var THETAS = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9];\n  var WEIGHTS = [1, 2, 3, 4, 5, 4, 3, 2, 1];\n  function lik(t, k, n) { return Math.pow(t, k) * Math.pow(1 - t, n - k); }\n  function normalized(arr) {\n    var s = 0;\n    arr.forEach(function (v) { s += v; });\n    return arr.map(function (v) { return v / s; });\n  }\n  function argmaxIndex(arr) {\n    var b = 0;\n    arr.forEach(function (v, i) { if (v > arr[b]) b = i; });\n    return b;\n  }\n  // A row of nine bars. set(values, maxValue) rescales heights so maxValue fills `height`.\n  function barRow(parent, x0, dx, base, bw, height, fill, stroke) {\n    var g = el(\"g\", {}, parent);\n    var bars = THETAS.map(function (t, i) {\n      return box(g, x0 + i * dx - bw / 2, base, bw, 0, fill, stroke || \"none\", 3);\n    });\n    var tick = THETAS.map(function (t, i) {\n      var tt = txt(g, x0 + i * dx, base + 14, \"tick\", String(t), \"middle\");\n      tt.setAttribute(\"opacity\", \"0\");\n      return tt;\n    });\n    return {\n      g: g,\n      bars: bars,\n      ticks: tick,\n      set: function (values, maxValue) {\n        values.forEach(function (v, i) {\n          var h = Math.max(0, (v / maxValue) * height);\n          setBox(bars[i], x0 + i * dx - bw / 2, base - h, bw, h);\n        });\n      },\n      showTicks: function (on) { tick.forEach(function (n) { n.setAttribute(\"opacity\", on ? \"1\" : \"0\"); }); }\n    };\n  }\n\n  var EXPLAIN = {\"fixed-model\":{\"h\":\"PROBABILITY: FIX THE MODEL\",\"t\":\"Suppose we **know** the coin has **p = 0.7**. The model is fixed. **Probability** asks: what data could this model produce?\"},\"possible-data\":{\"h\":\"POSSIBLE DATA, WITH PROBABILITIES\",\"t\":\"Flip 5 times. The number of heads could be 0 to 5, each with a probability: **0.002, 0.028, 0.132, 0.309, 0.360, 0.168**. The data vary; the parameter does not. These **add up to 1**.\"},\"observe-data\":{\"h\":\"WE OBSERVE ONE RESULT\",\"t\":\"We flip the coin and see **4 heads out of 5**. Of all the possible data, this is the one that actually happened.\"},\"freeze-data\":{\"h\":\"LIKELIHOOD: FREEZE THE DATA\",\"t\":\"Now we turn the viewpoint around. The **data are frozen**: 4 heads in 5. We no longer know p. Instead we ask **how well each candidate p explains the frozen data**.\"},\"vary-parameter\":{\"h\":\"VARY THE PARAMETER\",\"t\":\"Slide p from 0.1 to 0.9 and evaluate the same formula, **5 × p⁴ × (1 − p)**, at each p. The values trace the **likelihood function L(p)**. Now the parameter varies and the data stay fixed.\"},\"compare-likelihood\":{\"h\":\"COMPARE CANDIDATE VALUES OF p\",\"t\":\"**L(0.7) ≈ 0.360** and **L(0.4) ≈ 0.077**: p = 0.7 explains the observed data about **4.7 times better** than p = 0.4. We are comparing parameter values, not asking whether p is true.\"},\"probability-vs-likelihood\":{\"h\":\"SIDE BY SIDE\",\"t\":\"**Probability:** model fixed, data vary, values add up to 1. **Likelihood:** data fixed, parameter varies, values do **not** have to add up to 1, and they are **not the probability that a p is true**.\"},\"ml-connection\":{\"h\":\"TAKEAWAY\",\"t\":\"**Training uses likelihood:** the training data are fixed and the parameters are adjusted to explain them. **Using a trained model asks the probability question:** parameters fixed, what data are likely?\"}};\n  // ── scene ──\n  var steps = [\n    { id: \"fixed-model\", label: \"Probability: fix the model\", caption: \"Suppose we KNOW the coin has p = 0.7. The model is fixed. Probability asks what data this model could produce.\" },\n    { id: \"possible-data\", label: \"Possible data, with probabilities\", caption: \"Flip 5 times. The number of heads could be 0 to 5, and each possible result has a probability: 0.002, 0.028, 0.132, 0.309, 0.360, 0.168. The data vary; the parameter does not. These add up to 1.\" },\n    { id: \"observe-data\", label: \"We observe one result\", caption: \"We flip the coin and see 4 heads out of 5. Of all the possible data, this is the one that actually happened.\" },\n    { id: \"freeze-data\", label: \"Likelihood: freeze the data\", caption: \"Now turn the viewpoint around. The data are frozen: 4 heads in 5. We no longer know p. Instead we ask how well each candidate p explains the frozen data.\" },\n    { id: \"vary-parameter\", label: \"Vary the parameter\", caption: \"Slide p from 0.1 to 0.9 and evaluate the same formula, 5 × p⁴ × (1 − p), at each p. The values trace the likelihood function L(p). Now the parameter varies and the data stay fixed.\" },\n    { id: \"compare-likelihood\", label: \"Compare candidate values of p\", caption: \"L(0.7) ≈ 0.360 and L(0.4) ≈ 0.077: p = 0.7 explains the observed data about 4.7 times better than p = 0.4. We are comparing parameter values, not asking whether p is true.\" },\n    { id: \"probability-vs-likelihood\", label: \"Side by side\", caption: \"Probability: model fixed, data vary, the values add up to 1. Likelihood: data fixed, parameter varies, the values do NOT have to add up to 1, and they are not the probability that a p is true.\" },\n    { id: \"ml-connection\", label: \"Both views appear in ML\", caption: \"Training uses likelihood: the training data are fixed and parameters are adjusted to explain them. Using a trained model asks the probability question: parameters fixed, what data are likely?\" }\n  ];\n\n  function binom(k, n, p) {\n    var c = 1;\n    for (var i = 1; i <= k; i++) c = (c * (n - k + i)) / i;\n    return c * Math.pow(p, k) * Math.pow(1 - p, n - k);\n  }\n  function Lk(p) { return 5 * Math.pow(p, 4) * (1 - p); }\n  var PV = [0, 1, 2, 3, 4, 5].map(function (k) { return binom(k, 5, 0.7); });\n  var SC = 360; // pixels per unit probability\n\n  // Left panel: PROBABILITY.\n  var leftG = el(\"g\", {}, svg);\n  card(leftG, 14, 24, 296, 300, \"fillA\");\n  txt(leftG, 162, 48, \"lbl lbl-b\", \"PROBABILITY\", \"middle\");\n  box(leftG, 56, 58, 212, 28, \"rgba(56,189,248,0.25)\", \"#38bdf8\", 14);\n  txt(leftG, 162, 77, \"lbl\", \"model fixed: p = 0.7\", \"middle\");\n  var lBase = 280;\n  el(\"line\", { x1: 30, y1: lBase, x2: 296, y2: lBase, class: \"axis\" }, leftG);\n  var lBars = [], lVals = [];\n  PV.forEach(function (v, k) {\n    var cx = 54 + k * 44;\n    lBars.push(box(leftG, cx - 15, lBase, 30, 0, \"rgba(56,189,248,0.85)\", \"none\", 3));\n    lVals.push(txt(leftG, cx, lBase - 6, \"lbl\", fmt(v, 3), \"middle\"));\n    txt(leftG, cx, lBase + 16, \"tick\", String(k), \"middle\");\n  });\n  txt(leftG, 162, lBase + 36, \"note\", \"possible data: number of heads in 5 flips\", \"middle\");\n  var lSum = txt(leftG, 162, 110, \"lbl lbl-b\", \"all possible data: probabilities add up to 1\", \"middle\");\n  var lPick = el(\"rect\", { x: 54 + 4 * 44 - 21, y: lBase - PV[4] * SC - 24, width: 42, height: PV[4] * SC + 40, rx: 8, fill: \"none\", stroke: \"#e2b44a\", \"stroke-width\": 3 }, leftG);\n  var lPickLbl = txt(leftG, 54 + 4 * 44, lBase - PV[4] * SC - 32, \"lbl lbl-y\", \"observed: 4 heads\", \"middle\"); // above the bracket, not under its top edge\n\n  // Right panel: LIKELIHOOD.\n  var rightG = el(\"g\", {}, svg);\n  card(rightG, 330, 24, 296, 300, \"fillB\");\n  txt(rightG, 478, 48, \"lbl lbl-p\", \"LIKELIHOOD\", \"middle\");\n  box(rightG, 358, 58, 240, 28, \"rgba(244,114,182,0.25)\", \"#f472b6\", 14);\n  txt(rightG, 478, 77, \"lbl\", \"data fixed: 4 heads in 5\", \"middle\");\n  var gr = makeGraph(366, 280, 232, 300);\n  el(\"line\", { x1: gr.x(0), y1: gr.y(0), x2: gr.x(1.02), y2: gr.y(0), class: \"axis\" }, rightG);\n  [0, 0.2, 0.4, 0.6, 0.8, 1].forEach(function (t) { txt(rightG, gr.x(t), gr.y(0) + 16, \"tick\", String(t), \"middle\"); });\n  txt(rightG, 478, 316, \"note\", \"candidate parameter p\", \"middle\");\n  var curve = el(\"path\", { class: \"curve-p\" }, rightG);\n  var sweepDot = el(\"circle\", { r: 7, fill: \"#e2b44a\", stroke: \"#071510\", \"stroke-width\": 2 }, rightG);\n  var readout = txt(rightG, 478, 110, \"mono\", \"\", \"middle\");\n  var cmpG = el(\"g\", {}, rightG);\n  [[0.7, \"#1db584\"], [0.4, \"#e2b44a\"]].forEach(function (c) {\n    el(\"circle\", { cx: gr.x(c[0]), cy: gr.y(Lk(c[0])), r: 8, fill: c[1], stroke: \"#071510\", \"stroke-width\": 2 }, cmpG);\n    el(\"line\", { x1: gr.x(c[0]), y1: gr.y(Lk(c[0])), x2: gr.x(c[0]), y2: gr.y(0), stroke: c[1], \"stroke-width\": 2, \"stroke-dasharray\": \"5 4\" }, cmpG);\n    txt(cmpG, gr.x(c[0]), gr.y(Lk(c[0])) - 12, \"lbl\", \"p = \" + c[0] + \": \" + fmt(Lk(c[0]), 3), \"middle\");\n  });\n  txt(cmpG, 478, 132, \"lbl lbl-g\", \"0.7 explains the data ≈ 4.7× better than 0.4\", \"middle\");\n  var rSum = txt(rightG, 478, 110, \"lbl lbl-p\", \"values need NOT add up to 1\", \"middle\");\n\n  function drawCurve(upto) {\n    var d = \"\";\n    for (var t = 0.05; t <= upto + 1e-9; t += 0.01) d += (d ? \" L \" : \"M \") + gr.x(t).toFixed(1) + \" \" + gr.y(Lk(t)).toFixed(1);\n    curve.setAttribute(\"d\", d || \"M 0 0\");\n    sweepDot.setAttribute(\"cx\", gr.x(upto)); sweepDot.setAttribute(\"cy\", gr.y(Lk(upto)));\n    readout.textContent = \"p = \" + fmt(upto, 2) + \"    L = \" + fmt(Lk(upto), 3);\n  }\n\n  var mlG = el(\"g\", {}, svg);\n  card(mlG, 40, 50, 270, 240, \"fillA\");\n  txt(mlG, 175, 84, \"lbl lbl-b\", \"USING a trained model\", \"middle\");\n  txt(mlG, 175, 118, \"big\", \"parameters fixed\", \"middle\");\n  txt(mlG, 175, 146, \"lbl\", \"what data are likely?\", \"middle\");\n  txt(mlG, 175, 200, \"note\", \"this is a probability question\", \"middle\");\n  txt(mlG, 175, 232, \"note\", \"e.g. how likely is a new example\", \"middle\");\n  card(mlG, 330, 50, 270, 240, \"fillB\");\n  txt(mlG, 465, 84, \"lbl lbl-p\", \"TRAINING a model\", \"middle\");\n  txt(mlG, 465, 118, \"big\", \"data fixed\", \"middle\");\n  txt(mlG, 465, 146, \"lbl\", \"which parameters explain them?\", \"middle\");\n  txt(mlG, 465, 200, \"note\", \"this is a likelihood question\", \"middle\");\n  txt(mlG, 465, 232, \"note\", \"e.g. maximum likelihood fitting\", \"middle\");\n\n  function render(index, id) {\n    var i = index;\n    show(leftG, i <= 6);\n    show(rightG, i >= 3 && i <= 6);\n    show(mlG, i === 7);\n    show(lSum, i === 1 || i === 6);\n    show(lPick, i >= 2 && i <= 5); show(lPickLbl, i >= 2 && i <= 5);\n    show(rSum, i === 6);\n    show(cmpG, i === 5 || i === 6);\n    show(sweepDot, i === 4);\n    show(readout, i === 4);\n    leftG.setAttribute(\"opacity\", i >= 3 && i <= 5 ? \"0.35\" : i === 7 ? \"0\" : \"1\");\n    PV.forEach(function (v, k) {\n      var h = i >= 1 ? v * SC : 0;\n      setBox(lBars[k], 54 + k * 44 - 15, lBase - h, 30, h);\n      lBars[k].setAttribute(\"fill\", k === 4 && i >= 2 ? \"rgba(226,180,74,0.95)\" : \"rgba(56,189,248,0.85)\");\n      show(lVals[k], i >= 1);\n      lVals[k].setAttribute(\"y\", lBase - h - 6);\n    });\n    if (i >= 3 && i !== 4) drawCurve(i === 3 ? 0.05 : 0.95);\n    if (i === 3) { curve.setAttribute(\"d\", \"M 0 0\"); }\n    if (i === 4) anim(\"sweep\", 2800, function (e) { drawCurve(0.1 + 0.8 * e); });\n    if (i === 1) anim(\"bars\", 900, function (e) {\n      PV.forEach(function (v, k) { var h = v * SC * e; setBox(lBars[k], 54 + k * 44 - 15, lBase - h, 30, h); lVals[k].setAttribute(\"y\", lBase - h - 6); });\n    });\n  }\n\n\n  // ── shared runtime: stepping, explanation panel, educational autoplay pacing, bridge ──\n  var current = 0;\n  var explainHeadEl = document.getElementById(\"explain-h\");\n\n  // **bold** markers in an explanation become <strong> nodes (built with DOM calls, never innerHTML).\n  function setRich(node, str) {\n    node.textContent = \"\";\n    var parts = String(str).split(\"**\");\n    for (var i = 0; i < parts.length; i++) {\n      if (parts[i] === \"\") continue;\n      var seg = document.createElement(i % 2 ? \"strong\" : \"span\");\n      seg.textContent = parts[i];\n      node.appendChild(seg);\n    }\n  }\n\n  function explanationFor(index) {\n    var ex = (typeof EXPLAIN === \"object\" && EXPLAIN) ? EXPLAIN[steps[index].id] : null;\n    return ex || { h: \"WHAT IS HAPPENING\", t: steps[index].caption };\n  }\n\n  // Autoplay pace: 4.5 to 10.5 seconds per step, longer for longer explanations, so a learner can read.\n  function stepMs(index) {\n    var words = String(explanationFor(index).t).replace(/\\*\\*/g, \"\").split(/\\s+/).length;\n    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));\n  }\n\n  function renderStep(index) {\n    var ex = explanationFor(index);\n    labelEl.textContent = steps[index].label;\n    if (explainHeadEl) explainHeadEl.textContent = ex.h;\n    setRich(captionEl, ex.t);\n    render(index, steps[index].id);\n  }\n\n  function goTo(index) {\n    if (index < 0 || index >= steps.length) return;\n    current = index;\n    renderStep(current);\n    if (window.ReagvisBridge) window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n\n  renderStep(current);\n\n  // Autoplay: exactly one timer, one step per tick, stops on the final step.\n  // PLAY on the final step restarts from the first step and plays again.\n  var timer = null;\n\n  function stopAuto() {\n    if (timer !== null) {\n      clearTimeout(timer);\n      timer = null;\n    }\n  }\n\n  function scheduleNext() {\n    timer = setTimeout(function () {\n      timer = null;\n      if (current >= steps.length - 1) return;\n      goTo(current + 1);\n      if (current < steps.length - 1) scheduleNext();\n    }, stepMs(current));\n  }\n\n  function startAuto() {\n    if (timer !== null) return;\n    if (current >= steps.length - 1) goTo(0);\n    scheduleNext();\n  }\n\n  window.addEventListener(\"pagehide\", stopAuto);\n\n  window.ReagvisAnimation = {\n    stepDuration: stepMs,\n    onCommand: function (type, stepId) {\n      if (type === \"PLAY\") startAuto();\n      else if (type === \"PAUSE\") stopAuto();\n      else if (type === \"NEXT\") { stopAuto(); goTo(current + 1); }\n      else if (type === \"PREVIOUS\") { stopAuto(); goTo(current - 1); }\n      else if (type === \"RESET\") { stopAuto(); goTo(0); }\n      else if (type === \"GOTO_STEP\") {\n        stopAuto();\n        for (var i = 0; i < steps.length; i++) {\n          if (steps[i].id === stepId) { goTo(i); break; }\n        }\n      }\n    },\n  };\n\n  if (window.ReagvisBridge) {\n    window.ReagvisBridge.ready();\n    window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n})();\n",
+  "lastFrozenContentHash": null,
+  "lastFrozenRevisionId": null,
+  "manifest": {
+    "bridgeVersion": {
+      "$numberInt": "1"
+    },
+    "capabilities": [
+      "play",
+      "pause",
+      "next",
+      "previous",
+      "reset",
+      "gotoStep"
+    ],
+    "heightPx": {
+      "$numberInt": "590"
+    },
+    "traceEvents": [
+      "fixed-model",
+      "possible-data",
+      "observe-data",
+      "freeze-data",
+      "vary-parameter",
+      "compare-likelihood",
+      "probability-vs-likelihood",
+      "ml-connection"
+    ]
+  },
+  "packageId": "f1d65eae-e081-4e2e-a339-6a844e465257",
+  "packageTrace": {
+    "steps": [
+      {
+        "animationEvent": "fixed-model",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Probability: the parameter is fixed.",
+          "python": "p = 0.7   # the model is fixed\nprint(p)"
+        },
+        "id": "fixed-model",
+        "label": "Probability: fix the model"
+      },
+      {
+        "animationEvent": "possible-data",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "With p fixed, give a probability to every possible dataset (number of heads).",
+          "python": "from math import comb\n\ndef binom(k, n, p):\n    return comb(n, k) * p ** k * (1 - p) ** (n - k)\nprobs = [binom(k, 5, 0.7) for k in range(6)]\nprint([round(v, 3) for v in probs])   # [0.002, 0.028, 0.132, 0.309, 0.36, 0.168]\nprint(round(sum(probs), 2))           # 1.0"
+        },
+        "id": "possible-data",
+        "label": "Possible data, with probabilities"
+      },
+      {
+        "animationEvent": "observe-data",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "One of the possible datasets actually happens: 4 heads.",
+          "python": "from math import comb\n\ndef binom(k, n, p):\n    return comb(n, k) * p ** k * (1 - p) ** (n - k)\nprint(round(binom(4, 5, 0.7), 3))   # 0.36"
+        },
+        "id": "observe-data",
+        "label": "We observe one result"
+      },
+      {
+        "animationEvent": "freeze-data",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Likelihood: freeze the observed data and treat p as the unknown.",
+          "python": "observed = (4, 5)   # 4 heads in 5 flips, now fixed\nprint(observed)"
+        },
+        "id": "freeze-data",
+        "label": "Likelihood: freeze the data"
+      },
+      {
+        "animationEvent": "vary-parameter",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Evaluate the same formula for different p, with the data fixed.",
+          "python": "from math import comb\n\ndef binom(k, n, p):\n    return comb(n, k) * p ** k * (1 - p) ** (n - k)\ndef likelihood(p):\n    return binom(4, 5, p)\n\nfor p in [0.1, 0.3, 0.5, 0.7, 0.9]:\n    print(p, round(likelihood(p), 3))\n# 0.1 0.0 / 0.3 0.028 / 0.5 0.156 / 0.7 0.36 / 0.9 0.328"
+        },
+        "id": "vary-parameter",
+        "label": "Vary the parameter"
+      },
+      {
+        "animationEvent": "compare-likelihood",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Compare how well two parameter values explain the same fixed data.",
+          "python": "from math import comb\n\ndef binom(k, n, p):\n    return comb(n, k) * p ** k * (1 - p) ** (n - k)\ndef likelihood(p):\n    return binom(4, 5, p)\n\nprint(round(likelihood(0.7), 3), round(likelihood(0.4), 3))   # 0.36 0.077\nprint(round(likelihood(0.7) / likelihood(0.4), 1))             # 4.7"
+        },
+        "id": "compare-likelihood",
+        "label": "Compare candidate values of p"
+      },
+      {
+        "animationEvent": "probability-vs-likelihood",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Probabilities over data add to 1. Likelihood values over parameters need not.",
+          "python": "from math import comb\n\ndef binom(k, n, p):\n    return comb(n, k) * p ** k * (1 - p) ** (n - k)\nprobs = [binom(k, 5, 0.7) for k in range(6)]\nprint(round(sum(probs), 2))                                   # 1.0\ngrid = [i / 10 for i in range(1, 10)]\nprint(round(sum(binom(4, 5, p) for p in grid), 2))            # 1.63"
+        },
+        "id": "probability-vs-likelihood",
+        "label": "Side by side"
+      },
+      {
+        "animationEvent": "ml-connection",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Training varies the parameters for fixed data. Using the model fixes the parameters and varies the data.",
+          "python": "training = 'data fixed, vary the parameters (likelihood)'\nusing = 'parameters fixed, vary the data (probability)'\nprint(training)\nprint(using)"
+        },
+        "id": "ml-connection",
+        "label": "Both views appear in ML"
+      }
+    ],
+    "version": {
+      "$numberInt": "1"
+    }
+  },
+  "revision": {
+    "$numberInt": "5"
+  },
+  "revisionId": "r2",
+  "sourceKind": "zip",
+  "status": "frozen",
+  "title": "ML Module 5 — Likelihood vs Probability",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498531"
+    }
+  },
+  "updatedBy": {
+    "$oid": "000000000000000000000000"
+  }
+}

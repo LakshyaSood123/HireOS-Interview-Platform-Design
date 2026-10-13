@@ -1,0 +1,46 @@
+{
+ "same-dataset": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "One dataset for both methods: **34 customers** (purchases per month, average spend) from overlapping groups. We will give it to K-Means and to a GMM and compare."
+ },
+ "kmeans-centroids": {
+  "h": "K-MEANS: CENTROIDS",
+  "t": "K-Means with **K = 3** gives each customer **exactly one cluster** and summarizes each cluster by a centroid (the cross)."
+ },
+ "hard-boundaries": {
+  "h": "K-MEANS: HARD BOUNDARIES",
+  "t": "Every location belongs to its **nearest centroid**. The tinted regions have sharp edges: crossing one **flips the label**, even for nearly identical customers."
+ },
+ "ambiguous-point": {
+  "h": "A POINT IN THE OVERLAP",
+  "t": "This customer sits where two groups overlap, but K-Means must still give it **one label**. The fact that it is borderline is not recorded."
+ },
+ "gmm-components": {
+  "h": "GMM: COMPONENTS",
+  "t": "A GMM describes the same data with **ellipses** (1 and 2 standard deviations). Each component has a **mean, a spread and a weight**."
+ },
+ "soft-responsibility": {
+  "h": "GMM: SOFT RESPONSIBILITY",
+  "t": "The same customer gets **responsibilities for all three components** instead of one label: about **0.43 and 0.57** for the two overlapping ones."
+ },
+ "shape-flexibility": {
+  "h": "SHAPE FLEXIBILITY",
+  "t": "The dashed circles are what K-Means implicitly assumes around its centroids. The GMM ellipses can be **wide, narrow or differently sized**, so they follow the groups more closely."
+ },
+ "side-by-side": {
+  "h": "SIDE BY SIDE",
+  "t": "Left: K-Means, **one hard color** per customer. Right: GMM, colors **blended by responsibility**, so overlap shows as mixed colors. Both find the three groups."
+ },
+ "when-kmeans": {
+  "h": "WHEN K-MEANS IS ENOUGH",
+  "t": "Use K-Means for **compact, similar-looking groups** when speed and simplicity matter and **one label per point** is acceptable."
+ },
+ "when-gmm": {
+  "h": "WHEN A GMM HELPS",
+  "t": "Use a GMM when **overlap matters**, when you want **soft membership**, or when groups differ in spread or orientation. It has more parameters and can also stop at a local optimum."
+ },
+ "final-summary": {
+  "h": "TAKEAWAY",
+  "t": "**K-Means:** hard membership, centroids, distance. **GMM:** soft membership, mean + spread + weight, responsibilities. Neither is always better, and **both need the number of groups chosen**."
+ }
+}

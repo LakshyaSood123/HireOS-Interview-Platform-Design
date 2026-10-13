@@ -1,0 +1,54 @@
+{
+  "title": "Likelihood versus probability",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "fixed-model",
+      "label": "Probability: fix the model",
+      "pseudocode": "Probability: the parameter is fixed.",
+      "python": "p = 0.7   # the model is fixed\nprint(p)"
+    },
+    {
+      "id": "possible-data",
+      "label": "Possible data, with probabilities",
+      "pseudocode": "With p fixed, give a probability to every possible dataset (number of heads).",
+      "python": "from math import comb\n\ndef binom(k, n, p):\n    return comb(n, k) * p ** k * (1 - p) ** (n - k)\nprobs = [binom(k, 5, 0.7) for k in range(6)]\nprint([round(v, 3) for v in probs])   # [0.002, 0.028, 0.132, 0.309, 0.36, 0.168]\nprint(round(sum(probs), 2))           # 1.0"
+    },
+    {
+      "id": "observe-data",
+      "label": "We observe one result",
+      "pseudocode": "One of the possible datasets actually happens: 4 heads.",
+      "python": "from math import comb\n\ndef binom(k, n, p):\n    return comb(n, k) * p ** k * (1 - p) ** (n - k)\nprint(round(binom(4, 5, 0.7), 3))   # 0.36"
+    },
+    {
+      "id": "freeze-data",
+      "label": "Likelihood: freeze the data",
+      "pseudocode": "Likelihood: freeze the observed data and treat p as the unknown.",
+      "python": "observed = (4, 5)   # 4 heads in 5 flips, now fixed\nprint(observed)"
+    },
+    {
+      "id": "vary-parameter",
+      "label": "Vary the parameter",
+      "pseudocode": "Evaluate the same formula for different p, with the data fixed.",
+      "python": "from math import comb\n\ndef binom(k, n, p):\n    return comb(n, k) * p ** k * (1 - p) ** (n - k)\ndef likelihood(p):\n    return binom(4, 5, p)\n\nfor p in [0.1, 0.3, 0.5, 0.7, 0.9]:\n    print(p, round(likelihood(p), 3))\n# 0.1 0.0 / 0.3 0.028 / 0.5 0.156 / 0.7 0.36 / 0.9 0.328"
+    },
+    {
+      "id": "compare-likelihood",
+      "label": "Compare candidate values of p",
+      "pseudocode": "Compare how well two parameter values explain the same fixed data.",
+      "python": "from math import comb\n\ndef binom(k, n, p):\n    return comb(n, k) * p ** k * (1 - p) ** (n - k)\ndef likelihood(p):\n    return binom(4, 5, p)\n\nprint(round(likelihood(0.7), 3), round(likelihood(0.4), 3))   # 0.36 0.077\nprint(round(likelihood(0.7) / likelihood(0.4), 1))             # 4.7"
+    },
+    {
+      "id": "probability-vs-likelihood",
+      "label": "Side by side",
+      "pseudocode": "Probabilities over data add to 1. Likelihood values over parameters need not.",
+      "python": "from math import comb\n\ndef binom(k, n, p):\n    return comb(n, k) * p ** k * (1 - p) ** (n - k)\nprobs = [binom(k, 5, 0.7) for k in range(6)]\nprint(round(sum(probs), 2))                                   # 1.0\ngrid = [i / 10 for i in range(1, 10)]\nprint(round(sum(binom(4, 5, p) for p in grid), 2))            # 1.63"
+    },
+    {
+      "id": "ml-connection",
+      "label": "Both views appear in ML",
+      "pseudocode": "Training varies the parameters for fixed data. Using the model fixes the parameters and varies the data.",
+      "python": "training = 'data fixed, vary the parameters (likelihood)'\nusing = 'parameters fixed, vary the data (probability)'\nprint(training)\nprint(using)"
+    }
+  ]
+}

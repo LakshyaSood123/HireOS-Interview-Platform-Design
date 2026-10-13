@@ -1,0 +1,54 @@
+{
+  "title": "Bayesian thinking: prior, likelihood, posterior",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "unknown-p",
+      "label": "An unknown p, many candidates",
+      "pseudocode": "Keep a belief over a set of candidate values of p.",
+      "python": "thetas = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]\nprint(len(thetas), 'candidates for p')   # 9 candidates for p"
+    },
+    {
+      "id": "prior",
+      "label": "The prior: belief before data",
+      "pseudocode": "The prior gives each candidate a weight before any data are seen.",
+      "python": "weights = [1, 2, 3, 4, 5, 4, 3, 2, 1]\nprior = [w / sum(weights) for w in weights]\nprint([round(p, 2) for p in prior])   # [0.04, 0.08, 0.12, 0.16, 0.2, 0.16, 0.12, 0.08, 0.04]"
+    },
+    {
+      "id": "observe-data",
+      "label": "Observe the data",
+      "pseudocode": "Observe the evidence: H H T H H.",
+      "python": "heads, tails = 4, 1   # H H T H H\nprint(heads, tails)"
+    },
+    {
+      "id": "likelihood",
+      "label": "The likelihood: what the data say",
+      "pseudocode": "likelihood(candidate) = candidate^heads * (1 - candidate)^tails",
+      "python": "thetas = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]\nlike = [t ** 4 * (1 - t) for t in thetas]\nprint([round(v, 3) for v in like])\n# [0.0, 0.001, 0.006, 0.015, 0.031, 0.052, 0.072, 0.082, 0.066]"
+    },
+    {
+      "id": "combine",
+      "label": "Combine: prior x likelihood",
+      "pseudocode": "Multiply prior and likelihood candidate by candidate.",
+      "python": "thetas = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]\nweights = [1, 2, 3, 4, 5, 4, 3, 2, 1]\nprior = [w / sum(weights) for w in weights]\nlike = [t ** 4 * (1 - t) for t in thetas]   # H H T H H\nscore = [pr * li for pr, li in zip(prior, like)]\nprint([round(s, 4) for s in score])"
+    },
+    {
+      "id": "posterior",
+      "label": "The posterior: updated belief",
+      "pseudocode": "Rescale the products so they add up to 1.",
+      "python": "thetas = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]\nweights = [1, 2, 3, 4, 5, 4, 3, 2, 1]\nprior = [w / sum(weights) for w in weights]\nlike = [t ** 4 * (1 - t) for t in thetas]   # H H T H H\nscore = [pr * li for pr, li in zip(prior, like)]\nposterior = [s / sum(score) for s in score]\nprint([round(p, 3) for p in posterior])\nprint(round(sum(posterior), 2))   # 1.0"
+    },
+    {
+      "id": "shift-belief",
+      "label": "How the belief shifted",
+      "pseudocode": "Compare where the prior peaks with where the posterior peaks.",
+      "python": "thetas = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]\nweights = [1, 2, 3, 4, 5, 4, 3, 2, 1]\nprior = [w / sum(weights) for w in weights]\nlike = [t ** 4 * (1 - t) for t in thetas]   # H H T H H\nscore = [pr * li for pr, li in zip(prior, like)]\nposterior = [s / sum(score) for s in score]\nprint(thetas[prior.index(max(prior))], thetas[posterior.index(max(posterior))])   # 0.5 0.7"
+    },
+    {
+      "id": "ml-connection",
+      "label": "Why Bayesian thinking helps ML",
+      "pseudocode": "A posterior keeps a whole belief about the parameter, not just one number.",
+      "python": "thetas = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]\nweights = [1, 2, 3, 4, 5, 4, 3, 2, 1]\nprior = [w / sum(weights) for w in weights]\nlike = [t ** 4 * (1 - t) for t in thetas]   # H H T H H\nscore = [pr * li for pr, li in zip(prior, like)]\nposterior = [s / sum(score) for s in score]\nmean = sum(t * p for t, p in zip(thetas, posterior))\nprint(round(mean, 2))   # 0.64: the posterior mean of p"
+    }
+  ]
+}

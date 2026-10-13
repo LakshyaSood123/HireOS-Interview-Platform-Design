@@ -1,0 +1,38 @@
+{
+ "dataset": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Each dot is a customer, placed by **purchases per month** and **average spend**. The groups **overlap**, so some customers sit between groups. Colors have not been assigned yet."
+ },
+ "component-center": {
+  "h": "A COMPONENT'S MEAN",
+  "t": "A Gaussian mixture is built from **Gaussian components**. The cross marks one component's **mean**: the center of its cloud of customers."
+ },
+ "component-spread": {
+  "h": "A COMPONENT'S SPREAD",
+  "t": "Each component also has a **spread**. In two dimensions the **covariance** gives the cloud its size, shape and orientation, here a wide, flat ellipse."
+ },
+ "component-weight": {
+  "h": "A COMPONENT'S WEIGHT",
+  "t": "Each component has a **mixing weight**: the share of customers it accounts for. Across all components the weights **add up to 1**."
+ },
+ "three-gaussians": {
+  "h": "THREE COMPONENTS",
+  "t": "Three components A, B and C, each with its **own mean, spread and weight**. Each point is colored by blending the components that explain it."
+ },
+ "overlap": {
+  "h": "WHERE COMPONENTS OVERLAP",
+  "t": "Between B and C the clouds overlap. A customer there is **plausible under both components**, something a hard one-label method cannot express."
+ },
+ "combine-density": {
+  "h": "ONE FEATURE, ONE DENSITY",
+  "t": "Now we look at spend alone. The weighted components at 2, 5 and 8 add up to a single **mixture density with three peaks**."
+ },
+ "new-point": {
+  "h": "A NEW CUSTOMER",
+  "t": "A new customer at spend **3.5**: component A contributes **0.0258**, B contributes **0.0583** and C almost nothing, so the mixture density there is **0.0841**."
+ },
+ "gmm-view": {
+  "h": "TAKEAWAY",
+  "t": "A GMM describes data with components that each have a **mean, a spread and a weight**. Unlike a K-Means centroid, each component also says **how wide and how large** it is."
+ }
+}

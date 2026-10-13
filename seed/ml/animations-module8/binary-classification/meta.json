@@ -1,0 +1,60 @@
+{
+  "title": "Binary classification: two classes, one decision",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "examples",
+      "label": "Ten emails",
+      "pseudocode": "Ten emails with a spam score and a true label.",
+      "python": "spam_scores = [0.5, 1.0, 2.0, 3.0, 4.5, 3.5, 5.0, 6.0, 7.5, 9.0]\nlabels = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1]\nprint(list(zip(spam_scores, labels))[:4])\n# prints: [(0.5, 0), (1.0, 0), (2.0, 0), (3.0, 0)]"
+    },
+    {
+      "id": "two-classes",
+      "label": "Exactly two classes",
+      "pseudocode": "Each email is class 0 (not spam) or class 1 (spam).",
+      "python": "spam_scores = [0.5, 1.0, 2.0, 3.0, 4.5, 3.5, 5.0, 6.0, 7.5, 9.0]\nlabels = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1]\nprint(labels.count(0), 'not spam;', labels.count(1), 'spam')\n# prints: 5 not spam; 5 spam"
+    },
+    {
+      "id": "feature-input",
+      "label": "The feature goes in",
+      "pseudocode": "A new email arrives with its score.",
+      "python": "score = 7.5\nprint('feature:', score)\n# prints: feature: 7.5"
+    },
+    {
+      "id": "classifier",
+      "label": "The classifier decides",
+      "pseudocode": "Rule: score at least 4 means spam.",
+      "python": "def classify(score):\n    return 1 if score >= 4.0 else 0\n\nprint(classify(7.5), classify(2.0))\n# prints: 1 0"
+    },
+    {
+      "id": "prediction",
+      "label": "A predicted class",
+      "pseudocode": "Apply the rule to get a predicted class.",
+      "python": "def classify(score):\n    return 1 if score >= 4.0 else 0\n\npredicted = classify(7.5)\nprint('predicted class:', predicted)\n# prints: predicted class: 1"
+    },
+    {
+      "id": "compare-label",
+      "label": "Compare with the true class",
+      "pseudocode": "Compare the predicted class with the true class.",
+      "python": "def classify(score):\n    return 1 if score >= 4.0 else 0\n\npredicted, actual = classify(7.5), 1\nprint(predicted, actual, predicted == actual)\n# prints: 1 1 True"
+    },
+    {
+      "id": "correct-example",
+      "label": "A correct prediction",
+      "pseudocode": "Equal classes mean a correct prediction.",
+      "python": "def classify(score):\n    return 1 if score >= 4.0 else 0\n\npredicted, actual = classify(7.5), 1\nprint('correct' if predicted == actual else 'incorrect')\n# prints: correct"
+    },
+    {
+      "id": "wrong-example",
+      "label": "An incorrect prediction",
+      "pseudocode": "Different classes mean an incorrect prediction.",
+      "python": "def classify(score):\n    return 1 if score >= 4.0 else 0\n\npredicted, actual = classify(4.5), 0\nprint(predicted, actual, 'correct' if predicted == actual else 'incorrect')\n# prints: 1 0 incorrect"
+    },
+    {
+      "id": "binary-task",
+      "label": "The binary task",
+      "pseudocode": "Count the correct predictions over all ten emails.",
+      "python": "spam_scores = [0.5, 1.0, 2.0, 3.0, 4.5, 3.5, 5.0, 6.0, 7.5, 9.0]\nlabels = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1]\ndef classify(score):\n    return 1 if score >= 4.0 else 0\n\ncorrect = sum(classify(s) == y for s, y in zip(spam_scores, labels))\nprint(correct, 'of', len(labels), 'correct')\n# prints: 8 of 10 correct"
+    }
+  ]
+}

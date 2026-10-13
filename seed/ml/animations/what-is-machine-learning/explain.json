@@ -1,0 +1,22 @@
+{
+ "rules": {
+  "h": "TRADITIONAL SOFTWARE",
+  "t": "In traditional software **a person writes every rule**. The program follows those rules to turn an input (say, an email) into an output (spam or not). It can only handle what its rules cover."
+ },
+ "data": {
+  "h": "MACHINE LEARNING STARTS FROM EXAMPLES",
+  "t": "Instead of hand-written rules, we start with **examples**: emails already marked spam or not spam. A **learning algorithm** looks for patterns in them and produces a **model**."
+ },
+ "train": {
+  "h": "TRAINING",
+  "t": "**Training** adjusts the model so its pattern fits the examples it was shown. What the model keeps is a **learned pattern** of what spam looks like, not a list of memorized emails."
+ },
+ "unseen-input": {
+  "h": "A NEW EXAMPLE ARRIVES",
+  "t": "A **new email** that the model **never saw during training** is given to the trained model. The model must now decide, spam or not spam, using only what it learned."
+ },
+ "generalize": {
+  "h": "WHY THIS SHOWS GENERALIZATION",
+  "t": "The model correctly labels a **new email it never saw during training**. Because its prediction matches the actual label, it has learned a pattern that **transfers to unseen data** rather than merely memorizing earlier examples."
+ }
+}

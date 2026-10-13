@@ -1,0 +1,183 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322c4e9cccef168edd2"
+  },
+  "assets": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498642"
+    }
+  },
+  "createdBy": {
+    "$oid": "000000000000000000000000"
+  },
+  "css": "body {\r\n  margin: 0;\r\n  padding: 14px;\r\n  box-sizing: border-box;\r\n  background: #0b1d16;\r\n  color: #e6f5ec;\r\n  font-family: system-ui, sans-serif;\r\n}\r\n.scene {\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 8px;\r\n}\r\n.step-label {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  letter-spacing: 0.08em;\r\n  text-transform: uppercase;\r\n  color: #a7ce65;\r\n}\r\nsvg {\r\n  width: 100%;\r\n  height: auto;\r\n  max-width: 640px;\r\n  background: #071510;\r\n  border-radius: 10px;\r\n  border: 1px solid rgba(29, 181, 132, 0.35);\r\n}\r\nsvg g,\r\nsvg line,\r\nsvg polygon,\r\nsvg path,\r\nsvg ellipse,\r\nsvg circle,\r\nsvg rect,\r\nsvg text {\r\n  transition: opacity 0.4s ease, transform 0.6s ease;\r\n}\r\n.axis {\r\n  stroke: rgba(167, 206, 101, 0.3);\r\n  stroke-width: 1;\r\n}\r\n.tick {\r\n  font-size: 10px;\r\n  fill: #8fa89c;\r\n}\r\n.lbl,\r\n.big,\r\n.note,\r\n.mono {\r\n  paint-order: stroke;\r\n  stroke: #071510;\r\n  stroke-width: 3px;\r\n  stroke-linejoin: round;\r\n}\r\n.lbl {\r\n  font-size: 12px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.lbl-g { fill: #1db584; }\r\n.lbl-y { fill: #e2b44a; }\r\n.lbl-p { fill: #f472b6; }\r\n.lbl-b { fill: #38bdf8; }\r\n.lbl-r { fill: #f87171; }\r\n.big {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.note {\r\n  font-size: 11px;\r\n  fill: #c9dccf;\r\n}\r\n.mono {\r\n  font-family: ui-monospace, Consolas, monospace;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.caption {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  line-height: 1.5;\r\n  color: #c9dccf;\r\n  min-height: 40px;\r\n}\r\n.cell rect {\r\n  fill: rgba(255, 255, 255, 0.05);\r\n  stroke: rgba(255, 255, 255, 0.28);\r\n  stroke-width: 1.2;\r\n}\r\n.cell text {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.cell.hl-row rect { fill: rgba(226, 180, 74, 0.25); stroke: #e2b44a; }\r\n.cell.hl-col rect { fill: rgba(29, 181, 132, 0.25); stroke: #1db584; }\r\n.cell.hl-both rect { fill: rgba(244, 114, 182, 0.28); stroke: #f472b6; }\r\n.dim { opacity: 0.25; }\r\n.dash { stroke-dasharray: 5 4; }\r\n.fillA { fill: rgba(56, 189, 248, 0.16); stroke: #38bdf8; stroke-width: 2; }\r\n.fillB { fill: rgba(244, 114, 182, 0.18); stroke: #f472b6; stroke-width: 2; }\r\n.fillG { fill: rgba(29, 181, 132, 0.16); stroke: #1db584; stroke-width: 2; }\r\n.contour { stroke: rgba(56, 189, 248, 0.45); stroke-width: 1.5; }\n.curve { fill: none; stroke: #38bdf8; stroke-width: 3; }\n.curve-y { fill: none; stroke: #e2b44a; stroke-width: 3; }\n.curve-p { fill: none; stroke: #f472b6; stroke-width: 3; }\n.curve-g { fill: none; stroke: #1db584; stroke-width: 3; }\n.ghost { fill: none; stroke: rgba(201, 220, 207, 0.4); stroke-width: 2; }\n.lbl-w { fill: #e6f5ec; }\n.lbl-s { font-size: 11px; font-weight: 600; fill: #c9dccf; }\n\n/* ── explanation panel (shared by every generated ML animation) ── */\n.explain {\n  box-sizing: border-box;\n  max-width: 640px;\n  margin-top: 4px;\n  padding: 14px 18px 16px;\n  min-height: 150px;\n  border-radius: 12px;\n  background: rgba(29, 181, 132, 0.10);\n  border: 1px solid rgba(29, 181, 132, 0.45);\n  border-left: 5px solid #1db584;\n}\n.explain-h {\n  margin: 0 0 8px;\n  font-size: 13px;\n  font-weight: 800;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.explain-t {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.55;\n  color: #f1faf4;\n}\n.explain-t strong {\n  font-weight: 800;\n  color: #ffd98a;\n}\n\n",
+  "html": "<div class=\"scene\">\n  <p class=\"step-label\" id=\"step-label\"></p>\n  <svg id=\"scene\" viewBox=\"0 0 640 360\" role=\"img\" aria-label=\"The central limit theorem\"></svg>\n  <section class=\"explain\" aria-live=\"polite\">\n    <h3 class=\"explain-h\" id=\"explain-h\"></h3>\n    <p class=\"explain-t\" id=\"caption\"></p>\n  </section>\n</div>\n",
+  "js": "(function () {\n  // ── shared helpers (SVG, tweening) ─────────────────────────────────────────\r\n  var NS = \"http://www.w3.org/2000/svg\";\r\n  var svg = document.getElementById(\"scene\");\r\n  var labelEl = document.getElementById(\"step-label\");\r\n  var captionEl = document.getElementById(\"caption\");\r\n\r\n  function el(name, attrs, parent) {\r\n    var node = document.createElementNS(NS, name);\r\n    for (var key in attrs) node.setAttribute(key, attrs[key]);\r\n    if (parent) parent.appendChild(node);\r\n    return node;\r\n  }\r\n  function txt(parent, x, y, cls, str, anchor) {\r\n    var t = el(\"text\", { x: x, y: y, class: cls }, parent);\r\n    if (anchor) t.setAttribute(\"text-anchor\", anchor);\r\n    t.textContent = str;\r\n    return t;\r\n  }\r\n  function show(node, on) {\r\n    node.setAttribute(\"opacity\", on ? \"1\" : \"0\");\r\n  }\r\n  function place(node, x, y) {\r\n    node.style.transform = \"translate(\" + x + \"px,\" + y + \"px)\";\r\n  }\r\n  function setLine(node, x1, y1, x2, y2) {\r\n    node.setAttribute(\"x1\", x1);\r\n    node.setAttribute(\"y1\", y1);\r\n    node.setAttribute(\"x2\", x2);\r\n    node.setAttribute(\"y2\", y2);\r\n  }\r\n  function lerp(a, b, e) {\r\n    return a + (b - a) * e;\r\n  }\r\n  function round1(v) {\r\n    return (Math.round(v * 10) / 10).toFixed(1);\r\n  }\r\n\r\n  // Eased animation. fn(e) is called with e from 0 to 1. Without\r\n  // requestAnimationFrame (or with ms = 0) it jumps straight to fn(1).\r\n  var animTokens = {};\r\n  function anim(key, ms, fn) {\r\n    var token = (animTokens[key] || 0) + 1;\r\n    animTokens[key] = token;\r\n    if (typeof requestAnimationFrame !== \"function\" || ms <= 0) {\r\n      fn(1);\r\n      return;\r\n    }\r\n    var start = null;\r\n    function frame(now) {\r\n      if (animTokens[key] !== token) return;\r\n      if (start === null) start = now;\r\n      var p = Math.min(1, (now - start) / ms);\r\n      var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;\r\n      fn(e);\r\n      if (p < 1) requestAnimationFrame(frame);\r\n    }\r\n    requestAnimationFrame(frame);\r\n  }\r\n\r\n  // Arrowheads, one marker per colour.\r\n  var COLORS = { g: \"#1DB584\", y: \"#E2B44A\", p: \"#F472B6\", b: \"#38BDF8\", w: \"#c9dccf\", r: \"#F87171\" };\r\n  var defs = el(\"defs\", {}, svg);\r\n  Object.keys(COLORS).forEach(function (k) {\r\n    var m = el(\"marker\", { id: \"ah-\" + k, viewBox: \"0 0 10 10\", refX: 9, refY: 5, markerUnits: \"userSpaceOnUse\", markerWidth: 13, markerHeight: 13, orient: \"auto\" }, defs);\r\n    el(\"path\", { d: \"M0 0 L10 5 L0 10 Z\", fill: COLORS[k] }, m);\r\n  });\r\n  function arrow(parent, colorKey, width) {\r\n    return el(\"line\", { x1: 0, y1: 0, x2: 0, y2: 0, stroke: COLORS[colorKey], \"stroke-width\": width || 3, \"marker-end\": \"url(#ah-\" + colorKey + \")\", \"stroke-linecap\": \"round\" }, parent);\r\n  }\r\n  function polygon(parent, cls) {\r\n    return el(\"polygon\", { points: \"\", class: cls }, parent);\r\n  }\r\n  function setPoly(node, pts) {\r\n    node.setAttribute(\"points\", pts.map(function (p) { return p[0].toFixed(1) + \",\" + p[1].toFixed(1); }).join(\" \"));\r\n  }\r\n  function lerpPts(a, b, e) {\r\n    return a.map(function (p, i) { return [lerp(p[0], b[i][0], e), lerp(p[1], b[i][1], e)]; });\r\n  }\r\n  // Maps maths coordinates (x right, y up) to screen pixels.\r\n  function makePlane(cx, cy, s) {\r\n    return {\r\n      x: function (v) { return cx + s * v; },\r\n      y: function (v) { return cy - s * v; },\r\n      pt: function (p) { return [cx + s * p[0], cy - s * p[1]]; },\r\n      s: s, cx: cx, cy: cy\r\n    };\r\n  }\r\n  function axes(parent, plane, xr, yr) {\r\n    el(\"line\", { x1: plane.x(-xr), y1: plane.y(0), x2: plane.x(xr), y2: plane.y(0), class: \"axis\" }, parent);\r\n    el(\"line\", { x1: plane.x(0), y1: plane.y(-yr), x2: plane.x(0), y2: plane.y(yr), class: \"axis\" }, parent);\r\n  }\r\n\n  // ── Module 3 helpers: graphs, curves, contour plane ───────────────────────\n  // makeGraph maps maths values to pixels with separate x and y scales.\n  function makeGraph(ox, oy, sx, sy) {\n    return {\n      ox: ox, oy: oy, sx: sx, sy: sy,\n      x: function (v) { return ox + sx * v; },\n      y: function (v) { return oy - sy * v; }\n    };\n  }\n  function curveD(g, f, a, b, n) {\n    var d = \"\";\n    for (var i = 0; i <= n; i++) {\n      var v = a + ((b - a) * i) / n;\n      d += (i ? \" L \" : \"M \") + g.x(v).toFixed(1) + \" \" + g.y(f(v)).toFixed(1);\n    }\n    return d;\n  }\n  function setD(node, d) {\n    node.setAttribute(\"d\", d);\n  }\n  function fmt(v, n) {\n    return (Math.round(v * 100000) / 100000).toFixed(n === undefined ? 1 : n);\n  }\n  function drawAxes(parent, g, xmax, ymax, xticks, yticks) {\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(xmax), y2: g.y(0), class: \"axis\" }, parent);\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(0), y2: g.y(ymax), class: \"axis\" }, parent);\n    (xticks || []).forEach(function (t) { txt(parent, g.x(t), g.y(0) + 15, \"tick\", String(t), \"middle\"); });\n    (yticks || []).forEach(function (t) { txt(parent, g.x(0) - 7, g.y(t) + 4, \"tick\", String(t), \"end\"); });\n  }\n  function card(parent, x, y, w, h, cls) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: 10, class: cls || \"fillG\" }, parent);\n  }\n  function ring(parent, cx, cy, rx, ry, cls) {\n    return el(\"ellipse\", { cx: cx, cy: cy, rx: rx, ry: ry, fill: \"none\", class: cls || \"contour\" }, parent);\n  }\n  function clipTo(id, x, y, w, h) {\n    var c = el(\"clipPath\", { id: id }, defs);\n    el(\"rect\", { x: x, y: y, width: w, height: h }, c);\n  }\n\n  // ── Module 4 helpers: seeded randomness, small shapes ─────────────────────\n  function mulberry(seed) {\n    var a = seed;\n    return function () {\n      a |= 0; a = (a + 0x6D2B79F5) | 0;\n      var t = Math.imul(a ^ (a >>> 15), 1 | a);\n      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;\n      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;\n    };\n  }\n  function gaussSource(rand) {\n    return function () {\n      var u = 1 - rand(), v = rand();\n      return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);\n    };\n  }\n  function box(parent, x, y, w, h, fill, stroke, r) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: r === undefined ? 6 : r, fill: fill, stroke: stroke || \"none\", \"stroke-width\": 2 }, parent);\n  }\n  function setBox(node, x, y, w, h) {\n    node.setAttribute(\"x\", x); node.setAttribute(\"y\", y); node.setAttribute(\"width\", Math.max(0, w)); node.setAttribute(\"height\", Math.max(0, h));\n  }\n  function vis(list, on) {\n    list.forEach(function (n) { show(n, on); });\n  }\n\n  // ── Module 5 helpers: coins, and rows of bars over the nine candidate values of p ──\n  function coin(parent, x, y, r, letter) {\n    var g = el(\"g\", {}, parent);\n    var head = letter === \"H\";\n    el(\"circle\", { cx: x, cy: y, r: r, fill: head ? \"rgba(244,114,182,0.35)\" : \"rgba(56,189,248,0.3)\", stroke: head ? \"#f472b6\" : \"#38bdf8\", \"stroke-width\": 3 }, g);\n    var t = txt(g, x, y + r * 0.36, \"big\", letter, \"middle\");\n    t.setAttribute(\"font-size\", String(Math.round(r * 1.05)));\n    return g;\n  }\n  var THETAS = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9];\n  var WEIGHTS = [1, 2, 3, 4, 5, 4, 3, 2, 1];\n  function lik(t, k, n) { return Math.pow(t, k) * Math.pow(1 - t, n - k); }\n  function normalized(arr) {\n    var s = 0;\n    arr.forEach(function (v) { s += v; });\n    return arr.map(function (v) { return v / s; });\n  }\n  function argmaxIndex(arr) {\n    var b = 0;\n    arr.forEach(function (v, i) { if (v > arr[b]) b = i; });\n    return b;\n  }\n  // A row of nine bars. set(values, maxValue) rescales heights so maxValue fills `height`.\n  function barRow(parent, x0, dx, base, bw, height, fill, stroke) {\n    var g = el(\"g\", {}, parent);\n    var bars = THETAS.map(function (t, i) {\n      return box(g, x0 + i * dx - bw / 2, base, bw, 0, fill, stroke || \"none\", 3);\n    });\n    var tick = THETAS.map(function (t, i) {\n      var tt = txt(g, x0 + i * dx, base + 14, \"tick\", String(t), \"middle\");\n      tt.setAttribute(\"opacity\", \"0\");\n      return tt;\n    });\n    return {\n      g: g,\n      bars: bars,\n      ticks: tick,\n      set: function (values, maxValue) {\n        values.forEach(function (v, i) {\n          var h = Math.max(0, (v / maxValue) * height);\n          setBox(bars[i], x0 + i * dx - bw / 2, base - h, bw, h);\n        });\n      },\n      showTicks: function (on) { tick.forEach(function (n) { n.setAttribute(\"opacity\", on ? \"1\" : \"0\"); }); }\n    };\n  }\n\n  var EXPLAIN = {\"source-distribution\":{\"h\":\"THE POPULATION: A FAIR DIE\",\"t\":\"We start with a population that is clearly **not bell-shaped**: one roll of a fair die. Each face has probability 1/6, so the shape is **flat**. Its mean is **3.5** and its standard deviation about **1.71**.\"},\"sample\":{\"h\":\"TAKE ONE SAMPLE\",\"t\":\"Take a sample: roll the die **5 times**. Say we get **2, 6, 6, 1 and 4**.\"},\"sample-mean\":{\"h\":\"COMPUTE THE SAMPLE MEAN\",\"t\":\"The sample mean is the average: **(2 + 6 + 6 + 1 + 4) / 5 = 3.8**. This **one number**, not the five rolls, is what we now record on the axis.\"},\"repeat\":{\"h\":\"REPEAT MANY TIMES\",\"t\":\"Do it again with a fresh sample of 5 rolls, and again, and again. Each repetition drops **one more sample mean** onto the axis, and the pile of recorded means starts to take a shape.\"},\"means-histogram\":{\"h\":\"HISTOGRAM OF THE SAMPLE MEANS\",\"t\":\"After **2000 repetitions** the histogram of the sample **means** (n = 5) is already hump-shaped around **3.5**, even though a single roll is flat. The rolls did not become bell-shaped; **their averages did**.\"},\"larger-n\":{\"h\":\"USE BIGGER SAMPLES\",\"t\":\"Now let each sample have **n = 30** rolls instead of 5, and again record 2000 sample means. The histogram is **more bell-shaped and much narrower**.\"},\"normal-shape\":{\"h\":\"A NORMAL CURVE FITS\",\"t\":\"A normal curve with mean **3.5** and spread **σ / √30 ≈ 0.31** hugs the histogram of means. This is the **central limit theorem**: sample means are approximately normally distributed, whatever the shape of the population.\"},\"narrower-spread\":{\"h\":\"BIGGER n, NARROWER SPREAD\",\"t\":\"With **n = 5** the means spread about **0.76** (σ/√5); with **n = 30** only **0.31** (σ/√30). This spread is the **standard error**. It shrinks like 1/√n: four times the data halves it.\"},\"lln-vs-clt\":{\"h\":\"LLN VERSUS CLT\",\"t\":\"**LLN** asks where **one** sample mean goes as n grows (toward the true mean). **CLT** asks how **many** sample means are distributed across repeated samples (approximately normal, spread σ/√n). They are different questions.\"},\"ml-connection\":{\"h\":\"TAKEAWAY\",\"t\":\"This is why averages behave predictably: estimates can carry **error bars**, uncertainty shrinks like **1/√n**, and Gaussian noise is a common assumption. It holds for **averages**, not for raw data.\"}};\n  // ── scene ──\n  var steps = [\n    { id: \"source-distribution\", label: \"The population: a fair die\", caption: \"Start with a population that is clearly NOT bell-shaped: one roll of a fair die. Each face from 1 to 6 has probability 1/6, so the shape is flat. Its mean is 3.5 and its standard deviation is about 1.71.\" },\n    { id: \"sample\", label: \"Take one sample\", caption: \"Take a sample: roll the die 5 times. Say we get 2, 6, 6, 1 and 4.\" },\n    { id: \"sample-mean\", label: \"Compute the sample mean\", caption: \"The sample mean is the average of the sample: (2 + 6 + 6 + 1 + 4) / 5 = 3.8. This ONE number, not the five rolls, is what we now record on the axis.\" },\n    { id: \"repeat\", label: \"Repeat many times\", caption: \"Do it again with a fresh sample of 5 rolls, and again, and again. Each repetition drops one more sample mean onto the axis. The pile of recorded means starts to take a shape.\" },\n    { id: \"means-histogram\", label: \"Histogram of the sample means\", caption: \"After 2000 repetitions: the histogram of the SAMPLE MEANS (n = 5) is already hump-shaped around 3.5, even though a single roll is flat. The rolls did not become bell-shaped; their averages did.\" },\n    { id: \"larger-n\", label: \"Use bigger samples\", caption: \"Now let each sample have n = 30 rolls instead of 5, and again record 2000 sample means. The histogram is more bell-shaped and much narrower.\" },\n    { id: \"normal-shape\", label: \"A normal curve fits\", caption: \"A normal curve with mean 3.5 and spread σ / √30 ≈ 0.31 hugs the histogram of means. This is the central limit theorem: sample means are approximately normally distributed, whatever the shape of the population.\" },\n    { id: \"narrower-spread\", label: \"Bigger n, narrower spread\", caption: \"Compare the two: with n = 5 the means spread about 0.76 (σ/√5), with n = 30 only 0.31 (σ/√30). This spread is the standard error. Four times the data halves it.\" },\n    { id: \"lln-vs-clt\", label: \"LLN versus CLT\", caption: \"LLN asks where ONE sample mean goes as n grows (toward the true mean). CLT asks how MANY sample means are distributed across repeated samples (approximately normal, spread σ/√n). Different questions.\" },\n    { id: \"ml-connection\", label: \"Why ML cares\", caption: \"This is why averages behave predictably: estimates can carry error bars, uncertainty shrinks like 1/√n, and Gaussian noise is a common assumption. It holds for averages, not for raw data.\" }\n  ];\n\n  var MU = 3.5, SIGMA = Math.sqrt(35 / 12);\n  var rr = mulberry(11);\n  function dieRoll() { return 1 + Math.floor(rr() * 6); }\n  function means(n, count) {\n    var out = [];\n    for (var c = 0; c < count; c++) { var s = 0; for (var k = 0; k < n; k++) s += dieRoll(); out.push(s / n); }\n    return out;\n  }\n  var M5 = means(5, 2000), M30 = means(30, 2000);\n  function mean(a) { var s = 0; a.forEach(function (v) { s += v; }); return s / a.length; }\n  function sd(a) { var m = mean(a), s = 0; a.forEach(function (v) { s += (v - m) * (v - m); }); return Math.sqrt(s / a.length); }\n\n  var PXh = function (v) { return 64 + (v - 1) * 108; };\n  var BASE = 306, SY = 128, BW = 0.2, NB = 26;\n  function binsOf(arr, count) {\n    var bins = [];\n    for (var b = 0; b < NB; b++) bins.push(0);\n    for (var i = 0; i < count; i++) {\n      var idx = Math.min(NB - 1, Math.max(0, Math.round((arr[i] - 1) / BW)));\n      bins[idx]++;\n    }\n    return bins;\n  }\n  function makeBars(parent, fill, stroke) {\n    var out = [];\n    for (var b = 0; b < NB; b++) out.push(box(parent, PXh(1 + b * BW) - (PXh(1 + BW) - PXh(1)) / 2 + 1, BASE, PXh(1 + BW) - PXh(1) - 2, 0, fill, stroke || \"none\", 2));\n    return out;\n  }\n  function setBars(bars, arr, count) {\n    var bins = binsOf(arr, count);\n    bins.forEach(function (c, b) {\n      var h = (c / (count * BW)) * SY;\n      setBox(bars[b], PXh(1 + b * BW) - (PXh(1 + BW) - PXh(1)) / 2 + 1, BASE - h, PXh(1 + BW) - PXh(1) - 2, h);\n    });\n  }\n\n  // Axis for the sample means.\n  var axG = el(\"g\", {}, svg);\n  el(\"line\", { x1: 50, y1: BASE, x2: 620, y2: BASE, class: \"axis\" }, axG);\n  [1, 2, 3, 4, 5, 6].forEach(function (v) { txt(axG, PXh(v), BASE + 16, \"tick\", String(v), \"middle\"); });\n  txt(axG, 620, BASE + 34, \"note\", \"value of a sample mean\", \"end\");\n  var meanLine = el(\"line\", { x1: PXh(3.5), y1: 146, x2: PXh(3.5), y2: BASE, stroke: \"#e2b44a\", \"stroke-width\": 2, \"stroke-dasharray\": \"6 4\" }, svg);\n  var meanLbl = txt(svg, PXh(3.5) + 8, 150, \"lbl lbl-y\", \"μ = 3.5\", \"start\");\n\n  // Population inset (the die).\n  var popG = el(\"g\", {}, svg);\n  for (var f = 1; f <= 6; f++) {\n    box(popG, 40 + (f - 1) * 38, 82, 28, 44, \"rgba(56,189,248,0.7)\", \"none\", 3);\n    txt(popG, 54 + (f - 1) * 38, 142, \"tick\", String(f), \"middle\");\n  }\n  txt(popG, 40, 66, \"lbl lbl-b\", \"population: one die roll\", \"start\");\n  txt(popG, 40 + 6 * 38 + 6, 108, \"note\", \"flat, not a bell\", \"start\");\n\n  // Big flat population for step 0.\n  var bigPop = el(\"g\", {}, svg);\n  for (var g = 1; g <= 6; g++) {\n    box(bigPop, 90 + (g - 1) * 80, 150, 60, 110, \"rgba(56,189,248,0.7)\", \"none\", 4);\n    txt(bigPop, 120 + (g - 1) * 80, 282, \"big\", String(g), \"middle\");\n    txt(bigPop, 120 + (g - 1) * 80, 142, \"lbl\", \"1/6\", \"middle\");\n  }\n  txt(bigPop, 320, 54, \"lbl lbl-b\", \"one roll of a fair die: the population\", \"middle\");\n  txt(bigPop, 320, 82, \"note\", \"mean μ = 3.5     standard deviation σ ≈ 1.71\", \"middle\");\n\n  // The sample of five rolls and its mean.\n  var sampG = el(\"g\", {}, svg);\n  var ROLLS = [2, 6, 6, 1, 4];\n  ROLLS.forEach(function (v, i) {\n    box(sampG, 100 + i * 80, 176, 60, 60, \"rgba(226,180,74,0.2)\", \"#e2b44a\", 10);\n    txt(sampG, 130 + i * 80, 218, \"big\", String(v), \"middle\").setAttribute(\"font-size\", \"26\");\n  });\n  txt(sampG, 320, 166, \"lbl lbl-y\", \"one sample: 5 rolls\", \"middle\");\n  var meanG = el(\"g\", {}, svg);\n  txt(meanG, 320, 262, \"mono\", \"(2 + 6 + 6 + 1 + 4) / 5 = 3.8\", \"middle\");\n  var dropA = arrow(meanG, \"g\", 4); setLine(dropA, PXh(3.8), 270, PXh(3.8), BASE - 10);\n  el(\"circle\", { cx: PXh(3.8), cy: BASE - 5, r: 7, fill: \"#1db584\", stroke: \"#071510\", \"stroke-width\": 2 }, meanG);\n  txt(meanG, PXh(3.8) + 12, 292, \"lbl lbl-g\", \"sample mean 3.8\", \"start\");\n\n  // Histograms.\n  var histG5 = el(\"g\", {}, svg);\n  var bars5 = makeBars(histG5, \"rgba(56,189,248,0.85)\");\n  var histG30 = el(\"g\", {}, svg);\n  var bars30 = makeBars(histG30, \"rgba(244,114,182,0.85)\");\n  var ghost5 = el(\"g\", {}, svg);\n  var ghostBars = makeBars(ghost5, \"none\", \"#38bdf8\");\n  ghostBars.forEach(function (b) { b.setAttribute(\"stroke-width\", 2); });\n\n  var curveG = el(\"g\", {}, svg);\n  var cd = \"\", sd30 = SIGMA / Math.sqrt(30);\n  for (var x = 1.8; x <= 5.2; x += 0.04) cd += (cd ? \" L \" : \"M \") + PXh(x).toFixed(1) + \" \" + (BASE - (Math.exp(-((x - MU) * (x - MU)) / (2 * sd30 * sd30)) / (sd30 * Math.sqrt(2 * Math.PI))) * SY).toFixed(1);\n  el(\"path\", { d: cd, fill: \"none\", stroke: \"#e2b44a\", \"stroke-width\": 3 }, curveG);\n  txt(curveG, PXh(4.7), 150, \"lbl lbl-y\", \"normal curve\", \"start\");\n  txt(curveG, PXh(4.7), 166, \"note\", \"mean 3.5, spread σ/√30\", \"start\");\n\n  var stat = txt(svg, 612, 58, \"mono\", \"\", \"end\");\n  var stat2 = txt(svg, 612, 80, \"note\", \"\", \"end\");\n  var spreadG = el(\"g\", {}, svg);\n  var s5 = SIGMA / Math.sqrt(5);\n  var a5 = arrow(spreadG, \"b\", 3); setLine(a5, PXh(3.5), 118, PXh(3.5 + s5), 118);\n  txt(spreadG, PXh(3.5 + s5) + 8, 122, \"lbl lbl-b\", \"n = 5: spread 0.76\", \"start\");\n  var a30 = arrow(spreadG, \"p\", 3); setLine(a30, PXh(3.5), 138, PXh(3.5 + sd30), 138);\n  txt(spreadG, PXh(3.5 + sd30) + 8, 142, \"lbl lbl-p\", \"n = 30: spread 0.31\", \"start\");\n\n  var cmpG = el(\"g\", {}, svg);\n  card(cmpG, 30, 70, 280, 230, \"fillA\");\n  txt(cmpG, 170, 102, \"lbl lbl-b\", \"LAW OF LARGE NUMBERS\", \"middle\");\n  txt(cmpG, 170, 130, \"note\", \"where does ONE sample mean go\", \"middle\");\n  txt(cmpG, 170, 146, \"note\", \"as the sample size n grows?\", \"middle\");\n  var lp = \"\";\n  for (var q = 1; q <= 40; q++) lp += (lp ? \" L \" : \"M \") + (60 + q * 5).toFixed(1) + \" \" + (230 - (0.5 + 0.35 * Math.sin(q * 1.3) / Math.sqrt(q)) * 70 + 20).toFixed(1);\n  el(\"path\", { d: lp, fill: \"none\", stroke: \"#38bdf8\", \"stroke-width\": 3 }, cmpG);\n  el(\"line\", { x1: 60, y1: 230 - 0.5 * 70 + 20, x2: 270, y2: 230 - 0.5 * 70 + 20, stroke: \"#e2b44a\", \"stroke-width\": 2, \"stroke-dasharray\": \"5 4\" }, cmpG);\n  txt(cmpG, 170, 282, \"lbl lbl-y\", \"→ settles toward μ\", \"middle\");\n  card(cmpG, 330, 70, 280, 230, \"fillB\");\n  txt(cmpG, 470, 102, \"lbl lbl-p\", \"CENTRAL LIMIT THEOREM\", \"middle\");\n  txt(cmpG, 470, 130, \"note\", \"how are MANY sample means\", \"middle\");\n  txt(cmpG, 470, 146, \"note\", \"spread over repeated samples?\", \"middle\");\n  var bp = \"\";\n  for (var z = -3; z <= 3.01; z += 0.2) bp += (bp ? \" L \" : \"M \") + (470 + z * 36).toFixed(1) + \" \" + (262 - Math.exp(-z * z / 2) * 80).toFixed(1);\n  el(\"path\", { d: bp, fill: \"none\", stroke: \"#f472b6\", \"stroke-width\": 3 }, cmpG);\n  txt(cmpG, 470, 282, \"lbl lbl-y\", \"→ approximately normal, spread σ/√n\", \"middle\");\n\n  var mlG = el(\"g\", {}, svg);\n  [[\"Error bars\", \"uncertainty of an average shrinks like 1/√n\", \"fillA\"], [\"Predictable averages\", \"means of many samples behave in a known way\", \"fillB\"], [\"Gaussian noise\", \"a common assumption, often justified by averaging many small effects\", \"fillG\"]].forEach(function (b, i) {\n    var y = 50 + i * 90;\n    card(mlG, 70, y, 500, 74, b[2]);\n    txt(mlG, 320, y + 30, \"big\", b[0], \"middle\");\n    txt(mlG, 320, y + 54, \"note\", b[1], \"middle\");\n  });\n  txt(mlG, 320, 326, \"lbl lbl-y\", \"true for averages, not for raw data\", \"middle\");\n\n  function showStats(arr, label, theory) {\n    stat.textContent = label + \"  mean of means \" + fmt(mean(arr), 2) + \"   spread \" + fmt(sd(arr), 2);\n    stat2.textContent = \"theory: σ/√n = \" + fmt(theory, 2);\n  }\n\n  function render(index, id) {\n    var i = index;\n    show(bigPop, i === 0);\n    show(popG, i >= 1 && i <= 7);\n    show(sampG, i === 1 || i === 2);\n    show(meanG, i === 2);\n    show(axG, i >= 2 && i <= 7);\n    show(meanLine, i >= 4 && i <= 7); show(meanLbl, i >= 4 && i <= 6); // step 7 draws two spread arrows right where this label sits\n    show(histG5, i === 3 || i === 4);\n    show(histG30, i === 5 || i === 6 || i === 7);\n    show(ghost5, i === 7);\n    show(curveG, i === 6 || i === 7);\n    show(spreadG, i === 7);\n    show(cmpG, i === 8);\n    show(mlG, i === 9);\n    show(stat, i >= 4 && i <= 7); show(stat2, i >= 4 && i <= 7);\n    if (i === 3) {\n      anim(\"rep\", 2600, function (e) {\n        var k = Math.max(1, Math.round(e * 150));\n        setBars(bars5, M5, k);\n        stat.textContent = \"\"; stat2.textContent = \"\";\n      });\n    }\n    if (i === 4) { setBars(bars5, M5, 2000); showStats(M5, \"n = 5:\", SIGMA / Math.sqrt(5)); }\n    if (i === 5) {\n      setBars(bars30, M30, 2000); showStats(M30, \"n = 30:\", sd30);\n      anim(\"grow\", 1100, function (e) {\n        var cur = binsOf(M30, 2000), old = binsOf(M5, 2000);\n        cur.forEach(function (c, b) {\n          var h = (lerp(old[b], c, e) / (2000 * BW)) * SY;\n          setBox(bars30[b], PXh(1 + b * BW) - (PXh(1 + BW) - PXh(1)) / 2 + 1, BASE - h, PXh(1 + BW) - PXh(1) - 2, h);\n        });\n      });\n    }\n    if (i === 6) { setBars(bars30, M30, 2000); showStats(M30, \"n = 30:\", sd30); }\n    if (i === 7) { setBars(bars30, M30, 2000); setBars(ghostBars, M5, 2000); stat.textContent = \"n = 5 (outline) vs n = 30 (filled)\"; stat2.textContent = \"same population, same mean 3.5\"; }\n  }\n\n\n  // ── shared runtime: stepping, explanation panel, educational autoplay pacing, bridge ──\n  var current = 0;\n  var explainHeadEl = document.getElementById(\"explain-h\");\n\n  // **bold** markers in an explanation become <strong> nodes (built with DOM calls, never innerHTML).\n  function setRich(node, str) {\n    node.textContent = \"\";\n    var parts = String(str).split(\"**\");\n    for (var i = 0; i < parts.length; i++) {\n      if (parts[i] === \"\") continue;\n      var seg = document.createElement(i % 2 ? \"strong\" : \"span\");\n      seg.textContent = parts[i];\n      node.appendChild(seg);\n    }\n  }\n\n  function explanationFor(index) {\n    var ex = (typeof EXPLAIN === \"object\" && EXPLAIN) ? EXPLAIN[steps[index].id] : null;\n    return ex || { h: \"WHAT IS HAPPENING\", t: steps[index].caption };\n  }\n\n  // Autoplay pace: 4.5 to 10.5 seconds per step, longer for longer explanations, so a learner can read.\n  function stepMs(index) {\n    var words = String(explanationFor(index).t).replace(/\\*\\*/g, \"\").split(/\\s+/).length;\n    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));\n  }\n\n  function renderStep(index) {\n    var ex = explanationFor(index);\n    labelEl.textContent = steps[index].label;\n    if (explainHeadEl) explainHeadEl.textContent = ex.h;\n    setRich(captionEl, ex.t);\n    render(index, steps[index].id);\n  }\n\n  function goTo(index) {\n    if (index < 0 || index >= steps.length) return;\n    current = index;\n    renderStep(current);\n    if (window.ReagvisBridge) window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n\n  renderStep(current);\n\n  // Autoplay: exactly one timer, one step per tick, stops on the final step.\n  // PLAY on the final step restarts from the first step and plays again.\n  var timer = null;\n\n  function stopAuto() {\n    if (timer !== null) {\n      clearTimeout(timer);\n      timer = null;\n    }\n  }\n\n  function scheduleNext() {\n    timer = setTimeout(function () {\n      timer = null;\n      if (current >= steps.length - 1) return;\n      goTo(current + 1);\n      if (current < steps.length - 1) scheduleNext();\n    }, stepMs(current));\n  }\n\n  function startAuto() {\n    if (timer !== null) return;\n    if (current >= steps.length - 1) goTo(0);\n    scheduleNext();\n  }\n\n  window.addEventListener(\"pagehide\", stopAuto);\n\n  window.ReagvisAnimation = {\n    stepDuration: stepMs,\n    onCommand: function (type, stepId) {\n      if (type === \"PLAY\") startAuto();\n      else if (type === \"PAUSE\") stopAuto();\n      else if (type === \"NEXT\") { stopAuto(); goTo(current + 1); }\n      else if (type === \"PREVIOUS\") { stopAuto(); goTo(current - 1); }\n      else if (type === \"RESET\") { stopAuto(); goTo(0); }\n      else if (type === \"GOTO_STEP\") {\n        stopAuto();\n        for (var i = 0; i < steps.length; i++) {\n          if (steps[i].id === stepId) { goTo(i); break; }\n        }\n      }\n    },\n  };\n\n  if (window.ReagvisBridge) {\n    window.ReagvisBridge.ready();\n    window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n})();\n",
+  "lastFrozenContentHash": null,
+  "lastFrozenRevisionId": null,
+  "manifest": {
+    "bridgeVersion": {
+      "$numberInt": "1"
+    },
+    "capabilities": [
+      "play",
+      "pause",
+      "next",
+      "previous",
+      "reset",
+      "gotoStep"
+    ],
+    "heightPx": {
+      "$numberInt": "590"
+    },
+    "traceEvents": [
+      "source-distribution",
+      "sample",
+      "sample-mean",
+      "repeat",
+      "means-histogram",
+      "larger-n",
+      "normal-shape",
+      "narrower-spread",
+      "lln-vs-clt",
+      "ml-connection"
+    ]
+  },
+  "packageId": "fc317a17-6f4d-4423-8ca9-cf57af45c352",
+  "packageTrace": {
+    "steps": [
+      {
+        "animationEvent": "source-distribution",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "The population is flat: each face 1 to 6 has probability 1/6.",
+          "python": "from math import sqrt\n\nfaces = [1, 2, 3, 4, 5, 6]\nmu = sum(faces) / 6\nsigma = sqrt(sum((x - mu) ** 2 for x in faces) / 6)\nprint(mu, round(sigma, 2))   # 3.5 1.71"
+        },
+        "id": "source-distribution",
+        "label": "The population: a fair die"
+      },
+      {
+        "animationEvent": "sample",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Take a sample of 5 rolls.",
+          "python": "sample = [2, 6, 6, 1, 4]\nprint(len(sample), sample)"
+        },
+        "id": "sample",
+        "label": "Take one sample"
+      },
+      {
+        "animationEvent": "sample-mean",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "The sample mean is the average of the sample.",
+          "python": "sample = [2, 6, 6, 1, 4]\nprint(sum(sample) / len(sample))   # 3.8"
+        },
+        "id": "sample-mean",
+        "label": "Compute the sample mean"
+      },
+      {
+        "animationEvent": "repeat",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Draw many fresh samples and record each sample mean.",
+          "python": "import random\nfrom math import sqrt\n\nsigma = sqrt(35 / 12)\n\ndef sample_mean(n):\n    return sum(random.randint(1, 6) for _ in range(n)) / n\nrandom.seed(0)\nmeans = [sample_mean(5) for _ in range(5)]\nprint([round(m, 1) for m in means])   # [3.4, 3.6, 3.4, 3.2, 3.4]: each sample gives one mean"
+        },
+        "id": "repeat",
+        "label": "Repeat many times"
+      },
+      {
+        "animationEvent": "means-histogram",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Collect 2000 sample means (n = 5) and summarize them.",
+          "python": "import random\nfrom math import sqrt\n\nsigma = sqrt(35 / 12)\n\ndef sample_mean(n):\n    return sum(random.randint(1, 6) for _ in range(n)) / n\nrandom.seed(0)\nmeans = [sample_mean(5) for _ in range(2000)]\nm = sum(means) / len(means)\nsd = sqrt(sum((x - m) ** 2 for x in means) / len(means))\nprint(round(m, 2), round(sd, 2))   # 3.49 0.77"
+        },
+        "id": "means-histogram",
+        "label": "Histogram of the sample means"
+      },
+      {
+        "animationEvent": "larger-n",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Repeat with n = 30: the sample means are more concentrated.",
+          "python": "import random\nfrom math import sqrt\n\nsigma = sqrt(35 / 12)\n\ndef sample_mean(n):\n    return sum(random.randint(1, 6) for _ in range(n)) / n\nrandom.seed(0)\nmeans = [sample_mean(30) for _ in range(2000)]\nm = sum(means) / len(means)\nsd = sqrt(sum((x - m) ** 2 for x in means) / len(means))\nprint(round(m, 2), round(sd, 2))   # 3.5 0.31"
+        },
+        "id": "larger-n",
+        "label": "Use bigger samples"
+      },
+      {
+        "animationEvent": "normal-shape",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "About 68% of values from a normal curve lie within one standard deviation of the mean.",
+          "python": "import random\nfrom math import sqrt\n\nsigma = sqrt(35 / 12)\n\ndef sample_mean(n):\n    return sum(random.randint(1, 6) for _ in range(n)) / n\nrandom.seed(0)\nmeans = [sample_mean(30) for _ in range(2000)]\nse = sigma / sqrt(30)\nshare = sum(1 for x in means if abs(x - 3.5) <= se) / len(means)\nprint(round(share, 2))   # 0.69: close to 0.68, as for a bell shape"
+        },
+        "id": "normal-shape",
+        "label": "A normal curve fits"
+      },
+      {
+        "animationEvent": "narrower-spread",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "standard error = sigma / sqrt(n)",
+          "python": "from math import sqrt\n\nsigma = sqrt(35 / 12)\nfor n in [5, 30, 120]:\n    print(n, round(sigma / sqrt(n), 2))   # 5 0.76 / 30 0.31 / 120 0.16"
+        },
+        "id": "narrower-spread",
+        "label": "Bigger n, narrower spread"
+      },
+      {
+        "animationEvent": "lln-vs-clt",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "LLN: where one sample mean goes. CLT: how many sample means are distributed.",
+          "python": "lln = 'one sample mean settles toward mu as n grows'\nclt = 'many sample means are approximately normal, spread sigma / sqrt(n)'\nprint(lln)\nprint(clt)"
+        },
+        "id": "lln-vs-clt",
+        "label": "LLN versus CLT"
+      },
+      {
+        "animationEvent": "ml-connection",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Uncertainty about an average shrinks like 1 / sqrt(n).",
+          "python": "from math import sqrt\n\nsigma = sqrt(35 / 12)\nfor n in [100, 400]:\n    print(n, round(sigma / sqrt(n), 3))   # 100 0.171 / 400 0.085: four times the data halves it"
+        },
+        "id": "ml-connection",
+        "label": "Why ML cares"
+      }
+    ],
+    "version": {
+      "$numberInt": "1"
+    }
+  },
+  "revision": {
+    "$numberInt": "5"
+  },
+  "revisionId": "r2",
+  "sourceKind": "zip",
+  "status": "frozen",
+  "title": "ML Module 5 — Central Limit Theorem",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498642"
+    }
+  },
+  "updatedBy": {
+    "$oid": "000000000000000000000000"
+  }
+}

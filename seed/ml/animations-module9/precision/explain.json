@@ -1,0 +1,38 @@
+{
+ "matrix": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "The evaluation set again: **100 emails**, rows are actual, columns are predicted, and spam is the positive class. **TP = 16, FN = 4, FP = 8, TN = 72.**"
+ },
+ "predicted-positive-column": {
+  "h": "THE PREDICTED-SPAM COLUMN",
+  "t": "Precision looks **only at the emails the filter flagged** as spam. That is the predicted-spam **column** of the matrix: 16 + 8 = **24** emails."
+ },
+ "select-tp": {
+  "h": "FLAGGED AND REALLY SPAM",
+  "t": "Of the 24 flagged emails, **16 really are spam**: the true positives."
+ },
+ "select-fp": {
+  "h": "FLAGGED BUT LEGITIMATE",
+  "t": "The other **8** flagged emails are legitimate: false positives, **good mail blocked by mistake**."
+ },
+ "precision-question": {
+  "h": "THE PRECISION QUESTION",
+  "t": "Precision asks one question: **when the model says spam, how often is it right?**"
+ },
+ "numerator": {
+  "h": "THE NUMERATOR",
+  "t": "The numerator counts the flagged emails that really are spam: **TP = 16**."
+ },
+ "denominator": {
+  "h": "THE DENOMINATOR",
+  "t": "The denominator is **all predicted positives**, the whole predicted-spam column: **TP + FP = 24**. Notice that it is not all of the spam."
+ },
+ "calculate": {
+  "h": "CALCULATE PRECISION",
+  "t": "**Precision = TP / (TP + FP) = 16 / 24, about 0.667.** One more check against the matrix: 24 emails were flagged."
+ },
+ "interpret": {
+  "h": "TAKEAWAY",
+  "t": "Two out of every three emails the filter blocks really are spam; **one in three is legitimate**. Precision says nothing about spam that was never flagged: that question is answered by recall."
+ }
+}

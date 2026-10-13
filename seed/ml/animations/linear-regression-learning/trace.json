@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "steps": [
+    {
+      "id": "plot-data",
+      "label": "Plot the data points",
+      "animationEvent": "plot-data",
+      "code": {
+        "pseudocode": "Treat each student as one point: hours studied is the input x, exam score is the target y.",
+        "python": "hours = [1, 2, 3, 4, 5]\nscores = [42, 51, 61, 68, 78]\npoints = list(zip(hours, scores))\nprint(points[0])"
+      }
+    },
+    {
+      "id": "initialize",
+      "label": "Start with a flat line",
+      "animationEvent": "initialize",
+      "code": {
+        "pseudocode": "Choose starting values for the line prediction = w * x + b. With w = 0 and b = 0 the line predicts 0 for every student.",
+        "python": "def predict(x, w, b):\n    return w * x + b\n\ndef mse(w, b):\n    errors = [(predict(x, w, b) - y) ** 2 for x, y in zip(hours, scores)]\n    return sum(errors) / len(errors)\nprint(predict(3, 0, 0))"
+      }
+    },
+    {
+      "id": "predict",
+      "label": "Predict with the line",
+      "animationEvent": "predict",
+      "code": {
+        "pseudocode": "For each student, plug their hours into the line to get a predicted score.",
+        "python": "hours = [1, 2, 3, 4, 5]\nscores = [42, 51, 61, 68, 78]\ndef predict(x, w, b):\n    return w * x + b\n\nprint([predict(x, 9, 33) for x in hours])"
+      }
+    },
+    {
+      "id": "error",
+      "label": "Measure each error",
+      "animationEvent": "error",
+      "code": {
+        "pseudocode": "For each student, subtract the predicted score from the actual score. That difference is the error, or residual.",
+        "python": "hours = [1, 2, 3, 4, 5]\nscores = [42, 51, 61, 68, 78]\npredictions = [0 * x + 0 for x in hours]\nerrors = [y - p for y, p in zip(scores, predictions)]\nprint(errors)"
+      }
+    },
+    {
+      "id": "loss",
+      "label": "Average the squared errors (MSE)",
+      "animationEvent": "loss",
+      "code": {
+        "pseudocode": "Square every error so negatives do not cancel and big misses count more, then take the average. That is the MSE.",
+        "python": "hours = [1, 2, 3, 4, 5]\nscores = [42, 51, 61, 68, 78]\ndef predict(x, w, b):\n    return w * x + b\n\ndef mse(w, b):\n    errors = [(predict(x, w, b) - y) ** 2 for x, y in zip(hours, scores)]\n    return sum(errors) / len(errors)\nprint(round(mse(0, 0), 1))"
+      }
+    },
+    {
+      "id": "adjust",
+      "label": "Adjust w and b",
+      "animationEvent": "adjust",
+      "code": {
+        "pseudocode": "Try different values of w and b, and keep the ones that give a smaller MSE. Training automates this search.",
+        "python": "hours = [1, 2, 3, 4, 5]\nscores = [42, 51, 61, 68, 78]\ndef predict(x, w, b):\n    return w * x + b\n\ndef mse(w, b):\n    errors = [(predict(x, w, b) - y) ** 2 for x, y in zip(hours, scores)]\n    return sum(errors) / len(errors)\nprint(round(mse(0, 0), 1), round(mse(5, 20), 1))"
+      }
+    },
+    {
+      "id": "better-fit",
+      "label": "A better-fitting line",
+      "animationEvent": "better-fit",
+      "code": {
+        "pseudocode": "The line with the smallest MSE fits the data best. Here w = 9 and b = 33 give an MSE of 0.4.",
+        "python": "hours = [1, 2, 3, 4, 5]\nscores = [42, 51, 61, 68, 78]\ndef predict(x, w, b):\n    return w * x + b\n\ndef mse(w, b):\n    errors = [(predict(x, w, b) - y) ** 2 for x, y in zip(hours, scores)]\n    return sum(errors) / len(errors)\nprint(round(mse(9, 33), 1))"
+      }
+    }
+  ]
+}

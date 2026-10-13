@@ -1,0 +1,54 @@
+{
+  "title": "What are we estimating? Parameters and estimates",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "unknown-parameter",
+      "label": "An unknown parameter",
+      "pseudocode": "The coin has a fixed probability p of heads. We can see flips, never p itself.",
+      "python": "import random\n\nrandom.seed(4)\nhidden_p = 0.7                       # exists, but we cannot see it\nflip = lambda: 'H' if random.random() < hidden_p else 'T'\nprint(flip() in 'HT')                # True: we only ever observe flips"
+    },
+    {
+      "id": "collect-data",
+      "label": "Collect data",
+      "pseudocode": "Flip the coin and record what happens.",
+      "python": "flips = \"HHTHH\"\nheads = flips.count(\"H\")\ntails = len(flips) - heads\nprint(flips, heads, 'heads')   # HHTHH 4 heads"
+    },
+    {
+      "id": "sample",
+      "label": "A sample from a larger population",
+      "pseudocode": "Our flips are a small sample from the population of all flips the coin could make.",
+      "python": "sample = 'HHTHH'\nprint(len(sample), 'flips: a small sample of a much larger population')"
+    },
+    {
+      "id": "candidate-values",
+      "label": "Candidate values of p",
+      "pseudocode": "A candidate p predicts how many heads we should expect.",
+      "python": "for p in [0.2, 0.5, 0.8]:\n    print(p, 'expects', p * 5, 'heads in 5 flips')   # 1.0 / 2.5 / 4.0"
+    },
+    {
+      "id": "compare-candidates",
+      "label": "Compare candidates with the data",
+      "pseudocode": "Measure how far each candidate's expectation is from the observed count.",
+      "python": "seen = 4\nfor p in [0.2, 0.5, 0.8]:\n    print(p, abs(p * 5 - seen))   # 3.0 / 1.5 / 0.0"
+    },
+    {
+      "id": "estimate",
+      "label": "The estimate",
+      "pseudocode": "estimator: heads / flips. estimate: the number it gives for this sample.",
+      "python": "flips = \"HHTHH\"\nheads = flips.count(\"H\")\ntails = len(flips) - heads\nestimate = heads / len(flips)\nprint(estimate)   # 0.8"
+    },
+    {
+      "id": "uncertainty",
+      "label": "Estimates vary",
+      "pseudocode": "Different samples from the same coin give different estimates.",
+      "python": "for flips in ['HHTHH', 'HTTHT', 'HTHHT']:\n    print(flips, flips.count('H') / len(flips))   # 0.8 / 0.4 / 0.6"
+    },
+    {
+      "id": "ml-connection",
+      "label": "Parameters are what models learn",
+      "pseudocode": "The estimated parameter determines the model's predictions.",
+      "python": "p_hat = 4 / 5\nprint('P(next flip is heads) =', p_hat)   # 0.8"
+    }
+  ]
+}

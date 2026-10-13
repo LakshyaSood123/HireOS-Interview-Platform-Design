@@ -1,0 +1,54 @@
+{
+  "title": "Convex sets",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "region",
+      "label": "A region of allowed choices",
+      "pseudocode": "A set is a region of allowed points. This one is a disk of radius 3.",
+      "python": "from math import hypot\n\ndef in_disk(p):\n    return hypot(p[0], p[1]) <= 3\n\ndef in_ring(p):\n    return 2 <= hypot(p[0], p[1]) <= 3\n\ndef point_on_segment(x, y, lam):\n    return (lam * x[0] + (1 - lam) * y[0], lam * x[1] + (1 - lam) * y[1])\n\nprint(in_disk((1, 1)), in_disk((4, 0)))   # True False"
+    },
+    {
+      "id": "two-points",
+      "label": "Pick any two points",
+      "pseudocode": "Pick two points that are both in the set.",
+      "python": "from math import hypot\n\ndef in_disk(p):\n    return hypot(p[0], p[1]) <= 3\n\ndef in_ring(p):\n    return 2 <= hypot(p[0], p[1]) <= 3\n\ndef point_on_segment(x, y, lam):\n    return (lam * x[0] + (1 - lam) * y[0], lam * x[1] + (1 - lam) * y[1])\n\nA, B = (-1.5, 1.5), (2.0, -1.0)\nprint(in_disk(A), in_disk(B))   # True True"
+    },
+    {
+      "id": "connect",
+      "label": "Connect them with a straight line",
+      "pseudocode": "Points on the segment are lam * x + (1 - lam) * y for lam from 0 to 1.",
+      "python": "from math import hypot\n\ndef in_disk(p):\n    return hypot(p[0], p[1]) <= 3\n\ndef in_ring(p):\n    return 2 <= hypot(p[0], p[1]) <= 3\n\ndef point_on_segment(x, y, lam):\n    return (lam * x[0] + (1 - lam) * y[0], lam * x[1] + (1 - lam) * y[1])\n\nA, B = (-1.5, 1.5), (2.0, -1.0)\nprint(point_on_segment(A, B, 0.5))   # (0.25, 0.25)"
+    },
+    {
+      "id": "segment-inside",
+      "label": "The segment stays inside",
+      "pseudocode": "Check many points of the segment: all are inside the disk.",
+      "python": "from math import hypot\n\ndef in_disk(p):\n    return hypot(p[0], p[1]) <= 3\n\ndef in_ring(p):\n    return 2 <= hypot(p[0], p[1]) <= 3\n\ndef point_on_segment(x, y, lam):\n    return (lam * x[0] + (1 - lam) * y[0], lam * x[1] + (1 - lam) * y[1])\n\nA, B = (-1.5, 1.5), (2.0, -1.0)\nprint(all(in_disk(point_on_segment(A, B, i / 10)) for i in range(11)))   # True"
+    },
+    {
+      "id": "convex-example",
+      "label": "More convex shapes",
+      "pseudocode": "A square and a half-plane are convex too: midpoints of members stay inside.",
+      "python": "def in_square(p):\n    return abs(p[0]) <= 2 and abs(p[1]) <= 2\n\ndef in_half_plane(p):\n    return p[0] + p[1] <= 2\n\nprint(in_square((0.0, 0.0)), in_half_plane((0.5, 0.5)))   # True True : midpoints of members stay inside\nprint(in_square((1.5, -1.0)), in_half_plane((1.0, 0.5)))  # True True"
+    },
+    {
+      "id": "nonconvex-region",
+      "label": "A shape that is not convex",
+      "pseudocode": "The ring is a disk with a hole. Two points on opposite sides are both inside it.",
+      "python": "from math import hypot\n\ndef in_disk(p):\n    return hypot(p[0], p[1]) <= 3\n\ndef in_ring(p):\n    return 2 <= hypot(p[0], p[1]) <= 3\n\ndef point_on_segment(x, y, lam):\n    return (lam * x[0] + (1 - lam) * y[0], lam * x[1] + (1 - lam) * y[1])\n\nx, y = (-2.5, 0.0), (2.5, 0.0)\nprint(in_ring(x), in_ring(y))   # True True"
+    },
+    {
+      "id": "segment-leaves",
+      "label": "The segment leaves the set",
+      "pseudocode": "The midpoint of the two ring points is in the hole, so the ring is not convex.",
+      "python": "from math import hypot\n\ndef in_disk(p):\n    return hypot(p[0], p[1]) <= 3\n\ndef in_ring(p):\n    return 2 <= hypot(p[0], p[1]) <= 3\n\ndef point_on_segment(x, y, lam):\n    return (lam * x[0] + (1 - lam) * y[0], lam * x[1] + (1 - lam) * y[1])\n\nx, y = (-2.5, 0.0), (2.5, 0.0)\nmid = point_on_segment(x, y, 0.5)\nprint(mid, in_ring(mid))   # (0.0, 0.0) False"
+    },
+    {
+      "id": "optimization-connection",
+      "label": "Why optimization cares",
+      "pseudocode": "Count the points of the segment that leave the set.",
+      "python": "from math import hypot\n\ndef in_disk(p):\n    return hypot(p[0], p[1]) <= 3\n\ndef in_ring(p):\n    return 2 <= hypot(p[0], p[1]) <= 3\n\ndef point_on_segment(x, y, lam):\n    return (lam * x[0] + (1 - lam) * y[0], lam * x[1] + (1 - lam) * y[1])\n\nx, y = (-2.5, 0.0), (2.5, 0.0)\noutside = sum(1 for i in range(11) if not in_ring(point_on_segment(x, y, i / 10)))\nprint(outside)   # 7 : part of the segment is outside the ring"
+    }
+  ]
+}

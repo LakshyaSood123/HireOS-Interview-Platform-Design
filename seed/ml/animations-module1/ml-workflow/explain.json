@@ -1,0 +1,42 @@
+{
+ "problem": {
+  "h": "STEP 1: DEFINE THE GOAL",
+  "t": "Every project begins with a **clear goal**: **predict the sale price of a house before it is sold**. The goal decides what data we need and how we will judge success."
+ },
+ "data": {
+  "h": "STEP 2: COLLECT DATA",
+  "t": "We gather **records of past house sales**: area, bedrooms, age and the price each house sold for. Past examples with known answers are the raw material for learning."
+ },
+ "features-target": {
+  "h": "STEP 3: CHOOSE X AND y",
+  "t": "**Features X** are area, bedrooms and age. The **target y** is the sale price. Features are the inputs; the target is the answer the model should predict."
+ },
+ "split": {
+  "h": "STEP 4: SPLIT THE HOUSES",
+  "t": "Houses are separated into **train, validation and test** groups. A 70/15/15 split is only an example, not a rule. The test houses are set aside and **not touched**."
+ },
+ "model": {
+  "h": "STEP 5: CHOOSE A SIMPLE MODEL",
+  "t": "We start simple: **linear regression**, price = w · (area, bedrooms, age) + b. A simple model is easy to understand and a good baseline to beat."
+ },
+ "train": {
+  "h": "STEP 6: TRAIN",
+  "t": "**Adjust w and b using the training houses only.** This is where the model learns from data."
+ },
+ "validate": {
+  "h": "STEP 7: VALIDATE",
+  "t": "Measure the error on the **validation houses** and compare settings. Validation shows how the model behaves on houses it did not train on."
+ },
+ "improve": {
+  "h": "STEP 8: IMPROVE",
+  "t": "Change features or model settings, then **check the validation error again**. Improvement is a loop: change one thing, measure, repeat."
+ },
+ "test": {
+  "h": "STEP 9: ONE FINAL TEST",
+  "t": "Measure the error **once** on the test houses. These houses were **never used to train or choose**, so the result is an honest estimate."
+ },
+ "inference": {
+  "h": "TAKEAWAY",
+  "t": "A **new house goes in, the trained model runs, and an estimated sale price comes out**. This is **inference**: using the finished model on new data."
+ }
+}

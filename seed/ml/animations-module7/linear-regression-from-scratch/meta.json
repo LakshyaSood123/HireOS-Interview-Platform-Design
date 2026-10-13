@@ -1,0 +1,60 @@
+{
+  "title": "Linear regression from scratch with gradient descent",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "initialize",
+      "label": "Initialize the parameters",
+      "pseudocode": "Start with w = 0, b = 0 and a learning rate.",
+      "python": "w, b = 0.0, 0.0\nlr = 0.1\nprint(w, b, lr)\n# prints: 0.0 0.0 0.1"
+    },
+    {
+      "id": "predict",
+      "label": "Predict",
+      "pseudocode": "Predict every house with the current line.",
+      "python": "sizes = [1.0, 1.5, 2.0, 2.5, 3.0]\nprices = [2.0, 2.8, 3.7, 4.1, 5.2]\nw, b = 0.0, 0.0\nprint([w * x + b for x in sizes])\n# prints: [0.0, 0.0, 0.0, 0.0, 0.0]"
+    },
+    {
+      "id": "measure-error",
+      "label": "Measure the error",
+      "pseudocode": "Compute residuals (prediction - target) and the MSE.",
+      "python": "sizes = [1.0, 1.5, 2.0, 2.5, 3.0]\nprices = [2.0, 2.8, 3.7, 4.1, 5.2]\nw, b = 0.0, 0.0\nr = [(w * x + b) - y for x, y in zip(sizes, prices)]\nprint([round(e, 1) for e in r], round(sum(e * e for e in r) / len(r), 3))\n# prints: [-2.0, -2.8, -3.7, -4.1, -5.2] 13.876"
+    },
+    {
+      "id": "compute-gradients",
+      "label": "Compute the gradients",
+      "pseudocode": "d MSE / dw = 2/n * sum(r * x); d MSE / db = 2/n * sum(r).",
+      "python": "sizes = [1.0, 1.5, 2.0, 2.5, 3.0]\nprices = [2.0, 2.8, 3.7, 4.1, 5.2]\nw, b = 0.0, 0.0\nn = len(sizes)\nr = [(w * x + b) - y for x, y in zip(sizes, prices)]\ngrad_w = 2 / n * sum(e * x for e, x in zip(r, sizes))\ngrad_b = 2 / n * sum(r)\nprint(round(grad_w, 2), round(grad_b, 2))\n# prints: -15.78 -7.12"
+    },
+    {
+      "id": "update-w",
+      "label": "Update w",
+      "pseudocode": "w = w - learning_rate * grad_w.",
+      "python": "w, lr, grad_w = 0.0, 0.1, -15.78\nw = w - lr * grad_w\nprint(round(w, 3))\n# prints: 1.578"
+    },
+    {
+      "id": "update-b",
+      "label": "Update b",
+      "pseudocode": "b = b - learning_rate * grad_b.",
+      "python": "b, lr, grad_b = 0.0, 0.1, -7.12\nb = b - lr * grad_b\nprint(round(b, 3))\n# prints: 0.712"
+    },
+    {
+      "id": "new-line",
+      "label": "The new line",
+      "pseudocode": "The line after one round has a much lower MSE.",
+      "python": "sizes = [1.0, 1.5, 2.0, 2.5, 3.0]\nprices = [2.0, 2.8, 3.7, 4.1, 5.2]\nn = len(sizes)\n\ndef train_gd(epochs, lr=0.1):\n    w, b = 0.0, 0.0\n    for _ in range(epochs):\n        r = [(w * x + b) - y for x, y in zip(sizes, prices)]\n        gw = 2 / n * sum(e * x for e, x in zip(r, sizes))\n        gb = 2 / n * sum(r)\n        w, b = w - lr * gw, b - lr * gb\n    loss = sum(((w * x + b) - y) ** 2 for x, y in zip(sizes, prices)) / n\n    return w, b, loss\n\nw, b, loss = train_gd(1)\nprint(round(w, 3), round(b, 3), round(loss, 4))\n# prints: 1.578 0.712 0.1122"
+    },
+    {
+      "id": "repeat",
+      "label": "Repeat the loop",
+      "pseudocode": "Run the loop again and again.",
+      "python": "sizes = [1.0, 1.5, 2.0, 2.5, 3.0]\nprices = [2.0, 2.8, 3.7, 4.1, 5.2]\nn = len(sizes)\n\ndef train_gd(epochs, lr=0.1):\n    w, b = 0.0, 0.0\n    for _ in range(epochs):\n        r = [(w * x + b) - y for x, y in zip(sizes, prices)]\n        gw = 2 / n * sum(e * x for e, x in zip(r, sizes))\n        gb = 2 / n * sum(r)\n        w, b = w - lr * gw, b - lr * gb\n    loss = sum(((w * x + b) - y) ** 2 for x, y in zip(sizes, prices)) / n\n    return w, b, loss\n\nw, b, loss = train_gd(10)\nprint(round(w, 3), round(b, 3), round(loss, 4))\n# prints: 1.472 0.631 0.0191"
+    },
+    {
+      "id": "trained-line",
+      "label": "The trained line",
+      "pseudocode": "After many rounds the line stops changing.",
+      "python": "sizes = [1.0, 1.5, 2.0, 2.5, 3.0]\nprices = [2.0, 2.8, 3.7, 4.1, 5.2]\nn = len(sizes)\n\ndef train_gd(epochs, lr=0.1):\n    w, b = 0.0, 0.0\n    for _ in range(epochs):\n        r = [(w * x + b) - y for x, y in zip(sizes, prices)]\n        gw = 2 / n * sum(e * x for e, x in zip(r, sizes))\n        gb = 2 / n * sum(r)\n        w, b = w - lr * gw, b - lr * gb\n    loss = sum(((w * x + b) - y) ** 2 for x, y in zip(sizes, prices)) / n\n    return w, b, loss\n\nw, b, loss = train_gd(500)\nprint(round(w, 3), round(b, 3), round(loss, 4))\n# prints: 1.54 0.48 0.0166"
+    }
+  ]
+}

@@ -10,6 +10,8 @@ import {
   resetCmsDraftToPublished,
   saveCmsDraft,
   validateCmsDraft,
+  CMS_DSA_COURSE_ID,
+  CMS_EDITABLE_COURSES,
   type CmsDraft,
   type CmsValidationIssue,
   type CmsVersionSummary,
@@ -47,9 +49,9 @@ function countAll(course: CreatorCourse) {
   }
 }
 
-function draftToCourse(draft: CmsDraft): CreatorCourse {
+function draftToCourse(draft: CmsDraft, courseId: string): CreatorCourse {
   return {
-    id: CMS_COURSE_ID,
+    id: courseId,
     title: draft.title,
     courseType: "structured-dsa",
     dsaZones: draft.zones,
@@ -57,13 +59,15 @@ function draftToCourse(draft: CmsDraft): CreatorCourse {
   } as CreatorCourse
 }
 
-const CMS_COURSE_ID = "dsa-foundations"
-
 /** Draft canonical source is the backend CMS — see dsaCmsClient.ts. This
  * shell no longer reads/writes localStorage as the source of truth; it only
  * holds the currently-loaded draft and its server revision in React state. */
 export default function DsaEditorShell({ onBackToDashboard }: DsaEditorShellProps) {
   const { client } = useAuth()
+  // Which backend CMS course the editor is working on. DSA is the default;
+  // Machine Learning Foundations is the second course (see CMS_EDITABLE_COURSES).
+  const [cmsCourseId, setCmsCourseId] = useState<string>(CMS_DSA_COURSE_ID)
+  const isDsaCourse = cmsCourseId === CMS_DSA_COURSE_ID
   const [loadState, setLoadState] = useState<LoadState>("loading")
   const [loadError, setLoadError] = useState<string | null>(null)
   const [course, setCourse] = useState<CreatorCourse | null>(null)
@@ -95,9 +99,9 @@ export default function DsaEditorShell({ onBackToDashboard }: DsaEditorShellProp
   const loadDraft = () => {
     setLoadState("loading")
     setLoadError(null)
-    loadCmsDraft(client)
+    loadCmsDraft(client, cmsCourseId)
       .then(draft => {
-        const loaded = draftToCourse(draft)
+        const loaded = draftToCourse(draft, cmsCourseId)
         setCourse(loaded)
         setRevision(draft.revision)
         setSavedSnapshot(JSON.stringify(loaded.dsaZones))
@@ -115,7 +119,22 @@ export default function DsaEditorShell({ onBackToDashboard }: DsaEditorShellProp
       })
   }
 
-  useEffect(loadDraft, [client])
+  useEffect(loadDraft, [client, cmsCourseId])
+
+  // Switching courses replaces the draft in view. Unsaved edits to the current
+  // draft would be lost, so the author confirms first.
+  const handleCourseChange = (nextCourseId: string) => {
+    if (nextCourseId === cmsCourseId) return
+    if (isDirty && !window.confirm("Discard your unsaved changes to this draft and switch courses?")) return
+    setCmsCourseId(nextCourseId)
+    setSelectedZoneId(null)
+    setSelectedModuleId(null)
+    setSelectedCheckpointId(null)
+    setPreviewTarget({ zoneId: null, moduleId: null, checkpointId: null })
+    setVersions(null)
+    setConflict(null)
+    setSaveError(null)
+  }
 
   const isDirty = useMemo(() => (course ? JSON.stringify(course.dsaZones) !== savedSnapshot : false), [course, savedSnapshot])
   const counts = useMemo(() => (course ? countAll(course) : { zones: 0, modules: 0, checkpoints: 0 }), [course])
@@ -139,8 +158,8 @@ export default function DsaEditorShell({ onBackToDashboard }: DsaEditorShellProp
     setSaveError(null)
     setConflict(null)
     try {
-      const saved = await saveCmsDraft(client, course.dsaZones ?? [], revision)
-      const nextCourse = draftToCourse(saved)
+      const saved = await saveCmsDraft(client, cmsCourseId, course.dsaZones ?? [], revision)
+      const nextCourse = draftToCourse(saved, cmsCourseId)
       setCourse(nextCourse)
       setRevision(saved.revision)
       setSavedSnapshot(JSON.stringify(nextCourse.dsaZones))
@@ -165,6 +184,12 @@ export default function DsaEditorShell({ onBackToDashboard }: DsaEditorShellProp
 
   const handleResetConfirmed = async (kind: "static" | "published") => {
     setShowResetConfirm(null)
+    if (kind === "static" && !isDsaCourse) {
+      // The static reset imports the DSA curriculum. It must never overwrite
+      // another course's draft.
+      setSaveError("The static reset only applies to the DSA course. Use Reset to Published for this course.")
+      return
+    }
     if (kind === "static") {
       // Client-side only: replaces the in-memory draft with a fresh import
       // of the current static frontend DSA course. NOT saved automatically —
@@ -180,8 +205,8 @@ export default function DsaEditorShell({ onBackToDashboard }: DsaEditorShellProp
     // operation from the client-side reset above.
     setSaving(true)
     try {
-      const reset = await resetCmsDraftToPublished(client)
-      const nextCourse = draftToCourse(reset)
+      const reset = await resetCmsDraftToPublished(client, cmsCourseId)
+      const nextCourse = draftToCourse(reset, cmsCourseId)
       setCourse(nextCourse)
       setRevision(reset.revision)
       setSavedSnapshot(JSON.stringify(nextCourse.dsaZones))
@@ -198,7 +223,7 @@ export default function DsaEditorShell({ onBackToDashboard }: DsaEditorShellProp
     setPublishing(true)
     setPublishIssues(null)
     try {
-      const result = await publishCmsDraft(client)
+      const result = await publishCmsDraft(client, cmsCourseId)
       setPublishFlash(`Published ${result.snapshotVersion} (${result.snapshotCheckpointCount} checkpoints)`)
       setTimeout(() => setPublishFlash(null), 4000)
       loadDraft() // publishing recreates a fresh draft server-side
@@ -216,7 +241,7 @@ export default function DsaEditorShell({ onBackToDashboard }: DsaEditorShellProp
 
   const loadVersions = () => {
     setVersionsError(null)
-    listCmsVersions(client)
+    listCmsVersions(client, cmsCourseId)
       .then(setVersions)
       .catch(error => setVersionsError(error instanceof ApiRequestError ? error.message : "Couldn't load versions."))
   }
@@ -233,7 +258,7 @@ export default function DsaEditorShell({ onBackToDashboard }: DsaEditorShellProp
   const handleRollback = async (versionId: string) => {
     setRollingBack(true)
     try {
-      await activateCmsVersion(client, versionId)
+      await activateCmsVersion(client, cmsCourseId, versionId)
       setActiveVersion(versionId)
       loadVersions()
       flash(`Rolled back to ${versionId}`)
@@ -300,7 +325,18 @@ export default function DsaEditorShell({ onBackToDashboard }: DsaEditorShellProp
           </button>
           <div className="min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-sm font-black text-white truncate">DSA Interview Trail</h1>
+              <select
+                aria-label="Course"
+                value={cmsCourseId}
+                onChange={e => handleCourseChange(e.target.value)}
+                className="text-sm font-black text-white bg-transparent border border-white/15 rounded-md px-2 py-0.5 cursor-pointer"
+              >
+                {CMS_EDITABLE_COURSES.map(c => (
+                  <option key={c.id} value={c.id} className="bg-[#0b1d16]">
+                    {c.label}
+                  </option>
+                ))}
+              </select>
               <span className="px-2 py-0.5 rounded-full text-[9.5px] font-black uppercase tracking-wider shrink-0 bg-amber-500/15 text-amber-300 border border-amber-500/30">
                 Draft · CMS backend
               </span>
@@ -327,7 +363,10 @@ export default function DsaEditorShell({ onBackToDashboard }: DsaEditorShellProp
           </button>
           <button
             onClick={() => setShowResetConfirm("static")}
-            title="Replace the draft with a fresh import of the current static frontend DSA course (unsaved until you Save Draft)"
+            disabled={!isDsaCourse}
+            title={isDsaCourse
+              ? "Replace the draft with a fresh import of the current static frontend DSA course (unsaved until you Save Draft)"
+              : "Only available for the DSA course"}
             className="px-4 py-2 rounded-xl text-xs font-bold text-red-300 bg-red-500/10 hover:bg-red-500/15 border border-red-500/25 cursor-pointer transition-all"
           >
             Reset to Static DSA

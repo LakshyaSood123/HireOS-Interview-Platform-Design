@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "steps": [
+    {
+      "id": "dataset",
+      "label": "One dataset, split into two halves",
+      "animationEvent": "dataset",
+      "code": {
+        "pseudocode": "Use one dataset. Keep half of the examples for training and hold the other half out for validation.",
+        "python": "xs = [i * 10 / 29 for i in range(30)]\nys = [1.5 + 0.12 * (x - 5) ** 2 for x in xs]\npoints = list(zip(xs, ys))\ntrain = points[::2]\nvalidation = points[1::2]\nprint(len(train), len(validation))"
+      }
+    },
+    {
+      "id": "underfit",
+      "label": "Underfit: model too simple",
+      "animationEvent": "underfit",
+      "code": {
+        "pseudocode": "Fit a model that is too simple for the pattern, such as a constant. Its error is high on training examples and on validation examples.",
+        "python": "train_y = [4.0, 5.0, 7.0]\nconstant = sum(train_y) / len(train_y)\nprint(round(constant, 2))"
+      }
+    },
+    {
+      "id": "good-fit",
+      "label": "Good fit: captures the trend",
+      "animationEvent": "good-fit",
+      "code": {
+        "pseudocode": "Use a model flexible enough to follow the main trend, but not so flexible that it follows the noise. Both errors stay small.",
+        "python": "def trend(x):\n    return 1.5 + 0.12 * (x - 5) ** 2\n\nprint(round(trend(5), 2), round(trend(0), 2))"
+      }
+    },
+    {
+      "id": "overfit",
+      "label": "Overfit: memorizes the noise",
+      "animationEvent": "overfit",
+      "code": {
+        "pseudocode": "Choose a curve that passes through every training example. Training error becomes zero, but the curve swings away from new examples.",
+        "python": "train = {0.0: 3.1, 2.0: 4.0, 4.0: 2.2}\nprint(train[0.0], train[2.0], train[4.0])  # zero training error on these points"
+      }
+    },
+    {
+      "id": "train-vs-validation",
+      "label": "Compare training and validation error",
+      "animationEvent": "train-vs-validation",
+      "code": {
+        "pseudocode": "For each model, measure error on training examples and on validation examples. A large gap between them means the model did not generalize.",
+        "python": "def mse(predictions, actuals):\n    return sum((p - a) ** 2 for p, a in zip(predictions, actuals)) / len(actuals)\n\nprint(mse([1.0, 2.0], [1.0, 4.0]))"
+      }
+    },
+    {
+      "id": "generalize",
+      "label": "Judge models on unseen data",
+      "animationEvent": "generalize",
+      "code": {
+        "pseudocode": "Prefer the model with the best validation error, not the lowest training error. Validation shows performance on data the model has not memorized.",
+        "python": "errors = {'underfit': (2.9, 3.1), 'good': (0.6, 0.7), 'overfit': (0.0, 1.8)}\nbest = min(errors, key=lambda name: errors[name][1])\nprint(best)"
+      }
+    }
+  ]
+}

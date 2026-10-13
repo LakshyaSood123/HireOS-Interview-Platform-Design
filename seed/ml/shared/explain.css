@@ -1,0 +1,31 @@
+
+/* ── explanation panel (shared by every generated ML animation) ── */
+.explain {
+  box-sizing: border-box;
+  max-width: 640px;
+  margin-top: 4px;
+  padding: 14px 18px 16px;
+  min-height: 150px;
+  border-radius: 12px;
+  background: rgba(29, 181, 132, 0.10);
+  border: 1px solid rgba(29, 181, 132, 0.45);
+  border-left: 5px solid #1db584;
+}
+.explain-h {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #a7ce65;
+}
+.explain-t {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.55;
+  color: #f1faf4;
+}
+.explain-t strong {
+  font-weight: 800;
+  color: #ffd98a;
+}

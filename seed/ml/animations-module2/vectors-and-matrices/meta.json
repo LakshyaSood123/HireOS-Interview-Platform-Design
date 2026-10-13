@@ -1,0 +1,48 @@
+{
+  "title": "Vectors and matrices",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "scalar",
+      "label": "Start with one number",
+      "pseudocode": "A scalar is a single number, such as the area of one house.",
+      "python": "area = 1200\nprint(area)"
+    },
+    {
+      "id": "vector",
+      "label": "Group numbers into a vector",
+      "pseudocode": "List the features of one house in a fixed order. That ordered list is a vector.",
+      "python": "x = [1200, 2, 10]  # area, bedrooms, age\nprint(x)"
+    },
+    {
+      "id": "dimensions",
+      "label": "Count the dimension",
+      "pseudocode": "The dimension of a vector is how many entries it has.",
+      "python": "x = [1200, 2, 10]\nprint(len(x))  # 3"
+    },
+    {
+      "id": "matrix",
+      "label": "Stack the vectors into a matrix",
+      "pseudocode": "Put one vector per house on its own row. The table of rows is a matrix.",
+      "python": "X = [\n    [1200, 2, 10],\n    [1800, 3, 4],\n    [900, 1, 15],\n]\nprint(len(X), len(X[0]))  # 3 rows, 3 columns"
+    },
+    {
+      "id": "rows-columns",
+      "label": "Pick a row and a column",
+      "pseudocode": "A row is one house. A column is one feature for every house.",
+      "python": "X = [[1200, 2, 10], [1800, 3, 4], [900, 1, 15]]\nrow = X[1]                  # house 2\ncolumn = [r[0] for r in X]  # every area\nprint(row, column)"
+    },
+    {
+      "id": "transpose",
+      "label": "Transpose the matrix",
+      "pseudocode": "Swap rows and columns: the first column becomes the first row.",
+      "python": "X = [[1200, 2, 10], [1800, 3, 4], [900, 1, 15]]\nXt = [list(col) for col in zip(*X)]\nprint(Xt[0])  # [1200, 1800, 900]"
+    },
+    {
+      "id": "ml-dataset",
+      "label": "See the dataset as a matrix",
+      "pseudocode": "A machine learning dataset is a matrix: one row per example and one column per feature.",
+      "python": "X = [[1200, 2, 10], [1800, 3, 4], [900, 1, 15]]\nn_examples, n_features = len(X), len(X[0])\nprint(n_examples, n_features)"
+    }
+  ]
+}

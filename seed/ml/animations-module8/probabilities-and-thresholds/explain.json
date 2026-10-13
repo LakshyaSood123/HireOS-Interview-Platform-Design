@@ -1,0 +1,38 @@
+{
+ "probability-output": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "This classifier outputs an **estimated probability of spam** for each email, P(spam | x). The bars show the ten emails ordered by spam score. A probability is the model's estimate, **not yet a decision**."
+ },
+ "threshold-05": {
+  "h": "CHOOSE A THRESHOLD",
+  "t": "To act we need a rule: if the probability is **at least the threshold**, predict spam. The common default threshold is **0.5**."
+ },
+ "class-decision": {
+  "h": "TURN PROBABILITIES INTO CLASSES",
+  "t": "Bars at or above the line become **spam (pink)** and bars below become **not spam (blue)**. Red crosses mark the mistakes: the real mail at **0.62** and the spam at **0.38**."
+ },
+ "example-high": {
+  "h": "A HIGH PROBABILITY",
+  "t": "**P(spam) = 0.97** is at least 0.5, so this email is predicted spam. The probability is 0.97; the **prediction** is the class spam."
+ },
+ "example-low": {
+  "h": "A LOW PROBABILITY",
+  "t": "**P(spam) = 0.12** is below 0.5, so this email is predicted **not spam**."
+ },
+ "raise-threshold": {
+  "h": "RAISE THE THRESHOLD TO 0.8",
+  "t": "A stricter threshold: only emails with **P(spam) at least 0.8** are called spam. The bars have **not changed**, but the decisions have."
+ },
+ "predictions-change": {
+  "h": "DECISIONS CHANGED, PROBABILITIES DID NOT",
+  "t": "Two emails changed their decision (outlined): the real mail at **0.62** is no longer blocked, but the spam at **0.73** now slips through. The probabilities are exactly the same as before."
+ },
+ "lower-threshold": {
+  "h": "LOWER THE THRESHOLD TO 0.3",
+  "t": "A looser threshold: P(spam) at least **0.3** is called spam. Now the spam at **0.38** is caught, but the real mail at 0.62 is still blocked. **0.5 is a common default, not always best.**"
+ },
+ "tradeoff-preview": {
+  "h": "TAKEAWAY",
+  "t": "Different thresholds make different mistakes: a **low threshold blocks real mail** and a **high one lets spam through**. Model Evaluation studies how to measure and choose."
+ }
+}

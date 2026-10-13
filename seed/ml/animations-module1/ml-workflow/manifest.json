@@ -1,0 +1,23 @@
+{
+  "heightPx": 630,
+  "capabilities": [
+    "play",
+    "pause",
+    "next",
+    "previous",
+    "reset",
+    "gotoStep"
+  ],
+  "traceEvents": [
+    "problem",
+    "data",
+    "features-target",
+    "split",
+    "model",
+    "train",
+    "validate",
+    "improve",
+    "test",
+    "inference"
+  ]
+}

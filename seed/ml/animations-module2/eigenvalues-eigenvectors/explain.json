@@ -1,0 +1,30 @@
+{
+ "original-space": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "A ring of **arrows pointing in many directions**, all the same length. We will see what a matrix **does to every one of them**."
+ },
+ "transform": {
+  "h": "APPLY A MATRIX A",
+  "t": "The matrix **A** transforms every vector. It can change both its **direction and its length**, so the new, coloured arrows differ from the gray originals."
+ },
+ "most-vectors-turn": {
+  "h": "MOST VECTORS TURN",
+  "t": "Compare each arrow before and after. For almost every vector the **direction has turned**: the coloured arrow no longer lies along its gray original."
+ },
+ "special-direction": {
+  "h": "A FEW DIRECTIONS STAY PUT",
+  "t": "But along **two special lines** the transformed vector lands on the **same line it started on**. These are the directions the matrix treats most simply."
+ },
+ "eigenvector": {
+  "h": "THESE ARE THE EIGENVECTORS",
+  "t": "A vector that **keeps its direction** under A is an **eigenvector**. It is only stretched, shrunk or flipped, never turned."
+ },
+ "eigenvalue": {
+  "h": "THE SCALING FACTOR IS THE EIGENVALUE",
+  "t": "**A v = λ v.** Along **[1, 1]** the stretch is **λ = 3**, and along **[1, −1]** it is **λ = 1**. The eigenvalue says how much its eigenvector is stretched."
+ },
+ "ml-connection": {
+  "h": "TAKEAWAY",
+  "t": "For a data covariance matrix, the eigenvectors point along the **main directions of the data**, and the eigenvalues say how much spread lies along each. **PCA uses exactly these.**"
+ }
+}

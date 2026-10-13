@@ -1,0 +1,42 @@
+{
+ "fixed-responsibilities": {
+  "h": "WHAT HAPPENS IN THE M-STEP",
+  "t": "In the **M-step** the responsibilities from the E-step are **fixed**. Ten customers each carry a share of responsibility for A and for B. Now the **parameters** will change."
+ },
+ "select-component": {
+  "h": "REFIT COMPONENT A",
+  "t": "Start with component A. The question is: **which customers should shape its new mean, and by how much?**"
+ },
+ "point-weights": {
+  "h": "RESPONSIBILITY = WEIGHT",
+  "t": "Every customer contributes to A in proportion to its **responsibility for A**: customers at 1.5 and 2.0 weigh about **0.97 and 0.96**, the customer at 4.5 weighs **0.35**, and customers above 6 weigh almost nothing."
+ },
+ "weighted-points": {
+  "h": "WEIGHTED POINTS",
+  "t": "The circle sizes show the weights. **Heavy points pull the new mean strongly; light points hardly matter.**"
+ },
+ "weighted-sum": {
+  "h": "THE WEIGHTED SUM",
+  "t": "The total responsibility is **N_A = 4.083**. The weighted mean is the sum of **r × x** over all customers, divided by N_A."
+ },
+ "update-mean": {
+  "h": "UPDATE THE MEAN",
+  "t": "The new mean of A is **2.631**, down from 3. It moved toward the customers that A explains best."
+ },
+ "update-spread": {
+  "h": "UPDATE THE SPREAD",
+  "t": "The spread uses the same weights: **σ_A = 0.998**. The component stays about as wide as before."
+ },
+ "update-mixture-weight": {
+  "h": "UPDATE THE MIXING WEIGHT",
+  "t": "The mixing weight is the share of total responsibility: **π_A = 4.083 / 10 = 0.408**."
+ },
+ "all-components-updated": {
+  "h": "BOTH COMPONENTS UPDATED",
+  "t": "Component B is refitted the same way: weight **0.592**, mean **6.314**, spread **1.501**. A is now weight **0.408**, mean **2.631**, spread **0.998**."
+ },
+ "m-step-summary": {
+  "h": "TAKEAWAY",
+  "t": "In the M-step the **responsibilities stayed fixed** while the means, spreads and weights moved. K-Means averages only assigned points; a GMM **weights every point by its responsibility**."
+ }
+}

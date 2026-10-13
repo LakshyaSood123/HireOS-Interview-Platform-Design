@@ -1,0 +1,60 @@
+{
+  "title": "Evaluate performance",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "validation-data",
+      "label": "Validation data",
+      "pseudocode": "Evaluate on held-out validation data.",
+      "python": "customers, churners = 150, 30\nprint(customers, 'customers;', churners, 'churn;', customers - churners, 'stay')\n# prints: 150 customers; 30 churn; 120 stay"
+    },
+    {
+      "id": "predictions",
+      "label": "Predictions",
+      "pseudocode": "Flagged = predicted churn.",
+      "python": "VAL = {'baseline': (12, 10, 18, 110), 'logistic': (21, 12, 9, 108), 'tree': (24, 17, 6, 103)}   # (TP, FP, FN, TN) on 150 validation customers\ndef metrics(tp, fp, fn, tn):\n    p = tp / (tp + fp)\n    r = tp / (tp + fn)\n    return {'accuracy': (tp + tn) / (tp + fp + fn + tn), 'precision': p, 'recall': r, 'f1': 2 * p * r / (p + r)}\ntp, fp, fn, tn = VAL['logistic']\nprint('flagged:', tp + fp, ' real churners among them:', tp)\n# prints: flagged: 33  real churners among them: 21"
+    },
+    {
+      "id": "confusion-matrix",
+      "label": "Confusion matrix",
+      "pseudocode": "Count the four kinds of outcome.",
+      "python": "VAL = {'baseline': (12, 10, 18, 110), 'logistic': (21, 12, 9, 108), 'tree': (24, 17, 6, 103)}   # (TP, FP, FN, TN) on 150 validation customers\ndef metrics(tp, fp, fn, tn):\n    p = tp / (tp + fp)\n    r = tp / (tp + fn)\n    return {'accuracy': (tp + tn) / (tp + fp + fn + tn), 'precision': p, 'recall': r, 'f1': 2 * p * r / (p + r)}\ntp, fp, fn, tn = VAL['logistic']\nprint('TP', tp, 'FP', fp, 'FN', fn, 'TN', tn, ' total', tp + fp + fn + tn)\n# prints: TP 21 FP 12 FN 9 TN 108  total 150"
+    },
+    {
+      "id": "accuracy",
+      "label": "Accuracy",
+      "pseudocode": "accuracy = (TP + TN) / all",
+      "python": "VAL = {'baseline': (12, 10, 18, 110), 'logistic': (21, 12, 9, 108), 'tree': (24, 17, 6, 103)}   # (TP, FP, FN, TN) on 150 validation customers\ndef metrics(tp, fp, fn, tn):\n    p = tp / (tp + fp)\n    r = tp / (tp + fn)\n    return {'accuracy': (tp + tn) / (tp + fp + fn + tn), 'precision': p, 'recall': r, 'f1': 2 * p * r / (p + r)}\nm = metrics(*VAL['logistic'])\nprint('accuracy:', round(m['accuracy'], 3))\n# prints: accuracy: 0.86"
+    },
+    {
+      "id": "precision",
+      "label": "Precision",
+      "pseudocode": "precision = TP / (TP + FP)",
+      "python": "VAL = {'baseline': (12, 10, 18, 110), 'logistic': (21, 12, 9, 108), 'tree': (24, 17, 6, 103)}   # (TP, FP, FN, TN) on 150 validation customers\ndef metrics(tp, fp, fn, tn):\n    p = tp / (tp + fp)\n    r = tp / (tp + fn)\n    return {'accuracy': (tp + tn) / (tp + fp + fn + tn), 'precision': p, 'recall': r, 'f1': 2 * p * r / (p + r)}\nm = metrics(*VAL['logistic'])\nprint('precision:', round(m['precision'], 3))\n# prints: precision: 0.636"
+    },
+    {
+      "id": "recall",
+      "label": "Recall",
+      "pseudocode": "recall = TP / (TP + FN)",
+      "python": "VAL = {'baseline': (12, 10, 18, 110), 'logistic': (21, 12, 9, 108), 'tree': (24, 17, 6, 103)}   # (TP, FP, FN, TN) on 150 validation customers\ndef metrics(tp, fp, fn, tn):\n    p = tp / (tp + fp)\n    r = tp / (tp + fn)\n    return {'accuracy': (tp + tn) / (tp + fp + fn + tn), 'precision': p, 'recall': r, 'f1': 2 * p * r / (p + r)}\nm = metrics(*VAL['logistic'])\nprint('recall:', round(m['recall'], 3))\n# prints: recall: 0.7"
+    },
+    {
+      "id": "f1",
+      "label": "F1",
+      "pseudocode": "F1 = 2 * P * R / (P + R)",
+      "python": "VAL = {'baseline': (12, 10, 18, 110), 'logistic': (21, 12, 9, 108), 'tree': (24, 17, 6, 103)}   # (TP, FP, FN, TN) on 150 validation customers\ndef metrics(tp, fp, fn, tn):\n    p = tp / (tp + fp)\n    r = tp / (tp + fn)\n    return {'accuracy': (tp + tn) / (tp + fp + fn + tn), 'precision': p, 'recall': r, 'f1': 2 * p * r / (p + r)}\nm = metrics(*VAL['logistic'])\nprint('F1:', round(m['f1'], 3))\n# prints: F1: 0.667"
+    },
+    {
+      "id": "business-priority",
+      "label": "Business priority",
+      "pseudocode": "Judge the metrics against the goal.",
+      "python": "VAL = {'baseline': (12, 10, 18, 110), 'logistic': (21, 12, 9, 108), 'tree': (24, 17, 6, 103)}   # (TP, FP, FN, TN) on 150 validation customers\ndef metrics(tp, fp, fn, tn):\n    p = tp / (tp + fp)\n    r = tp / (tp + fn)\n    return {'accuracy': (tp + tn) / (tp + fp + fn + tn), 'precision': p, 'recall': r, 'f1': 2 * p * r / (p + r)}\ndef meets_goal(m):\n    return m['recall'] >= 0.75 and m['precision'] >= 0.5\nm = metrics(*VAL['logistic'])\nprint('recall ok:', m['recall'] >= 0.75, ' precision ok:', m['precision'] >= 0.5, ' goal met:', meets_goal(m))\n# prints: recall ok: False  precision ok: True  goal met: False"
+    },
+    {
+      "id": "evaluation-summary",
+      "label": "Evaluation summary",
+      "pseudocode": "Report several metrics, keep the test set locked.",
+      "python": "VAL = {'baseline': (12, 10, 18, 110), 'logistic': (21, 12, 9, 108), 'tree': (24, 17, 6, 103)}   # (TP, FP, FN, TN) on 150 validation customers\ndef metrics(tp, fp, fn, tn):\n    p = tp / (tp + fp)\n    r = tp / (tp + fn)\n    return {'accuracy': (tp + tn) / (tp + fp + fn + tn), 'precision': p, 'recall': r, 'f1': 2 * p * r / (p + r)}\nfor name in ('baseline', 'logistic'):\n    m = metrics(*VAL[name])\n    print(name, 'accuracy', round(m['accuracy'], 2), 'recall', round(m['recall'], 2))\n# prints: baseline accuracy 0.81 recall 0.4\n# prints: logistic accuracy 0.86 recall 0.7"
+    }
+  ]
+}

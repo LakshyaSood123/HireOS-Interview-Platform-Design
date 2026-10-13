@@ -1,0 +1,34 @@
+{
+ "perfect-line": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Suppose prices really follow the underlying line **y = 1.5x + 0.5**. With no noise, every house would sit **exactly on it** (the rings)."
+ },
+ "add-noise": {
+  "h": "ADD RANDOM NOISE",
+  "t": "Real prices carry random disturbances: **y = 1.5x + 0.5 + ε**. Each house is nudged off the line by its own small amount **ε**."
+ },
+ "noisy-observations": {
+  "h": "WHAT WE ACTUALLY OBSERVE",
+  "t": "We only see the nudged points, never the perfect line. The red bars are the noise **ε = y − (1.5x + 0.5)**: **0, +0.05, +0.20, −0.15, +0.20**."
+ },
+ "residuals": {
+  "h": "COLLECT THE NOISE VALUES",
+  "t": "The five noise values move onto a number line. They are small, positive and negative, and **cluster around zero**. (Residuals of a fitted line use the opposite sign; the sizes are the same.)"
+ },
+ "gaussian-noise": {
+  "h": "MODEL NOISE AS GAUSSIAN",
+  "t": "Assume each ε comes from a **bell curve centered at 0** with spread **σ = 0.2**. Small disturbances are common, big ones are rare, and every house has its own bell around the line."
+ },
+ "likelihood-view": {
+  "h": "LIKELIHOOD OF THE OBSERVATIONS",
+  "t": "For a candidate line, read the **bell height at each observed price**. The likelihood is the product: 1.99 × 1.93 × 1.21 × 1.51 × 1.21 ≈ **8.50**. A line whose bells sit under the data scores high."
+ },
+ "mse-connection": {
+  "h": "MAXIMUM LIKELIHOOD IS LEAST SQUARES",
+  "t": "**−log L = (n/2)·log(2πσ²) + SSE/(2σ²).** With σ fixed, the smaller the squared error, the larger the likelihood, so the line with the **lowest MSE also has the highest likelihood**."
+ },
+ "ml-interpretation": {
+  "h": "TAKEAWAY",
+  "t": "Squared error is **not arbitrary**: it is what you minimize when you assume **independent Gaussian noise of constant spread**. If noise is heavy-tailed or its spread changes, another loss may be better."
+ }
+}

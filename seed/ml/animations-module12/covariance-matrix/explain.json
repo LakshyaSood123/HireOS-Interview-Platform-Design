@@ -1,0 +1,38 @@
+{
+ "raw-points": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "The raw data matrix **X**: six rows (customers) and two columns (usage, spend). The feature means, **4.50 and 3.50**, mark the center of the cloud."
+ },
+ "center-data": {
+  "h": "CENTER THE DATA",
+  "t": "Subtracting each column's mean gives **Xc = X − means**. The dashed cross moves to the center of the cloud, so every number now says how far a customer is **above or below average**."
+ },
+ "x-variance": {
+  "h": "VARIANCE OF USAGE",
+  "t": "Each blue line is a customer's horizontal distance from average. The squared distances add to **17.50**, and dividing by **n − 1 = 5** gives a variance of **3.50**."
+ },
+ "y-variance": {
+  "h": "VARIANCE OF SPEND",
+  "t": "Each pink line is a customer's vertical distance from average. The squared distances add to **13.50**, and dividing by 5 gives a variance of **2.70**."
+ },
+ "cross-variation": {
+  "h": "MOVING TOGETHER",
+  "t": "Each shaded rectangle multiplies a customer's horizontal and vertical deviations. All six are **positive**, because high usage goes with high spend. They sum to 14.50, so the **covariance is 14.50 / 5 = 2.90**."
+ },
+ "matrix-diagonal": {
+  "h": "THE DIAGONAL",
+  "t": "In the covariance matrix the **diagonal entries are the variances** of each feature: **3.50** for usage and **2.70** for spend."
+ },
+ "matrix-off-diagonal": {
+  "h": "THE OFF-DIAGONAL",
+  "t": "The off-diagonal entries are the **covariance between the two features**, **2.90** in both places because the matrix is symmetric. A positive value means the features rise together."
+ },
+ "covariance-matrix": {
+  "h": "THE COVARIANCE MATRIX",
+  "t": "Together these form **S = XcᵀXc / (n − 1)**. Dividing the covariance by both standard deviations gives the correlation, **0.94**, which has no units."
+ },
+ "pca-input": {
+  "h": "TAKEAWAY",
+  "t": "This small symmetric matrix holds all the spread information PCA needs. **Next:** its eigenvectors will give the principal directions, and its eigenvalues the variance along them."
+ }
+}

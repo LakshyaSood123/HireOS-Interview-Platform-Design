@@ -1,0 +1,147 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322c4e9cccef168ed09"
+  },
+  "assets": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498517"
+    }
+  },
+  "createdBy": {
+    "$oid": "000000000000000000000000"
+  },
+  "css": "body {\r\n  margin: 0;\r\n  padding: 14px;\r\n  box-sizing: border-box;\r\n  background: #0b1d16;\r\n  color: #e6f5ec;\r\n  font-family: system-ui, sans-serif;\r\n}\r\n.scene {\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 8px;\r\n}\r\n.step-label {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  letter-spacing: 0.08em;\r\n  text-transform: uppercase;\r\n  color: #a7ce65;\r\n}\r\nsvg {\r\n  width: 100%;\r\n  height: auto;\r\n  max-width: 640px;\r\n  background: #071510;\r\n  border-radius: 10px;\r\n  border: 1px solid rgba(29, 181, 132, 0.35);\r\n}\r\nsvg g,\r\nsvg line,\r\nsvg polygon,\r\nsvg path,\r\nsvg ellipse,\r\nsvg circle,\r\nsvg rect,\r\nsvg text {\r\n  transition: opacity 0.4s ease, transform 0.6s ease;\r\n}\r\n.axis {\r\n  stroke: rgba(167, 206, 101, 0.3);\r\n  stroke-width: 1;\r\n}\r\n.tick {\r\n  font-size: 10px;\r\n  fill: #8fa89c;\r\n}\r\n.lbl,\r\n.big,\r\n.note,\r\n.mono {\r\n  paint-order: stroke;\r\n  stroke: #071510;\r\n  stroke-width: 3px;\r\n  stroke-linejoin: round;\r\n}\r\n.lbl {\r\n  font-size: 12px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.lbl-g { fill: #1db584; }\r\n.lbl-y { fill: #e2b44a; }\r\n.lbl-p { fill: #f472b6; }\r\n.lbl-b { fill: #38bdf8; }\r\n.lbl-r { fill: #f87171; }\r\n.big {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.note {\r\n  font-size: 11px;\r\n  fill: #c9dccf;\r\n}\r\n.mono {\r\n  font-family: ui-monospace, Consolas, monospace;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.caption {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  line-height: 1.5;\r\n  color: #c9dccf;\r\n  min-height: 40px;\r\n}\r\n.cell rect {\r\n  fill: rgba(255, 255, 255, 0.05);\r\n  stroke: rgba(255, 255, 255, 0.28);\r\n  stroke-width: 1.2;\r\n}\r\n.cell text {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.cell.hl-row rect { fill: rgba(226, 180, 74, 0.25); stroke: #e2b44a; }\r\n.cell.hl-col rect { fill: rgba(29, 181, 132, 0.25); stroke: #1db584; }\r\n.cell.hl-both rect { fill: rgba(244, 114, 182, 0.28); stroke: #f472b6; }\r\n.dim { opacity: 0.25; }\r\n.dash { stroke-dasharray: 5 4; }\r\n.fillA { fill: rgba(56, 189, 248, 0.16); stroke: #38bdf8; stroke-width: 2; }\r\n.fillB { fill: rgba(244, 114, 182, 0.18); stroke: #f472b6; stroke-width: 2; }\r\n.fillG { fill: rgba(29, 181, 132, 0.16); stroke: #1db584; stroke-width: 2; }\r\n.contour { stroke: rgba(56, 189, 248, 0.45); stroke-width: 1.5; }\n.curve { fill: none; stroke: #38bdf8; stroke-width: 3; }\n.curve-y { fill: none; stroke: #e2b44a; stroke-width: 3; }\n.curve-p { fill: none; stroke: #f472b6; stroke-width: 3; }\n.curve-g { fill: none; stroke: #1db584; stroke-width: 3; }\n.ghost { fill: none; stroke: rgba(201, 220, 207, 0.4); stroke-width: 2; }\n.lbl-w { fill: #e6f5ec; }\n.lbl-s { font-size: 11px; font-weight: 600; fill: #c9dccf; }\n\n/* ── explanation panel (shared by every generated ML animation) ── */\n.explain {\n  box-sizing: border-box;\n  max-width: 640px;\n  margin-top: 4px;\n  padding: 14px 18px 16px;\n  min-height: 150px;\n  border-radius: 12px;\n  background: rgba(29, 181, 132, 0.10);\n  border: 1px solid rgba(29, 181, 132, 0.45);\n  border-left: 5px solid #1db584;\n}\n.explain-h {\n  margin: 0 0 8px;\n  font-size: 13px;\n  font-weight: 800;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.explain-t {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.55;\n  color: #f1faf4;\n}\n.explain-t strong {\n  font-weight: 800;\n  color: #ffd98a;\n}\n\n",
+  "html": "<div class=\"scene\">\n  <p class=\"step-label\" id=\"step-label\"></p>\n  <svg id=\"scene\" viewBox=\"0 0 640 360\" role=\"img\" aria-label=\"Random variables: from outcomes to numbers\"></svg>\n  <section class=\"explain\" aria-live=\"polite\">\n    <h3 class=\"explain-h\" id=\"explain-h\"></h3>\n    <p class=\"explain-t\" id=\"caption\"></p>\n  </section>\n</div>\n",
+  "js": "(function () {\n  // ── shared helpers (SVG, tweening) ─────────────────────────────────────────\r\n  var NS = \"http://www.w3.org/2000/svg\";\r\n  var svg = document.getElementById(\"scene\");\r\n  var labelEl = document.getElementById(\"step-label\");\r\n  var captionEl = document.getElementById(\"caption\");\r\n\r\n  function el(name, attrs, parent) {\r\n    var node = document.createElementNS(NS, name);\r\n    for (var key in attrs) node.setAttribute(key, attrs[key]);\r\n    if (parent) parent.appendChild(node);\r\n    return node;\r\n  }\r\n  function txt(parent, x, y, cls, str, anchor) {\r\n    var t = el(\"text\", { x: x, y: y, class: cls }, parent);\r\n    if (anchor) t.setAttribute(\"text-anchor\", anchor);\r\n    t.textContent = str;\r\n    return t;\r\n  }\r\n  function show(node, on) {\r\n    node.setAttribute(\"opacity\", on ? \"1\" : \"0\");\r\n  }\r\n  function place(node, x, y) {\r\n    node.style.transform = \"translate(\" + x + \"px,\" + y + \"px)\";\r\n  }\r\n  function setLine(node, x1, y1, x2, y2) {\r\n    node.setAttribute(\"x1\", x1);\r\n    node.setAttribute(\"y1\", y1);\r\n    node.setAttribute(\"x2\", x2);\r\n    node.setAttribute(\"y2\", y2);\r\n  }\r\n  function lerp(a, b, e) {\r\n    return a + (b - a) * e;\r\n  }\r\n  function round1(v) {\r\n    return (Math.round(v * 10) / 10).toFixed(1);\r\n  }\r\n\r\n  // Eased animation. fn(e) is called with e from 0 to 1. Without\r\n  // requestAnimationFrame (or with ms = 0) it jumps straight to fn(1).\r\n  var animTokens = {};\r\n  function anim(key, ms, fn) {\r\n    var token = (animTokens[key] || 0) + 1;\r\n    animTokens[key] = token;\r\n    if (typeof requestAnimationFrame !== \"function\" || ms <= 0) {\r\n      fn(1);\r\n      return;\r\n    }\r\n    var start = null;\r\n    function frame(now) {\r\n      if (animTokens[key] !== token) return;\r\n      if (start === null) start = now;\r\n      var p = Math.min(1, (now - start) / ms);\r\n      var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;\r\n      fn(e);\r\n      if (p < 1) requestAnimationFrame(frame);\r\n    }\r\n    requestAnimationFrame(frame);\r\n  }\r\n\r\n  // Arrowheads, one marker per colour.\r\n  var COLORS = { g: \"#1DB584\", y: \"#E2B44A\", p: \"#F472B6\", b: \"#38BDF8\", w: \"#c9dccf\", r: \"#F87171\" };\r\n  var defs = el(\"defs\", {}, svg);\r\n  Object.keys(COLORS).forEach(function (k) {\r\n    var m = el(\"marker\", { id: \"ah-\" + k, viewBox: \"0 0 10 10\", refX: 9, refY: 5, markerUnits: \"userSpaceOnUse\", markerWidth: 13, markerHeight: 13, orient: \"auto\" }, defs);\r\n    el(\"path\", { d: \"M0 0 L10 5 L0 10 Z\", fill: COLORS[k] }, m);\r\n  });\r\n  function arrow(parent, colorKey, width) {\r\n    return el(\"line\", { x1: 0, y1: 0, x2: 0, y2: 0, stroke: COLORS[colorKey], \"stroke-width\": width || 3, \"marker-end\": \"url(#ah-\" + colorKey + \")\", \"stroke-linecap\": \"round\" }, parent);\r\n  }\r\n  function polygon(parent, cls) {\r\n    return el(\"polygon\", { points: \"\", class: cls }, parent);\r\n  }\r\n  function setPoly(node, pts) {\r\n    node.setAttribute(\"points\", pts.map(function (p) { return p[0].toFixed(1) + \",\" + p[1].toFixed(1); }).join(\" \"));\r\n  }\r\n  function lerpPts(a, b, e) {\r\n    return a.map(function (p, i) { return [lerp(p[0], b[i][0], e), lerp(p[1], b[i][1], e)]; });\r\n  }\r\n  // Maps maths coordinates (x right, y up) to screen pixels.\r\n  function makePlane(cx, cy, s) {\r\n    return {\r\n      x: function (v) { return cx + s * v; },\r\n      y: function (v) { return cy - s * v; },\r\n      pt: function (p) { return [cx + s * p[0], cy - s * p[1]]; },\r\n      s: s, cx: cx, cy: cy\r\n    };\r\n  }\r\n  function axes(parent, plane, xr, yr) {\r\n    el(\"line\", { x1: plane.x(-xr), y1: plane.y(0), x2: plane.x(xr), y2: plane.y(0), class: \"axis\" }, parent);\r\n    el(\"line\", { x1: plane.x(0), y1: plane.y(-yr), x2: plane.x(0), y2: plane.y(yr), class: \"axis\" }, parent);\r\n  }\r\n\n  // ── Module 3 helpers: graphs, curves, contour plane ───────────────────────\n  // makeGraph maps maths values to pixels with separate x and y scales.\n  function makeGraph(ox, oy, sx, sy) {\n    return {\n      ox: ox, oy: oy, sx: sx, sy: sy,\n      x: function (v) { return ox + sx * v; },\n      y: function (v) { return oy - sy * v; }\n    };\n  }\n  function curveD(g, f, a, b, n) {\n    var d = \"\";\n    for (var i = 0; i <= n; i++) {\n      var v = a + ((b - a) * i) / n;\n      d += (i ? \" L \" : \"M \") + g.x(v).toFixed(1) + \" \" + g.y(f(v)).toFixed(1);\n    }\n    return d;\n  }\n  function setD(node, d) {\n    node.setAttribute(\"d\", d);\n  }\n  function fmt(v, n) {\n    return (Math.round(v * 100000) / 100000).toFixed(n === undefined ? 1 : n);\n  }\n  function drawAxes(parent, g, xmax, ymax, xticks, yticks) {\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(xmax), y2: g.y(0), class: \"axis\" }, parent);\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(0), y2: g.y(ymax), class: \"axis\" }, parent);\n    (xticks || []).forEach(function (t) { txt(parent, g.x(t), g.y(0) + 15, \"tick\", String(t), \"middle\"); });\n    (yticks || []).forEach(function (t) { txt(parent, g.x(0) - 7, g.y(t) + 4, \"tick\", String(t), \"end\"); });\n  }\n  function card(parent, x, y, w, h, cls) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: 10, class: cls || \"fillG\" }, parent);\n  }\n  function ring(parent, cx, cy, rx, ry, cls) {\n    return el(\"ellipse\", { cx: cx, cy: cy, rx: rx, ry: ry, fill: \"none\", class: cls || \"contour\" }, parent);\n  }\n  function clipTo(id, x, y, w, h) {\n    var c = el(\"clipPath\", { id: id }, defs);\n    el(\"rect\", { x: x, y: y, width: w, height: h }, c);\n  }\n\n  // ── Module 4 helpers: seeded randomness, small shapes ─────────────────────\n  function mulberry(seed) {\n    var a = seed;\n    return function () {\n      a |= 0; a = (a + 0x6D2B79F5) | 0;\n      var t = Math.imul(a ^ (a >>> 15), 1 | a);\n      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;\n      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;\n    };\n  }\n  function gaussSource(rand) {\n    return function () {\n      var u = 1 - rand(), v = rand();\n      return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);\n    };\n  }\n  function box(parent, x, y, w, h, fill, stroke, r) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: r === undefined ? 6 : r, fill: fill, stroke: stroke || \"none\", \"stroke-width\": 2 }, parent);\n  }\n  function setBox(node, x, y, w, h) {\n    node.setAttribute(\"x\", x); node.setAttribute(\"y\", y); node.setAttribute(\"width\", Math.max(0, w)); node.setAttribute(\"height\", Math.max(0, h));\n  }\n  function vis(list, on) {\n    list.forEach(function (n) { show(n, on); });\n  }\n\n  var EXPLAIN = {\"experiment\":{\"h\":\"WHAT YOU ARE LOOKING AT\",\"t\":\"We toss a **fair coin twice**. Before the tosses, the result is uncertain. We will turn the result into a **number we can compute with**.\"},\"outcomes\":{\"h\":\"THE FOUR OUTCOMES\",\"t\":\"The possible outcomes are **HH, HT, TH and TT**, each with probability **1/4**. These are descriptions, not numbers: we cannot average them or put them in a formula.\"},\"define-variable\":{\"h\":\"DEFINE A RANDOM VARIABLE\",\"t\":\"Choose a rule: **X = the number of heads**. A random variable is exactly this: **a rule that gives a number to every outcome**. The rule is fixed; only which outcome occurs is random.\"},\"map-outcomes\":{\"h\":\"MAP EACH OUTCOME TO A NUMBER\",\"t\":\"Apply the rule: **HH has 2 heads, HT has 1, TH has 1, TT has 0**. Two different outcomes (HT and TH) can map to the same value.\"},\"possible-values\":{\"h\":\"THE POSSIBLE VALUES\",\"t\":\"X can take the values **0, 1 or 2**. These numbers, not the coin pictures, are what a formula can work with.\"},\"probabilities\":{\"h\":\"PROBABILITIES OF THE VALUES\",\"t\":\"Add up the outcomes that map to each value: **P(X = 0) = 1/4**, **P(X = 1) = 1/4 + 1/4 = 1/2**, **P(X = 2) = 1/4**. Values with their probabilities are the **distribution of X**.\"},\"ml-connection\":{\"h\":\"TAKEAWAY\",\"t\":\"**Features, labels and noise are random variables**: rules from “what happened” to a number. Once they are numbers we can talk about averages, spread and relationships.\"}};\n  // ── scene ──\n  var steps = [\r\n    { id: \"experiment\", label: \"A random experiment\", caption: \"Toss a fair coin twice. Before the tosses, the result is uncertain. We will turn the result into a number we can compute with.\" },\r\n    { id: \"outcomes\", label: \"The four outcomes\", caption: \"The possible outcomes are HH, HT, TH and TT, each with probability 1/4. These are descriptions, not numbers: we cannot average them or put them in a formula.\" },\r\n    { id: \"define-variable\", label: \"Define a random variable\", caption: \"Choose a rule: X = the number of heads. A random variable is exactly this, a rule that gives a number to every outcome. The rule is fixed; only which outcome occurs is random.\" },\r\n    { id: \"map-outcomes\", label: \"Map each outcome to a number\", caption: \"Apply the rule: HH has 2 heads, HT has 1, TH has 1, TT has 0. Two different outcomes (HT and TH) can map to the same value.\" },\r\n    { id: \"possible-values\", label: \"The possible values\", caption: \"X can take the values 0, 1 or 2. These numbers, not the coin pictures, are what a formula can work with.\" },\r\n    { id: \"probabilities\", label: \"Probabilities of the values\", caption: \"Add up the outcomes that map to each value: P(X = 0) = 1/4, P(X = 1) = 1/4 + 1/4 = 1/2, P(X = 2) = 1/4. Values with their probabilities are the distribution of X.\" },\r\n    { id: \"ml-connection\", label: \"Random variables in ML\", caption: \"Features, labels and noise are random variables: a rule from 'what happened' to a number. Once they are numbers we can talk about averages, spread and relationships.\" }\r\n  ];\r\n\r\n  var OUT = [\"HH\", \"HT\", \"TH\", \"TT\"];\r\n  var VAL = [2, 1, 1, 0];\r\n  var oy = function (i) { return 86 + i * 62; };\r\n  var vy = function (v) { return 254 - v * 84; };\r\n  var VX = 480;\r\n\r\n  var coins = el(\"g\", {}, svg);\r\n  [250, 390].forEach(function (cx, i) {\r\n    el(\"circle\", { cx: cx, cy: 160, r: 52, fill: \"rgba(226,180,74,0.2)\", stroke: \"#e2b44a\", \"stroke-width\": 3 }, coins);\r\n    txt(coins, cx, 172, \"big\", \"?\", \"middle\").setAttribute(\"font-size\", \"34\");\r\n    txt(coins, cx, 244, \"note\", \"toss \" + (i + 1), \"middle\");\r\n  });\r\n  txt(coins, 320, 70, \"lbl\", \"two tosses of a fair coin\", \"middle\");\r\n\r\n  var cardsG = el(\"g\", {}, svg);\r\n  var cards = [];\r\n  OUT.forEach(function (name, i) {\r\n    var g = el(\"g\", {}, cardsG);\r\n    box(g, 40, oy(i) - 24, 130, 48, \"rgba(226,180,74,0.16)\", \"#e2b44a\", 10);\r\n    txt(g, 105, oy(i) + 7, \"big\", name.split(\"\").join(\" \"), \"middle\").setAttribute(\"font-size\", \"20\");\r\n    cards.push(g);\r\n  });\r\n  txt(cardsG, 105, 44, \"lbl\", \"outcomes\", \"middle\");\r\n\r\n  var rule = el(\"g\", {}, svg);\r\n  box(rule, 215, 26, 210, 40, \"rgba(29,181,132,0.2)\", \"#1db584\", 10);\r\n  txt(rule, 320, 51, \"lbl lbl-g\", \"X = number of heads\", \"middle\");\r\n\r\n  var arrows = [];\r\n  var mapG = el(\"g\", {}, svg);\r\n  OUT.forEach(function (name, i) {\r\n    var a = arrow(mapG, \"g\", 3);\r\n    setLine(a, 176, oy(i), VX - 34, vy(VAL[i]));\r\n    arrows.push(a);\r\n  });\r\n\r\n  var valsG = el(\"g\", {}, svg);\r\n  txt(valsG, VX, 44, \"lbl\", \"values of X\", \"middle\");\r\n  [0, 1, 2].forEach(function (v) {\r\n    el(\"circle\", { cx: VX, cy: vy(v), r: 26, fill: \"rgba(56,189,248,0.2)\", stroke: \"#38bdf8\", \"stroke-width\": 3 }, valsG);\r\n    txt(valsG, VX, vy(v) + 8, \"big\", String(v), \"middle\").setAttribute(\"font-size\", \"22\");\r\n  });\r\n  var bracket = el(\"path\", { d: \"M 534 \" + (vy(2) - 28) + \" L 546 \" + (vy(2) - 28) + \" L 546 \" + (vy(0) + 28) + \" L 534 \" + (vy(0) + 28), fill: \"none\", stroke: \"#e2b44a\", \"stroke-width\": 2.5 }, svg);\r\n  var bracketLbl = txt(svg, 556, vy(1) + 4, \"lbl lbl-y\", \"0, 1 or 2\", \"start\");\r\n\r\n  var probG = el(\"g\", {}, svg);\r\n  var PR = [0.25, 0.5, 0.25];\r\n  var PL = [\"1/4\", \"1/2\", \"1/4\"];\r\n  [2, 1, 0].forEach(function (v) {\r\n    var p = PR[v];\r\n    box(probG, 524, vy(v) - 14, p * 130, 28, \"rgba(244,114,182,0.8)\", \"none\", 4);\r\n    txt(probG, 524 + p * 130 + 6, vy(v) + 5, \"lbl\", PL[v], \"start\");\r\n  });\r\n  var sumNote = txt(probG, 570, vy(1) + 34, \"note\", \"HT + TH: 1/4 + 1/4\", \"middle\");\r\n\r\n  var mlG = el(\"g\", {}, svg);\r\n  [[\"label y\", \"spam = 1, not spam = 0\", \"fillB\"], [\"feature x\", \"a house's size\", \"fillA\"], [\"noise\", \"measurement error\", \"fillG\"]].forEach(function (r, i) {\r\n    var y = 84 + i * 76;\r\n    card(mlG, 60, y, 190, 56, r[2]);\r\n    txt(mlG, 155, y + 34, \"big\", r[0], \"middle\");\r\n    var ar = arrow(mlG, \"w\", 3); setLine(ar, 254, y + 28, 304, y + 28);\r\n    card(mlG, 308, y, 270, 56, r[2]);\r\n    txt(mlG, 443, y + 34, \"lbl\", r[1], \"middle\");\r\n  });\r\n  txt(mlG, 320, 56, \"lbl lbl-y\", \"each of these is a random variable: a number we can compute with\", \"middle\");\r\n\r\n  function render(index, id) {\r\n    var i = index;\r\n    show(coins, i === 0);\r\n    show(cardsG, i >= 1 && i <= 5);\r\n    show(rule, i >= 2 && i <= 5);\r\n    show(mapG, i >= 3 && i <= 5);\r\n    show(valsG, i >= 3 && i <= 5);\r\n    show(bracket, i === 4); show(bracketLbl, i === 4);\r\n    show(probG, i === 5);\r\n    show(mlG, i === 6);\r\n    if (i === 1) {\r\n      anim(\"cards\", 1100, function (e) {\r\n        for (var q = 0; q < 4; q++) cards[q].setAttribute(\"opacity\", Math.max(0, Math.min(1, e * 5 - q)).toFixed(2));\r\n      });\r\n    } else {\r\n      cards.forEach(function (c) { c.setAttribute(\"opacity\", \"1\"); });\r\n    }\r\n    if (i === 3) {\r\n      anim(\"arrows\", 1400, function (e) {\r\n        for (var q = 0; q < 4; q++) arrows[q].setAttribute(\"opacity\", Math.max(0, Math.min(1, e * 5 - q)).toFixed(2));\r\n      });\r\n    } else {\r\n      arrows.forEach(function (a) { a.setAttribute(\"opacity\", \"1\"); });\r\n    }\r\n  }\r\n\n\n  // ── shared runtime: stepping, explanation panel, educational autoplay pacing, bridge ──\n  var current = 0;\n  var explainHeadEl = document.getElementById(\"explain-h\");\n\n  // **bold** markers in an explanation become <strong> nodes (built with DOM calls, never innerHTML).\n  function setRich(node, str) {\n    node.textContent = \"\";\n    var parts = String(str).split(\"**\");\n    for (var i = 0; i < parts.length; i++) {\n      if (parts[i] === \"\") continue;\n      var seg = document.createElement(i % 2 ? \"strong\" : \"span\");\n      seg.textContent = parts[i];\n      node.appendChild(seg);\n    }\n  }\n\n  function explanationFor(index) {\n    var ex = (typeof EXPLAIN === \"object\" && EXPLAIN) ? EXPLAIN[steps[index].id] : null;\n    return ex || { h: \"WHAT IS HAPPENING\", t: steps[index].caption };\n  }\n\n  // Autoplay pace: 4.5 to 10.5 seconds per step, longer for longer explanations, so a learner can read.\n  function stepMs(index) {\n    var words = String(explanationFor(index).t).replace(/\\*\\*/g, \"\").split(/\\s+/).length;\n    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));\n  }\n\n  function renderStep(index) {\n    var ex = explanationFor(index);\n    labelEl.textContent = steps[index].label;\n    if (explainHeadEl) explainHeadEl.textContent = ex.h;\n    setRich(captionEl, ex.t);\n    render(index, steps[index].id);\n  }\n\n  function goTo(index) {\n    if (index < 0 || index >= steps.length) return;\n    current = index;\n    renderStep(current);\n    if (window.ReagvisBridge) window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n\n  renderStep(current);\n\n  // Autoplay: exactly one timer, one step per tick, stops on the final step.\n  // PLAY on the final step restarts from the first step and plays again.\n  var timer = null;\n\n  function stopAuto() {\n    if (timer !== null) {\n      clearTimeout(timer);\n      timer = null;\n    }\n  }\n\n  function scheduleNext() {\n    timer = setTimeout(function () {\n      timer = null;\n      if (current >= steps.length - 1) return;\n      goTo(current + 1);\n      if (current < steps.length - 1) scheduleNext();\n    }, stepMs(current));\n  }\n\n  function startAuto() {\n    if (timer !== null) return;\n    if (current >= steps.length - 1) goTo(0);\n    scheduleNext();\n  }\n\n  window.addEventListener(\"pagehide\", stopAuto);\n\n  window.ReagvisAnimation = {\n    stepDuration: stepMs,\n    onCommand: function (type, stepId) {\n      if (type === \"PLAY\") startAuto();\n      else if (type === \"PAUSE\") stopAuto();\n      else if (type === \"NEXT\") { stopAuto(); goTo(current + 1); }\n      else if (type === \"PREVIOUS\") { stopAuto(); goTo(current - 1); }\n      else if (type === \"RESET\") { stopAuto(); goTo(0); }\n      else if (type === \"GOTO_STEP\") {\n        stopAuto();\n        for (var i = 0; i < steps.length; i++) {\n          if (steps[i].id === stepId) { goTo(i); break; }\n        }\n      }\n    },\n  };\n\n  if (window.ReagvisBridge) {\n    window.ReagvisBridge.ready();\n    window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n})();\n",
+  "lastFrozenContentHash": null,
+  "lastFrozenRevisionId": null,
+  "manifest": {
+    "bridgeVersion": {
+      "$numberInt": "1"
+    },
+    "capabilities": [
+      "play",
+      "pause",
+      "next",
+      "previous",
+      "reset",
+      "gotoStep"
+    ],
+    "heightPx": {
+      "$numberInt": "590"
+    },
+    "traceEvents": [
+      "experiment",
+      "outcomes",
+      "define-variable",
+      "map-outcomes",
+      "possible-values",
+      "probabilities",
+      "ml-connection"
+    ]
+  },
+  "packageId": "59e7386f-2a33-49cc-aa66-2a72e40fcbe7",
+  "packageTrace": {
+    "steps": [
+      {
+        "animationEvent": "experiment",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Toss a fair coin twice. The result is uncertain.",
+          "python": "import random\n\nrandom.seed(2)\ntosses = [random.choice('HT') for _ in range(2)]\nprint(len(tosses))   # 2 tosses"
+        },
+        "id": "experiment",
+        "label": "A random experiment"
+      },
+      {
+        "animationEvent": "outcomes",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "List the outcomes. They are descriptions, not numbers.",
+          "python": "outcomes = ['HH', 'HT', 'TH', 'TT']\nprint(outcomes)"
+        },
+        "id": "outcomes",
+        "label": "The four outcomes"
+      },
+      {
+        "animationEvent": "define-variable",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Define X = the number of heads. X is a rule from an outcome to a number.",
+          "python": "def heads(outcome):\n    return outcome.count('H')   # X: a rule, not a mystery\n\nprint(heads('HT'))   # 1"
+        },
+        "id": "define-variable",
+        "label": "Define a random variable"
+      },
+      {
+        "animationEvent": "map-outcomes",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Apply the rule X to every outcome.",
+          "python": "outcomes = {'HH': 0.25, 'HT': 0.25, 'TH': 0.25, 'TT': 0.25}\n\ndef heads(outcome):\n    return outcome.count('H')   # the random variable X\nfor o in outcomes:\n    print(o, heads(o))\n# HH 2 / HT 1 / TH 1 / TT 0"
+        },
+        "id": "map-outcomes",
+        "label": "Map each outcome to a number"
+      },
+      {
+        "animationEvent": "possible-values",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Collect the distinct values X can take.",
+          "python": "outcomes = {'HH': 0.25, 'HT': 0.25, 'TH': 0.25, 'TT': 0.25}\n\ndef heads(outcome):\n    return outcome.count('H')   # the random variable X\nprint(sorted({heads(o) for o in outcomes}))   # [0, 1, 2]"
+        },
+        "id": "possible-values",
+        "label": "The possible values"
+      },
+      {
+        "animationEvent": "probabilities",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "P(X = x) = sum of the probabilities of the outcomes that map to x.",
+          "python": "outcomes = {'HH': 0.25, 'HT': 0.25, 'TH': 0.25, 'TT': 0.25}\n\ndef heads(outcome):\n    return outcome.count('H')   # the random variable X\ndist = {}\nfor o, p in outcomes.items():\n    dist[heads(o)] = dist.get(heads(o), 0) + p\nprint(dict(sorted(dist.items())))   # {0: 0.25, 1: 0.5, 2: 0.25}"
+        },
+        "id": "probabilities",
+        "label": "Probabilities of the values"
+      },
+      {
+        "animationEvent": "ml-connection",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Labels, features and noise are numbers produced from uncertain outcomes.",
+          "python": "emails = ['free money now', 'meeting at 3']\nlabels = [1 if 'free' in e else 0 for e in emails]   # label y: spam = 1\nprint(labels)   # [1, 0]"
+        },
+        "id": "ml-connection",
+        "label": "Random variables in ML"
+      }
+    ],
+    "version": {
+      "$numberInt": "1"
+    }
+  },
+  "revision": {
+    "$numberInt": "5"
+  },
+  "revisionId": "r2",
+  "sourceKind": "zip",
+  "status": "frozen",
+  "title": "ML Module 4 — Random Variables",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498517"
+    }
+  },
+  "updatedBy": {
+    "$oid": "000000000000000000000000"
+  }
+}

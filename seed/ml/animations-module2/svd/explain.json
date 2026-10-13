@@ -1,0 +1,30 @@
+{
+ "original": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Take every unit-length vector: together they form a **circle**. The two arrows mark special **perpendicular directions**."
+ },
+ "rotate-input": {
+  "h": "STEP 1: ROTATE THE INPUT (Vᵀ)",
+  "t": "First, rotate so those special directions **line up with the axes**. Rotating a circle changes nothing about its shape."
+ },
+ "scale": {
+  "h": "STEP 2: STRETCH ALONG THE AXES (Σ)",
+  "t": "Next, stretch along the axes by different amounts: **×3 horizontally and ×1 vertically**. The circle becomes an **ellipse**."
+ },
+ "rotate-output": {
+  "h": "STEP 3: ROTATE THE OUTPUT (U)",
+  "t": "Finally, rotate the ellipse into its final position. **Rotate, stretch, rotate:** that is every matrix, **A = U Σ Vᵀ**."
+ },
+ "singular-values": {
+  "h": "THE STRETCH AMOUNTS ARE THE SINGULAR VALUES",
+  "t": "The ellipse's two radii are the **singular values**: **σ₁ = 3** for the long direction and **σ₂ = 1** for the short one."
+ },
+ "rank-approximation": {
+  "h": "KEEP ONLY THE BIGGEST SINGULAR VALUE",
+  "t": "Drop σ₂ and the ellipse flattens to a line. This **rank-1 approximation** keeps **9 of every 10** units of “energy”: 3² / (3² + 1²) = **90%**."
+ },
+ "ml-connection": {
+  "h": "TAKEAWAY",
+  "t": "Keeping the **large singular values** gives a smaller, cleaner version of the data. That powers **compression, denoising and dimensionality reduction**."
+ }
+}

@@ -1,0 +1,62 @@
+{
+ "problem": {
+  "h": "STEP 1: FRAME THE PROBLEM",
+  "t": "Every project starts here: a vague wish becomes a measurable question, **will this customer cancel within 30 days?** The chips that appear will build up into the whole workflow."
+ },
+ "data": {
+  "h": "STEP 2: DATA",
+  "t": "We have **1,000 customer observations over 20 weeks**, with about **20% churn**. Knowing this base rate matters, because it is what any model has to beat."
+ },
+ "features-target": {
+  "h": "STEP 3: FEATURES AND TARGET",
+  "t": "Five features known on day 0, target **churned_30d**, and the leaky **closed date removed**. Checking for leakage here prevents a falsely perfect model later."
+ },
+ "split": {
+  "h": "STEP 4: SPLIT",
+  "t": "A **chronological** 700 / 150 / 150 split, made before any results are examined, with the **test set locked**."
+ },
+ "baseline": {
+  "h": "STEP 5: BASELINE",
+  "t": "A simple rule sets the bar: **0.81 accuracy but recall of only 0.40**. Without a baseline we cannot tell whether a model adds any value."
+ },
+ "choose-model": {
+  "h": "STEP 6: CHOOSE CANDIDATES",
+  "t": "A **logistic-style** and a **tree-style** model are chosen as **candidates to test**, not as winners picked in advance."
+ },
+ "train": {
+  "h": "STEP 7: TRAIN",
+  "t": "Training adjusts **parameters** using the **training data only**, repeating predict, measure the loss, update."
+ },
+ "validate": {
+  "h": "STEP 8: VALIDATE",
+  "t": "On validation data the logistic-style model gets **F1 0.67 and recall 0.70**, which is **below the goal**. The validation set is where we find out what is not good enough yet."
+ },
+ "diagnose": {
+  "h": "STEP 9: DIAGNOSE",
+  "t": "Compare the train and validation scores. **Poor on both** suggests underfitting, while **0.97 against 0.59** suggests overfitting. The pattern tells us what to try next."
+ },
+ "tune": {
+  "h": "STEP 10: TUNE",
+  "t": "Validation picks **max_depth 4** (F1 **0.676**), while the training score alone would have picked 8. Settings are chosen on validation, never on the test set."
+ },
+ "compare": {
+  "h": "STEP 11: COMPARE",
+  "t": "Under one fair protocol the tree meets the goal, with **recall 0.80 and precision 0.59**. Models are compared against the goal, not just by the highest number."
+ },
+ "lock": {
+  "h": "STEP 12: LOCK",
+  "t": "The model and its settings are **locked**: tree-style, max_depth 4. With no more changes allowed, the test result will actually mean something."
+ },
+ "final-test": {
+  "h": "STEP 13: FINAL TEST",
+  "t": "The test set is evaluated **once**: **precision 0.54, recall 0.79, F1 0.64**. A little below validation is normal, because validation was used to make choices and the test set was not."
+ },
+ "monitor": {
+  "h": "STEP 14: MONITOR",
+  "t": "After launch, average usage has shifted by **25%** from training. In this **toy example** we use a 15% tolerance, so we would investigate and possibly retrain. That threshold is a teaching value, not a universal rule."
+ },
+ "complete-workflow": {
+  "h": "TAKEAWAY",
+  "t": "The yellow arrow shows the loop: diagnosing, tuning and comparing **feed back into choosing a model**. **Remember:** reliable ML is a disciplined, iterative process, not “pick an algorithm, train, done”."
+ }
+}

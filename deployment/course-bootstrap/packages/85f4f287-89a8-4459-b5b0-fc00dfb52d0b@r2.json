@@ -1,0 +1,159 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322c4e9cccef168ed0d"
+  },
+  "assets": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498519"
+    }
+  },
+  "createdBy": {
+    "$oid": "000000000000000000000000"
+  },
+  "css": "body {\r\n  margin: 0;\r\n  padding: 14px;\r\n  box-sizing: border-box;\r\n  background: #0b1d16;\r\n  color: #e6f5ec;\r\n  font-family: system-ui, sans-serif;\r\n}\r\n.scene {\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 8px;\r\n}\r\n.step-label {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  letter-spacing: 0.08em;\r\n  text-transform: uppercase;\r\n  color: #a7ce65;\r\n}\r\nsvg {\r\n  width: 100%;\r\n  height: auto;\r\n  max-width: 640px;\r\n  background: #071510;\r\n  border-radius: 10px;\r\n  border: 1px solid rgba(29, 181, 132, 0.35);\r\n}\r\nsvg g,\r\nsvg line,\r\nsvg polygon,\r\nsvg path,\r\nsvg ellipse,\r\nsvg circle,\r\nsvg rect,\r\nsvg text {\r\n  transition: opacity 0.4s ease, transform 0.6s ease;\r\n}\r\n.axis {\r\n  stroke: rgba(167, 206, 101, 0.3);\r\n  stroke-width: 1;\r\n}\r\n.tick {\r\n  font-size: 10px;\r\n  fill: #8fa89c;\r\n}\r\n.lbl,\r\n.big,\r\n.note,\r\n.mono {\r\n  paint-order: stroke;\r\n  stroke: #071510;\r\n  stroke-width: 3px;\r\n  stroke-linejoin: round;\r\n}\r\n.lbl {\r\n  font-size: 12px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.lbl-g { fill: #1db584; }\r\n.lbl-y { fill: #e2b44a; }\r\n.lbl-p { fill: #f472b6; }\r\n.lbl-b { fill: #38bdf8; }\r\n.lbl-r { fill: #f87171; }\r\n.big {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.note {\r\n  font-size: 11px;\r\n  fill: #c9dccf;\r\n}\r\n.mono {\r\n  font-family: ui-monospace, Consolas, monospace;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.caption {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  line-height: 1.5;\r\n  color: #c9dccf;\r\n  min-height: 40px;\r\n}\r\n.cell rect {\r\n  fill: rgba(255, 255, 255, 0.05);\r\n  stroke: rgba(255, 255, 255, 0.28);\r\n  stroke-width: 1.2;\r\n}\r\n.cell text {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.cell.hl-row rect { fill: rgba(226, 180, 74, 0.25); stroke: #e2b44a; }\r\n.cell.hl-col rect { fill: rgba(29, 181, 132, 0.25); stroke: #1db584; }\r\n.cell.hl-both rect { fill: rgba(244, 114, 182, 0.28); stroke: #f472b6; }\r\n.dim { opacity: 0.25; }\r\n.dash { stroke-dasharray: 5 4; }\r\n.fillA { fill: rgba(56, 189, 248, 0.16); stroke: #38bdf8; stroke-width: 2; }\r\n.fillB { fill: rgba(244, 114, 182, 0.18); stroke: #f472b6; stroke-width: 2; }\r\n.fillG { fill: rgba(29, 181, 132, 0.16); stroke: #1db584; stroke-width: 2; }\r\n.contour { stroke: rgba(56, 189, 248, 0.45); stroke-width: 1.5; }\n.curve { fill: none; stroke: #38bdf8; stroke-width: 3; }\n.curve-y { fill: none; stroke: #e2b44a; stroke-width: 3; }\n.curve-p { fill: none; stroke: #f472b6; stroke-width: 3; }\n.curve-g { fill: none; stroke: #1db584; stroke-width: 3; }\n.ghost { fill: none; stroke: rgba(201, 220, 207, 0.4); stroke-width: 2; }\n.lbl-w { fill: #e6f5ec; }\n.lbl-s { font-size: 11px; font-weight: 600; fill: #c9dccf; }\n\n/* ── explanation panel (shared by every generated ML animation) ── */\n.explain {\n  box-sizing: border-box;\n  max-width: 640px;\n  margin-top: 4px;\n  padding: 14px 18px 16px;\n  min-height: 150px;\n  border-radius: 12px;\n  background: rgba(29, 181, 132, 0.10);\n  border: 1px solid rgba(29, 181, 132, 0.45);\n  border-left: 5px solid #1db584;\n}\n.explain-h {\n  margin: 0 0 8px;\n  font-size: 13px;\n  font-weight: 800;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.explain-t {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.55;\n  color: #f1faf4;\n}\n.explain-t strong {\n  font-weight: 800;\n  color: #ffd98a;\n}\n\n",
+  "html": "<div class=\"scene\">\n  <p class=\"step-label\" id=\"step-label\"></p>\n  <svg id=\"scene\" viewBox=\"0 0 640 360\" role=\"img\" aria-label=\"Variance: how spread out a quantity is\"></svg>\n  <section class=\"explain\" aria-live=\"polite\">\n    <h3 class=\"explain-h\" id=\"explain-h\"></h3>\n    <p class=\"explain-t\" id=\"caption\"></p>\n  </section>\n</div>\n",
+  "js": "(function () {\n  // ── shared helpers (SVG, tweening) ─────────────────────────────────────────\r\n  var NS = \"http://www.w3.org/2000/svg\";\r\n  var svg = document.getElementById(\"scene\");\r\n  var labelEl = document.getElementById(\"step-label\");\r\n  var captionEl = document.getElementById(\"caption\");\r\n\r\n  function el(name, attrs, parent) {\r\n    var node = document.createElementNS(NS, name);\r\n    for (var key in attrs) node.setAttribute(key, attrs[key]);\r\n    if (parent) parent.appendChild(node);\r\n    return node;\r\n  }\r\n  function txt(parent, x, y, cls, str, anchor) {\r\n    var t = el(\"text\", { x: x, y: y, class: cls }, parent);\r\n    if (anchor) t.setAttribute(\"text-anchor\", anchor);\r\n    t.textContent = str;\r\n    return t;\r\n  }\r\n  function show(node, on) {\r\n    node.setAttribute(\"opacity\", on ? \"1\" : \"0\");\r\n  }\r\n  function place(node, x, y) {\r\n    node.style.transform = \"translate(\" + x + \"px,\" + y + \"px)\";\r\n  }\r\n  function setLine(node, x1, y1, x2, y2) {\r\n    node.setAttribute(\"x1\", x1);\r\n    node.setAttribute(\"y1\", y1);\r\n    node.setAttribute(\"x2\", x2);\r\n    node.setAttribute(\"y2\", y2);\r\n  }\r\n  function lerp(a, b, e) {\r\n    return a + (b - a) * e;\r\n  }\r\n  function round1(v) {\r\n    return (Math.round(v * 10) / 10).toFixed(1);\r\n  }\r\n\r\n  // Eased animation. fn(e) is called with e from 0 to 1. Without\r\n  // requestAnimationFrame (or with ms = 0) it jumps straight to fn(1).\r\n  var animTokens = {};\r\n  function anim(key, ms, fn) {\r\n    var token = (animTokens[key] || 0) + 1;\r\n    animTokens[key] = token;\r\n    if (typeof requestAnimationFrame !== \"function\" || ms <= 0) {\r\n      fn(1);\r\n      return;\r\n    }\r\n    var start = null;\r\n    function frame(now) {\r\n      if (animTokens[key] !== token) return;\r\n      if (start === null) start = now;\r\n      var p = Math.min(1, (now - start) / ms);\r\n      var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;\r\n      fn(e);\r\n      if (p < 1) requestAnimationFrame(frame);\r\n    }\r\n    requestAnimationFrame(frame);\r\n  }\r\n\r\n  // Arrowheads, one marker per colour.\r\n  var COLORS = { g: \"#1DB584\", y: \"#E2B44A\", p: \"#F472B6\", b: \"#38BDF8\", w: \"#c9dccf\", r: \"#F87171\" };\r\n  var defs = el(\"defs\", {}, svg);\r\n  Object.keys(COLORS).forEach(function (k) {\r\n    var m = el(\"marker\", { id: \"ah-\" + k, viewBox: \"0 0 10 10\", refX: 9, refY: 5, markerUnits: \"userSpaceOnUse\", markerWidth: 13, markerHeight: 13, orient: \"auto\" }, defs);\r\n    el(\"path\", { d: \"M0 0 L10 5 L0 10 Z\", fill: COLORS[k] }, m);\r\n  });\r\n  function arrow(parent, colorKey, width) {\r\n    return el(\"line\", { x1: 0, y1: 0, x2: 0, y2: 0, stroke: COLORS[colorKey], \"stroke-width\": width || 3, \"marker-end\": \"url(#ah-\" + colorKey + \")\", \"stroke-linecap\": \"round\" }, parent);\r\n  }\r\n  function polygon(parent, cls) {\r\n    return el(\"polygon\", { points: \"\", class: cls }, parent);\r\n  }\r\n  function setPoly(node, pts) {\r\n    node.setAttribute(\"points\", pts.map(function (p) { return p[0].toFixed(1) + \",\" + p[1].toFixed(1); }).join(\" \"));\r\n  }\r\n  function lerpPts(a, b, e) {\r\n    return a.map(function (p, i) { return [lerp(p[0], b[i][0], e), lerp(p[1], b[i][1], e)]; });\r\n  }\r\n  // Maps maths coordinates (x right, y up) to screen pixels.\r\n  function makePlane(cx, cy, s) {\r\n    return {\r\n      x: function (v) { return cx + s * v; },\r\n      y: function (v) { return cy - s * v; },\r\n      pt: function (p) { return [cx + s * p[0], cy - s * p[1]]; },\r\n      s: s, cx: cx, cy: cy\r\n    };\r\n  }\r\n  function axes(parent, plane, xr, yr) {\r\n    el(\"line\", { x1: plane.x(-xr), y1: plane.y(0), x2: plane.x(xr), y2: plane.y(0), class: \"axis\" }, parent);\r\n    el(\"line\", { x1: plane.x(0), y1: plane.y(-yr), x2: plane.x(0), y2: plane.y(yr), class: \"axis\" }, parent);\r\n  }\r\n\n  // ── Module 3 helpers: graphs, curves, contour plane ───────────────────────\n  // makeGraph maps maths values to pixels with separate x and y scales.\n  function makeGraph(ox, oy, sx, sy) {\n    return {\n      ox: ox, oy: oy, sx: sx, sy: sy,\n      x: function (v) { return ox + sx * v; },\n      y: function (v) { return oy - sy * v; }\n    };\n  }\n  function curveD(g, f, a, b, n) {\n    var d = \"\";\n    for (var i = 0; i <= n; i++) {\n      var v = a + ((b - a) * i) / n;\n      d += (i ? \" L \" : \"M \") + g.x(v).toFixed(1) + \" \" + g.y(f(v)).toFixed(1);\n    }\n    return d;\n  }\n  function setD(node, d) {\n    node.setAttribute(\"d\", d);\n  }\n  function fmt(v, n) {\n    return (Math.round(v * 100000) / 100000).toFixed(n === undefined ? 1 : n);\n  }\n  function drawAxes(parent, g, xmax, ymax, xticks, yticks) {\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(xmax), y2: g.y(0), class: \"axis\" }, parent);\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(0), y2: g.y(ymax), class: \"axis\" }, parent);\n    (xticks || []).forEach(function (t) { txt(parent, g.x(t), g.y(0) + 15, \"tick\", String(t), \"middle\"); });\n    (yticks || []).forEach(function (t) { txt(parent, g.x(0) - 7, g.y(t) + 4, \"tick\", String(t), \"end\"); });\n  }\n  function card(parent, x, y, w, h, cls) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: 10, class: cls || \"fillG\" }, parent);\n  }\n  function ring(parent, cx, cy, rx, ry, cls) {\n    return el(\"ellipse\", { cx: cx, cy: cy, rx: rx, ry: ry, fill: \"none\", class: cls || \"contour\" }, parent);\n  }\n  function clipTo(id, x, y, w, h) {\n    var c = el(\"clipPath\", { id: id }, defs);\n    el(\"rect\", { x: x, y: y, width: w, height: h }, c);\n  }\n\n  // ── Module 4 helpers: seeded randomness, small shapes ─────────────────────\n  function mulberry(seed) {\n    var a = seed;\n    return function () {\n      a |= 0; a = (a + 0x6D2B79F5) | 0;\n      var t = Math.imul(a ^ (a >>> 15), 1 | a);\n      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;\n      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;\n    };\n  }\n  function gaussSource(rand) {\n    return function () {\n      var u = 1 - rand(), v = rand();\n      return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);\n    };\n  }\n  function box(parent, x, y, w, h, fill, stroke, r) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: r === undefined ? 6 : r, fill: fill, stroke: stroke || \"none\", \"stroke-width\": 2 }, parent);\n  }\n  function setBox(node, x, y, w, h) {\n    node.setAttribute(\"x\", x); node.setAttribute(\"y\", y); node.setAttribute(\"width\", Math.max(0, w)); node.setAttribute(\"height\", Math.max(0, h));\n  }\n  function vis(list, on) {\n    list.forEach(function (n) { show(n, on); });\n  }\n\n  var EXPLAIN = {\"same-mean\":{\"h\":\"WHAT YOU ARE LOOKING AT\",\"t\":\"**A** takes the values 4, 5, 6 with probabilities 0.25, 0.5, 0.25. **B** takes 0, 5, 10 with the same probabilities. Both balance at **5**: their mean is the same.\"},\"different-spread\":{\"h\":\"BUT THEY ARE SPREAD DIFFERENTLY\",\"t\":\"A stays within **1** of the mean. B stretches **5** away on each side. The mean cannot tell them apart, so we need a second number: the **spread**.\"},\"mean\":{\"h\":\"START FROM THE MEAN\",\"t\":\"Focus on A. Its mean is **5**. To measure spread we ask, for each value, **how far it is from this mean**.\"},\"deviations\":{\"h\":\"DEVIATIONS FROM THE MEAN\",\"t\":\"The deviation of a value is its signed distance from the mean: **4 is −1, 5 is 0, 6 is +1**. Averaging these just gives 0, because the minus and plus **cancel**.\"},\"square-deviations\":{\"h\":\"SQUARE THE DEVIATIONS\",\"t\":\"Squaring removes the signs and punishes bigger misses more: **(−1)² = 1, 0² = 0, (+1)² = 1**. Each square is drawn with that area (tiny here).\"},\"average\":{\"h\":\"AVERAGE THE SQUARES\",\"t\":\"Take the probability-weighted average of the squares: **0.25 × 1 + 0.5 × 0 + 0.25 × 1 = 0.5**. That is the **variance: Var(A) = 0.5**.\"},\"compare-variance\":{\"h\":\"COMPARE WITH B\",\"t\":\"For B the deviations are **−5, 0, +5**, so the squares are **25, 0, 25** (big squares). **Var(B) = 12.5**, which is **25 times larger** than Var(A).\"},\"ml-connection\":{\"h\":\"TAKEAWAY\",\"t\":\"Variance tells how **uncertain a prediction is** or how much a feature varies. The standard deviation (its square root) is in the original units: about **0.71 for A and 3.54 for B**.\"}};\n  // ── scene ──\n  var steps = [\n    { id: \"same-mean\", label: \"Two distributions, same mean\", caption: \"A takes the values 4, 5, 6 with probabilities 0.25, 0.5, 0.25. B takes 0, 5, 10 with the same probabilities. Both balance at 5: their mean (expected value) is 5.\" },\n    { id: \"different-spread\", label: \"But they are spread differently\", caption: \"A stays within 1 of the mean. B stretches 5 away on each side. The mean cannot tell them apart, so we need a second number: the spread.\" },\n    { id: \"mean\", label: \"Start from the mean\", caption: \"Focus on A. Its mean is 5. To measure spread we will ask, for each value, how far it is from this mean.\" },\n    { id: \"deviations\", label: \"Deviations from the mean\", caption: \"The deviation of a value is its distance from the mean with a sign: 4 is −1 away, 5 is 0 away, 6 is +1 away. Averaging these just gives 0, because the minus and plus cancel.\" },\n    { id: \"square-deviations\", label: \"Square the deviations\", caption: \"Squaring removes the signs and punishes bigger misses more: (−1)² = 1, 0² = 0, (+1)² = 1. Each square is drawn with that area (tiny here).\" },\n    { id: \"average\", label: \"Average the squares\", caption: \"Take the probability-weighted average of the squares: 0.25 × 1 + 0.5 × 0 + 0.25 × 1 = 0.5. That is the variance: Var(A) = 0.5.\" },\n    { id: \"compare-variance\", label: \"Compare with B\", caption: \"For B the deviations are −5, 0, +5, so the squares are 25, 0, 25 (big squares). Var(B) = 0.25 × 25 + 0 + 0.25 × 25 = 12.5, which is 25 times larger than Var(A).\" },\n    { id: \"ml-connection\", label: \"Why variance matters in ML\", caption: \"Variance tells how uncertain a prediction is or how much a feature varies. Standard deviation (the square root) is in the original units: about 0.71 for A and 3.54 for B.\" }\n  ];\n\n  var XS = function (v) { return 70 + 50 * v; };\n  var yA = 130, yB = 244, HS = 140;\n\n  function chart(parent, base, vals, color, title) {\n    var g = el(\"g\", {}, parent);\n    el(\"line\", { x1: 40, y1: base, x2: 600, y2: base, class: \"axis\" }, g);\n    [0, 5, 10].forEach(function (v) { txt(g, XS(v), base + 16, \"tick\", String(v), \"middle\"); });\n    vals.forEach(function (vp) {\n      box(g, XS(vp[0]) - 14, base - vp[1] * HS, 28, vp[1] * HS, color, \"none\", 3);\n    });\n    txt(g, 20, base - 70, \"big\", title, \"start\").setAttribute(\"font-size\", \"22\");\n    var m = el(\"line\", { x1: XS(5), y1: base - 88, x2: XS(5), y2: base, stroke: \"#e2b44a\", \"stroke-width\": 2.5, \"stroke-dasharray\": \"6 4\" }, g);\n    // Probability labels are drawn after the mean line, with a dark outline, so the dashed line never strikes through them.\n    vals.forEach(function (vp) {\n      var label = txt(g, XS(vp[0]), base - vp[1] * HS - 6, \"lbl\", String(vp[1]), \"middle\");\n      label.setAttribute(\"stroke\", \"#071510\");\n      label.setAttribute(\"stroke-width\", \"4\");\n      label.setAttribute(\"paint-order\", \"stroke\");\n    });\n    txt(g, XS(5) + 8, base - 94, \"lbl lbl-y\", \"mean 5\", \"start\");\n    return g;\n  }\n  var gA = chart(svg, yA, [[4, 0.25], [5, 0.5], [6, 0.25]], \"rgba(56,189,248,0.8)\", \"A\");\n  var gB = chart(svg, yB, [[0, 0.25], [5, 0.5], [10, 0.25]], \"rgba(244,114,182,0.8)\", \"B\");\n\n  var spreadG = el(\"g\", {}, svg);\n  var sa = arrow(spreadG, \"g\", 3); setLine(sa, XS(5) - 6, yA + 36, XS(4) - 14, yA + 36);\n  var sb = arrow(spreadG, \"g\", 3); setLine(sb, XS(5) + 6, yA + 36, XS(6) + 14, yA + 36);\n  txt(spreadG, XS(5), yA + 52, \"lbl lbl-g\", \"narrow\", \"middle\");\n  var sc = arrow(spreadG, \"r\", 3); setLine(sc, XS(5) - 6, yB + 36, XS(0), yB + 36);\n  var sd = arrow(spreadG, \"r\", 3); setLine(sd, XS(5) + 6, yB + 36, XS(10), yB + 36);\n  txt(spreadG, XS(5), yB + 52, \"lbl lbl-r\", \"wide\", \"middle\");\n\n  function devs(parent, base, pairs, color) {\n    var g = el(\"g\", {}, parent);\n    pairs.forEach(function (p) {\n      var d = p[1];\n      if (d !== 0) {\n        var a = arrow(g, color, 3);\n        setLine(a, XS(5), base + 30, XS(p[0]) + (d > 0 ? -16 : 16), base + 30);\n      } else {\n        el(\"circle\", { cx: XS(5), cy: base + 30, r: 4, fill: \"#c9dccf\" }, g);\n      }\n      txt(g, XS(p[0]), base + 50, \"lbl\", (d > 0 ? \"+\" : d < 0 ? \"−\" : \"\") + Math.abs(d), \"middle\");\n    });\n    return g;\n  }\n  var devA = devs(svg, yA, [[4, -1], [5, 0], [6, 1]], \"y\");\n  var devB = devs(svg, yB, [[0, -5], [5, 0], [10, 5]], \"y\");\n\n  function squares(parent, base, pairs, color) {\n    var g = el(\"g\", {}, parent);\n    pairs.forEach(function (p) {\n      var side = Math.abs(p[1]) * 6;\n      if (side > 0) box(g, XS(p[0]) - side / 2, base + 56, side, side, color, \"none\", 1);\n      txt(g, XS(p[0]), base + 56 + Math.max(side, 6) + 14, \"lbl\", String(p[1] * p[1]), \"middle\");\n    });\n    return g;\n  }\n  var sqA = squares(svg, yA, [[4, -1], [5, 0], [6, 1]], \"rgba(56,189,248,0.9)\");\n  var sqB = squares(svg, yB, [[0, -5], [5, 0], [10, 5]], \"rgba(244,114,182,0.9)\");\n\n  var avgG = el(\"g\", {}, svg);\n  card(avgG, 60, 196, 520, 120, \"fillG\");\n  txt(avgG, 320, 224, \"lbl lbl-g\", \"variance = the probability-weighted average of the squares\", \"middle\");\n  txt(avgG, 320, 258, \"mono\", \"0.25 × 1  +  0.5 × 0  +  0.25 × 1\", \"middle\");\n  txt(avgG, 320, 296, \"big\", \"Var(A) = 0.5\", \"middle\").setAttribute(\"font-size\", \"20\");\n\n  var cmpG = el(\"g\", {}, svg);\n  card(cmpG, 430, 8, 190, 46, \"fillA\");\n  txt(cmpG, 450, 36, \"note\", \"Var(A) =\", \"start\");\n  txt(cmpG, 540, 40, \"big\", \"0.5\", \"start\").setAttribute(\"font-size\", \"22\");\n  card(cmpG, 430, 62, 190, 46, \"fillB\");\n  txt(cmpG, 450, 90, \"note\", \"Var(B) =\", \"start\");\n  txt(cmpG, 540, 94, \"big\", \"12.5\", \"start\").setAttribute(\"font-size\", \"22\");\n\n  var mlG = el(\"g\", {}, svg);\n  txt(mlG, 320, 40, \"lbl\", \"standard deviation = √variance, in the original units\", \"middle\");\n  var SD = 40;\n  card(mlG, 60, 70, 150, 56, \"fillA\");\n  txt(mlG, 135, 104, \"big\", \"Model A\", \"middle\");\n  box(mlG, 230, 82, 0.71 * SD * 2, 32, \"rgba(56,189,248,0.85)\", \"none\", 4);\n  txt(mlG, 230 + 0.71 * SD * 2 + 8, 104, \"lbl\", \"spread ≈ 0.71\", \"start\");\n  card(mlG, 60, 150, 150, 56, \"fillB\");\n  txt(mlG, 135, 184, \"big\", \"Model B\", \"middle\");\n  box(mlG, 230, 162, 3.54 * SD * 2, 32, \"rgba(244,114,182,0.85)\", \"none\", 4);\n  txt(mlG, 230 + 3.54 * SD * 2 + 8, 184, \"lbl\", \"≈ 3.54\", \"start\");\n  card(mlG, 60, 240, 520, 84, \"fillG\");\n  txt(mlG, 320, 270, \"lbl\", \"same average error, very different reliability\", \"middle\");\n  txt(mlG, 320, 300, \"note\", \"larger variance = less predictable predictions, or a more spread-out feature\", \"middle\");\n\n  function render(index, id) {\n    var i = index;\n    show(gA, i <= 7 && i !== 7);\n    show(gB, i <= 1 || i === 6);\n    show(spreadG, i === 1);\n    show(devA, i === 3 || i === 4);\n    show(sqA, i === 4);\n    show(devB, i === 6);\n    show(sqB, i === 6);\n    show(avgG, i === 5);\n    show(cmpG, i === 6);\n    show(mlG, i === 7);\n    // In the final comparison, shift chart A upward area is the same; cards sit on the right.\n  }\n\n\n  // ── shared runtime: stepping, explanation panel, educational autoplay pacing, bridge ──\n  var current = 0;\n  var explainHeadEl = document.getElementById(\"explain-h\");\n\n  // **bold** markers in an explanation become <strong> nodes (built with DOM calls, never innerHTML).\n  function setRich(node, str) {\n    node.textContent = \"\";\n    var parts = String(str).split(\"**\");\n    for (var i = 0; i < parts.length; i++) {\n      if (parts[i] === \"\") continue;\n      var seg = document.createElement(i % 2 ? \"strong\" : \"span\");\n      seg.textContent = parts[i];\n      node.appendChild(seg);\n    }\n  }\n\n  function explanationFor(index) {\n    var ex = (typeof EXPLAIN === \"object\" && EXPLAIN) ? EXPLAIN[steps[index].id] : null;\n    return ex || { h: \"WHAT IS HAPPENING\", t: steps[index].caption };\n  }\n\n  // Autoplay pace: 4.5 to 10.5 seconds per step, longer for longer explanations, so a learner can read.\n  function stepMs(index) {\n    var words = String(explanationFor(index).t).replace(/\\*\\*/g, \"\").split(/\\s+/).length;\n    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));\n  }\n\n  function renderStep(index) {\n    var ex = explanationFor(index);\n    labelEl.textContent = steps[index].label;\n    if (explainHeadEl) explainHeadEl.textContent = ex.h;\n    setRich(captionEl, ex.t);\n    render(index, steps[index].id);\n  }\n\n  function goTo(index) {\n    if (index < 0 || index >= steps.length) return;\n    current = index;\n    renderStep(current);\n    if (window.ReagvisBridge) window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n\n  renderStep(current);\n\n  // Autoplay: exactly one timer, one step per tick, stops on the final step.\n  // PLAY on the final step restarts from the first step and plays again.\n  var timer = null;\n\n  function stopAuto() {\n    if (timer !== null) {\n      clearTimeout(timer);\n      timer = null;\n    }\n  }\n\n  function scheduleNext() {\n    timer = setTimeout(function () {\n      timer = null;\n      if (current >= steps.length - 1) return;\n      goTo(current + 1);\n      if (current < steps.length - 1) scheduleNext();\n    }, stepMs(current));\n  }\n\n  function startAuto() {\n    if (timer !== null) return;\n    if (current >= steps.length - 1) goTo(0);\n    scheduleNext();\n  }\n\n  window.addEventListener(\"pagehide\", stopAuto);\n\n  window.ReagvisAnimation = {\n    stepDuration: stepMs,\n    onCommand: function (type, stepId) {\n      if (type === \"PLAY\") startAuto();\n      else if (type === \"PAUSE\") stopAuto();\n      else if (type === \"NEXT\") { stopAuto(); goTo(current + 1); }\n      else if (type === \"PREVIOUS\") { stopAuto(); goTo(current - 1); }\n      else if (type === \"RESET\") { stopAuto(); goTo(0); }\n      else if (type === \"GOTO_STEP\") {\n        stopAuto();\n        for (var i = 0; i < steps.length; i++) {\n          if (steps[i].id === stepId) { goTo(i); break; }\n        }\n      }\n    },\n  };\n\n  if (window.ReagvisBridge) {\n    window.ReagvisBridge.ready();\n    window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n})();\n",
+  "lastFrozenContentHash": null,
+  "lastFrozenRevisionId": null,
+  "manifest": {
+    "bridgeVersion": {
+      "$numberInt": "1"
+    },
+    "capabilities": [
+      "play",
+      "pause",
+      "next",
+      "previous",
+      "reset",
+      "gotoStep"
+    ],
+    "heightPx": {
+      "$numberInt": "590"
+    },
+    "traceEvents": [
+      "same-mean",
+      "different-spread",
+      "mean",
+      "deviations",
+      "square-deviations",
+      "average",
+      "compare-variance",
+      "ml-connection"
+    ]
+  },
+  "packageId": "85f4f287-89a8-4459-b5b0-fc00dfb52d0b",
+  "packageTrace": {
+    "steps": [
+      {
+        "animationEvent": "same-mean",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "A and B have the same mean.",
+          "python": "def mean(d):\n    return sum(x * p for x, p in d.items())\n\nA = {4: 0.25, 5: 0.5, 6: 0.25}\nB = {0: 0.25, 5: 0.5, 10: 0.25}\nprint(mean(A), mean(B))   # 5.0 5.0"
+        },
+        "id": "same-mean",
+        "label": "Two distributions, same mean"
+      },
+      {
+        "animationEvent": "different-spread",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Compare how far apart each distribution's values are.",
+          "python": "def mean(d):\n    return sum(x * p for x, p in d.items())\n\nA = {4: 0.25, 5: 0.5, 6: 0.25}\nB = {0: 0.25, 5: 0.5, 10: 0.25}\nprint(max(A) - min(A), max(B) - min(B))   # 2 10"
+        },
+        "id": "different-spread",
+        "label": "But they are spread differently"
+      },
+      {
+        "animationEvent": "mean",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Measure spread relative to the mean of A.",
+          "python": "def mean(d):\n    return sum(x * p for x, p in d.items())\n\nA = {4: 0.25, 5: 0.5, 6: 0.25}\nB = {0: 0.25, 5: 0.5, 10: 0.25}\nm = mean(A)\nprint(m)   # 5.0"
+        },
+        "id": "mean",
+        "label": "Start from the mean"
+      },
+      {
+        "animationEvent": "deviations",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "deviation = value - mean. Their weighted average is always 0.",
+          "python": "def mean(d):\n    return sum(x * p for x, p in d.items())\n\nA = {4: 0.25, 5: 0.5, 6: 0.25}\nB = {0: 0.25, 5: 0.5, 10: 0.25}\nm = mean(A)\nprint([x - m for x in A])                  # [-1.0, 0.0, 1.0]\nprint(sum(p * (x - m) for x, p in A.items()))   # 0.0: they cancel"
+        },
+        "id": "deviations",
+        "label": "Deviations from the mean"
+      },
+      {
+        "animationEvent": "square-deviations",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Squaring removes the signs and punishes large deviations more.",
+          "python": "def mean(d):\n    return sum(x * p for x, p in d.items())\n\nA = {4: 0.25, 5: 0.5, 6: 0.25}\nB = {0: 0.25, 5: 0.5, 10: 0.25}\nm = mean(A)\nprint([(x - m) ** 2 for x in A])   # [1.0, 0.0, 1.0]"
+        },
+        "id": "square-deviations",
+        "label": "Square the deviations"
+      },
+      {
+        "animationEvent": "average",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "variance = expected squared deviation",
+          "python": "def mean(d):\n    return sum(x * p for x, p in d.items())\n\nA = {4: 0.25, 5: 0.5, 6: 0.25}\nB = {0: 0.25, 5: 0.5, 10: 0.25}\nm = mean(A)\nprint(sum(p * (x - m) ** 2 for x, p in A.items()))   # 0.5"
+        },
+        "id": "average",
+        "label": "Average the squares"
+      },
+      {
+        "animationEvent": "compare-variance",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Do the same for B and compare the two variances.",
+          "python": "def mean(d):\n    return sum(x * p for x, p in d.items())\n\nA = {4: 0.25, 5: 0.5, 6: 0.25}\nB = {0: 0.25, 5: 0.5, 10: 0.25}\ndef variance(d):\n    m = mean(d)\n    return sum(p * (x - m) ** 2 for x, p in d.items())\n\nprint(variance(A), variance(B))   # 0.5 12.5"
+        },
+        "id": "compare-variance",
+        "label": "Compare with B"
+      },
+      {
+        "animationEvent": "ml-connection",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Standard deviation = square root of variance, in the original units.",
+          "python": "def mean(d):\n    return sum(x * p for x, p in d.items())\n\nA = {4: 0.25, 5: 0.5, 6: 0.25}\nB = {0: 0.25, 5: 0.5, 10: 0.25}\ndef variance(d):\n    m = mean(d)\n    return sum(p * (x - m) ** 2 for x, p in d.items())\n\nprint(round(variance(A) ** 0.5, 2), round(variance(B) ** 0.5, 2))   # 0.71 3.54"
+        },
+        "id": "ml-connection",
+        "label": "Why variance matters in ML"
+      }
+    ],
+    "version": {
+      "$numberInt": "1"
+    }
+  },
+  "revision": {
+    "$numberInt": "5"
+  },
+  "revisionId": "r2",
+  "sourceKind": "zip",
+  "status": "frozen",
+  "title": "ML Module 4 — Variance",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498519"
+    }
+  },
+  "updatedBy": {
+    "$oid": "000000000000000000000000"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "title": "Bayes rule: updating a belief with evidence",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "prior",
+      "label": "The prior: belief before evidence",
+      "pseudocode": "The prior is what we believe before seeing the evidence.",
+      "python": "prior = 0.4   # P(spam)\nprint(prior)"
+    },
+    {
+      "id": "evidence",
+      "label": "The evidence arrives",
+      "pseudocode": "Observe the evidence: the email contains 'free'.",
+      "python": "email_has_free = True\nprint(email_has_free)"
+    },
+    {
+      "id": "likelihood",
+      "label": "The likelihood: evidence given the cause",
+      "pseudocode": "The likelihood is how likely the evidence is if the email is spam.",
+      "python": "spam_with_free, spam_total = 24, 40\nprint(spam_with_free / spam_total)   # 0.6"
+    },
+    {
+      "id": "reverse-condition",
+      "label": "We need the condition reversed",
+      "pseudocode": "We know P(free | spam) but want P(spam | free). Bayes' rule reverses the condition.",
+      "python": "# known:  P(free | spam) = 0.6\n# wanted: P(spam | free)\n# Bayes: P(spam | free) = P(free | spam) * P(spam) / P(free)\nprint('reverse the condition')"
+    },
+    {
+      "id": "normalize",
+      "label": "Normalize by the total evidence",
+      "pseudocode": "P(free) adds up how often 'free' appears from every possible cause.",
+      "python": "prior = 0.4        # P(spam)\nlike_spam = 0.6    # P(free | spam)\nlike_ham = 0.1     # P(free | not spam)\nevidence = like_spam * prior + like_ham * (1 - prior)\nprint(round(evidence, 2))   # 0.3"
+    },
+    {
+      "id": "posterior",
+      "label": "The posterior: the updated belief",
+      "pseudocode": "posterior = likelihood * prior / evidence",
+      "python": "prior = 0.4        # P(spam)\nlike_spam = 0.6    # P(free | spam)\nlike_ham = 0.1     # P(free | not spam)\nevidence = like_spam * prior + like_ham * (1 - prior)\nposterior = like_spam * prior / evidence\nprint(round(posterior, 2))   # 0.8"
+    },
+    {
+      "id": "compare-before-after",
+      "label": "Before and after",
+      "pseudocode": "Compare the prior with the posterior.",
+      "python": "prior = 0.4        # P(spam)\nlike_spam = 0.6    # P(free | spam)\nlike_ham = 0.1     # P(free | not spam)\nevidence = like_spam * prior + like_ham * (1 - prior)\nposterior = like_spam * prior / evidence\nprint(prior, round(posterior, 2))   # 0.4 0.8"
+    },
+    {
+      "id": "ml-connection",
+      "label": "How a classifier uses it",
+      "pseudocode": "Compute a posterior for each class and predict the larger one.",
+      "python": "prior = 0.4        # P(spam)\nlike_spam = 0.6    # P(free | spam)\nlike_ham = 0.1     # P(free | not spam)\nevidence = like_spam * prior + like_ham * (1 - prior)\nposterior = {'spam': like_spam * prior / evidence,\n             'not spam': like_ham * (1 - prior) / evidence}\nprint({k: round(v, 2) for k, v in posterior.items()})   # {'spam': 0.8, 'not spam': 0.2}\nprint(max(posterior, key=posterior.get))   # spam"
+    }
+  ]
+}

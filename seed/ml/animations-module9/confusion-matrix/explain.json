@@ -1,0 +1,42 @@
+{
+ "email-predictions": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "A spam filter has classified some emails. Here are **ten of them**; later we use all **100 emails** of the evaluation set. Our job is to count exactly how the filter is right and wrong."
+ },
+ "actual-labels": {
+  "h": "THE ACTUAL LABELS",
+  "t": "Each email has an **actual class**: spam or legitimate. **Spam is our positive class**, the thing we are trying to find."
+ },
+ "predicted-labels": {
+  "h": "THE PREDICTED LABELS",
+  "t": "The filter also gave each email a **predicted class**. Comparing actual with predicted shows where it was **right and where it was wrong**."
+ },
+ "correct-spam": {
+  "h": "TRUE POSITIVES",
+  "t": "**Actual spam, predicted spam** is a **true positive (TP)**: the filter caught it. Three of these ten emails are TP."
+ },
+ "missed-spam": {
+  "h": "FALSE NEGATIVES",
+  "t": "**Actual spam, predicted legitimate** is a **false negative (FN)**. The filter **missed** this spam, and it reaches the inbox."
+ },
+ "false-alarm": {
+  "h": "FALSE POSITIVES",
+  "t": "**Actual legitimate, predicted spam** is a **false positive (FP)**. A good email was **blocked by mistake**: a false alarm."
+ },
+ "correct-legitimate": {
+  "h": "TRUE NEGATIVES",
+  "t": "**Actual legitimate, predicted legitimate** is a **true negative (TN)**: a good email correctly allowed through."
+ },
+ "build-matrix": {
+  "h": "BUILD THE MATRIX",
+  "t": "The four outcomes go into a 2 × 2 table. **Rows are the actual class, columns are the predicted class.** We use this orientation everywhere in the course."
+ },
+ "fill-counts": {
+  "h": "FILL IN THE COUNTS",
+  "t": "Over all 100 emails: **TP = 16, FN = 4, FP = 8, TN = 72**. The four counts add up to 100, so every email appears in exactly one cell."
+ },
+ "read-matrix": {
+  "h": "TAKEAWAY",
+  "t": "Rows give the actual totals: **20 spam and 80 legitimate**. The diagonal (16 + 72 = 88) is correct, so accuracy is **0.88**. The off-diagonal cells show **which mistakes** were made, which accuracy alone hides."
+ }
+}

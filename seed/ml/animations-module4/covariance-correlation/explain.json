@@ -1,0 +1,38 @@
+{
+ "scatter": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Each point is one house: **size across, price up**. We want one number that says whether the two variables **move together**, and in which direction."
+ },
+ "positive": {
+  "h": "POSITIVE: THEY RISE TOGETHER",
+  "t": "Bigger houses cost more: as size grows, price grows. The points climb from lower left to upper right. This is **positive covariance**."
+ },
+ "negative": {
+  "h": "NEGATIVE: ONE UP, THE OTHER DOWN",
+  "t": "Now imagine price falls as size grows (say, size versus distance to the city). The points slide from upper left to lower right. This is **negative covariance**."
+ },
+ "near-zero": {
+  "h": "NEAR ZERO: NO STRAIGHT-LINE TREND",
+  "t": "Here the points show **no consistent upward or downward trend**. Knowing the size tells you nothing about which side of the average the price is on. Covariance is about zero."
+ },
+ "covariance": {
+  "h": "HOW COVARIANCE IS COMPUTED",
+  "t": "Mark the means (the cross). Each point makes a **rectangle**: its distance from the mean in x times its distance in y. Green rectangles (same side of both means) count positive, red negative. Covariance is their average: **(6+2+0+1+8)/5 = 3.4**."
+ },
+ "rescale": {
+  "h": "COVARIANCE DEPENDS ON THE UNITS",
+  "t": "Measure size in units **ten times larger**. The points have exactly the same shape, yet covariance jumps from **3.4 to 34**. A raw covariance is hard to compare across variables."
+ },
+ "correlation": {
+  "h": "CORRELATION REMOVES THE UNITS",
+  "t": "Divide by both standard deviations: **Corr = Cov / (σx × σy) = 3.4 / (√2 × √6) ≈ 0.98.** Correlation is always between **−1 and +1**: +1 a perfect rising line, −1 a perfect falling line, 0 no straight-line trend."
+ },
+ "zero-not-independence": {
+  "h": "ZERO CORRELATION IS NOT INDEPENDENCE",
+  "t": "These points follow **y = (x − 3)²**: y is completely determined by x. Yet the left and right halves cancel, so covariance and correlation are exactly **0**. Correlation only detects **straight-line** relationships."
+ },
+ "ml-connection": {
+  "h": "TAKEAWAY",
+  "t": "**Highly correlated features are redundant.** Collect all the variances and covariances into a **covariance matrix**: it is the key ingredient of PCA and of the multivariate normal in the next checkpoint."
+ }
+}

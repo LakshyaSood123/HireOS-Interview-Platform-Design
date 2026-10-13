@@ -1,0 +1,34 @@
+{
+ "observed-data": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "We observed **H H T H H**. This data is now **fixed**. The question: which value of p would have made exactly this result **the most likely**?"
+ },
+ "candidate-low": {
+  "h": "CANDIDATE p = 0.2",
+  "t": "Score a candidate flip by flip. Each head contributes **p**, each tail **1 − p**. For p = 0.2 the chips are **0.2, 0.2, 0.8, 0.2, 0.2**, and their product, the **likelihood, is only 0.0013**."
+ },
+ "candidate-middle": {
+  "h": "CANDIDATE p = 0.5",
+  "t": "For p = 0.5 every flip contributes 0.5, so the likelihood is **0.5⁵ = 0.031**. That is much better than 0.0013."
+ },
+ "candidate-high": {
+  "h": "CANDIDATE p = 0.8",
+  "t": "For p = 0.8 the chips are **0.8, 0.8, 0.2, 0.8, 0.8** and the likelihood is **0.082**, the best of the three. Under p = 0.8 the data we saw is **64 times more likely** than under p = 0.2."
+ },
+ "likelihood-curve": {
+  "h": "THE LIKELIHOOD CURVE",
+  "t": "Try every value of p from 0 to 1 and plot its likelihood: **L(p) = p⁴(1 − p)**. The three candidates are points on this curve, which **rises, peaks and falls**."
+ },
+ "maximum": {
+  "h": "FIND THE MAXIMUM",
+  "t": "The top of the curve is where the data are **most likely**. It sits at **p = 0.8**. The data stayed fixed; only the parameter was varied."
+ },
+ "mle": {
+  "h": "THE MAXIMUM LIKELIHOOD ESTIMATE",
+  "t": "**p_MLE = argmax L(p) = 0.8.** “Argmax” means the value of p that gives the largest L. Here it equals **4/5**, the observed fraction of heads."
+ },
+ "ml-connection": {
+  "h": "TAKEAWAY",
+  "t": "Fitting a probabilistic model usually means **maximum likelihood**: choose the parameters that make the training data most likely. We usually maximize the **log** of the likelihood, which has the same peak."
+ }
+}

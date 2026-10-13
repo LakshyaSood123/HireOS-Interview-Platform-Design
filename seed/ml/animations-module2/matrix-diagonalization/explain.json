@@ -1,0 +1,30 @@
+{
+ "complex-transform": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Apply **A** to the blue square. It becomes the pink slanted shape: **stretched and sheared** in a hard-to-read way."
+ },
+ "eigen-directions": {
+  "h": "FIND ITS SPECIAL DIRECTIONS",
+  "t": "A has two **eigen-directions**, **[1, 1] and [1, −1]**. They are the natural axes of this transformation."
+ },
+ "change-basis": {
+  "h": "CHANGE COORDINATES TO THOSE DIRECTIONS",
+  "t": "Rotate the view so the eigen-directions line up with the screen axes. This is the **P⁻¹ step**: we look at the same problem from a better angle."
+ },
+ "diagonal-space": {
+  "h": "HERE A ONLY STRETCHES EACH AXIS",
+  "t": "In these coordinates A does something simple: it **stretches the first axis by 3 and the second by 1**. That is a **diagonal matrix D**."
+ },
+ "scale": {
+  "h": "SCALE EACH AXIS INDEPENDENTLY",
+  "t": "Apply D: stretch by 3 along the first axis and leave the second alone. The axes **do not affect each other**."
+ },
+ "change-back": {
+  "h": "CHANGE BACK TO THE ORIGINAL COORDINATES",
+  "t": "Rotate back (the **P step**). The result is exactly the slanted shape that A produced directly in the first step."
+ },
+ "decomposition": {
+  "h": "TAKEAWAY",
+  "t": "**A = P D P⁻¹.** Change coordinates, scale each axis, change back: a hard transformation becomes **three simple moves**."
+ }
+}

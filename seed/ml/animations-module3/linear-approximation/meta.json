@@ -1,0 +1,48 @@
+{
+  "title": "Linear approximation: zoom in until it looks straight",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "nonlinear-function",
+      "label": "A curved loss",
+      "pseudocode": "The loss is a curve, not a straight line.",
+      "python": "def loss(w):\n    return (w - 3) ** 2\n\nprint(loss(1), loss(2), loss(3))   # 4 1 0: not a straight line"
+    },
+    {
+      "id": "choose-point",
+      "label": "Choose the point we are standing at",
+      "pseudocode": "Choose the current point a, and note its loss.",
+      "python": "def loss(w):\n    return (w - 3) ** 2\n\na = 1.0\nprint(a, loss(a))   # 1.0 4.0"
+    },
+    {
+      "id": "tangent-line",
+      "label": "Draw the tangent line",
+      "pseudocode": "The tangent line at a is: loss(a) + slope * h, where h is the step away from a.",
+      "python": "def slope(w):\n    return 2 * (w - 3)\n\na = 1.0\nprint(slope(a))   # -4.0, so the line is 4 - 4*h"
+    },
+    {
+      "id": "nearby-point",
+      "label": "Look at a nearby point",
+      "pseudocode": "Step to a + h and compare the line with the true curve there.",
+      "python": "def loss(w):\n    return (w - 3) ** 2\n\nh = 0.5\nprint(loss(1 + h))   # 2.25 (the curve)"
+    },
+    {
+      "id": "approximation",
+      "label": "The approximation and its error",
+      "pseudocode": "prediction = loss(a) + slope * h. Then error = true loss - prediction.",
+      "python": "def loss(w):\n    return (w - 3) ** 2\n\ndef slope(w):\n    return 2 * (w - 3)\n\na, h = 1.0, 0.5\nprediction = loss(a) + slope(a) * h\nprint(prediction, loss(a + h), loss(a + h) - prediction)   # 2.0 2.25 0.25"
+    },
+    {
+      "id": "error-grows",
+      "label": "The error grows with distance",
+      "pseudocode": "Try bigger steps h and see how much further off the line becomes.",
+      "python": "def loss(w):\n    return (w - 3) ** 2\n\ndef slope(w):\n    return 2 * (w - 3)\n\nfor h in [0.5, 1.0, 2.0]:\n    prediction = loss(1) + slope(1) * h\n    print(h, prediction, loss(1 + h), loss(1 + h) - prediction)\n# 0.5 2.0 2.25 0.25 / 1.0 0.0 1.0 1.0 / 2.0 -4.0 0.0 4.0"
+    },
+    {
+      "id": "ml-connection",
+      "label": "Why training takes small steps",
+      "pseudocode": "new loss is about old loss + slope * change in w, and this only holds for small changes.",
+      "python": "def loss(w):\n    return (w - 3) ** 2\n\ndef slope(w):\n    return 2 * (w - 3)\n\nw, change = 1.0, 0.1\nprint(loss(w) + slope(w) * change, loss(w + change))   # 3.6 3.61 (close for a small step)"
+    }
+  ]
+}

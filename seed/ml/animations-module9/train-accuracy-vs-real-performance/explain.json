@@ -1,0 +1,38 @@
+{
+ "training-data": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "A spam classifier is fitted to a set of **training emails**. Its parameters are tuned to these particular examples."
+ },
+ "high-training-score": {
+  "h": "A HIGH TRAINING SCORE",
+  "t": "Scored on those same emails, it reaches **98 percent accuracy**. That looks excellent, but the model **has already seen these emails**."
+ },
+ "new-data": {
+  "h": "NEW, UNSEEN EMAILS",
+  "t": "Now fresh emails arrive that were **not used to fit** the model. This **validation data** shows how the model behaves on mail it has never seen."
+ },
+ "performance-drop": {
+  "h": "PERFORMANCE DROPS",
+  "t": "Validation accuracy is only **84 percent**, a **14-point gap**. The validation score is the better guide to real use. A large gap is the overfitting you met in Regression in Practice."
+ },
+ "imbalanced-data": {
+  "h": "A DIFFERENT PROBLEM: IMBALANCE",
+  "t": "A mailbox of 100 emails has **95 legitimate and only 5 spam**. When one class is rare, **accuracy can hide a lot**."
+ },
+ "always-negative": {
+  "h": "A MODEL THAT ALWAYS SAYS LEGITIMATE",
+  "t": "Consider a lazy model that predicts **legitimate for every email**. It never flags anything."
+ },
+ "high-accuracy": {
+  "h": "95% ACCURACY",
+  "t": "It is right for all 95 legitimate emails: **95 correct out of 100**, so 95 percent accuracy. That sounds great."
+ },
+ "missed-positive-class": {
+  "h": "BUT IT MISSES EVERY SPAM",
+  "t": "Yet it catches **0 of the 5 spam** emails. The high accuracy came from **ignoring the rare class** completely."
+ },
+ "need-better-metrics": {
+  "h": "TAKEAWAY",
+  "t": "Accuracy is **one metric, not the whole story**. Next comes a table of the four outcomes, then precision, recall and F1, which look at **each kind of mistake**."
+ }
+}

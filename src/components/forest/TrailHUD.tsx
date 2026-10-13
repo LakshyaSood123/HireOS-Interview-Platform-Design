@@ -1,6 +1,7 @@
 import { useAppState } from "../../state/AppStateContext"
 import { useAuth } from "../../auth/AuthContext"
 import OwlAvatar from "../OwlAvatar"
+import { usePilotLearnerUi } from "../../config/pilotMode"
 
 interface TrailHUDProps {
   /** App-level navigate (App.tsx's `handleNavigate`), so leaving Reagvis
@@ -19,6 +20,7 @@ export default function TrailHUD({ onNavigateHireOS }: TrailHUDProps) {
     simulatedReadinessScore,
   } = useAppState()
   const { user, logout } = useAuth()
+  const pilot = usePilotLearnerUi()
 
   const handleReturnToHireOS = () => {
     returnToHireOS()
@@ -31,6 +33,7 @@ export default function TrailHUD({ onNavigateHireOS }: TrailHUDProps) {
 
         {/* ── Left: Brand & Return to HireOS ── */}
         <div className="flex items-center gap-3">
+          {!pilot && (
           <button
             onClick={handleReturnToHireOS}
             title="Return to HireOS Interview"
@@ -49,8 +52,9 @@ export default function TrailHUD({ onNavigateHireOS }: TrailHUDProps) {
             </svg>
             <span className="hidden sm:inline">HireOS</span>
           </button>
+          )}
 
-          <div className="h-4 w-[1px] bg-[#BBD4B8] hidden sm:block" />
+          {!pilot && <div className="h-4 w-[1px] bg-[#BBD4B8] hidden sm:block" />}
 
           {/* Reagvis Labs Logo & Brand */}
           <div className="flex items-center gap-2">
@@ -70,7 +74,7 @@ export default function TrailHUD({ onNavigateHireOS }: TrailHUDProps) {
 
         {/* ── Center: Primary Navigation Links (Minimal & Sleek) ── */}
         <nav className="hidden md:flex items-center gap-1 p-1 rounded-full bg-white/70 border border-[#BBD4B8]/60 shadow-2xs">
-          <button
+          {!pilot && (<button
             onClick={() => setReagvisView("intro")}
             className={`px-4 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
               reagvisView === "intro"
@@ -79,7 +83,7 @@ export default function TrailHUD({ onNavigateHireOS }: TrailHUDProps) {
             }`}
           >
             Home
-          </button>
+          </button>)}
           <button
             onClick={() => setReagvisView("library")}
             className={`px-4 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
@@ -90,7 +94,7 @@ export default function TrailHUD({ onNavigateHireOS }: TrailHUDProps) {
           >
             Courses
           </button>
-          <button
+          {!pilot && (<button
             onClick={() => setReagvisView("map")}
             className={`px-4 py-1 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
               reagvisView === "map"
@@ -101,18 +105,18 @@ export default function TrailHUD({ onNavigateHireOS }: TrailHUDProps) {
             <span>🗺️</span>
             <span>My Trail</span>
             <span className="w-1.5 h-1.5 rounded-full bg-[#1DB584] animate-ping" />
-          </button>
+          </button>)}
         </nav>
 
         {/* ── Right: Gamification HUD (Compact & Soft) ── */}
         <div className="flex items-center gap-2 sm:gap-2.5">
-          {/* Readiness */}
-          <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/80 border border-[#BBD4B8]/70 shadow-2xs">
+          {/* Readiness (mock interview-readiness score; not shown to pilot learners) */}
+          {!pilot && <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/80 border border-[#BBD4B8]/70 shadow-2xs">
             <span className="text-[10px] font-bold text-gray-500 hidden sm:inline">Ready</span>
             <span className="text-xs font-black font-mono text-[#1DB584]">
               {simulatedReadinessScore}%
             </span>
-          </div>
+          </div>}
 
           {/* Streak */}
           <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/80 border border-[#BBD4B8]/70 text-xs font-bold text-[#E27D4C] shadow-2xs">
@@ -128,7 +132,7 @@ export default function TrailHUD({ onNavigateHireOS }: TrailHUDProps) {
 
           {/* Profile Mentor Avatar */}
           <button
-            onClick={() => setReagvisView("intro")}
+            onClick={() => setReagvisView(pilot ? "library" : "intro")}
             className="w-8 h-8 rounded-full bg-white/90 border border-[#BBD4B8] shadow-xs flex items-center justify-center cursor-pointer hover:scale-105 transition-transform ml-0.5"
             title="Profile & Diagnostic Overview"
           >

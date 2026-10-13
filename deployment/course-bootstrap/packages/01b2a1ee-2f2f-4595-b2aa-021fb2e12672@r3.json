@@ -1,0 +1,123 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322c4e9cccef168ece9"
+  },
+  "assets": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498489"
+    }
+  },
+  "createdBy": {
+    "$oid": "000000000000000000000000"
+  },
+  "css": "body {\n  margin: 0;\n  padding: 16px;\n  box-sizing: border-box;\n  background: #0b1d16;\n  color: #e6f5ec;\n  font-family: system-ui, sans-serif;\n}\n.scene {\n  display: flex;\n  flex-direction: column;\n  gap: 14px;\n}\n.step-label {\n  margin: 0;\n  font-size: 13px;\n  font-weight: 700;\n  letter-spacing: 0.08em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.dataset {\n  width: 100%;\n  border-collapse: collapse;\n  font-size: 13px;\n}\n.dataset th,\n.dataset td {\n  padding: 6px 10px;\n  border: 1px solid rgba(29, 181, 132, 0.25);\n  text-align: right;\n  transition: background 0.35s ease, color 0.35s ease;\n}\n.dataset th {\n  color: #a7ce65;\n  font-weight: 700;\n}\n.dataset .feature-hl {\n  background: rgba(29, 181, 132, 0.18);\n  color: #7ee8bd;\n}\n.dataset .label-hl {\n  background: rgba(226, 180, 74, 0.2);\n  color: #e2b44a;\n}\n.split {\n  display: none;\n  gap: 10px;\n}\n.split.on {\n  display: flex;\n}\n.pane {\n  flex: 1;\n  padding: 10px;\n  border-radius: 10px;\n  border: 1px solid rgba(29, 181, 132, 0.35);\n  font-size: 12px;\n}\n.y-pane {\n  border-color: rgba(226, 180, 74, 0.5);\n}\n.pane-title {\n  font-weight: 700;\n}\n.sample {\n  display: none;\n  gap: 10px;\n  align-items: center;\n  font-size: 13px;\n}\n.sample.on {\n  display: flex;\n}\n.sample span:first-child {\n  padding: 6px 10px;\n  border-radius: 8px;\n  background: rgba(29, 181, 132, 0.15);\n}\n.arrow {\n  color: #a7ce65;\n}\n.caption {\n  margin: 0;\n  font-size: 13px;\n  line-height: 1.5;\n  color: #c9dccf;\n  min-height: 40px;\n}\n\n/* ── explanation panel (shared by every generated ML animation) ── */\n.explain {\n  box-sizing: border-box;\n  max-width: 640px;\n  margin-top: 4px;\n  padding: 14px 18px 16px;\n  min-height: 150px;\n  border-radius: 12px;\n  background: rgba(29, 181, 132, 0.10);\n  border: 1px solid rgba(29, 181, 132, 0.45);\n  border-left: 5px solid #1db584;\n}\n.explain-h {\n  margin: 0 0 8px;\n  font-size: 13px;\n  font-weight: 800;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.explain-t {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.55;\n  color: #f1faf4;\n}\n.explain-t strong {\n  font-weight: 800;\n  color: #ffd98a;\n}\n",
+  "html": "<!doctype html>\n<html>\n  <head>\n    <meta charset=\"utf-8\" />\n    <title>Features and Labels</title>\n  </head>\n  <body>\n    <div class=\"scene\">\n      <p class=\"step-label\" id=\"step-label\">Raw table</p>\n      <table class=\"dataset\" id=\"dataset\">\n        <thead>\n          <tr>\n            <th data-col=\"area\">Area</th>\n            <th data-col=\"bedrooms\">Bedrooms</th>\n            <th data-col=\"age\">Age</th>\n            <th data-col=\"price\">Sale Price</th>\n          </tr>\n        </thead>\n        <tbody>\n          <tr><td>1200</td><td>2</td><td>10</td><td>45</td></tr>\n          <tr><td>1800</td><td>3</td><td>4</td><td>72</td></tr>\n          <tr><td>900</td><td>1</td><td>15</td><td>32</td></tr>\n        </tbody>\n      </table>\n      <div class=\"split\" id=\"split\">\n        <div class=\"pane x-pane\" id=\"x-pane\"><span class=\"pane-title\">X: input features</span></div>\n        <div class=\"pane y-pane\" id=\"y-pane\"><span class=\"pane-title\">y: target label</span></div>\n      </div>\n      <div class=\"sample\" id=\"sample\">\n        <span id=\"sample-values\">[1500, 3, 6]</span>\n        <span class=\"arrow\">→ model →</span>\n        <span id=\"prediction-text\">Predicted Sale Price (model estimate)</span>\n      </div>\n      <section class=\"explain\" aria-live=\"polite\">\n        <h3 class=\"explain-h\" id=\"explain-h\"></h3>\n        <p class=\"explain-t\" id=\"caption\"></p>\n      </section>\n    </div>\n  </body>\n</html>\n",
+  "js": "(function () {\n  var steps = [\n    { id: \"raw-table\", label: \"Raw table\", caption: \"A dataset is a table: each row is one example, each column is one piece of information.\", showFeatures: false, showLabel: false, showSplit: false, showSample: false },\n    { id: \"features\", label: \"Features\", caption: \"Area, Bedrooms and Age are the features: the information the model receives.\", showFeatures: true, showLabel: false, showSplit: false, showSample: false },\n    { id: \"label\", label: \"Label\", caption: \"Sale Price is the label: the value the model is trained to predict.\", showFeatures: false, showLabel: true, showSplit: false, showSample: false },\n    { id: \"split\", label: \"X and y\", caption: \"Split the table: X holds the features, y holds the label.\", showFeatures: false, showLabel: false, showSplit: true, showSample: false },\n    { id: \"new-sample\", label: \"New sample\", caption: \"A new house with features [1500, 3, 6] goes into the trained model, which outputs an estimated price.\", showFeatures: false, showLabel: false, showSplit: true, showSample: true },\n  ];\n\n  var current = 0;\n  var labelEl = document.getElementById(\"step-label\");\n  var captionEl = document.getElementById(\"caption\");\n  var explainHeadEl = document.getElementById(\"explain-h\");\n  // Per-step explanations (mirrors explain.json in this package folder). **bold** markers become <strong>.\n  var EXPLAIN = {\"raw-table\": {\"h\": \"WHAT YOU ARE LOOKING AT\", \"t\": \"A dataset is a **table**: each **row is one example** (here, a house) and each **column is one piece of information** about it.\"}, \"features\": {\"h\": \"FEATURES\", \"t\": \"**Area, Bedrooms and Age** are the **features**: the information the model receives as input. Highlighting them separates what the model may use from what it must predict.\"}, \"label\": {\"h\": \"THE LABEL\", \"t\": \"**Sale Price** is the **label**: the value the model is trained to **predict**. During training each house comes with its answer; for a new house the answer is unknown.\"}, \"split\": {\"h\": \"X AND y\", \"t\": \"Splitting the table gives **X**, the features, and **y**, the label. Nearly every supervised learning algorithm takes this pair as input: **learn y from X**.\"}, \"new-sample\": {\"h\": \"USING THE TRAINED MODEL\", \"t\": \"A **new house with features [1500, 3, 6]** goes into the trained model, which outputs an **estimated price**. For a new house there is no label yet: the model produces it.\"}};\n\n  function setRich(node, str) {\n    node.textContent = \"\";\n    var parts = String(str).split(\"**\");\n    for (var i = 0; i < parts.length; i++) {\n      if (parts[i] === \"\") continue;\n      var seg = document.createElement(i % 2 ? \"strong\" : \"span\");\n      seg.textContent = parts[i];\n      node.appendChild(seg);\n    }\n  }\n\n  function explanationFor(index) {\n    var ex = EXPLAIN[steps[index].id];\n    return ex || { h: \"WHAT IS HAPPENING\", t: steps[index].caption || steps[index].detail || \"\" };\n  }\n\n  function stepMs(index) {\n    var words = String(explanationFor(index).t).replace(/\\*\\*/g, \"\").split(/\\s+/).length;\n    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));\n  }\n\n  function showExplanation(index) {\n    var ex = explanationFor(index);\n    if (explainHeadEl) explainHeadEl.textContent = ex.h;\n    setRich(captionEl, ex.t);\n  }\n  var splitEl = document.getElementById(\"split\");\n  var sampleEl = document.getElementById(\"sample\");\n  var table = document.getElementById(\"dataset\");\n\n  function render(index) {\n    var step = steps[index];\n    labelEl.textContent = step.label;\n    showExplanation(index);\n    var rows = table.querySelectorAll(\"tbody tr\");\n    var headers = table.querySelectorAll(\"thead th\");\n    for (var h = 0; h < headers.length; h++) headers[h].classList.remove(\"feature-hl\", \"label-hl\");\n    for (var r = 0; r < rows.length; r++) {\n      var cells = rows[r].querySelectorAll(\"td\");\n      for (var c = 0; c < cells.length; c++) cells[c].classList.remove(\"feature-hl\", \"label-hl\");\n    }\n    if (step.showFeatures) {\n      for (var f = 0; f < 3; f++) {\n        headers[f].classList.add(\"feature-hl\");\n        for (var rr = 0; rr < rows.length; rr++) rows[rr].querySelectorAll(\"td\")[f].classList.add(\"feature-hl\");\n      }\n    }\n    if (step.showLabel) {\n      headers[3].classList.add(\"label-hl\");\n      for (var lr = 0; lr < rows.length; lr++) rows[lr].querySelectorAll(\"td\")[3].classList.add(\"label-hl\");\n    }\n    splitEl.className = step.showSplit ? \"split on\" : \"split\";\n    sampleEl.className = step.showSample ? \"sample on\" : \"sample\";\n  }\n\n  function goTo(index) {\n    if (index < 0 || index >= steps.length) return;\n    current = index;\n    render(current);\n    if (window.ReagvisBridge) window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n\n  render(current);\n\n  // Autoplay pace: 4.5 to 10.5 seconds per step (longer for longer explanations), exactly one timer.\n  // PLAY on the final step restarts from the first step and plays again.\n  var timer = null;\n\n  function stopAuto() {\n    if (timer !== null) {\n      clearTimeout(timer);\n      timer = null;\n    }\n  }\n\n  function scheduleNext() {\n    timer = setTimeout(function () {\n      timer = null;\n      if (current >= steps.length - 1) return;\n      goTo(current + 1);\n      if (current < steps.length - 1) scheduleNext();\n    }, stepMs(current));\n  }\n\n  function startAuto() {\n    if (timer !== null) return;\n    if (current >= steps.length - 1) goTo(0);\n    scheduleNext();\n  }\n\n  window.addEventListener(\"pagehide\", stopAuto);\n\n  window.ReagvisAnimation = {\n    stepDuration: stepMs,\n    onCommand: function (type, stepId) {\n      if (type === \"PLAY\") startAuto();\n      else if (type === \"PAUSE\") stopAuto();\n      else if (type === \"NEXT\") { stopAuto(); goTo(current + 1); }\n      else if (type === \"PREVIOUS\") { stopAuto(); goTo(current - 1); }\n      else if (type === \"RESET\") { stopAuto(); goTo(0); }\n      else if (type === \"GOTO_STEP\") {\n        stopAuto();\n        for (var i = 0; i < steps.length; i++) {\n          if (steps[i].id === stepId) { goTo(i); break; }\n        }\n      }\n    },\n  };\n\n  if (window.ReagvisBridge) {\n    window.ReagvisBridge.ready();\n    window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n})();\n",
+  "lastFrozenContentHash": null,
+  "lastFrozenRevisionId": null,
+  "manifest": {
+    "bridgeVersion": {
+      "$numberInt": "1"
+    },
+    "capabilities": [
+      "play",
+      "pause",
+      "next",
+      "previous",
+      "reset",
+      "gotoStep"
+    ],
+    "heightPx": {
+      "$numberInt": "470"
+    },
+    "traceEvents": [
+      "raw-table",
+      "features",
+      "label",
+      "split",
+      "new-sample"
+    ]
+  },
+  "packageId": "01b2a1ee-2f2f-4595-b2aa-021fb2e12672",
+  "packageTrace": {
+    "steps": [
+      {
+        "animationEvent": "raw-table",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Each row is one example. Each column is one piece of information.\ndataset <- rows of (area, bedrooms, age, price)",
+          "python": "dataset = [\n    [1200, 2, 10, 45],\n    [1800, 3, 4, 72],\n    [900, 1, 15, 32],\n]"
+        },
+        "id": "raw-table",
+        "label": "The raw table"
+      },
+      {
+        "animationEvent": "features",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Features are the inputs the model receives: area, bedrooms, age.\nx <- [area, bedrooms, age]",
+          "python": "x = [1200, 2, 10]  # features of one house"
+        },
+        "id": "features",
+        "label": "Choose features"
+      },
+      {
+        "animationEvent": "label",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "The label is the value to predict: sale price.\ny <- sale_price",
+          "python": "y = 45  # label of the same house"
+        },
+        "id": "label",
+        "label": "Choose the label"
+      },
+      {
+        "animationEvent": "split",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "X collects every feature row. y collects every label.\nX <- features of all rows\ny <- labels of all rows",
+          "python": "dataset = [\n    [1200, 2, 10, 45],\n    [1800, 3, 4, 72],\n    [900, 1, 15, 32],\n]\n\nX = [row[:-1] for row in dataset]\ny = [row[-1] for row in dataset]\nprint(X[0], y[0])"
+        },
+        "id": "split",
+        "label": "Split into X and y"
+      },
+      {
+        "animationEvent": "new-sample",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "A new feature row goes into the trained model.\nprediction <- model.predict([1500, 3, 6])",
+          "python": "# A stand-in formula plays the role of a trained model.\ndef trained_model(x):\n    area, bedrooms, age = x\n    return 0.03 * area + 5 * bedrooms - 0.5 * age\n\nnew_x = [1500, 3, 6]\nprint(round(trained_model(new_x), 1))  # 57.0"
+        },
+        "id": "new-sample",
+        "label": "Predict a new house"
+      }
+    ],
+    "version": {
+      "$numberInt": "1"
+    }
+  },
+  "revision": {
+    "$numberInt": "6"
+  },
+  "revisionId": "r3",
+  "sourceKind": "zip",
+  "status": "frozen",
+  "title": "ML Seed — Features and Labels",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498489"
+    }
+  },
+  "updatedBy": {
+    "$oid": "000000000000000000000000"
+  }
+}

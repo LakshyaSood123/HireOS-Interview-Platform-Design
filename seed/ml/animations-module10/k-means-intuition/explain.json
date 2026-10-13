@@ -1,0 +1,38 @@
+{
+ "dataset": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Our **twelve customers**, with no labels, plotted by purchases per month and average spend. The goal is to **group them by similarity**."
+ },
+ "choose-k": {
+  "h": "CHOOSE K",
+  "t": "K-Means needs the **number of clusters in advance**. Here we choose **K = 3**. We will see later that this choice matters."
+ },
+ "initial-centers": {
+  "h": "PLACE K INITIAL CENTERS",
+  "t": "Start with three **centers** (diamonds), here at (3, 4), (5, 3) and (5, 9.5). They live in the **same space as the data** and are only a first guess."
+ },
+ "nearest-center": {
+  "h": "FIND EACH POINT'S NEAREST CENTER",
+  "t": "Every customer finds the center **nearest** to it. The thin lines show these choices."
+ },
+ "assign-groups": {
+  "h": "ASSIGN TO GROUPS",
+  "t": "Each customer joins the group of its nearest center. The grouping is rough: the customer at **(6.8, 6.8)** joined the wrong clump."
+ },
+ "compute-means": {
+  "h": "COMPUTE THE GROUP MEANS",
+  "t": "For each group, find the **mean position** of its members (the crosses). This is where the center would sit if it were in the middle of its points."
+ },
+ "move-centers": {
+  "h": "MOVE THE CENTERS",
+  "t": "Each center **moves to the mean of its group**. The centers now fit their groups better than the starting guess."
+ },
+ "repeat": {
+  "h": "REPEAT",
+  "t": "With the centers moved, assign again: the stray customer **switches groups**. Then move the centers once more."
+ },
+ "final-clusters": {
+  "h": "TAKEAWAY",
+  "t": "Now nothing changes: **three clusters** with centers near (1.68, 2.0), (6.58, 6.12) and (3.67, 8.28). K-Means **alternates assign and move** until the groups are stable."
+ }
+}

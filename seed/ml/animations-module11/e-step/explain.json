@@ -1,0 +1,38 @@
+{
+ "fixed-components": {
+  "h": "WHAT HAPPENS IN THE E-STEP",
+  "t": "In the **E-step** the current parameters are **fixed**: A (weight 0.4, mean 3, spread 1) and B (weight 0.6, mean 6, spread 1.5). We only compute memberships; nothing will move."
+ },
+ "select-point": {
+  "h": "PICK ONE POINT",
+  "t": "Take one customer at spend **x = 4.5**. We want to know how much responsibility each component takes for this point."
+ },
+ "likelihood-a": {
+  "h": "HOW WELL DOES A EXPLAIN IT?",
+  "t": "Evaluate component A's density at x: **0.1295**. This is the likelihood of the point under A alone."
+ },
+ "likelihood-b": {
+  "h": "HOW WELL DOES B EXPLAIN IT?",
+  "t": "Evaluate component B's density at x: **0.1613**. B explains this point somewhat better than A, partly because B is wider."
+ },
+ "apply-weights": {
+  "h": "APPLY THE MIXING WEIGHTS",
+  "t": "Multiply each density by its component's mixing weight: **0.4 × 0.1295** for A and **0.6 × 0.1613** for B. A component that covers more customers is more likely in advance."
+ },
+ "unnormalized-scores": {
+  "h": "UNNORMALIZED SCORES",
+  "t": "The weighted scores are **0.0518 for A** and **0.0968 for B**. They are not shares yet, because they do **not add up to 1**."
+ },
+ "normalize": {
+  "h": "NORMALIZE ACROSS COMPONENTS",
+  "t": "Divide each score by the total, **0.1486**. This turns the scores into shares that add up to 1, which is what makes them **responsibilities**."
+ },
+ "responsibilities": {
+  "h": "THE RESPONSIBILITIES",
+  "t": "For this point: **A 0.3486** and **B 0.6514**. Only memberships were computed, so **the components are exactly as before**."
+ },
+ "e-step-summary": {
+  "h": "TAKEAWAY",
+  "t": "Doing the same for all ten customers gives each one a row of responsibilities: low spends belong almost entirely to A, high spends to B, and 4.5 is split. **The E-step changes memberships, not parameters.**"
+ }
+}

@@ -1,0 +1,66 @@
+{
+  "title": "Convergence: the loop settles",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "initial-state",
+      "label": "The starting state",
+      "pseudocode": "Start with the initial centers.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\npoints = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\ncenters = [(3, 4), (5, 3), (5, 9.5)]\ndef wcss(centers, labels):\n    return sum(distance(p, centers[l]) ** 2 for p, l in zip(points, labels))\nlabels = [nearest_center(p, centers) for p in points]\nprint('objective will be measured as WCSS')\n# prints: objective will be measured as WCSS"
+    },
+    {
+      "id": "assignment-1",
+      "label": "Assignment 1",
+      "pseudocode": "Assign, then measure the objective.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\npoints = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\ncenters = [(3, 4), (5, 3), (5, 9.5)]\ndef wcss(centers, labels):\n    return sum(distance(p, centers[l]) ** 2 for p, l in zip(points, labels))\nlabels = [nearest_center(p, centers) for p in points]\nprint(round(wcss(centers, labels), 2))\n# prints: 82.06"
+    },
+    {
+      "id": "update-1",
+      "label": "Update 1",
+      "pseudocode": "Move the centers; the objective falls.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\npoints = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\ndef mean_point(m):\n    return (sum(p[0] for p in m) / len(m), sum(p[1] for p in m) / len(m))\ncenters = [(3, 4), (5, 3), (5, 9.5)]\ndef wcss(centers, labels):\n    return sum(distance(p, centers[l]) ** 2 for p, l in zip(points, labels))\nlabels = [nearest_center(p, centers) for p in points]\nnew = [mean_point([p for p, l in zip(points, labels) if l == i]) for i in range(3)]\nprint(round(wcss(new, labels), 2))\n# prints: 13.06"
+    },
+    {
+      "id": "objective-drops",
+      "label": "The objective drops",
+      "pseudocode": "Compare before and after the update.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\npoints = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\ndef mean_point(m):\n    return (sum(p[0] for p in m) / len(m), sum(p[1] for p in m) / len(m))\ncenters = [(3, 4), (5, 3), (5, 9.5)]\ndef wcss(centers, labels):\n    return sum(distance(p, centers[l]) ** 2 for p, l in zip(points, labels))\nlabels = [nearest_center(p, centers) for p in points]\nnew = [mean_point([p for p, l in zip(points, labels) if l == i]) for i in range(3)]\nprint(round(wcss(centers, labels), 2), '->', round(wcss(new, labels), 2))\n# prints: 82.06 -> 13.06"
+    },
+    {
+      "id": "assignment-2",
+      "label": "Assignment 2",
+      "pseudocode": "Reassign with the moved centers.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\npoints = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\ndef mean_point(m):\n    return (sum(p[0] for p in m) / len(m), sum(p[1] for p in m) / len(m))\ncenters = [(3, 4), (5, 3), (5, 9.5)]\ndef kmeans(centers, rounds):\n    for _ in range(rounds):\n        labels = [nearest_center(p, centers) for p in points]\n        centers = [mean_point([p for p, l in zip(points, labels) if l == i]) for i in range(len(centers))]\n    return labels, centers\ndef wcss(centers, labels):\n    return sum(distance(p, centers[l]) ** 2 for p, l in zip(points, labels))\nlabels, new = kmeans(centers, 1)\nlabels2 = [nearest_center(p, new) for p in points]\nprint(round(wcss(new, labels2), 2))\n# prints: 6.31"
+    },
+    {
+      "id": "update-2",
+      "label": "Update 2",
+      "pseudocode": "Move the centers again.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\npoints = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\ndef mean_point(m):\n    return (sum(p[0] for p in m) / len(m), sum(p[1] for p in m) / len(m))\ncenters = [(3, 4), (5, 3), (5, 9.5)]\ndef kmeans(centers, rounds):\n    for _ in range(rounds):\n        labels = [nearest_center(p, centers) for p in points]\n        centers = [mean_point([p for p, l in zip(points, labels) if l == i]) for i in range(len(centers))]\n    return labels, centers\ndef wcss(centers, labels):\n    return sum(distance(p, centers[l]) ** 2 for p, l in zip(points, labels))\nlabels, new = kmeans(centers, 2)\nprint(round(wcss(new, labels), 2))\n# prints: 4.18"
+    },
+    {
+      "id": "objective-drops-again",
+      "label": "The objective drops again",
+      "pseudocode": "The objective never rises.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\npoints = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\ndef mean_point(m):\n    return (sum(p[0] for p in m) / len(m), sum(p[1] for p in m) / len(m))\ncenters = [(3, 4), (5, 3), (5, 9.5)]\ndef kmeans(centers, rounds):\n    for _ in range(rounds):\n        labels = [nearest_center(p, centers) for p in points]\n        centers = [mean_point([p for p, l in zip(points, labels) if l == i]) for i in range(len(centers))]\n    return labels, centers\ndef wcss(centers, labels):\n    return sum(distance(p, centers[l]) ** 2 for p, l in zip(points, labels))\nlabels1, c1 = kmeans(centers, 1)\nl2 = [nearest_center(p, c1) for p in points]\nlabels2, c2 = kmeans(centers, 2)\nprint(round(wcss(c1, l2), 2), '->', round(wcss(c2, labels2), 2))\n# prints: 6.31 -> 4.18"
+    },
+    {
+      "id": "stable-centers",
+      "label": "Nothing changes",
+      "pseudocode": "A further assignment changes nothing.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\npoints = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\ndef mean_point(m):\n    return (sum(p[0] for p in m) / len(m), sum(p[1] for p in m) / len(m))\ncenters = [(3, 4), (5, 3), (5, 9.5)]\ndef kmeans(centers, rounds):\n    for _ in range(rounds):\n        labels = [nearest_center(p, centers) for p in points]\n        centers = [mean_point([p for p, l in zip(points, labels) if l == i]) for i in range(len(centers))]\n    return labels, centers\nl2, c2 = kmeans(centers, 2)\nl3 = [nearest_center(p, c2) for p in points]\nprint('assignments changed:', l2 != l3)\n# prints: assignments changed: False"
+    },
+    {
+      "id": "converged",
+      "label": "Converged",
+      "pseudocode": "Stable assignments mean convergence.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\npoints = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\ndef mean_point(m):\n    return (sum(p[0] for p in m) / len(m), sum(p[1] for p in m) / len(m))\ncenters = [(3, 4), (5, 3), (5, 9.5)]\ndef kmeans(centers, rounds):\n    for _ in range(rounds):\n        labels = [nearest_center(p, centers) for p in points]\n        centers = [mean_point([p for p, l in zip(points, labels) if l == i]) for i in range(len(centers))]\n    return labels, centers\na, ca = kmeans(centers, 2)\nb, cb = kmeans(centers, 5)\nprint('same result after more rounds:', a == b and ca == cb)\n# prints: same result after more rounds: True"
+    },
+    {
+      "id": "different-initialization-preview",
+      "label": "A different start",
+      "pseudocode": "A different start can converge elsewhere.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\npoints = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\ndef mean_point(m):\n    return (sum(p[0] for p in m) / len(m), sum(p[1] for p in m) / len(m))\ndef kmeans(centers, rounds):\n    for _ in range(rounds):\n        labels = [nearest_center(p, centers) for p in points]\n        centers = [mean_point([p for p, l in zip(points, labels) if l == i]) for i in range(len(centers))]\n    return labels, centers\ndef wcss(centers, labels):\n    return sum(distance(p, centers[l]) ** 2 for p, l in zip(points, labels))\nlabels, c = kmeans([(1, 2), (2, 2), (5, 7)], 6)\nprint(round(wcss(c, labels), 2), 'versus 4.18 from the first start')\n# prints: 29.48 versus 4.18 from the first start"
+    }
+  ]
+}

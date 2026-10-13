@@ -1,0 +1,38 @@
+{
+ "candidate-models": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Five candidates for the eight development houses: **a straight line** and a **degree-4 curve** with ridge strength **λ = 0, 0.1, 0.3 and 1**. Which one will predict new houses best?"
+ },
+ "train": {
+  "h": "TRAIN EVERY CANDIDATE",
+  "t": "Each candidate is fitted to the development data. The flexible curve with **λ = 0 hugs the points** tightly; a stronger λ smooths it out."
+ },
+ "validation": {
+  "h": "SCORE ON VALIDATION DATA",
+  "t": "Four-fold cross-validation scores each candidate on houses it was **not trained on**: line **0.0359**, curve λ = 0 **0.3169**, λ = 0.1 **0.2769**, λ = 0.3 **0.1662**, λ = 1 **0.4682**."
+ },
+ "compare-metrics": {
+  "h": "COMPARE THE METRICS",
+  "t": "Training error and validation error tell **different stories**. The λ = 0 curve has the smallest training error but a validation error almost **nine times** the line's."
+ },
+ "reject-overfit": {
+  "h": "REJECT THE OVERFITTING MODEL",
+  "t": "A **tiny training error with a large validation error** is the signature of overfitting. Ridge helps the curve (λ = 0.3 is its best) but not enough."
+ },
+ "select": {
+  "h": "SELECT THE BEST MODEL",
+  "t": "The straight line has the **lowest validation error**, so it wins. A simpler model beats a fancier one when the data are close to a line."
+ },
+ "lock-choice": {
+  "h": "LOCK THE CHOICE",
+  "t": "Refit the winner on **all development houses** and freeze every decision: the model, its hyperparameters, everything. From now on **nothing may change in response to the test set**."
+ },
+ "final-test": {
+  "h": "SCORE THE TEST SET ONCE",
+  "t": "Only now do we score the two locked test houses: **test MSE 0.0046**, in the same small range as the validation scores. If it were disappointing we would **report it, not go back and tune**."
+ },
+ "workflow-summary": {
+  "h": "TAKEAWAY",
+  "t": "**Train** to learn parameters, **validate or cross-validate** to choose the model and hyperparameters, **lock** the choice, **test once** to report. This is how we avoid fooling ourselves."
+ }
+}

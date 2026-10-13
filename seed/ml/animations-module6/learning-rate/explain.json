@@ -1,0 +1,38 @@
+{
+ "same-start": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Same bowl **L(w) = (w − 3)²**, same start **w = 0**, same rule **w_new = w_old − η × gradient**. Only the **learning rate η**, which sets the step size, will change. The direction stays the same."
+ },
+ "small-rate": {
+  "h": "A SMALL LEARNING RATE (0.02)",
+  "t": "With **η = 0.02** each step is tiny: w goes **0, 0.12, 0.24, 0.35, 0.45 …** The path crawls along the bowl."
+ },
+ "small-progress": {
+  "h": "SMALL RATE: SAFE BUT SLOW",
+  "t": "After 10 steps **w is only about 1.0** and the loss is still about 4. It will get there, but it needs hundreds of steps."
+ },
+ "good-rate": {
+  "h": "A GOOD LEARNING RATE (0.3)",
+  "t": "With **η = 0.3** the steps are **1.8, 2.52, 2.81, 2.92 …** Big steps at first, then smaller ones as the ground flattens."
+ },
+ "good-progress": {
+  "h": "GOOD RATE: FAST AND STEADY",
+  "t": "After 5 steps **w ≈ 2.97** and the loss is about **0.001**. Efficient progress with no drama."
+ },
+ "large-rate": {
+  "h": "A LARGE LEARNING RATE (0.9)",
+  "t": "With **η = 0.9** the first step jumps from 0 to **5.4**, right over the minimum at 3."
+ },
+ "overshoot": {
+  "h": "OVERSHOOT AND OSCILLATION",
+  "t": "The next steps go back and forth: **1.08, 4.54, 1.77 …** It bounces from side to side. Each bounce is smaller here, so it still converges, but **slowly and wastefully**."
+ },
+ "diverge": {
+  "h": "TOO LARGE: DIVERGENCE",
+  "t": "With **η = 1.1** the steps are **6.6, −1.32, 8.18, −3.22 …** Each bounce is **bigger** than the last, so the loss grows: the search **diverges**. For this objective any η above 1 diverges."
+ },
+ "compare": {
+  "h": "TAKEAWAY",
+  "t": "Small η: slow but steady. Good η: fast. η = 0.9: bouncing but shrinking. η = 1.1: growing. **The learning rate controls the step size, not the direction.**"
+ }
+}

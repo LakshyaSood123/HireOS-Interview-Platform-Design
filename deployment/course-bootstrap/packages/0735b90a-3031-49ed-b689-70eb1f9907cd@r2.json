@@ -1,0 +1,147 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322c4e9cccef168ed2b"
+  },
+  "assets": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498542"
+    }
+  },
+  "createdBy": {
+    "$oid": "000000000000000000000000"
+  },
+  "css": "body {\r\n  margin: 0;\r\n  padding: 14px;\r\n  box-sizing: border-box;\r\n  background: #0b1d16;\r\n  color: #e6f5ec;\r\n  font-family: system-ui, sans-serif;\r\n}\r\n.scene {\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 8px;\r\n}\r\n.step-label {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  letter-spacing: 0.08em;\r\n  text-transform: uppercase;\r\n  color: #a7ce65;\r\n}\r\nsvg {\r\n  width: 100%;\r\n  height: auto;\r\n  max-width: 640px;\r\n  background: #071510;\r\n  border-radius: 10px;\r\n  border: 1px solid rgba(29, 181, 132, 0.35);\r\n}\r\nsvg g,\r\nsvg line,\r\nsvg polygon,\r\nsvg path,\r\nsvg ellipse,\r\nsvg circle,\r\nsvg rect,\r\nsvg text {\r\n  transition: opacity 0.4s ease, transform 0.6s ease;\r\n}\r\n.axis {\r\n  stroke: rgba(167, 206, 101, 0.3);\r\n  stroke-width: 1;\r\n}\r\n.tick {\r\n  font-size: 10px;\r\n  fill: #8fa89c;\r\n}\r\n.lbl,\r\n.big,\r\n.note,\r\n.mono {\r\n  paint-order: stroke;\r\n  stroke: #071510;\r\n  stroke-width: 3px;\r\n  stroke-linejoin: round;\r\n}\r\n.lbl {\r\n  font-size: 12px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.lbl-g { fill: #1db584; }\r\n.lbl-y { fill: #e2b44a; }\r\n.lbl-p { fill: #f472b6; }\r\n.lbl-b { fill: #38bdf8; }\r\n.lbl-r { fill: #f87171; }\r\n.big {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.note {\r\n  font-size: 11px;\r\n  fill: #c9dccf;\r\n}\r\n.mono {\r\n  font-family: ui-monospace, Consolas, monospace;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.caption {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  line-height: 1.5;\r\n  color: #c9dccf;\r\n  min-height: 40px;\r\n}\r\n.cell rect {\r\n  fill: rgba(255, 255, 255, 0.05);\r\n  stroke: rgba(255, 255, 255, 0.28);\r\n  stroke-width: 1.2;\r\n}\r\n.cell text {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.cell.hl-row rect { fill: rgba(226, 180, 74, 0.25); stroke: #e2b44a; }\r\n.cell.hl-col rect { fill: rgba(29, 181, 132, 0.25); stroke: #1db584; }\r\n.cell.hl-both rect { fill: rgba(244, 114, 182, 0.28); stroke: #f472b6; }\r\n.dim { opacity: 0.25; }\r\n.dash { stroke-dasharray: 5 4; }\r\n.fillA { fill: rgba(56, 189, 248, 0.16); stroke: #38bdf8; stroke-width: 2; }\r\n.fillB { fill: rgba(244, 114, 182, 0.18); stroke: #f472b6; stroke-width: 2; }\r\n.fillG { fill: rgba(29, 181, 132, 0.16); stroke: #1db584; stroke-width: 2; }\r\n\n/* ── explanation panel (shared by every generated ML animation) ── */\n.explain {\n  box-sizing: border-box;\n  max-width: 640px;\n  margin-top: 4px;\n  padding: 14px 18px 16px;\n  min-height: 150px;\n  border-radius: 12px;\n  background: rgba(29, 181, 132, 0.10);\n  border: 1px solid rgba(29, 181, 132, 0.45);\n  border-left: 5px solid #1db584;\n}\n.explain-h {\n  margin: 0 0 8px;\n  font-size: 13px;\n  font-weight: 800;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.explain-t {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.55;\n  color: #f1faf4;\n}\n.explain-t strong {\n  font-weight: 800;\n  color: #ffd98a;\n}\n\n",
+  "html": "<div class=\"scene\">\n  <p class=\"step-label\" id=\"step-label\"></p>\n  <svg id=\"scene\" viewBox=\"0 0 640 360\" role=\"img\" aria-label=\"Vector spaces and subspaces\"></svg>\n  <section class=\"explain\" aria-live=\"polite\">\n    <h3 class=\"explain-h\" id=\"explain-h\"></h3>\n    <p class=\"explain-t\" id=\"caption\"></p>\n  </section>\n</div>\n",
+  "js": "(function () {\n  // ── shared helpers (SVG, tweening) ─────────────────────────────────────────\r\n  var NS = \"http://www.w3.org/2000/svg\";\r\n  var svg = document.getElementById(\"scene\");\r\n  var labelEl = document.getElementById(\"step-label\");\r\n  var captionEl = document.getElementById(\"caption\");\r\n\r\n  function el(name, attrs, parent) {\r\n    var node = document.createElementNS(NS, name);\r\n    for (var key in attrs) node.setAttribute(key, attrs[key]);\r\n    if (parent) parent.appendChild(node);\r\n    return node;\r\n  }\r\n  function txt(parent, x, y, cls, str, anchor) {\r\n    var t = el(\"text\", { x: x, y: y, class: cls }, parent);\r\n    if (anchor) t.setAttribute(\"text-anchor\", anchor);\r\n    t.textContent = str;\r\n    return t;\r\n  }\r\n  function show(node, on) {\r\n    node.setAttribute(\"opacity\", on ? \"1\" : \"0\");\r\n  }\r\n  function place(node, x, y) {\r\n    node.style.transform = \"translate(\" + x + \"px,\" + y + \"px)\";\r\n  }\r\n  function setLine(node, x1, y1, x2, y2) {\r\n    node.setAttribute(\"x1\", x1);\r\n    node.setAttribute(\"y1\", y1);\r\n    node.setAttribute(\"x2\", x2);\r\n    node.setAttribute(\"y2\", y2);\r\n  }\r\n  function lerp(a, b, e) {\r\n    return a + (b - a) * e;\r\n  }\r\n  function round1(v) {\r\n    return (Math.round(v * 10) / 10).toFixed(1);\r\n  }\r\n\r\n  // Eased animation. fn(e) is called with e from 0 to 1. Without\r\n  // requestAnimationFrame (or with ms = 0) it jumps straight to fn(1).\r\n  var animTokens = {};\r\n  function anim(key, ms, fn) {\r\n    var token = (animTokens[key] || 0) + 1;\r\n    animTokens[key] = token;\r\n    if (typeof requestAnimationFrame !== \"function\" || ms <= 0) {\r\n      fn(1);\r\n      return;\r\n    }\r\n    var start = null;\r\n    function frame(now) {\r\n      if (animTokens[key] !== token) return;\r\n      if (start === null) start = now;\r\n      var p = Math.min(1, (now - start) / ms);\r\n      var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;\r\n      fn(e);\r\n      if (p < 1) requestAnimationFrame(frame);\r\n    }\r\n    requestAnimationFrame(frame);\r\n  }\r\n\r\n  // Arrowheads, one marker per colour.\r\n  var COLORS = { g: \"#1DB584\", y: \"#E2B44A\", p: \"#F472B6\", b: \"#38BDF8\", w: \"#c9dccf\", r: \"#F87171\" };\r\n  var defs = el(\"defs\", {}, svg);\r\n  Object.keys(COLORS).forEach(function (k) {\r\n    var m = el(\"marker\", { id: \"ah-\" + k, viewBox: \"0 0 10 10\", refX: 9, refY: 5, markerUnits: \"userSpaceOnUse\", markerWidth: 13, markerHeight: 13, orient: \"auto\" }, defs);\r\n    el(\"path\", { d: \"M0 0 L10 5 L0 10 Z\", fill: COLORS[k] }, m);\r\n  });\r\n  function arrow(parent, colorKey, width) {\r\n    return el(\"line\", { x1: 0, y1: 0, x2: 0, y2: 0, stroke: COLORS[colorKey], \"stroke-width\": width || 3, \"marker-end\": \"url(#ah-\" + colorKey + \")\", \"stroke-linecap\": \"round\" }, parent);\r\n  }\r\n  function polygon(parent, cls) {\r\n    return el(\"polygon\", { points: \"\", class: cls }, parent);\r\n  }\r\n  function setPoly(node, pts) {\r\n    node.setAttribute(\"points\", pts.map(function (p) { return p[0].toFixed(1) + \",\" + p[1].toFixed(1); }).join(\" \"));\r\n  }\r\n  function lerpPts(a, b, e) {\r\n    return a.map(function (p, i) { return [lerp(p[0], b[i][0], e), lerp(p[1], b[i][1], e)]; });\r\n  }\r\n  // Maps maths coordinates (x right, y up) to screen pixels.\r\n  function makePlane(cx, cy, s) {\r\n    return {\r\n      x: function (v) { return cx + s * v; },\r\n      y: function (v) { return cy - s * v; },\r\n      pt: function (p) { return [cx + s * p[0], cy - s * p[1]]; },\r\n      s: s, cx: cx, cy: cy\r\n    };\r\n  }\r\n  function axes(parent, plane, xr, yr) {\r\n    el(\"line\", { x1: plane.x(-xr), y1: plane.y(0), x2: plane.x(xr), y2: plane.y(0), class: \"axis\" }, parent);\r\n    el(\"line\", { x1: plane.x(0), y1: plane.y(-yr), x2: plane.x(0), y2: plane.y(yr), class: \"axis\" }, parent);\r\n  }\r\n\n  var EXPLAIN = {\"vector\":{\"h\":\"WHAT YOU ARE LOOKING AT\",\"t\":\"Here is one vector **v**: an **arrow from the origin**. Think of it as a direction and a length.\"},\"scale-vector\":{\"h\":\"SCALING STRETCHES OR FLIPS IT\",\"t\":\"Multiplying by a number scales the arrow: **2v is twice as long**, and a **negative number flips** it.\"},\"combine-vectors\":{\"h\":\"COMBINE TWO VECTORS\",\"t\":\"With a second vector **w**, we can build **a·v + b·w**: scale each one, then add them.\"},\"span-line\":{\"h\":\"ONE VECTOR SPANS A LINE\",\"t\":\"All the scaled copies of a single vector lie on **one line through the origin**. That line is its **span**.\"},\"span-plane\":{\"h\":\"TWO INDEPENDENT VECTORS SPAN THE PLANE\",\"t\":\"If v and w do not point along the same line, their combinations reach **every point in the plane**.\"},\"subspace\":{\"h\":\"A SUBSPACE IS A FLAT SPACE THROUGH THE ORIGIN\",\"t\":\"The line is a **subspace** of the plane: it contains the origin, and adding or scaling its vectors **never leaves it**.\"},\"ml-connection\":{\"h\":\"TAKEAWAY\",\"t\":\"Real data often sits **close to a line or plane inside a bigger space**. Finding it lets us describe the data with **fewer numbers**.\"}};\n  // ── scene ──\n  var steps = [\r\n    { id: \"vector\", label: \"A vector is an arrow from the origin\", caption: \"Here is one vector v. Think of it as a direction and a length.\" },\r\n    { id: \"scale-vector\", label: \"Scaling stretches or flips it\", caption: \"Multiplying by a number scales the arrow: 2v is twice as long, and a negative number flips it.\" },\r\n    { id: \"combine-vectors\", label: \"Combine two vectors\", caption: \"With a second vector w, we can build a·v + b·w: scale each one, then add them.\" },\r\n    { id: \"span-line\", label: \"One vector spans a line\", caption: \"All the scaled copies of a single vector lie on one line through the origin. That line is its span.\" },\r\n    { id: \"span-plane\", label: \"Two independent vectors span the plane\", caption: \"If v and w do not point along the same line, their combinations reach every point in the plane.\" },\r\n    { id: \"subspace\", label: \"A subspace is a flat space through the origin\", caption: \"The line is a subspace of the plane: it contains the origin, and adding or scaling its vectors never leaves it.\" },\r\n    { id: \"ml-connection\", label: \"Data often lives near a subspace\", caption: \"Real data often sits close to a line or plane inside a bigger space. Finding it lets us describe the data with fewer numbers.\" }\r\n  ];\r\n\r\n  var P = makePlane(320, 190, 34);\r\n  var V = [2, 1];\r\n  var W = [-1, 2];\r\n\r\n  var tint = el(\"rect\", { x: 14, y: 14, width: 612, height: 332, rx: 10, class: \"fillA\", opacity: 0 }, svg);\r\n  axes(svg, P, 9, 5.2);\r\n\r\n  var spanLine = el(\"line\", { x1: P.x(-7), y1: P.y(-3.5), x2: P.x(7), y2: P.y(3.5), stroke: \"#1db584\", \"stroke-width\": 3, opacity: 0 }, svg);\r\n\r\n  var gridDots = el(\"g\", { opacity: 0 }, svg);\r\n  [-1.5, -0.75, 0, 0.75, 1.5].forEach(function (a) {\r\n    [-1.5, -0.75, 0, 0.75, 1.5].forEach(function (b) {\r\n      el(\"circle\", { cx: P.x(a * V[0] + b * W[0]), cy: P.y(a * V[1] + b * W[1]), r: 3.5, fill: \"#c9dccf\" }, gridDots);\r\n    });\r\n  });\r\n\r\n  var ghost2 = arrow(svg, \"y\", 2.5);\r\n  ghost2.setAttribute(\"stroke-dasharray\", \"5 4\");\r\n  setLine(ghost2, P.x(0), P.y(0), P.x(2 * V[0]), P.y(2 * V[1]));\r\n  var ghostNeg = arrow(svg, \"r\", 2.5);\r\n  ghostNeg.setAttribute(\"stroke-dasharray\", \"5 4\");\r\n  setLine(ghostNeg, P.x(0), P.y(0), P.x(-V[0]), P.y(-V[1]));\r\n  var lab2 = txt(svg, P.x(2 * V[0]) + 8, P.y(2 * V[1]) - 6, \"lbl lbl-y\", \"2v\");\r\n  var labNeg = txt(svg, P.x(-V[0]) - 24, P.y(-V[1]) + 16, \"lbl lbl-r\", \"−v\");\r\n\r\n  var arrV = arrow(svg, \"b\", 3.5);\r\n  setLine(arrV, P.x(0), P.y(0), P.x(V[0]), P.y(V[1]));\r\n  var labV = txt(svg, P.x(V[0]) + 8, P.y(V[1]) + 14, \"lbl lbl-b\", \"v\");\r\n  var arrW = arrow(svg, \"p\", 3.5);\r\n  setLine(arrW, P.x(0), P.y(0), P.x(W[0]), P.y(W[1]));\r\n  var labW = txt(svg, P.x(W[0]) - 16, P.y(W[1]) - 6, \"lbl lbl-p\", \"w\");\r\n\r\n  // a·v + b·w with a = 1.5, b = 1\r\n  var A1 = 1.5, B1 = 1;\r\n  var comb = [A1 * V[0] + B1 * W[0], A1 * V[1] + B1 * W[1]];\r\n  var scaledV = arrow(svg, \"b\", 2.5);\r\n  scaledV.setAttribute(\"stroke-dasharray\", \"5 4\");\r\n  setLine(scaledV, P.x(0), P.y(0), P.x(1.5 * V[0]), P.y(1.5 * V[1]));\r\n  var scaledVLab = txt(svg, P.x(1.5 * V[0]) + 8, P.y(1.5 * V[1]) + 16, \"lbl lbl-b\", \"1.5·v\");\r\n  var par1 = el(\"line\", { class: \"dash\", stroke: \"#38bdf8\", \"stroke-width\": 1.5 }, svg);\r\n  setLine(par1, P.x(A1 * V[0]), P.y(A1 * V[1]), P.x(comb[0]), P.y(comb[1]));\r\n  var par2 = el(\"line\", { class: \"dash\", stroke: \"#f472b6\", \"stroke-width\": 1.5 }, svg);\r\n  setLine(par2, P.x(B1 * W[0]), P.y(B1 * W[1]), P.x(comb[0]), P.y(comb[1]));\r\n  var combDot = el(\"circle\", { cx: P.x(comb[0]), cy: P.y(comb[1]), r: 6, fill: \"#e2b44a\" }, svg);\r\n  var combLab = txt(svg, P.x(comb[0]) + 12, P.y(comb[1]) + 4, \"lbl lbl-y\", \"1.5·v + 1·w\");\r\n\r\n  var origin = el(\"circle\", { cx: P.x(0), cy: P.y(0), r: 5, fill: \"#e6f5ec\" }, svg);\r\n  var originLab = txt(svg, P.x(0) + 8, P.y(0) + 18, \"note\", \"origin (0)\");\r\n  var subLab = txt(svg, 40, 40, \"lbl lbl-g\", \"\", \"start\");\r\n  var subNote = txt(svg, 40, 58, \"note\", \"\", \"start\");\r\n\r\n  // Data points near the line (last step).\r\n  var cloud = el(\"g\", { opacity: 0 }, svg);\r\n  for (var t = -3; t <= 3.01; t += 0.5) {\r\n    var off = 0.35 * Math.sin(t * 5.3 + 1);\r\n    var nx = -V[1], ny = V[0];\r\n    var norm = Math.sqrt(nx * nx + ny * ny);\r\n    el(\"circle\", { cx: P.x(2 * t + (nx / norm) * off), cy: P.y(t + (ny / norm) * off), r: 5, fill: \"#f472b6\" }, cloud);\r\n  }\r\n\r\n  function render(index, id) {\r\n    var all = [tint, spanLine, gridDots, ghost2, ghostNeg, lab2, labNeg, arrV, labV, arrW, labW, par1, par2, combDot, combLab, origin, originLab, cloud, scaledV, scaledVLab];\r\n    all.forEach(function (n) { show(n, false); });\r\n    subLab.textContent = \"\";\r\n    subNote.textContent = \"\";\r\n    show(origin, true);\r\n    show(originLab, true);\r\n\r\n    if (id === \"vector\") {\r\n      show(arrV, true); show(labV, true);\r\n    } else if (id === \"scale-vector\") {\r\n      show(arrV, true); show(labV, true); show(ghost2, true); show(lab2, true); show(ghostNeg, true); show(labNeg, true);\r\n    } else if (id === \"combine-vectors\") {\r\n      show(arrV, true); show(labV, true); show(arrW, true); show(labW, true);\r\n      show(par1, true); show(par2, true); show(combDot, true); show(combLab, true); show(scaledV, true); show(scaledVLab, true);\r\n    } else if (id === \"span-line\") {\r\n      show(spanLine, true); show(arrV, true); show(labV, true);\r\n      subLab.textContent = \"span of v = a line\";\r\n    } else if (id === \"span-plane\") {\r\n      show(gridDots, true); show(arrV, true); show(labV, true); show(arrW, true); show(labW, true);\r\n      subLab.textContent = \"span of v and w = the whole plane\";\r\n    } else if (id === \"subspace\") {\r\n      show(tint, true); show(spanLine, true); show(arrV, true); show(labV, true);\r\n      subLab.textContent = \"subspace: a line through the origin\";\r\n      subNote.textContent = \"inside the plane; it always contains 0\";\r\n    } else {\r\n      show(spanLine, true); show(cloud, true);\r\n      subLab.textContent = \"data close to a line\";\r\n      subNote.textContent = \"describe each point by one number instead of two\";\r\n    }\r\n  }\r\n\n\n  // ── shared runtime: stepping, explanation panel, educational autoplay pacing, bridge ──\n  var current = 0;\n  var explainHeadEl = document.getElementById(\"explain-h\");\n\n  // **bold** markers in an explanation become <strong> nodes (built with DOM calls, never innerHTML).\n  function setRich(node, str) {\n    node.textContent = \"\";\n    var parts = String(str).split(\"**\");\n    for (var i = 0; i < parts.length; i++) {\n      if (parts[i] === \"\") continue;\n      var seg = document.createElement(i % 2 ? \"strong\" : \"span\");\n      seg.textContent = parts[i];\n      node.appendChild(seg);\n    }\n  }\n\n  function explanationFor(index) {\n    var ex = (typeof EXPLAIN === \"object\" && EXPLAIN) ? EXPLAIN[steps[index].id] : null;\n    return ex || { h: \"WHAT IS HAPPENING\", t: steps[index].caption };\n  }\n\n  // Autoplay pace: 4.5 to 10.5 seconds per step, longer for longer explanations, so a learner can read.\n  function stepMs(index) {\n    var words = String(explanationFor(index).t).replace(/\\*\\*/g, \"\").split(/\\s+/).length;\n    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));\n  }\n\n  function renderStep(index) {\n    var ex = explanationFor(index);\n    labelEl.textContent = steps[index].label;\n    if (explainHeadEl) explainHeadEl.textContent = ex.h;\n    setRich(captionEl, ex.t);\n    render(index, steps[index].id);\n  }\n\n  function goTo(index) {\n    if (index < 0 || index >= steps.length) return;\n    current = index;\n    renderStep(current);\n    if (window.ReagvisBridge) window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n\n  renderStep(current);\n\n  // Autoplay: exactly one timer, one step per tick, stops on the final step.\n  // PLAY on the final step restarts from the first step and plays again.\n  var timer = null;\n\n  function stopAuto() {\n    if (timer !== null) {\n      clearTimeout(timer);\n      timer = null;\n    }\n  }\n\n  function scheduleNext() {\n    timer = setTimeout(function () {\n      timer = null;\n      if (current >= steps.length - 1) return;\n      goTo(current + 1);\n      if (current < steps.length - 1) scheduleNext();\n    }, stepMs(current));\n  }\n\n  function startAuto() {\n    if (timer !== null) return;\n    if (current >= steps.length - 1) goTo(0);\n    scheduleNext();\n  }\n\n  window.addEventListener(\"pagehide\", stopAuto);\n\n  window.ReagvisAnimation = {\n    stepDuration: stepMs,\n    onCommand: function (type, stepId) {\n      if (type === \"PLAY\") startAuto();\n      else if (type === \"PAUSE\") stopAuto();\n      else if (type === \"NEXT\") { stopAuto(); goTo(current + 1); }\n      else if (type === \"PREVIOUS\") { stopAuto(); goTo(current - 1); }\n      else if (type === \"RESET\") { stopAuto(); goTo(0); }\n      else if (type === \"GOTO_STEP\") {\n        stopAuto();\n        for (var i = 0; i < steps.length; i++) {\n          if (steps[i].id === stepId) { goTo(i); break; }\n        }\n      }\n    },\n  };\n\n  if (window.ReagvisBridge) {\n    window.ReagvisBridge.ready();\n    window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n})();\n",
+  "lastFrozenContentHash": null,
+  "lastFrozenRevisionId": null,
+  "manifest": {
+    "bridgeVersion": {
+      "$numberInt": "1"
+    },
+    "capabilities": [
+      "play",
+      "pause",
+      "next",
+      "previous",
+      "reset",
+      "gotoStep"
+    ],
+    "heightPx": {
+      "$numberInt": "590"
+    },
+    "traceEvents": [
+      "vector",
+      "scale-vector",
+      "combine-vectors",
+      "span-line",
+      "span-plane",
+      "subspace",
+      "ml-connection"
+    ]
+  },
+  "packageId": "0735b90a-3031-49ed-b689-70eb1f9907cd",
+  "packageTrace": {
+    "steps": [
+      {
+        "animationEvent": "vector",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "A vector is an arrow from the origin. It has a direction and a length.",
+          "python": "v = [2, 1]\nprint(v)"
+        },
+        "id": "vector",
+        "label": "Draw one vector"
+      },
+      {
+        "animationEvent": "scale-vector",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Multiply every entry by a number. A positive number stretches, a negative number flips the direction.",
+          "python": "v = [2, 1]\n\ndef scale(a, v):\n    return [a * x for x in v]\n\nprint(scale(2, v), scale(-1, v))  # [4, 2] [-2, -1]"
+        },
+        "id": "scale-vector",
+        "label": "Scale the vector"
+      },
+      {
+        "animationEvent": "combine-vectors",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Scale each vector, then add them entry by entry. This is a linear combination.",
+          "python": "v, w = [2, 1], [-1, 2]\n\ndef combine(a, v, b, w):\n    return [a * x + b * y for x, y in zip(v, w)]\n\nprint(combine(1.5, v, 1, w))  # [2.0, 3.5]"
+        },
+        "id": "combine-vectors",
+        "label": "Combine two vectors"
+      },
+      {
+        "animationEvent": "span-line",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Every scaled copy of v lies on the same line through the origin. That line is the span of v.",
+          "python": "v = [2, 1]\npoints = [[a * x for x in v] for a in (-2, -1, 0, 1, 2)]\nprint(points)  # all on one line"
+        },
+        "id": "span-line",
+        "label": "One vector spans a line"
+      },
+      {
+        "animationEvent": "span-plane",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "If v and w do not point along one line, their combinations reach every point in the plane.",
+          "python": "v, w = [2, 1], [-1, 2]\n\ndef reach(target):\n    # Solve a*v + b*w = target for 2D vectors.\n    det = v[0] * w[1] - v[1] * w[0]\n    a = (target[0] * w[1] - target[1] * w[0]) / det\n    b = (v[0] * target[1] - v[1] * target[0]) / det\n    return a, b\n\nprint(reach([3, 4]))  # (2.0, 1.0): 2v + 1w = [3, 4]"
+        },
+        "id": "span-plane",
+        "label": "Two vectors span the plane"
+      },
+      {
+        "animationEvent": "subspace",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "A subspace contains the origin, and adding or scaling its vectors never leaves it.",
+          "python": "v = [2, 1]\na = [3 * x for x in v]    # 3v\nb = [-1 * x for x in v]   # -v\ntotal = [p + q for p, q in zip(a, b)]\nprint(total)  # [4, 2] = 2v, still on the same line"
+        },
+        "id": "subspace",
+        "label": "Recognise a subspace"
+      },
+      {
+        "animationEvent": "ml-connection",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "If data sits close to a line, one number per point (its position along the line) can describe it.",
+          "python": "points = [[2, 1.1], [4, 1.9], [-2, -1.0], [6, 3.2]]\nd = [2, 1]\nlength = (d[0] ** 2 + d[1] ** 2) ** 0.5\nposition = [(p[0] * d[0] + p[1] * d[1]) / length for p in points]\nprint([round(t, 2) for t in position])"
+        },
+        "id": "ml-connection",
+        "label": "Find the subspace the data lives near"
+      }
+    ],
+    "version": {
+      "$numberInt": "1"
+    }
+  },
+  "revision": {
+    "$numberInt": "5"
+  },
+  "revisionId": "r2",
+  "sourceKind": "zip",
+  "status": "frozen",
+  "title": "ML Module 2 — Vector Spaces and Subspaces",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498542"
+    }
+  },
+  "updatedBy": {
+    "$oid": "000000000000000000000000"
+  }
+}

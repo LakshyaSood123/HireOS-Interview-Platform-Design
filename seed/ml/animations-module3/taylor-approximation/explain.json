@@ -1,0 +1,34 @@
+{
+ "original-function": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Take **f(x) = x³**, a curve that bends upward. We want a **simple formula that predicts f near one chosen point** without computing the whole function."
+ },
+ "expansion-point": {
+  "h": "CHOOSE THE EXPANSION POINT",
+  "t": "Pick the point **a = 1**, where **f(1) = 1**. Everything we build will be centered on this point and is **most accurate close to it**."
+ },
+ "first-order": {
+  "h": "FIRST ORDER: THE TANGENT LINE",
+  "t": "Use the value and the slope there. The slope is **f′(1) = 3**, so **f(x) ≈ 1 + 3(x − 1)**. This is the straight-line approximation."
+ },
+ "first-order-error": {
+  "h": "WHERE THE STRAIGHT LINE FALLS SHORT",
+  "t": "At **x = 1.5** the true value is **3.375** but the line says **2.5**, off by **0.875**. The curve is bending upward and the line cannot follow."
+ },
+ "curvature": {
+  "h": "CURVATURE: THE SLOPE KEEPS CHANGING",
+  "t": "Look at the slope along the curve: about **1.1 at x = 0.6, 3 at x = 1, about 5.9 at x = 1.4**. The slope itself grows. How fast it changes is the **curvature, f″ = 6x**, which is 6 at x = 1."
+ },
+ "second-order": {
+  "h": "SECOND ORDER: ADD THE BEND",
+  "t": "Add a term for the bend: **½ × f″(1) × (x − 1)² = 3(x − 1)²**. Now **f(x) ≈ 1 + 3(x − 1) + 3(x − 1)²**, and the pink curve follows the bend."
+ },
+ "improved-approximation": {
+  "h": "THE SECOND-ORDER VERSION IS CLOSER",
+  "t": "At **x = 2** the truth is **8**: first order says 4, second order says **7**. At **x = 1.5** the truth is 3.375: first order gives 2.5 and second order **3.25**."
+ },
+ "ml-connection": {
+  "h": "TAKEAWAY",
+  "t": "A gradient alone is a **first-order** picture: it knows the slope, not how the slope changes. **Curvature tells how far a gradient step can be trusted**, which is why second-order information matters in training."
+ }
+}

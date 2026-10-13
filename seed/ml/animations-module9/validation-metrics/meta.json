@@ -1,0 +1,66 @@
+{
+  "title": "Validation metrics: choose with the right question",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "candidate-models",
+      "label": "Three candidate classifiers",
+      "pseudocode": "Validation metrics of three candidates.",
+      "python": "models = {'A': (0.92, 0.70, 0.95), 'B': (0.91, 0.86, 0.80), 'C': (0.94, 0.95, 0.45)}   # accuracy, precision, recall\nfor name, (acc, p, r) in models.items():\n    print(name, acc, p, r)\n# prints: A 0.92 0.7 0.95\n# prints: B 0.91 0.86 0.8\n# prints: C 0.94 0.95 0.45"
+    },
+    {
+      "id": "accuracy-view",
+      "label": "View: accuracy",
+      "pseudocode": "Which model has the best accuracy?",
+      "python": "models = {'A': (0.92, 0.70, 0.95), 'B': (0.91, 0.86, 0.80), 'C': (0.94, 0.95, 0.45)}   # accuracy, precision, recall\nprint(max(models, key=lambda k: models[k][0]))\n# prints: C"
+    },
+    {
+      "id": "precision-view",
+      "label": "View: precision",
+      "pseudocode": "Which model has the best precision?",
+      "python": "models = {'A': (0.92, 0.70, 0.95), 'B': (0.91, 0.86, 0.80), 'C': (0.94, 0.95, 0.45)}   # accuracy, precision, recall\nprint(max(models, key=lambda k: models[k][1]))\n# prints: C"
+    },
+    {
+      "id": "recall-view",
+      "label": "View: recall",
+      "pseudocode": "Which model has the best recall?",
+      "python": "models = {'A': (0.92, 0.70, 0.95), 'B': (0.91, 0.86, 0.80), 'C': (0.94, 0.95, 0.45)}   # accuracy, precision, recall\nprint(max(models, key=lambda k: models[k][2]))\n# prints: A"
+    },
+    {
+      "id": "f1-view",
+      "label": "View: F1",
+      "pseudocode": "Which model has the best F1?",
+      "python": "models = {'A': (0.92, 0.70, 0.95), 'B': (0.91, 0.86, 0.80), 'C': (0.94, 0.95, 0.45)}   # accuracy, precision, recall\ndef f1(p, r):\n    return 2 * p * r / (p + r)\n\nprint({k: round(f1(v[1], v[2]), 3) for k, v in models.items()})\nprint(max(models, key=lambda k: f1(models[k][1], models[k][2])))\n# prints: {'A': 0.806, 'B': 0.829, 'C': 0.611}\n# prints: B"
+    },
+    {
+      "id": "application-costs",
+      "label": "Costs decide the metric",
+      "pseudocode": "Map the costly mistake to a metric.",
+      "python": "metric_for = {'spam filter (false positive costly)': 'precision', 'fraud screening (false negative costly)': 'recall', 'both matter': 'F1'}\nfor problem, metric in metric_for.items():\n    print(problem, '->', metric)\n# prints: spam filter (false positive costly) -> precision\n# prints: fraud screening (false negative costly) -> recall\n# prints: both matter -> F1"
+    },
+    {
+      "id": "choose-metric",
+      "label": "Choose the metric first",
+      "pseudocode": "Pick the metric before comparing models.",
+      "python": "steps = ['understand the cost of each mistake', 'pick the metric', 'compare models on validation data']\nfor s in steps:\n    print(s)\n# prints: understand the cost of each mistake\n# prints: pick the metric\n# prints: compare models on validation data"
+    },
+    {
+      "id": "compare-validation",
+      "label": "Compare on validation data",
+      "pseudocode": "For fraud screening compare recall.",
+      "python": "models = {'A': (0.92, 0.70, 0.95), 'B': (0.91, 0.86, 0.80), 'C': (0.94, 0.95, 0.45)}   # accuracy, precision, recall\nprint({k: v[2] for k, v in models.items()})\n# prints: {'A': 0.95, 'B': 0.8, 'C': 0.45}"
+    },
+    {
+      "id": "select-model",
+      "label": "Select the model",
+      "pseudocode": "Select the model with the best validation recall.",
+      "python": "models = {'A': (0.92, 0.70, 0.95), 'B': (0.91, 0.86, 0.80), 'C': (0.94, 0.95, 0.45)}   # accuracy, precision, recall\nprint(max(models, key=lambda k: models[k][2]), 'selected on validation data')\n# prints: A selected on validation data"
+    },
+    {
+      "id": "test-stays-locked",
+      "label": "The test set stays locked",
+      "pseudocode": "The test set is scored once at the end.",
+      "python": "test_scored = False\nprint('test set scored yet:', test_scored)\n# prints: test set scored yet: False"
+    }
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322c4e9cccef168ed27"
+  },
+  "assets": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498539"
+    }
+  },
+  "createdBy": {
+    "$oid": "000000000000000000000000"
+  },
+  "css": "body {\n  margin: 0;\n  padding: 14px;\n  box-sizing: border-box;\n  background: #0b1d16;\n  color: #e6f5ec;\n  font-family: system-ui, sans-serif;\n}\n.scene {\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n}\n.header {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: space-between;\n  align-items: baseline;\n  gap: 8px;\n}\n.step-label {\n  margin: 0;\n  font-size: 13px;\n  font-weight: 700;\n  letter-spacing: 0.08em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.stats {\n  margin: 0;\n  font-size: 12px;\n  color: #c9dccf;\n}\nsvg {\n  width: 100%;\n  height: auto;\n  max-width: 640px;\n  background: #071510;\n  border-radius: 10px;\n  border: 1px solid rgba(29, 181, 132, 0.35);\n}\n.axis {\n  stroke: rgba(167, 206, 101, 0.4);\n  stroke-width: 1;\n}\n.axis-label {\n  font-size: 11px;\n  fill: #8FA89C;\n}\n.pt {\n  stroke: rgba(0, 0, 0, 0.4);\n  stroke-width: 1;\n  transition: opacity 0.4s ease;\n}\n.pt-train {\n  fill: #1DB584;\n}\n.pt-val {\n  fill: #E2B44A;\n}\n.curve {\n  stroke-width: 3;\n  stroke-linejoin: round;\n  transition: opacity 0.4s ease;\n}\n.curve-underfit {\n  stroke: #94A3B8;\n}\n.curve-good {\n  stroke: #1DB584;\n}\n.curve-overfit {\n  stroke: #F472B6;\n}\n.bar {\n  transition: height 0.5s ease, y 0.5s ease, opacity 0.3s ease;\n}\n.bar-train {\n  fill: #1DB584;\n  opacity: 0.85;\n}\n.bar-val {\n  fill: #E2B44A;\n  opacity: 0.85;\n}\n.bar-focus {\n  stroke: #ffffff;\n  stroke-width: 2;\n}\n.bar-name {\n  font-size: 11px;\n  font-weight: 800;\n  fill: #e6f5ec;\n}\n.bar-value {\n  font-size: 10.5px;\n  fill: #c9dccf;\n}\n.caption {\n  margin: 0;\n  font-size: 13px;\n  line-height: 1.5;\n  color: #c9dccf;\n  min-height: 40px;\n}\n\n/* ── explanation panel (shared by every generated ML animation) ── */\n.explain {\n  box-sizing: border-box;\n  max-width: 640px;\n  margin-top: 4px;\n  padding: 14px 18px 16px;\n  min-height: 150px;\n  border-radius: 12px;\n  background: rgba(29, 181, 132, 0.10);\n  border: 1px solid rgba(29, 181, 132, 0.45);\n  border-left: 5px solid #1db584;\n}\n.explain-h {\n  margin: 0 0 8px;\n  font-size: 13px;\n  font-weight: 800;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.explain-t {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.55;\n  color: #f1faf4;\n}\n.explain-t strong {\n  font-weight: 800;\n  color: #ffd98a;\n}\n",
+  "html": "<div class=\"scene\">\n  <div class=\"header\">\n    <p class=\"step-label\" id=\"step-label\">One dataset</p>\n    <p class=\"stats\" id=\"stats\"></p>\n  </div>\n  <svg id=\"scene\" viewBox=\"0 0 640 320\" role=\"img\" aria-label=\"Three models fitted to the same data and compared on training and validation error\">\n    <g id=\"plot\"></g>\n    <g id=\"bars\" opacity=\"0\"></g>\n  </svg>\n  <section class=\"explain\" aria-live=\"polite\">\n        <h3 class=\"explain-h\" id=\"explain-h\"></h3>\n        <p class=\"explain-t\" id=\"caption\"></p>\n      </section>\n</div>\n",
+  "js": "(function () {\n  var NS = \"http://www.w3.org/2000/svg\";\n\n  var steps = [\n    { id: \"dataset\", label: \"One dataset\", caption: \"30 examples follow a gentle curve with some noise. Half are used for training, half are held out for validation.\" },\n    { id: \"underfit\", label: \"Underfit: too simple\", caption: \"A flat line ignores the curve. It is wrong on the training points AND on the validation points.\" },\n    { id: \"good-fit\", label: \"Good fit: captures the trend\", caption: \"This curve follows the main pattern. Its training and validation errors are both small.\" },\n    { id: \"overfit\", label: \"Overfit: memorizes the noise\", caption: \"This curve passes through every training point, so its training error is zero. It wiggles between them and misses the validation points.\" },\n    { id: \"train-vs-validation\", label: \"Training error vs validation error\", caption: \"Compare the two bars for each model. Training error can keep falling while validation error gets worse.\" },\n    { id: \"generalize\", label: \"Generalization\", caption: \"The goal is not the lowest training error. The goal is performance on unseen data.\" }\n  ];\n\n  // One dataset: 30 points on a curve plus deterministic noise.\n  var points = [];\n  for (var i = 0; i < 30; i++) {\n    var x = (i * 10) / 29;\n    var f = Math.sin(i * 12.9898) * 43758.5453;\n    var noise = ((f - Math.floor(f)) - 0.5) * 1.8;\n    var y = 1 + 0.16 * (x - 5) * (x - 5) + noise;\n    points.push({ x: x, y: y, set: i % 2 === 0 ? \"train\" : \"validation\" });\n  }\n  var trainPts = points.filter(function (p) { return p.set === \"train\"; });\n  var valPts = points.filter(function (p) { return p.set === \"validation\"; });\n\n  // The three models, each a function of x.\n  var meanTrain = trainPts.reduce(function (s, p) { return s + p.y; }, 0) / trainPts.length;\n  var sortedTrain = trainPts.slice().sort(function (a, b) { return a.x - b.x; });\n  var models = {\n    underfit: function () { return meanTrain; },\n    \"good-fit\": function (x) { return 1 + 0.16 * (x - 5) * (x - 5); },\n    overfit: function (x) {\n      // Piecewise-linear curve through every training point.\n      if (x <= sortedTrain[0].x) return sortedTrain[0].y;\n      for (var k = 0; k < sortedTrain.length - 1; k++) {\n        var a = sortedTrain[k], b = sortedTrain[k + 1];\n        if (x >= a.x && x <= b.x) {\n          var t = (x - a.x) / (b.x - a.x);\n          return a.y + t * (b.y - a.y);\n        }\n      }\n      return sortedTrain[sortedTrain.length - 1].y;\n    },\n  };\n\n  function mse(fn, set) {\n    var total = 0;\n    for (var j = 0; j < set.length; j++) {\n      var d = fn(set[j].x) - set[j].y;\n      total += d * d;\n    }\n    return total / set.length;\n  }\n  var errors = {};\n  [\"underfit\", \"good-fit\", \"overfit\"].forEach(function (name) {\n    errors[name] = { train: mse(models[name], trainPts), validation: mse(models[name], valPts) };\n  });\n\n  // Plot geometry (viewBox 640 x 320).\n  function px(x) { return 50 + (x / 10) * 560; }\n  function py(y) { return 286 - (y / 7) * 252; }\n\n  var svg = document.getElementById(\"scene\");\n  var plot = document.getElementById(\"plot\");\n  var bars = document.getElementById(\"bars\");\n  var labelEl = document.getElementById(\"step-label\");\n  var captionEl = document.getElementById(\"caption\");\n  var explainHeadEl = document.getElementById(\"explain-h\");\n  // Per-step explanations (mirrors explain.json in this package folder). **bold** markers become <strong>.\n  var EXPLAIN = {\"dataset\": {\"h\": \"WHAT YOU ARE LOOKING AT\", \"t\": \"**30 examples** follow a gentle curve with some noise. **Half (green) are used for training**, which is what the model learns from, and **half (amber) are held out for validation**: new data to check it on.\"}, \"underfit\": {\"h\": \"UNDERFIT: TOO SIMPLE\", \"t\": \"A **flat line ignores the curve**. It is wrong on the training points **and** on the validation points, because the model is too simple to capture the pattern.\"}, \"good-fit\": {\"h\": \"GOOD FIT: CAPTURES THE TREND\", \"t\": \"This curve follows the **main pattern** without chasing every dot. Its training and validation errors are **both small**, so it should work on new data too.\"}, \"overfit\": {\"h\": \"OVERFIT: MEMORIZES THE NOISE\", \"t\": \"This curve passes through **every training point**, so its training error is **zero**. But it wiggles between them and **misses the validation points**: it learned the noise, not the pattern.\"}, \"train-vs-validation\": {\"h\": \"TRAINING VS VALIDATION ERROR\", \"t\": \"Compare the two bars for each model. **Training error can keep falling while validation error gets worse.** A big gap between them is the warning sign of overfitting.\"}, \"generalize\": {\"h\": \"TAKEAWAY\", \"t\": \"The goal is **not the lowest training error**. The goal is **performance on unseen data**: that is what generalization means.\"}};\n\n  function setRich(node, str) {\n    node.textContent = \"\";\n    var parts = String(str).split(\"**\");\n    for (var i = 0; i < parts.length; i++) {\n      if (parts[i] === \"\") continue;\n      var seg = document.createElement(i % 2 ? \"strong\" : \"span\");\n      seg.textContent = parts[i];\n      node.appendChild(seg);\n    }\n  }\n\n  function explanationFor(index) {\n    var ex = EXPLAIN[steps[index].id];\n    return ex || { h: \"WHAT IS HAPPENING\", t: steps[index].caption || steps[index].detail || \"\" };\n  }\n\n  function stepMs(index) {\n    var words = String(explanationFor(index).t).replace(/\\*\\*/g, \"\").split(/\\s+/).length;\n    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));\n  }\n\n  function showExplanation(index) {\n    var ex = explanationFor(index);\n    if (explainHeadEl) explainHeadEl.textContent = ex.h;\n    setRich(captionEl, ex.t);\n  }\n  var statsEl = document.getElementById(\"stats\");\n\n  function el(name, attrs, parent) {\n    var node = document.createElementNS(NS, name);\n    for (var key in attrs) node.setAttribute(key, attrs[key]);\n    if (parent) parent.appendChild(node);\n    return node;\n  }\n\n  // Axes.\n  el(\"line\", { x1: 50, y1: 286, x2: 610, y2: 286, class: \"axis\" }, plot);\n  el(\"line\", { x1: 50, y1: 34, x2: 50, y2: 286, class: \"axis\" }, plot);\n  var axisLabels = [\n    el(\"text\", { x: 330, y: 312, class: \"axis-label\", \"text-anchor\": \"middle\" }, plot),\n    el(\"text\", { x: 18, y: 160, class: \"axis-label\", transform: \"rotate(-90 18 160)\", \"text-anchor\": \"middle\" }, plot),\n  ];\n  axisLabels[0].textContent = \"input x\";\n  axisLabels[1].textContent = \"target y\";\n\n  var pointEls = points.map(function (p) {\n    return el(\"circle\", {\n      cx: px(p.x), cy: py(p.y), r: 5.5,\n      class: \"pt \" + (p.set === \"train\" ? \"pt-train\" : \"pt-val\"),\n    }, plot);\n  });\n\n  var curve = el(\"path\", { d: \"\", class: \"curve\", fill: \"none\" }, plot);\n\n  function curvePath(fn) {\n    var d = \"\";\n    for (var s = 0; s <= 60; s++) {\n      var x = (s / 60) * 10;\n      d += (s === 0 ? \"M\" : \"L\") + px(x).toFixed(1) + \" \" + py(fn(x)).toFixed(1) + \" \";\n    }\n    return d;\n  }\n\n  // Bar chart for the comparison step.\n  var BAR_X = { underfit: 150, \"good-fit\": 320, overfit: 490 };\n  var maxErr = 0;\n  [\"underfit\", \"good-fit\", \"overfit\"].forEach(function (name) {\n    maxErr = Math.max(maxErr, errors[name].train, errors[name].validation);\n  });\n  var barScale = 200 / maxErr;\n  var barEls = {};\n  [\"underfit\", \"good-fit\", \"overfit\"].forEach(function (name) {\n    var g = el(\"g\", { class: \"bar-group\", \"data-model\": name }, bars);\n    var tH = errors[name].train * barScale;\n    var vH = errors[name].validation * barScale;\n    barEls[name + \"-train\"] = el(\"rect\", { x: BAR_X[name] - 48, y: 286 - tH, width: 40, height: tH, rx: 4, class: \"bar bar-train\" }, g);\n    barEls[name + \"-val\"] = el(\"rect\", { x: BAR_X[name] + 8, y: 286 - vH, width: 40, height: vH, rx: 4, class: \"bar bar-val\" }, g);\n    el(\"text\", { x: BAR_X[name], y: 304, class: \"bar-name\", \"text-anchor\": \"middle\" }, g).textContent =\n      name === \"good-fit\" ? \"GOOD FIT\" : name.toUpperCase();\n    el(\"text\", { x: BAR_X[name] - 28, y: 286 - tH - 6, class: \"bar-value\", \"text-anchor\": \"middle\" }, g).textContent = errors[name].train.toFixed(2);\n    el(\"text\", { x: BAR_X[name] + 28, y: 286 - vH - 6, class: \"bar-value\", \"text-anchor\": \"middle\" }, g).textContent = errors[name].validation.toFixed(2);\n  });\n\n  var current = 0;\n\n  function setPlotMode(mode) {\n    pointEls.forEach(function (node) { node.style.opacity = mode === \"bars\" ? \"0.25\" : \"1\"; });\n    plot.setAttribute(\"opacity\", mode === \"bars\" ? \"0.35\" : \"1\");\n    // The bar chart reuses the same area; the plot axis labels would collide with the bar names.\n    axisLabels.forEach(function (node) { node.setAttribute(\"opacity\", mode === \"bars\" ? \"0\" : \"1\"); });\n    bars.setAttribute(\"opacity\", mode === \"bars\" ? \"1\" : \"0\");\n  }\n\n  function render(index) {\n    var step = steps[index];\n    labelEl.textContent = step.label;\n    showExplanation(index);\n    statsEl.textContent = \"\";\n    curve.setAttribute(\"class\", \"curve\");\n    var id = step.id;\n\n    if (id === \"dataset\") {\n      setPlotMode(\"dots\");\n      curve.setAttribute(\"d\", \"\");\n    } else if (id === \"underfit\") {\n      setPlotMode(\"dots\");\n      curve.setAttribute(\"class\", \"curve curve-underfit\");\n      curve.setAttribute(\"d\", curvePath(models.underfit));\n      statsEl.textContent = \"Train MSE \" + errors.underfit.train.toFixed(2) + \" · Validation MSE \" + errors.underfit.validation.toFixed(2);\n    } else if (id === \"good-fit\") {\n      setPlotMode(\"dots\");\n      curve.setAttribute(\"class\", \"curve curve-good\");\n      curve.setAttribute(\"d\", curvePath(models[\"good-fit\"]));\n      statsEl.textContent = \"Train MSE \" + errors[\"good-fit\"].train.toFixed(2) + \" · Validation MSE \" + errors[\"good-fit\"].validation.toFixed(2);\n    } else if (id === \"overfit\") {\n      setPlotMode(\"dots\");\n      curve.setAttribute(\"class\", \"curve curve-overfit\");\n      curve.setAttribute(\"d\", curvePath(models.overfit));\n      statsEl.textContent = \"Train MSE \" + errors.overfit.train.toFixed(2) + \" · Validation MSE \" + errors.overfit.validation.toFixed(2);\n    } else if (id === \"train-vs-validation\" || id === \"generalize\") {\n      setPlotMode(\"bars\");\n      curve.setAttribute(\"d\", \"\");\n      var highlightValidation = id === \"generalize\";\n      Object.keys(barEls).forEach(function (key) {\n        var isVal = key.slice(-3) === \"val\";\n        barEls[key].setAttribute(\"class\", \"bar \" + (isVal ? \"bar-val\" : \"bar-train\") + (highlightValidation && isVal ? \" bar-focus\" : \"\"));\n      });\n      statsEl.textContent = \"Left bar: training error · Right bar: validation error\";\n    }\n  }\n\n  function emit() {\n    if (window.ReagvisBridge) window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n\n  function go(index) {\n    if (index < 0 || index >= steps.length) return false;\n    current = index;\n    render(current);\n    emit();\n    return true;\n  }\n\n  // Autoplay pace: 4.5 to 10.5 seconds per step (longer for longer explanations), exactly one timer.\n  // PLAY on the final step restarts from the first step and plays again.\n  var timer = null;\n\n  function stopAuto() {\n    if (timer !== null) {\n      clearTimeout(timer);\n      timer = null;\n    }\n  }\n\n  function scheduleNext() {\n    timer = setTimeout(function () {\n      timer = null;\n      if (current >= steps.length - 1) return;\n      go(current + 1);\n      if (current < steps.length - 1) scheduleNext();\n    }, stepMs(current));\n  }\n\n  function startAuto() {\n    if (timer !== null) return;\n    if (current >= steps.length - 1) go(0);\n    scheduleNext();\n  }\n\n  window.addEventListener(\"pagehide\", stopAuto);\n\n  window.ReagvisAnimation = {\n    stepDuration: stepMs,\n    onCommand: function (type, stepId) {\n      if (type === \"PLAY\") startAuto();\n      else if (type === \"PAUSE\") stopAuto();\n      else if (type === \"NEXT\") { stopAuto(); go(current + 1); }\n      else if (type === \"PREVIOUS\") { stopAuto(); go(current - 1); }\n      else if (type === \"RESET\") { stopAuto(); go(0); }\n      else if (type === \"GOTO_STEP\") {\n        stopAuto();\n        for (var i = 0; i < steps.length; i++) {\n          if (steps[i].id === stepId) { go(i); break; }\n        }\n      }\n    },\n  };\n\n  render(current);\n  if (window.ReagvisBridge) {\n    window.ReagvisBridge.ready();\n    window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n})();\n",
+  "lastFrozenContentHash": null,
+  "lastFrozenRevisionId": null,
+  "manifest": {
+    "bridgeVersion": {
+      "$numberInt": "1"
+    },
+    "capabilities": [
+      "play",
+      "pause",
+      "next",
+      "previous",
+      "reset",
+      "gotoStep"
+    ],
+    "heightPx": {
+      "$numberInt": "560"
+    },
+    "traceEvents": [
+      "dataset",
+      "underfit",
+      "good-fit",
+      "overfit",
+      "train-vs-validation",
+      "generalize"
+    ]
+  },
+  "packageId": "393b9719-7f98-4605-a3e2-09c227178ecd",
+  "packageTrace": {
+    "steps": [
+      {
+        "animationEvent": "dataset",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Use one dataset. Keep half of the examples for training and hold the other half out for validation.",
+          "python": "xs = [i * 10 / 29 for i in range(30)]\nys = [1.5 + 0.12 * (x - 5) ** 2 for x in xs]\npoints = list(zip(xs, ys))\ntrain = points[::2]\nvalidation = points[1::2]\nprint(len(train), len(validation))"
+        },
+        "id": "dataset",
+        "label": "One dataset, split into two halves"
+      },
+      {
+        "animationEvent": "underfit",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Fit a model that is too simple for the pattern, such as a constant. Its error is high on training examples and on validation examples.",
+          "python": "train_y = [4.0, 5.0, 7.0]\nconstant = sum(train_y) / len(train_y)\nprint(round(constant, 2))"
+        },
+        "id": "underfit",
+        "label": "Underfit: model too simple"
+      },
+      {
+        "animationEvent": "good-fit",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Use a model flexible enough to follow the main trend, but not so flexible that it follows the noise. Both errors stay small.",
+          "python": "def trend(x):\n    return 1.5 + 0.12 * (x - 5) ** 2\n\nprint(round(trend(5), 2), round(trend(0), 2))"
+        },
+        "id": "good-fit",
+        "label": "Good fit: captures the trend"
+      },
+      {
+        "animationEvent": "overfit",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Choose a curve that passes through every training example. Training error becomes zero, but the curve swings away from new examples.",
+          "python": "train = {0.0: 3.1, 2.0: 4.0, 4.0: 2.2}\nprint(train[0.0], train[2.0], train[4.0])  # zero training error on these points"
+        },
+        "id": "overfit",
+        "label": "Overfit: memorizes the noise"
+      },
+      {
+        "animationEvent": "train-vs-validation",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "For each model, measure error on training examples and on validation examples. A large gap between them means the model did not generalize.",
+          "python": "def mse(predictions, actuals):\n    return sum((p - a) ** 2 for p, a in zip(predictions, actuals)) / len(actuals)\n\nprint(mse([1.0, 2.0], [1.0, 4.0]))"
+        },
+        "id": "train-vs-validation",
+        "label": "Compare training and validation error"
+      },
+      {
+        "animationEvent": "generalize",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Prefer the model with the best validation error, not the lowest training error. Validation shows performance on data the model has not memorized.",
+          "python": "errors = {'underfit': (2.9, 3.1), 'good': (0.6, 0.7), 'overfit': (0.0, 1.8)}\nbest = min(errors, key=lambda name: errors[name][1])\nprint(best)"
+        },
+        "id": "generalize",
+        "label": "Judge models on unseen data"
+      }
+    ],
+    "version": {
+      "$numberInt": "1"
+    }
+  },
+  "revision": {
+    "$numberInt": "7"
+  },
+  "revisionId": "r2",
+  "sourceKind": "zip",
+  "status": "frozen",
+  "title": "ML Module 1 — Generalization, Underfitting & Overfitting",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498539"
+    }
+  },
+  "updatedBy": {
+    "$oid": "000000000000000000000000"
+  }
+}

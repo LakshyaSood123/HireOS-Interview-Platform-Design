@@ -1,0 +1,54 @@
+{
+  "title": "Multiclass classification: choose one of several classes",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "three-classes",
+      "label": "Three classes",
+      "pseudocode": "Three possible classes for each email.",
+      "python": "classes = ['personal', 'promotional', 'spam']\nprint(len(classes), 'classes:', classes)\n# prints: 3 classes: ['personal', 'promotional', 'spam']"
+    },
+    {
+      "id": "input-example",
+      "label": "One email to classify",
+      "pseudocode": "The new email has two features.",
+      "python": "email = {'suspicious_words': 7, 'promo_words': 3}\nprint(email)\n# prints: {'suspicious_words': 7, 'promo_words': 3}"
+    },
+    {
+      "id": "class-scores",
+      "label": "One score per class",
+      "pseudocode": "The model gives one raw score per class.",
+      "python": "raw = {'personal': 0.5, 'promotional': 1.2, 'spam': 2.1}\nprint(raw)\n# prints: {'personal': 0.5, 'promotional': 1.2, 'spam': 2.1}"
+    },
+    {
+      "id": "compare-scores",
+      "label": "Compare the scores",
+      "pseudocode": "Rank the classes by score.",
+      "python": "raw = {'personal': 0.5, 'promotional': 1.2, 'spam': 2.1}\nprint(sorted(raw, key=raw.get, reverse=True))\n# prints: ['spam', 'promotional', 'personal']"
+    },
+    {
+      "id": "probabilities",
+      "label": "Scores become probabilities",
+      "pseudocode": "Softmax turns scores into probabilities that sum to 1.",
+      "python": "import math\n\nraw = {'personal': 0.5, 'promotional': 1.2, 'spam': 2.1}\n\ndef softmax(values):\n    exps = [math.exp(v) for v in values]\n    return [e / sum(exps) for e in exps]\n\nprobs = softmax(list(raw.values()))\nprint([round(p, 3) for p in probs], round(sum(probs), 3))\n# prints: [0.126, 0.253, 0.622] 1.0"
+    },
+    {
+      "id": "choose-largest",
+      "label": "Choose the largest",
+      "pseudocode": "Predict the class with the largest probability.",
+      "python": "import math\n\nraw = {'personal': 0.5, 'promotional': 1.2, 'spam': 2.1}\n\ndef softmax(values):\n    exps = [math.exp(v) for v in values]\n    return [e / sum(exps) for e in exps]\n\nprobs = dict(zip(raw, softmax(list(raw.values()))))\nprint(max(probs, key=probs.get))\n# prints: spam"
+    },
+    {
+      "id": "decision-regions",
+      "label": "Decision regions",
+      "pseudocode": "Each class wins in its own region of feature space.",
+      "python": "def scores(u, v):\n    return {'personal': 4 - 0.6 * u - 0.6 * v, 'promotional': -2 + 0.9 * v - 0.1 * u, 'spam': -3 + 0.8 * u - 0.1 * v}\n\nfor point in [(1, 1), (2, 8), (7, 3)]:\n    s = scores(*point)\n    print(point, max(s, key=s.get))\n# prints: (1, 1) personal\n# prints: (2, 8) promotional\n# prints: (7, 3) spam"
+    },
+    {
+      "id": "ml-example",
+      "label": "Two ways to build it",
+      "pseudocode": "One-versus-rest: pick the class whose binary classifier is most confident.",
+      "python": "binary_confidence = {'personal': 0.1, 'promotional': 0.3, 'spam': 0.9}\nprint(max(binary_confidence, key=binary_confidence.get))\n# prints: spam"
+    }
+  ]
+}

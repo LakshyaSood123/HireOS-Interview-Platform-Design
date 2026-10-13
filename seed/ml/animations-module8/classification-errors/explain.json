@@ -1,0 +1,34 @@
+{
+ "predictions": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Our rule predicts all ten emails. **Fill color is the true class** and the **ring is the predicted class**. We choose spam as the **positive class**: positive just means the class we are looking for."
+ },
+ "correct-positive": {
+  "h": "TRUE POSITIVES",
+  "t": "**True positive:** predicted spam and actually spam. Four emails (scores 5, 6, 7.5 and 9) are **caught correctly**."
+ },
+ "correct-negative": {
+  "h": "TRUE NEGATIVES",
+  "t": "**True negative:** predicted not spam and actually not spam. Four emails (scores 0.5, 1, 2 and 3) are **correctly allowed**."
+ },
+ "false-positive": {
+  "h": "A FALSE POSITIVE",
+  "t": "**False positive:** predicted spam but actually real mail. The email with score 4.5 is legitimate, yet it is **blocked**."
+ },
+ "false-negative": {
+  "h": "A FALSE NEGATIVE",
+  "t": "**False negative:** predicted not spam but actually spam. The spam with score 3.5 **slips through** to the inbox."
+ },
+ "compare-errors": {
+  "h": "ALL FOUR OUTCOMES",
+  "t": "Every prediction falls into **exactly one** of four outcomes: **4 true positives, 4 true negatives, 1 false positive and 1 false negative**. That is 10 emails."
+ },
+ "different-costs": {
+  "h": "ERRORS HAVE DIFFERENT COSTS",
+  "t": "The two mistakes are not equally bad. Blocking a job offer is annoying; letting phishing through can be harmful. In **disease screening**, a false negative (a missed case) is usually the worse mistake."
+ },
+ "module9-preview": {
+  "h": "TAKEAWAY",
+  "t": "Organizing these four counts in a table and measuring a classifier from them is the job of **Model Evaluation**. For now: **always define the positive class first**."
+ }
+}

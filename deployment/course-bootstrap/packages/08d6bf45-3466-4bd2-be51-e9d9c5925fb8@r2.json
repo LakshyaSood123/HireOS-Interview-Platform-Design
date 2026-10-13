@@ -1,0 +1,159 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322c4e9cccef168ed19"
+  },
+  "assets": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498528"
+    }
+  },
+  "createdBy": {
+    "$oid": "000000000000000000000000"
+  },
+  "css": "body {\r\n  margin: 0;\r\n  padding: 14px;\r\n  box-sizing: border-box;\r\n  background: #0b1d16;\r\n  color: #e6f5ec;\r\n  font-family: system-ui, sans-serif;\r\n}\r\n.scene {\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 8px;\r\n}\r\n.step-label {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  letter-spacing: 0.08em;\r\n  text-transform: uppercase;\r\n  color: #a7ce65;\r\n}\r\nsvg {\r\n  width: 100%;\r\n  height: auto;\r\n  max-width: 640px;\r\n  background: #071510;\r\n  border-radius: 10px;\r\n  border: 1px solid rgba(29, 181, 132, 0.35);\r\n}\r\nsvg g,\r\nsvg line,\r\nsvg polygon,\r\nsvg path,\r\nsvg ellipse,\r\nsvg circle,\r\nsvg rect,\r\nsvg text {\r\n  transition: opacity 0.4s ease, transform 0.6s ease;\r\n}\r\n.axis {\r\n  stroke: rgba(167, 206, 101, 0.3);\r\n  stroke-width: 1;\r\n}\r\n.tick {\r\n  font-size: 10px;\r\n  fill: #8fa89c;\r\n}\r\n.lbl,\r\n.big,\r\n.note,\r\n.mono {\r\n  paint-order: stroke;\r\n  stroke: #071510;\r\n  stroke-width: 3px;\r\n  stroke-linejoin: round;\r\n}\r\n.lbl {\r\n  font-size: 12px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.lbl-g { fill: #1db584; }\r\n.lbl-y { fill: #e2b44a; }\r\n.lbl-p { fill: #f472b6; }\r\n.lbl-b { fill: #38bdf8; }\r\n.lbl-r { fill: #f87171; }\r\n.big {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.note {\r\n  font-size: 11px;\r\n  fill: #c9dccf;\r\n}\r\n.mono {\r\n  font-family: ui-monospace, Consolas, monospace;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.caption {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  line-height: 1.5;\r\n  color: #c9dccf;\r\n  min-height: 40px;\r\n}\r\n.cell rect {\r\n  fill: rgba(255, 255, 255, 0.05);\r\n  stroke: rgba(255, 255, 255, 0.28);\r\n  stroke-width: 1.2;\r\n}\r\n.cell text {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.cell.hl-row rect { fill: rgba(226, 180, 74, 0.25); stroke: #e2b44a; }\r\n.cell.hl-col rect { fill: rgba(29, 181, 132, 0.25); stroke: #1db584; }\r\n.cell.hl-both rect { fill: rgba(244, 114, 182, 0.28); stroke: #f472b6; }\r\n.dim { opacity: 0.25; }\r\n.dash { stroke-dasharray: 5 4; }\r\n.fillA { fill: rgba(56, 189, 248, 0.16); stroke: #38bdf8; stroke-width: 2; }\r\n.fillB { fill: rgba(244, 114, 182, 0.18); stroke: #f472b6; stroke-width: 2; }\r\n.fillG { fill: rgba(29, 181, 132, 0.16); stroke: #1db584; stroke-width: 2; }\r\n.contour { stroke: rgba(56, 189, 248, 0.45); stroke-width: 1.5; }\n.curve { fill: none; stroke: #38bdf8; stroke-width: 3; }\n.curve-y { fill: none; stroke: #e2b44a; stroke-width: 3; }\n.curve-p { fill: none; stroke: #f472b6; stroke-width: 3; }\n.curve-g { fill: none; stroke: #1db584; stroke-width: 3; }\n.ghost { fill: none; stroke: rgba(201, 220, 207, 0.4); stroke-width: 2; }\n.lbl-w { fill: #e6f5ec; }\n.lbl-s { font-size: 11px; font-weight: 600; fill: #c9dccf; }\n\n/* ── explanation panel (shared by every generated ML animation) ── */\n.explain {\n  box-sizing: border-box;\n  max-width: 640px;\n  margin-top: 4px;\n  padding: 14px 18px 16px;\n  min-height: 150px;\n  border-radius: 12px;\n  background: rgba(29, 181, 132, 0.10);\n  border: 1px solid rgba(29, 181, 132, 0.45);\n  border-left: 5px solid #1db584;\n}\n.explain-h {\n  margin: 0 0 8px;\n  font-size: 13px;\n  font-weight: 800;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.explain-t {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.55;\n  color: #f1faf4;\n}\n.explain-t strong {\n  font-weight: 800;\n  color: #ffd98a;\n}\n\n",
+  "html": "<div class=\"scene\">\n  <p class=\"step-label\" id=\"step-label\"></p>\n  <svg id=\"scene\" viewBox=\"0 0 640 360\" role=\"img\" aria-label=\"What are we estimating? Parameters and estimates\"></svg>\n  <section class=\"explain\" aria-live=\"polite\">\n    <h3 class=\"explain-h\" id=\"explain-h\"></h3>\n    <p class=\"explain-t\" id=\"caption\"></p>\n  </section>\n</div>\n",
+  "js": "(function () {\n  // ── shared helpers (SVG, tweening) ─────────────────────────────────────────\r\n  var NS = \"http://www.w3.org/2000/svg\";\r\n  var svg = document.getElementById(\"scene\");\r\n  var labelEl = document.getElementById(\"step-label\");\r\n  var captionEl = document.getElementById(\"caption\");\r\n\r\n  function el(name, attrs, parent) {\r\n    var node = document.createElementNS(NS, name);\r\n    for (var key in attrs) node.setAttribute(key, attrs[key]);\r\n    if (parent) parent.appendChild(node);\r\n    return node;\r\n  }\r\n  function txt(parent, x, y, cls, str, anchor) {\r\n    var t = el(\"text\", { x: x, y: y, class: cls }, parent);\r\n    if (anchor) t.setAttribute(\"text-anchor\", anchor);\r\n    t.textContent = str;\r\n    return t;\r\n  }\r\n  function show(node, on) {\r\n    node.setAttribute(\"opacity\", on ? \"1\" : \"0\");\r\n  }\r\n  function place(node, x, y) {\r\n    node.style.transform = \"translate(\" + x + \"px,\" + y + \"px)\";\r\n  }\r\n  function setLine(node, x1, y1, x2, y2) {\r\n    node.setAttribute(\"x1\", x1);\r\n    node.setAttribute(\"y1\", y1);\r\n    node.setAttribute(\"x2\", x2);\r\n    node.setAttribute(\"y2\", y2);\r\n  }\r\n  function lerp(a, b, e) {\r\n    return a + (b - a) * e;\r\n  }\r\n  function round1(v) {\r\n    return (Math.round(v * 10) / 10).toFixed(1);\r\n  }\r\n\r\n  // Eased animation. fn(e) is called with e from 0 to 1. Without\r\n  // requestAnimationFrame (or with ms = 0) it jumps straight to fn(1).\r\n  var animTokens = {};\r\n  function anim(key, ms, fn) {\r\n    var token = (animTokens[key] || 0) + 1;\r\n    animTokens[key] = token;\r\n    if (typeof requestAnimationFrame !== \"function\" || ms <= 0) {\r\n      fn(1);\r\n      return;\r\n    }\r\n    var start = null;\r\n    function frame(now) {\r\n      if (animTokens[key] !== token) return;\r\n      if (start === null) start = now;\r\n      var p = Math.min(1, (now - start) / ms);\r\n      var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;\r\n      fn(e);\r\n      if (p < 1) requestAnimationFrame(frame);\r\n    }\r\n    requestAnimationFrame(frame);\r\n  }\r\n\r\n  // Arrowheads, one marker per colour.\r\n  var COLORS = { g: \"#1DB584\", y: \"#E2B44A\", p: \"#F472B6\", b: \"#38BDF8\", w: \"#c9dccf\", r: \"#F87171\" };\r\n  var defs = el(\"defs\", {}, svg);\r\n  Object.keys(COLORS).forEach(function (k) {\r\n    var m = el(\"marker\", { id: \"ah-\" + k, viewBox: \"0 0 10 10\", refX: 9, refY: 5, markerUnits: \"userSpaceOnUse\", markerWidth: 13, markerHeight: 13, orient: \"auto\" }, defs);\r\n    el(\"path\", { d: \"M0 0 L10 5 L0 10 Z\", fill: COLORS[k] }, m);\r\n  });\r\n  function arrow(parent, colorKey, width) {\r\n    return el(\"line\", { x1: 0, y1: 0, x2: 0, y2: 0, stroke: COLORS[colorKey], \"stroke-width\": width || 3, \"marker-end\": \"url(#ah-\" + colorKey + \")\", \"stroke-linecap\": \"round\" }, parent);\r\n  }\r\n  function polygon(parent, cls) {\r\n    return el(\"polygon\", { points: \"\", class: cls }, parent);\r\n  }\r\n  function setPoly(node, pts) {\r\n    node.setAttribute(\"points\", pts.map(function (p) { return p[0].toFixed(1) + \",\" + p[1].toFixed(1); }).join(\" \"));\r\n  }\r\n  function lerpPts(a, b, e) {\r\n    return a.map(function (p, i) { return [lerp(p[0], b[i][0], e), lerp(p[1], b[i][1], e)]; });\r\n  }\r\n  // Maps maths coordinates (x right, y up) to screen pixels.\r\n  function makePlane(cx, cy, s) {\r\n    return {\r\n      x: function (v) { return cx + s * v; },\r\n      y: function (v) { return cy - s * v; },\r\n      pt: function (p) { return [cx + s * p[0], cy - s * p[1]]; },\r\n      s: s, cx: cx, cy: cy\r\n    };\r\n  }\r\n  function axes(parent, plane, xr, yr) {\r\n    el(\"line\", { x1: plane.x(-xr), y1: plane.y(0), x2: plane.x(xr), y2: plane.y(0), class: \"axis\" }, parent);\r\n    el(\"line\", { x1: plane.x(0), y1: plane.y(-yr), x2: plane.x(0), y2: plane.y(yr), class: \"axis\" }, parent);\r\n  }\r\n\n  // ── Module 3 helpers: graphs, curves, contour plane ───────────────────────\n  // makeGraph maps maths values to pixels with separate x and y scales.\n  function makeGraph(ox, oy, sx, sy) {\n    return {\n      ox: ox, oy: oy, sx: sx, sy: sy,\n      x: function (v) { return ox + sx * v; },\n      y: function (v) { return oy - sy * v; }\n    };\n  }\n  function curveD(g, f, a, b, n) {\n    var d = \"\";\n    for (var i = 0; i <= n; i++) {\n      var v = a + ((b - a) * i) / n;\n      d += (i ? \" L \" : \"M \") + g.x(v).toFixed(1) + \" \" + g.y(f(v)).toFixed(1);\n    }\n    return d;\n  }\n  function setD(node, d) {\n    node.setAttribute(\"d\", d);\n  }\n  function fmt(v, n) {\n    return (Math.round(v * 100000) / 100000).toFixed(n === undefined ? 1 : n);\n  }\n  function drawAxes(parent, g, xmax, ymax, xticks, yticks) {\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(xmax), y2: g.y(0), class: \"axis\" }, parent);\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(0), y2: g.y(ymax), class: \"axis\" }, parent);\n    (xticks || []).forEach(function (t) { txt(parent, g.x(t), g.y(0) + 15, \"tick\", String(t), \"middle\"); });\n    (yticks || []).forEach(function (t) { txt(parent, g.x(0) - 7, g.y(t) + 4, \"tick\", String(t), \"end\"); });\n  }\n  function card(parent, x, y, w, h, cls) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: 10, class: cls || \"fillG\" }, parent);\n  }\n  function ring(parent, cx, cy, rx, ry, cls) {\n    return el(\"ellipse\", { cx: cx, cy: cy, rx: rx, ry: ry, fill: \"none\", class: cls || \"contour\" }, parent);\n  }\n  function clipTo(id, x, y, w, h) {\n    var c = el(\"clipPath\", { id: id }, defs);\n    el(\"rect\", { x: x, y: y, width: w, height: h }, c);\n  }\n\n  // ── Module 4 helpers: seeded randomness, small shapes ─────────────────────\n  function mulberry(seed) {\n    var a = seed;\n    return function () {\n      a |= 0; a = (a + 0x6D2B79F5) | 0;\n      var t = Math.imul(a ^ (a >>> 15), 1 | a);\n      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;\n      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;\n    };\n  }\n  function gaussSource(rand) {\n    return function () {\n      var u = 1 - rand(), v = rand();\n      return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);\n    };\n  }\n  function box(parent, x, y, w, h, fill, stroke, r) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: r === undefined ? 6 : r, fill: fill, stroke: stroke || \"none\", \"stroke-width\": 2 }, parent);\n  }\n  function setBox(node, x, y, w, h) {\n    node.setAttribute(\"x\", x); node.setAttribute(\"y\", y); node.setAttribute(\"width\", Math.max(0, w)); node.setAttribute(\"height\", Math.max(0, h));\n  }\n  function vis(list, on) {\n    list.forEach(function (n) { show(n, on); });\n  }\n\n  // ── Module 5 helpers: coins, and rows of bars over the nine candidate values of p ──\n  function coin(parent, x, y, r, letter) {\n    var g = el(\"g\", {}, parent);\n    var head = letter === \"H\";\n    el(\"circle\", { cx: x, cy: y, r: r, fill: head ? \"rgba(244,114,182,0.35)\" : \"rgba(56,189,248,0.3)\", stroke: head ? \"#f472b6\" : \"#38bdf8\", \"stroke-width\": 3 }, g);\n    var t = txt(g, x, y + r * 0.36, \"big\", letter, \"middle\");\n    t.setAttribute(\"font-size\", String(Math.round(r * 1.05)));\n    return g;\n  }\n  var THETAS = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9];\n  var WEIGHTS = [1, 2, 3, 4, 5, 4, 3, 2, 1];\n  function lik(t, k, n) { return Math.pow(t, k) * Math.pow(1 - t, n - k); }\n  function normalized(arr) {\n    var s = 0;\n    arr.forEach(function (v) { s += v; });\n    return arr.map(function (v) { return v / s; });\n  }\n  function argmaxIndex(arr) {\n    var b = 0;\n    arr.forEach(function (v, i) { if (v > arr[b]) b = i; });\n    return b;\n  }\n  // A row of nine bars. set(values, maxValue) rescales heights so maxValue fills `height`.\n  function barRow(parent, x0, dx, base, bw, height, fill, stroke) {\n    var g = el(\"g\", {}, parent);\n    var bars = THETAS.map(function (t, i) {\n      return box(g, x0 + i * dx - bw / 2, base, bw, 0, fill, stroke || \"none\", 3);\n    });\n    var tick = THETAS.map(function (t, i) {\n      var tt = txt(g, x0 + i * dx, base + 14, \"tick\", String(t), \"middle\");\n      tt.setAttribute(\"opacity\", \"0\");\n      return tt;\n    });\n    return {\n      g: g,\n      bars: bars,\n      ticks: tick,\n      set: function (values, maxValue) {\n        values.forEach(function (v, i) {\n          var h = Math.max(0, (v / maxValue) * height);\n          setBox(bars[i], x0 + i * dx - bw / 2, base - h, bw, h);\n        });\n      },\n      showTicks: function (on) { tick.forEach(function (n) { n.setAttribute(\"opacity\", on ? \"1\" : \"0\"); }); }\n    };\n  }\n\n  var EXPLAIN = {\"unknown-parameter\":{\"h\":\"WHAT YOU ARE LOOKING AT\",\"t\":\"This coin has some true probability **p** of landing heads, but nobody printed it on the coin. **p is a parameter**: a fixed number that describes the coin, and it is **unknown**.\"},\"collect-data\":{\"h\":\"COLLECT DATA\",\"t\":\"What we can do is **observe data**. Flip the coin 5 times: **H H T H H**, which is 4 heads and 1 tail. The data are visible; p is not.\"},\"sample\":{\"h\":\"A SAMPLE FROM A LARGER POPULATION\",\"t\":\"These 5 flips are a **sample**, a small piece of the **population** of every flip this coin could ever make. We use the sample to learn about the population.\"},\"candidate-values\":{\"h\":\"CANDIDATE VALUES OF p\",\"t\":\"Which values of p are plausible? If p were **0.2** we would expect about **1 head** in 5 flips, if p were **0.5** about **2.5**, and if p were **0.8** about **4**.\"},\"compare-candidates\":{\"h\":\"COMPARE CANDIDATES WITH THE DATA\",\"t\":\"We saw **4 heads**. p = 0.2 expects 1 (off by 3), p = 0.5 expects 2.5 (off by 1.5), p = 0.8 expects 4 (off by 0). **The data match 0.8 best.**\"},\"estimate\":{\"h\":\"THE ESTIMATE\",\"t\":\"The rule “**heads divided by flips**” is an **estimator**. Applied to this sample it gives the **estimate 4 / 5 = 0.8**. The rule stays the same; the number depends on the data.\"},\"uncertainty\":{\"h\":\"ESTIMATES VARY\",\"t\":\"Flip the same coin another 5 times and you may get **H T T H T**: estimate **0.4**. Another sample, **H T H H T**, gives **0.6**. The coin did not change; the **samples** did. So an estimate always carries uncertainty.\"},\"ml-connection\":{\"h\":\"TAKEAWAY\",\"t\":\"A model's **parameters are estimated from data**, and then they determine its predictions: with p estimated as 0.8, we predict heads on the next flip with probability 0.8.\"}};\n  // ── scene ──\n  var steps = [\n    { id: \"unknown-parameter\", label: \"An unknown parameter\", caption: \"This coin has some true probability p of landing heads, but nobody printed it on the coin. p is a parameter: a fixed number that describes the coin, and it is unknown.\" },\n    { id: \"collect-data\", label: \"Collect data\", caption: \"What we can do is observe data. Flip the coin 5 times: H H T H H, which is 4 heads and 1 tail. Data is visible; p is not.\" },\n    { id: \"sample\", label: \"A sample from a larger population\", caption: \"These 5 flips are a sample, a small piece of the population of every flip this coin could ever make. We will use the sample to learn about the population.\" },\n    { id: \"candidate-values\", label: \"Candidate values of p\", caption: \"Which values of p are plausible? If p were 0.2 we would expect about 1 head in 5 flips, if p were 0.5 about 2.5, if p were 0.8 about 4.\" },\n    { id: \"compare-candidates\", label: \"Compare candidates with the data\", caption: \"We saw 4 heads. p = 0.2 expects 1 (off by 3), p = 0.5 expects 2.5 (off by 1.5), p = 0.8 expects 4 (off by 0). The data match 0.8 best.\" },\n    { id: \"estimate\", label: \"The estimate\", caption: \"The rule 'heads divided by flips' is an estimator. Applied to this sample it gives the estimate 4 / 5 = 0.8. The rule stays; the number depends on the data.\" },\n    { id: \"uncertainty\", label: \"Estimates vary\", caption: \"Flip the same coin another 5 times and you may get H T T H T: estimate 0.4. Another sample, H T H H T, gives 0.6. The coin did not change; the samples did. So an estimate always carries uncertainty.\" },\n    { id: \"ml-connection\", label: \"Parameters are what models learn\", caption: \"A model's parameters are estimated from data, and then they determine its predictions: with p estimated as 0.8, we predict heads on the next flip with probability 0.8.\" }\n  ];\n\n  var FLIPS = [\"H\", \"H\", \"T\", \"H\", \"H\"];\n  var bigG = el(\"g\", {}, svg);\n  el(\"circle\", { cx: 320, cy: 150, r: 66, fill: \"rgba(226,180,74,0.18)\", stroke: \"#e2b44a\", \"stroke-width\": 4 }, bigG);\n  txt(bigG, 320, 166, \"big\", \"p = ?\", \"middle\").setAttribute(\"font-size\", \"32\");\n  var bigLbl = txt(bigG, 320, 248, \"lbl lbl-y\", \"unknown probability of heads\", \"middle\");\n  var bigLbl2 = txt(bigG, 320, 268, \"note\", \"a parameter: fixed, but we cannot see it\", \"middle\");\n\n  var cloudG = el(\"g\", {}, svg);\n  var cr = mulberry(5);\n  for (var q = 0; q < 110; q++) {\n    var ang = cr() * Math.PI * 2, rad = Math.sqrt(cr());\n    el(\"circle\", { cx: 440 + Math.cos(ang) * rad * 175, cy: 200 + Math.sin(ang) * rad * 88, r: 4.5, fill: cr() < 0.7 ? \"rgba(244,114,182,0.5)\" : \"rgba(56,189,248,0.5)\" }, cloudG);\n  }\n  el(\"ellipse\", { cx: 440, cy: 200, rx: 190, ry: 100, fill: \"none\", stroke: \"#c9dccf\", \"stroke-width\": 2, \"stroke-dasharray\": \"7 5\" }, cloudG);\n  txt(cloudG, 440, 322, \"lbl\", \"population: every flip this coin could ever make\", \"middle\");\n\n  var rowG = el(\"g\", {}, svg);\n  var flipCoins = FLIPS.map(function (L, i) {\n    var g = coin(rowG, 262 + i * 66, 120, 25, L);\n    return g;\n  });\n  var rowLbl = txt(rowG, 395, 78, \"lbl\", \"5 flips: 4 heads, 1 tail\", \"middle\");\n  var sampBox = el(\"rect\", { x: 226, y: 88, width: 340, height: 64, rx: 14, fill: \"none\", stroke: \"#e2b44a\", \"stroke-width\": 3 }, svg);\n  var sampLbl = txt(svg, 396, 180, \"lbl lbl-y\", \"sample: our 5 flips\", \"middle\");\n\n  var candG = el(\"g\", {}, svg);\n  var cands = [[0.2, 1, \"p = 0.2\"], [0.5, 2.5, \"p = 0.5\"], [0.8, 4, \"p = 0.8\"]];\n  var candBoxes = [], diffLbls = [];\n  cands.forEach(function (c, i) {\n    var x = 20 + i * 205;\n    candBoxes.push(box(candG, x, 190, 190, 140, \"rgba(56,189,248,0.08)\", \"rgba(56,189,248,0.5)\", 12));\n    txt(candG, x + 95, 216, \"big\", c[2], \"middle\");\n    for (var s = 0; s < 5; s++) {\n      var fillAmt = Math.max(0, Math.min(1, c[1] - s));\n      box(candG, x + 20 + s * 30, 232, 26, 26, \"rgba(255,255,255,0.08)\", \"rgba(255,255,255,0.3)\", 3);\n      if (fillAmt > 0) box(candG, x + 20 + s * 30, 232, 26 * fillAmt, 26, \"rgba(244,114,182,0.85)\", \"none\", 3);\n    }\n    txt(candG, x + 95, 282, \"note\", \"expects \" + c[1] + \" heads in 5\", \"middle\");\n    diffLbls.push(txt(candG, x + 95, 312, \"lbl\", \"\", \"middle\"));\n  });\n  var seenG = el(\"g\", {}, svg);\n  [0, 1, 2].forEach(function (i) {\n    var x = 20 + i * 205;\n    el(\"line\", { x1: x + 20 + 4 * 30 - 2, y1: 226, x2: x + 20 + 4 * 30 - 2, y2: 264, stroke: \"#e2b44a\", \"stroke-width\": 3 }, seenG);\n  });\n  txt(seenG, 320, 182, \"lbl lbl-y\", \"seen: 4 heads (yellow mark)\", \"middle\");\n\n  var estG = el(\"g\", {}, svg);\n  card(estG, 130, 200, 380, 120, \"fillG\");\n  txt(estG, 320, 232, \"lbl\", \"estimator (the rule):  heads ÷ flips\", \"middle\");\n  txt(estG, 320, 270, \"big\", \"estimate:  4 / 5 = 0.8\", \"middle\").setAttribute(\"font-size\", \"22\");\n  txt(estG, 320, 300, \"note\", \"the rule is fixed; the number depends on the data\", \"middle\");\n\n  var varG = el(\"g\", {}, svg);\n  [[\"H H T H H\", \"0.8\"], [\"H T T H T\", \"0.4\"], [\"H T H H T\", \"0.6\"]].forEach(function (r, i) {\n    var y = 40 + i * 78;\n    card(varG, 40, y, 250, 56, \"fillA\");\n    var seq = r[0].split(\" \");\n    seq.forEach(function (L, j) { coin(varG, 70 + j * 44, y + 28, 15, L); });\n    var a = arrow(varG, \"w\", 3); setLine(a, 298, y + 28, 340, y + 28);\n    card(varG, 346, y, 150, 56, \"fillG\");\n    txt(varG, 421, y + 36, \"big\", \"estimate \" + r[1], \"middle\");\n  });\n  txt(varG, 320, 296, \"lbl lbl-y\", \"same coin, same p: three samples, three estimates\", \"middle\");\n  txt(varG, 320, 322, \"note\", \"so we also ask how much to trust an estimate\", \"middle\");\n\n  var mlG = el(\"g\", {}, svg);\n  [[\"data\", \"flips H H T H H\", \"fillA\"], [\"estimator\", \"heads ÷ flips\", \"fillG\"], [\"parameter\", \"p̂ = 0.8\", \"fillB\"], [\"prediction\", \"next flip: heads with probability 0.8\", \"fillG\"]].forEach(function (b, i) {\n    var x = 14 + i * 158, w = 138;\n    card(mlG, x, 120, w, 100, b[2]);\n    txt(mlG, x + w / 2, 148, \"note\", b[0], \"middle\");\n    var parts = b[1].length > 18 ? [b[1].slice(0, 14), b[1].slice(14)] : [b[1]];\n    if (i === 3) parts = [\"next flip:\", \"heads with\", \"probability 0.8\"];\n    parts.forEach(function (ptxt, k) { txt(mlG, x + w / 2, 176 + k * 18, \"lbl\", ptxt, \"middle\"); });\n    if (i < 3) { var a = arrow(mlG, \"w\", 3); setLine(a, x + w + 2, 170, x + w + 18, 170); }\n  });\n  txt(mlG, 320, 262, \"lbl lbl-y\", \"learning a model = estimating its parameters from data\", \"middle\");\n\n  function render(index, id) {\n    var i = index;\n    show(bigG, i <= 1 || i === 2);\n    show(bigLbl, i === 0); show(bigLbl2, i === 0);\n    var shiftBig = i === 0 ? 0 : -210;\n    place(bigG, shiftBig, i >= 3 ? -80 : 0);\n    show(rowG, i >= 1 && i <= 5);\n    show(rowLbl, i >= 1 && i <= 2);\n    show(cloudG, i === 2);\n    show(sampBox, i === 2); show(sampLbl, i === 2);\n    show(candG, i >= 3 && i <= 4);\n    show(seenG, i === 4);\n    show(estG, i === 5);\n    show(varG, i === 6);\n    show(mlG, i === 7);\n    show(bigG, i <= 2);\n    place(rowG, 0, i >= 3 ? -50 : 0);\n    for (var c = 0; c < 3; c++) {\n      var d = Math.abs(cands[c][1] - 4);\n      diffLbls[c].textContent = i === 4 ? (d === 0 ? \"off by 0: best match\" : \"off by \" + d) : \"\";\n      candBoxes[c].setAttribute(\"stroke\", i === 4 && d === 0 ? \"#1db584\" : \"rgba(56,189,248,0.5)\");\n      candBoxes[c].setAttribute(\"stroke-width\", i === 4 && d === 0 ? 4 : 2);\n    }\n    if (i === 1) {\n      anim(\"flips\", 1200, function (e) { flipCoins.forEach(function (g, k) { g.setAttribute(\"opacity\", Math.max(0, Math.min(1, e * 6 - k)).toFixed(2)); }); });\n    } else {\n      flipCoins.forEach(function (g) { g.setAttribute(\"opacity\", \"1\"); });\n    }\n  }\n\n\n  // ── shared runtime: stepping, explanation panel, educational autoplay pacing, bridge ──\n  var current = 0;\n  var explainHeadEl = document.getElementById(\"explain-h\");\n\n  // **bold** markers in an explanation become <strong> nodes (built with DOM calls, never innerHTML).\n  function setRich(node, str) {\n    node.textContent = \"\";\n    var parts = String(str).split(\"**\");\n    for (var i = 0; i < parts.length; i++) {\n      if (parts[i] === \"\") continue;\n      var seg = document.createElement(i % 2 ? \"strong\" : \"span\");\n      seg.textContent = parts[i];\n      node.appendChild(seg);\n    }\n  }\n\n  function explanationFor(index) {\n    var ex = (typeof EXPLAIN === \"object\" && EXPLAIN) ? EXPLAIN[steps[index].id] : null;\n    return ex || { h: \"WHAT IS HAPPENING\", t: steps[index].caption };\n  }\n\n  // Autoplay pace: 4.5 to 10.5 seconds per step, longer for longer explanations, so a learner can read.\n  function stepMs(index) {\n    var words = String(explanationFor(index).t).replace(/\\*\\*/g, \"\").split(/\\s+/).length;\n    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));\n  }\n\n  function renderStep(index) {\n    var ex = explanationFor(index);\n    labelEl.textContent = steps[index].label;\n    if (explainHeadEl) explainHeadEl.textContent = ex.h;\n    setRich(captionEl, ex.t);\n    render(index, steps[index].id);\n  }\n\n  function goTo(index) {\n    if (index < 0 || index >= steps.length) return;\n    current = index;\n    renderStep(current);\n    if (window.ReagvisBridge) window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n\n  renderStep(current);\n\n  // Autoplay: exactly one timer, one step per tick, stops on the final step.\n  // PLAY on the final step restarts from the first step and plays again.\n  var timer = null;\n\n  function stopAuto() {\n    if (timer !== null) {\n      clearTimeout(timer);\n      timer = null;\n    }\n  }\n\n  function scheduleNext() {\n    timer = setTimeout(function () {\n      timer = null;\n      if (current >= steps.length - 1) return;\n      goTo(current + 1);\n      if (current < steps.length - 1) scheduleNext();\n    }, stepMs(current));\n  }\n\n  function startAuto() {\n    if (timer !== null) return;\n    if (current >= steps.length - 1) goTo(0);\n    scheduleNext();\n  }\n\n  window.addEventListener(\"pagehide\", stopAuto);\n\n  window.ReagvisAnimation = {\n    stepDuration: stepMs,\n    onCommand: function (type, stepId) {\n      if (type === \"PLAY\") startAuto();\n      else if (type === \"PAUSE\") stopAuto();\n      else if (type === \"NEXT\") { stopAuto(); goTo(current + 1); }\n      else if (type === \"PREVIOUS\") { stopAuto(); goTo(current - 1); }\n      else if (type === \"RESET\") { stopAuto(); goTo(0); }\n      else if (type === \"GOTO_STEP\") {\n        stopAuto();\n        for (var i = 0; i < steps.length; i++) {\n          if (steps[i].id === stepId) { goTo(i); break; }\n        }\n      }\n    },\n  };\n\n  if (window.ReagvisBridge) {\n    window.ReagvisBridge.ready();\n    window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n})();\n",
+  "lastFrozenContentHash": null,
+  "lastFrozenRevisionId": null,
+  "manifest": {
+    "bridgeVersion": {
+      "$numberInt": "1"
+    },
+    "capabilities": [
+      "play",
+      "pause",
+      "next",
+      "previous",
+      "reset",
+      "gotoStep"
+    ],
+    "heightPx": {
+      "$numberInt": "590"
+    },
+    "traceEvents": [
+      "unknown-parameter",
+      "collect-data",
+      "sample",
+      "candidate-values",
+      "compare-candidates",
+      "estimate",
+      "uncertainty",
+      "ml-connection"
+    ]
+  },
+  "packageId": "08d6bf45-3466-4bd2-be51-e9d9c5925fb8",
+  "packageTrace": {
+    "steps": [
+      {
+        "animationEvent": "unknown-parameter",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "The coin has a fixed probability p of heads. We can see flips, never p itself.",
+          "python": "import random\n\nrandom.seed(4)\nhidden_p = 0.7                       # exists, but we cannot see it\nflip = lambda: 'H' if random.random() < hidden_p else 'T'\nprint(flip() in 'HT')                # True: we only ever observe flips"
+        },
+        "id": "unknown-parameter",
+        "label": "An unknown parameter"
+      },
+      {
+        "animationEvent": "collect-data",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Flip the coin and record what happens.",
+          "python": "flips = \"HHTHH\"\nheads = flips.count(\"H\")\ntails = len(flips) - heads\nprint(flips, heads, 'heads')   # HHTHH 4 heads"
+        },
+        "id": "collect-data",
+        "label": "Collect data"
+      },
+      {
+        "animationEvent": "sample",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Our flips are a small sample from the population of all flips the coin could make.",
+          "python": "sample = 'HHTHH'\nprint(len(sample), 'flips: a small sample of a much larger population')"
+        },
+        "id": "sample",
+        "label": "A sample from a larger population"
+      },
+      {
+        "animationEvent": "candidate-values",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "A candidate p predicts how many heads we should expect.",
+          "python": "for p in [0.2, 0.5, 0.8]:\n    print(p, 'expects', p * 5, 'heads in 5 flips')   # 1.0 / 2.5 / 4.0"
+        },
+        "id": "candidate-values",
+        "label": "Candidate values of p"
+      },
+      {
+        "animationEvent": "compare-candidates",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Measure how far each candidate's expectation is from the observed count.",
+          "python": "seen = 4\nfor p in [0.2, 0.5, 0.8]:\n    print(p, abs(p * 5 - seen))   # 3.0 / 1.5 / 0.0"
+        },
+        "id": "compare-candidates",
+        "label": "Compare candidates with the data"
+      },
+      {
+        "animationEvent": "estimate",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "estimator: heads / flips. estimate: the number it gives for this sample.",
+          "python": "flips = \"HHTHH\"\nheads = flips.count(\"H\")\ntails = len(flips) - heads\nestimate = heads / len(flips)\nprint(estimate)   # 0.8"
+        },
+        "id": "estimate",
+        "label": "The estimate"
+      },
+      {
+        "animationEvent": "uncertainty",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Different samples from the same coin give different estimates.",
+          "python": "for flips in ['HHTHH', 'HTTHT', 'HTHHT']:\n    print(flips, flips.count('H') / len(flips))   # 0.8 / 0.4 / 0.6"
+        },
+        "id": "uncertainty",
+        "label": "Estimates vary"
+      },
+      {
+        "animationEvent": "ml-connection",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "The estimated parameter determines the model's predictions.",
+          "python": "p_hat = 4 / 5\nprint('P(next flip is heads) =', p_hat)   # 0.8"
+        },
+        "id": "ml-connection",
+        "label": "Parameters are what models learn"
+      }
+    ],
+    "version": {
+      "$numberInt": "1"
+    }
+  },
+  "revision": {
+    "$numberInt": "5"
+  },
+  "revisionId": "r2",
+  "sourceKind": "zip",
+  "status": "frozen",
+  "title": "ML Module 5 — What Are We Estimating?",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498528"
+    }
+  },
+  "updatedBy": {
+    "$oid": "000000000000000000000000"
+  }
+}

@@ -1,0 +1,30 @@
+{
+ "plot-data": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Each dot is **one student**: **hours studied** on the x-axis and **exam score** on the y-axis. More hours tend to mean higher scores, so a line might describe the trend."
+ },
+ "initialize": {
+  "h": "START WITH A FLAT LINE",
+  "t": "Our model is a line: **prediction = w × hours + b**. We start with **w = 0 and b = 0**, a flat line that predicts **0 for everyone**. This is only a starting guess."
+ },
+ "predict": {
+  "h": "PREDICT WITH THE LINE",
+  "t": "For each student the **prediction is the point where their hours meet the line**. Every prediction here is 0, far below the real scores."
+ },
+ "error": {
+  "h": "MEASURE EACH ERROR",
+  "t": "The **error (residual)** is **actual score minus predicted score**: the vertical gap between a dot and the line. Big gaps mean the line fits that student badly."
+ },
+ "loss": {
+  "h": "AVERAGE THE SQUARED ERRORS (MSE)",
+  "t": "Squaring each error makes it positive and punishes big misses, and averaging gives one number: the **MSE**. **A big MSE means a poor fit**, and training tries to shrink it."
+ },
+ "adjust": {
+  "h": "ADJUST w AND b",
+  "t": "**Training changes w and b.** This new line is closer to the dots, so the errors and the **MSE are smaller**. The model learned by reducing its own error."
+ },
+ "better-fit": {
+  "h": "TAKEAWAY",
+  "t": "With **w = 9 and b = 33** the line passes almost through every dot and the **MSE is only 0.4**. Learning a linear model means **adjusting w and b until the errors are as small as possible**."
+ }
+}

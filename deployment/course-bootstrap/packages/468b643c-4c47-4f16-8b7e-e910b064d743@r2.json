@@ -1,0 +1,159 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322c4e9cccef168ed31"
+  },
+  "assets": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498546"
+    }
+  },
+  "createdBy": {
+    "$oid": "000000000000000000000000"
+  },
+  "css": "body {\r\n  margin: 0;\r\n  padding: 14px;\r\n  box-sizing: border-box;\r\n  background: #0b1d16;\r\n  color: #e6f5ec;\r\n  font-family: system-ui, sans-serif;\r\n}\r\n.scene {\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 8px;\r\n}\r\n.step-label {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  letter-spacing: 0.08em;\r\n  text-transform: uppercase;\r\n  color: #a7ce65;\r\n}\r\nsvg {\r\n  width: 100%;\r\n  height: auto;\r\n  max-width: 640px;\r\n  background: #071510;\r\n  border-radius: 10px;\r\n  border: 1px solid rgba(29, 181, 132, 0.35);\r\n}\r\nsvg g,\r\nsvg line,\r\nsvg polygon,\r\nsvg path,\r\nsvg ellipse,\r\nsvg circle,\r\nsvg rect,\r\nsvg text {\r\n  transition: opacity 0.4s ease, transform 0.6s ease;\r\n}\r\n.axis {\r\n  stroke: rgba(167, 206, 101, 0.3);\r\n  stroke-width: 1;\r\n}\r\n.tick {\r\n  font-size: 10px;\r\n  fill: #8fa89c;\r\n}\r\n.lbl,\r\n.big,\r\n.note,\r\n.mono {\r\n  paint-order: stroke;\r\n  stroke: #071510;\r\n  stroke-width: 3px;\r\n  stroke-linejoin: round;\r\n}\r\n.lbl {\r\n  font-size: 12px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.lbl-g { fill: #1db584; }\r\n.lbl-y { fill: #e2b44a; }\r\n.lbl-p { fill: #f472b6; }\r\n.lbl-b { fill: #38bdf8; }\r\n.lbl-r { fill: #f87171; }\r\n.big {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.note {\r\n  font-size: 11px;\r\n  fill: #c9dccf;\r\n}\r\n.mono {\r\n  font-family: ui-monospace, Consolas, monospace;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.caption {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  line-height: 1.5;\r\n  color: #c9dccf;\r\n  min-height: 40px;\r\n}\r\n.cell rect {\r\n  fill: rgba(255, 255, 255, 0.05);\r\n  stroke: rgba(255, 255, 255, 0.28);\r\n  stroke-width: 1.2;\r\n}\r\n.cell text {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.cell.hl-row rect { fill: rgba(226, 180, 74, 0.25); stroke: #e2b44a; }\r\n.cell.hl-col rect { fill: rgba(29, 181, 132, 0.25); stroke: #1db584; }\r\n.cell.hl-both rect { fill: rgba(244, 114, 182, 0.28); stroke: #f472b6; }\r\n.dim { opacity: 0.25; }\r\n.dash { stroke-dasharray: 5 4; }\r\n.fillA { fill: rgba(56, 189, 248, 0.16); stroke: #38bdf8; stroke-width: 2; }\r\n.fillB { fill: rgba(244, 114, 182, 0.18); stroke: #f472b6; stroke-width: 2; }\r\n.fillG { fill: rgba(29, 181, 132, 0.16); stroke: #1db584; stroke-width: 2; }\r\n\n/* ── explanation panel (shared by every generated ML animation) ── */\n.explain {\n  box-sizing: border-box;\n  max-width: 640px;\n  margin-top: 4px;\n  padding: 14px 18px 16px;\n  min-height: 150px;\n  border-radius: 12px;\n  background: rgba(29, 181, 132, 0.10);\n  border: 1px solid rgba(29, 181, 132, 0.45);\n  border-left: 5px solid #1db584;\n}\n.explain-h {\n  margin: 0 0 8px;\n  font-size: 13px;\n  font-weight: 800;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.explain-t {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.55;\n  color: #f1faf4;\n}\n.explain-t strong {\n  font-weight: 800;\n  color: #ffd98a;\n}\n\n",
+  "html": "<div class=\"scene\">\n  <p class=\"step-label\" id=\"step-label\"></p>\n  <svg id=\"scene\" viewBox=\"0 0 640 360\" role=\"img\" aria-label=\"Least squares: the best-fitting line\"></svg>\n  <section class=\"explain\" aria-live=\"polite\">\n    <h3 class=\"explain-h\" id=\"explain-h\"></h3>\n    <p class=\"explain-t\" id=\"caption\"></p>\n  </section>\n</div>\n",
+  "js": "(function () {\n  // ── shared helpers (SVG, tweening) ─────────────────────────────────────────\r\n  var NS = \"http://www.w3.org/2000/svg\";\r\n  var svg = document.getElementById(\"scene\");\r\n  var labelEl = document.getElementById(\"step-label\");\r\n  var captionEl = document.getElementById(\"caption\");\r\n\r\n  function el(name, attrs, parent) {\r\n    var node = document.createElementNS(NS, name);\r\n    for (var key in attrs) node.setAttribute(key, attrs[key]);\r\n    if (parent) parent.appendChild(node);\r\n    return node;\r\n  }\r\n  function txt(parent, x, y, cls, str, anchor) {\r\n    var t = el(\"text\", { x: x, y: y, class: cls }, parent);\r\n    if (anchor) t.setAttribute(\"text-anchor\", anchor);\r\n    t.textContent = str;\r\n    return t;\r\n  }\r\n  function show(node, on) {\r\n    node.setAttribute(\"opacity\", on ? \"1\" : \"0\");\r\n  }\r\n  function place(node, x, y) {\r\n    node.style.transform = \"translate(\" + x + \"px,\" + y + \"px)\";\r\n  }\r\n  function setLine(node, x1, y1, x2, y2) {\r\n    node.setAttribute(\"x1\", x1);\r\n    node.setAttribute(\"y1\", y1);\r\n    node.setAttribute(\"x2\", x2);\r\n    node.setAttribute(\"y2\", y2);\r\n  }\r\n  function lerp(a, b, e) {\r\n    return a + (b - a) * e;\r\n  }\r\n  function round1(v) {\r\n    return (Math.round(v * 10) / 10).toFixed(1);\r\n  }\r\n\r\n  // Eased animation. fn(e) is called with e from 0 to 1. Without\r\n  // requestAnimationFrame (or with ms = 0) it jumps straight to fn(1).\r\n  var animTokens = {};\r\n  function anim(key, ms, fn) {\r\n    var token = (animTokens[key] || 0) + 1;\r\n    animTokens[key] = token;\r\n    if (typeof requestAnimationFrame !== \"function\" || ms <= 0) {\r\n      fn(1);\r\n      return;\r\n    }\r\n    var start = null;\r\n    function frame(now) {\r\n      if (animTokens[key] !== token) return;\r\n      if (start === null) start = now;\r\n      var p = Math.min(1, (now - start) / ms);\r\n      var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;\r\n      fn(e);\r\n      if (p < 1) requestAnimationFrame(frame);\r\n    }\r\n    requestAnimationFrame(frame);\r\n  }\r\n\r\n  // Arrowheads, one marker per colour.\r\n  var COLORS = { g: \"#1DB584\", y: \"#E2B44A\", p: \"#F472B6\", b: \"#38BDF8\", w: \"#c9dccf\", r: \"#F87171\" };\r\n  var defs = el(\"defs\", {}, svg);\r\n  Object.keys(COLORS).forEach(function (k) {\r\n    var m = el(\"marker\", { id: \"ah-\" + k, viewBox: \"0 0 10 10\", refX: 9, refY: 5, markerUnits: \"userSpaceOnUse\", markerWidth: 13, markerHeight: 13, orient: \"auto\" }, defs);\r\n    el(\"path\", { d: \"M0 0 L10 5 L0 10 Z\", fill: COLORS[k] }, m);\r\n  });\r\n  function arrow(parent, colorKey, width) {\r\n    return el(\"line\", { x1: 0, y1: 0, x2: 0, y2: 0, stroke: COLORS[colorKey], \"stroke-width\": width || 3, \"marker-end\": \"url(#ah-\" + colorKey + \")\", \"stroke-linecap\": \"round\" }, parent);\r\n  }\r\n  function polygon(parent, cls) {\r\n    return el(\"polygon\", { points: \"\", class: cls }, parent);\r\n  }\r\n  function setPoly(node, pts) {\r\n    node.setAttribute(\"points\", pts.map(function (p) { return p[0].toFixed(1) + \",\" + p[1].toFixed(1); }).join(\" \"));\r\n  }\r\n  function lerpPts(a, b, e) {\r\n    return a.map(function (p, i) { return [lerp(p[0], b[i][0], e), lerp(p[1], b[i][1], e)]; });\r\n  }\r\n  // Maps maths coordinates (x right, y up) to screen pixels.\r\n  function makePlane(cx, cy, s) {\r\n    return {\r\n      x: function (v) { return cx + s * v; },\r\n      y: function (v) { return cy - s * v; },\r\n      pt: function (p) { return [cx + s * p[0], cy - s * p[1]]; },\r\n      s: s, cx: cx, cy: cy\r\n    };\r\n  }\r\n  function axes(parent, plane, xr, yr) {\r\n    el(\"line\", { x1: plane.x(-xr), y1: plane.y(0), x2: plane.x(xr), y2: plane.y(0), class: \"axis\" }, parent);\r\n    el(\"line\", { x1: plane.x(0), y1: plane.y(-yr), x2: plane.x(0), y2: plane.y(yr), class: \"axis\" }, parent);\r\n  }\r\n\n  var EXPLAIN = {\"data\":{\"h\":\"WHAT YOU ARE LOOKING AT\",\"t\":\"**Four data points.** No single straight line passes through all of them, so we must decide what “best fit” means.\"},\"candidate-line\":{\"h\":\"TRY A CANDIDATE LINE\",\"t\":\"Pick a line, here **y = 0.5x + 2**, and see how well it predicts each point.\"},\"residuals\":{\"h\":\"MEASURE EACH RESIDUAL\",\"t\":\"A **residual** is the vertical gap between a point and the line: **actual minus predicted**. The bars show how far the line misses each point.\"},\"square-errors\":{\"h\":\"SQUARE THE RESIDUALS\",\"t\":\"Squaring makes every error **positive** and **punishes big misses**. Adding the squares gives a total of **2.5** for this line.\"},\"compare-lines\":{\"h\":\"COMPARE OTHER LINES\",\"t\":\"Try other lines. **Each one has its own total of squared errors**, so lines can be ranked by how well they fit.\"},\"minimum\":{\"h\":\"THE BEST LINE HAS THE SMALLEST TOTAL\",\"t\":\"**Least squares** picks the line with the smallest total squared error. Here that is **y = 0.8x + 1.5**, with a total of **1.8**.\"},\"projection-view\":{\"h\":\"THE SAME ANSWER, AS A PROJECTION\",\"t\":\"Geometrically, the data vector **b** is **projected** onto the space of possible predictions **A x**. The leftover residual is **perpendicular** to that space.\"},\"ml-connection\":{\"h\":\"TAKEAWAY\",\"t\":\"Fitting a regression line is exactly this problem. The best x solves **AᵀA x = Aᵀb**, the **normal equations**.\"}};\n  // ── scene ──\n  var steps = [\r\n    { id: \"data\", label: \"Data that no line fits perfectly\", caption: \"Four data points. No single straight line passes through all of them.\" },\r\n    { id: \"candidate-line\", label: \"Try a candidate line\", caption: \"Pick a line, here y = 0.5x + 2, and see how well it predicts each point.\" },\r\n    { id: \"residuals\", label: \"Measure each residual\", caption: \"A residual is the vertical gap between a point and the line: actual minus predicted.\" },\r\n    { id: \"square-errors\", label: \"Square the residuals\", caption: \"Squaring makes every error positive and punishes big misses. Add the squares: here the total is 2.5.\" },\r\n    { id: \"compare-lines\", label: \"Compare other lines\", caption: \"Try other lines. Each one has its own total of squared errors.\" },\r\n    { id: \"minimum\", label: \"The best line has the smallest total\", caption: \"Least squares picks the line with the smallest total squared error. Here that is y = 0.8x + 1.5, with 1.8.\" },\r\n    { id: \"projection-view\", label: \"The same answer, as a projection\", caption: \"Geometrically, the data vector b is projected onto the space of predictions A x. The residual is perpendicular to that space.\" },\r\n    { id: \"ml-connection\", label: \"This is linear regression\", caption: \"Fitting a regression line is exactly this problem. The best x solves AᵀA x = Aᵀb, the normal equations.\" }\r\n  ];\r\n\r\n  var PTS = [[1, 2], [2, 3], [3, 5], [4, 4]];\r\n  var LINES = [\r\n    { m: 0.5, b: 2, color: \"#e2b44a\", key: \"y\", name: \"y = 0.5x + 2\" },\r\n    { m: 1, b: 1, color: \"#38bdf8\", key: \"b\", name: \"y = x + 1\" },\r\n    { m: 0.8, b: 1.5, color: \"#f472b6\", key: \"p\", name: \"y = 0.8x + 1.5\" }\r\n  ];\r\n  function sse(l) {\r\n    return PTS.reduce(function (s, p) { var r = p[1] - (l.m * p[0] + l.b); return s + r * r; }, 0);\r\n  }\r\n  function PX(x) { return 70 + 100 * x; }\r\n  function PY(y) { return 300 - 48 * y; }\r\n\r\n  var plot = el(\"g\", {}, svg);\r\n  el(\"line\", { x1: PX(0), y1: PY(0), x2: PX(5.3), y2: PY(0), class: \"axis\" }, plot);\r\n  el(\"line\", { x1: PX(0), y1: PY(0), x2: PX(0), y2: PY(5.6), class: \"axis\" }, plot);\r\n  txt(plot, PX(5.3), PY(0) + 16, \"tick\", \"x\", \"end\");\r\n  txt(plot, PX(0) - 8, PY(5.6) + 4, \"tick\", \"y\", \"end\");\r\n\r\n  var lineEls = LINES.map(function (l) {\r\n    return el(\"line\", { x1: PX(0.3), y1: PY(l.m * 0.3 + l.b), x2: PX(5), y2: PY(l.m * 5 + l.b), stroke: l.color, \"stroke-width\": 3, \"stroke-linecap\": \"round\", opacity: 0 }, plot);\r\n  });\r\n  var resEls = PTS.map(function (p) { return el(\"line\", { stroke: \"#f87171\", \"stroke-width\": 2, opacity: 0 }, plot); });\r\n  var sqEls = PTS.map(function () { return el(\"rect\", { fill: \"rgba(248,113,113,0.25)\", stroke: \"#f87171\", \"stroke-width\": 1.2, opacity: 0 }, plot); });\r\n  PTS.forEach(function (p) { el(\"circle\", { cx: PX(p[0]), cy: PY(p[1]), r: 7, fill: \"#1db584\", stroke: \"#071510\", \"stroke-width\": 1.5 }, plot); });\r\n  var sseLab = txt(plot, 610, 284, \"big\", \"\", \"end\");\r\n\r\n  // Legend of candidate lines.\r\n  var legend = el(\"g\", { opacity: 0 }, plot);\r\n  var legendRows = LINES.map(function (l, i) {\r\n    var g = el(\"g\", {}, legend);\r\n    el(\"rect\", { x: 360, y: 168 + i * 26, width: 14, height: 14, rx: 3, fill: l.color }, g);\r\n    txt(g, 382, 180 + i * 26, \"lbl\", l.name + \"   total \" + round1(sse(l)), \"start\");\r\n    return g;\r\n  });\r\n\r\n  // Projection schematic (step 7).\r\n  var proj = el(\"g\", { opacity: 0 }, svg);\r\n  var O = [240, 262], Bt = [360, 80], Pp = [360, 226];\r\n  el(\"polygon\", { points: \"130,300 400,300 520,214 250,214\", class: \"fillA\" }, proj);\r\n  txt(proj, 140, 322, \"lbl lbl-b\", \"space of predictions  A x  (column space of A)\", \"start\");\r\n  var bArrow = arrow(proj, \"g\", 4);\r\n  setLine(bArrow, O[0], O[1], Bt[0], Bt[1]);\r\n  txt(proj, Bt[0] + 10, Bt[1] + 4, \"lbl lbl-g\", \"b  (the data)\", \"start\");\r\n  var pArrow = arrow(proj, \"y\", 5);\r\n  setLine(pArrow, O[0], O[1], Pp[0], Pp[1]);\r\n  txt(proj, Pp[0] + 12, Pp[1] + 20, \"lbl lbl-y\", \"p = A x̂  (best prediction)\", \"start\");\r\n  var perp = el(\"line\", { class: \"dash\", stroke: \"#f472b6\", \"stroke-width\": 2.2 }, proj);\r\n  setLine(perp, Bt[0], Bt[1], Pp[0], Pp[1]);\r\n  txt(proj, Bt[0] - 12, 150, \"lbl lbl-p\", \"residual ⟂ space\", \"end\");\r\n  el(\"polyline\", { points: (Pp[0] - 14) + \",\" + Pp[1] + \" \" + (Pp[0] - 14) + \",\" + (Pp[1] - 14) + \" \" + Pp[0] + \",\" + (Pp[1] - 14), fill: \"none\", stroke: \"#e2b44a\", \"stroke-width\": 2 }, proj);\r\n\r\n  var mlPanel = el(\"g\", { opacity: 0 }, svg);\r\n  el(\"rect\", { x: 380, y: 176, width: 240, height: 90, rx: 12, class: \"fillG\" }, mlPanel);\r\n  txt(mlPanel, 394, 202, \"lbl\", \"linear regression = least squares\", \"start\");\r\n  txt(mlPanel, 394, 232, \"mono\", \"AᵀA x = Aᵀ b\", \"start\");\r\n  txt(mlPanel, 394, 254, \"note\", \"the normal equations\", \"start\");\r\n\r\n  function drawLineResiduals(l) {\r\n    PTS.forEach(function (p, i) {\r\n      var yl = l.m * p[0] + l.b;\r\n      setLine(resEls[i], PX(p[0]), PY(p[1]), PX(p[0]), PY(yl));\r\n      var side = Math.abs(p[1] - yl) * 48;\r\n      var top = Math.min(PY(p[1]), PY(yl));\r\n      sqEls[i].setAttribute(\"x\", PX(p[0]));\r\n      sqEls[i].setAttribute(\"y\", top);\r\n      sqEls[i].setAttribute(\"width\", side);\r\n      sqEls[i].setAttribute(\"height\", side);\r\n    });\r\n  }\r\n\r\n  function render(index, id) {\r\n    show(plot, id !== \"projection-view\");\r\n    show(proj, id === \"projection-view\");\r\n    show(mlPanel, id === \"ml-connection\");\r\n    lineEls.forEach(function (n) { show(n, false); n.setAttribute(\"stroke-width\", 3); });\r\n    resEls.forEach(function (n) { show(n, false); });\r\n    sqEls.forEach(function (n) { show(n, false); });\r\n    show(legend, false);\r\n    sseLab.textContent = \"\";\r\n    legendRows.forEach(function (g) { g.setAttribute(\"opacity\", 1); });\r\n\r\n    if (id === \"candidate-line\" || id === \"residuals\" || id === \"square-errors\") {\r\n      show(lineEls[0], true);\r\n      drawLineResiduals(LINES[0]);\r\n      if (id !== \"candidate-line\") resEls.forEach(function (n) { show(n, true); });\r\n      if (id === \"square-errors\") {\r\n        sqEls.forEach(function (n) { show(n, true); });\r\n        sseLab.textContent = \"total squared error = \" + round1(sse(LINES[0]));\r\n      }\r\n    } else if (id === \"compare-lines\") {\r\n      lineEls.forEach(function (n) { show(n, true); });\r\n      show(legend, true);\r\n    } else if (id === \"minimum\") {\r\n      lineEls.forEach(function (n, i) { show(n, true); if (i !== 2) n.setAttribute(\"opacity\", 0.25); });\r\n      lineEls[2].setAttribute(\"stroke-width\", 5);\r\n      show(legend, true);\r\n      legendRows.forEach(function (g, i) { g.setAttribute(\"opacity\", i === 2 ? 1 : 0.35); });\r\n      sseLab.textContent = \"smallest total = \" + round1(sse(LINES[2]));\r\n    } else if (id === \"ml-connection\") {\r\n      show(lineEls[2], true);\r\n      lineEls[2].setAttribute(\"stroke-width\", 5);\r\n    }\r\n  }\r\n\n\n  // ── shared runtime: stepping, explanation panel, educational autoplay pacing, bridge ──\n  var current = 0;\n  var explainHeadEl = document.getElementById(\"explain-h\");\n\n  // **bold** markers in an explanation become <strong> nodes (built with DOM calls, never innerHTML).\n  function setRich(node, str) {\n    node.textContent = \"\";\n    var parts = String(str).split(\"**\");\n    for (var i = 0; i < parts.length; i++) {\n      if (parts[i] === \"\") continue;\n      var seg = document.createElement(i % 2 ? \"strong\" : \"span\");\n      seg.textContent = parts[i];\n      node.appendChild(seg);\n    }\n  }\n\n  function explanationFor(index) {\n    var ex = (typeof EXPLAIN === \"object\" && EXPLAIN) ? EXPLAIN[steps[index].id] : null;\n    return ex || { h: \"WHAT IS HAPPENING\", t: steps[index].caption };\n  }\n\n  // Autoplay pace: 4.5 to 10.5 seconds per step, longer for longer explanations, so a learner can read.\n  function stepMs(index) {\n    var words = String(explanationFor(index).t).replace(/\\*\\*/g, \"\").split(/\\s+/).length;\n    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));\n  }\n\n  function renderStep(index) {\n    var ex = explanationFor(index);\n    labelEl.textContent = steps[index].label;\n    if (explainHeadEl) explainHeadEl.textContent = ex.h;\n    setRich(captionEl, ex.t);\n    render(index, steps[index].id);\n  }\n\n  function goTo(index) {\n    if (index < 0 || index >= steps.length) return;\n    current = index;\n    renderStep(current);\n    if (window.ReagvisBridge) window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n\n  renderStep(current);\n\n  // Autoplay: exactly one timer, one step per tick, stops on the final step.\n  // PLAY on the final step restarts from the first step and plays again.\n  var timer = null;\n\n  function stopAuto() {\n    if (timer !== null) {\n      clearTimeout(timer);\n      timer = null;\n    }\n  }\n\n  function scheduleNext() {\n    timer = setTimeout(function () {\n      timer = null;\n      if (current >= steps.length - 1) return;\n      goTo(current + 1);\n      if (current < steps.length - 1) scheduleNext();\n    }, stepMs(current));\n  }\n\n  function startAuto() {\n    if (timer !== null) return;\n    if (current >= steps.length - 1) goTo(0);\n    scheduleNext();\n  }\n\n  window.addEventListener(\"pagehide\", stopAuto);\n\n  window.ReagvisAnimation = {\n    stepDuration: stepMs,\n    onCommand: function (type, stepId) {\n      if (type === \"PLAY\") startAuto();\n      else if (type === \"PAUSE\") stopAuto();\n      else if (type === \"NEXT\") { stopAuto(); goTo(current + 1); }\n      else if (type === \"PREVIOUS\") { stopAuto(); goTo(current - 1); }\n      else if (type === \"RESET\") { stopAuto(); goTo(0); }\n      else if (type === \"GOTO_STEP\") {\n        stopAuto();\n        for (var i = 0; i < steps.length; i++) {\n          if (steps[i].id === stepId) { goTo(i); break; }\n        }\n      }\n    },\n  };\n\n  if (window.ReagvisBridge) {\n    window.ReagvisBridge.ready();\n    window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n})();\n",
+  "lastFrozenContentHash": null,
+  "lastFrozenRevisionId": null,
+  "manifest": {
+    "bridgeVersion": {
+      "$numberInt": "1"
+    },
+    "capabilities": [
+      "play",
+      "pause",
+      "next",
+      "previous",
+      "reset",
+      "gotoStep"
+    ],
+    "heightPx": {
+      "$numberInt": "590"
+    },
+    "traceEvents": [
+      "data",
+      "candidate-line",
+      "residuals",
+      "square-errors",
+      "compare-lines",
+      "minimum",
+      "projection-view",
+      "ml-connection"
+    ]
+  },
+  "packageId": "468b643c-4c47-4f16-8b7e-e910b064d743",
+  "packageTrace": {
+    "steps": [
+      {
+        "animationEvent": "data",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Four points, and no single straight line passes through all of them.",
+          "python": "points = [(1, 2), (2, 3), (3, 5), (4, 4)]\nprint(points)"
+        },
+        "id": "data",
+        "label": "Look at the data"
+      },
+      {
+        "animationEvent": "candidate-line",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Choose a slope m and an intercept b. The line predicts y = m * x + b.",
+          "python": "def predict(x, m, b):\n    return m * x + b\n\nprint(predict(3, 0.5, 2))  # 3.5"
+        },
+        "id": "candidate-line",
+        "label": "Try a candidate line"
+      },
+      {
+        "animationEvent": "residuals",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "For every point, subtract the predicted value from the actual value.",
+          "python": "points = [(1, 2), (2, 3), (3, 5), (4, 4)]\nresiduals = [y - (0.5 * x + 2) for x, y in points]\nprint(residuals)  # [-0.5, 0.0, 1.5, 0.0]"
+        },
+        "id": "residuals",
+        "label": "Measure each residual"
+      },
+      {
+        "animationEvent": "square-errors",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Square each residual so errors are positive and large misses count more, then add them up.",
+          "python": "points = [(1, 2), (2, 3), (3, 5), (4, 4)]\ntotal = sum((y - (0.5 * x + 2)) ** 2 for x, y in points)\nprint(total)  # 2.5"
+        },
+        "id": "square-errors",
+        "label": "Square and add the errors"
+      },
+      {
+        "animationEvent": "compare-lines",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Compute the same total for other candidate lines.",
+          "python": "points = [(1, 2), (2, 3), (3, 5), (4, 4)]\n\ndef total(m, b):\n    return sum((y - (m * x + b)) ** 2 for x, y in points)\n\nprint(round(total(0.5, 2), 2), round(total(1, 1), 2), round(total(0.8, 1.5), 2))"
+        },
+        "id": "compare-lines",
+        "label": "Compare other lines"
+      },
+      {
+        "animationEvent": "minimum",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "The least-squares line is the one with the smallest total squared error.",
+          "python": "points = [(1, 2), (2, 3), (3, 5), (4, 4)]\n\ndef total(m, b):\n    return sum((y - (m * x + b)) ** 2 for x, y in points)\n\ncandidates = [(0.5, 2), (1, 1), (0.8, 1.5)]\nprint(min(candidates, key=lambda c: total(*c)))  # (0.8, 1.5)"
+        },
+        "id": "minimum",
+        "label": "Keep the line with the smallest total"
+      },
+      {
+        "animationEvent": "projection-view",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "The best prediction vector is the projection of the data vector onto the space of possible predictions.",
+          "python": "# The residual of the best line is perpendicular to the inputs.\nxs, ys = [1, 2, 3, 4], [2, 3, 5, 4]\nres = [y - (0.8 * x + 1.5) for x, y in zip(xs, ys)]\nprint(round(sum(r * x for r, x in zip(res, xs)), 6), round(sum(res), 6))  # 0.0 0.0"
+        },
+        "id": "projection-view",
+        "label": "See it as a projection"
+      },
+      {
+        "animationEvent": "ml-connection",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Linear regression fits exactly this line. Its solution satisfies the normal equations.",
+          "python": "xs, ys = [1, 2, 3, 4], [2, 3, 5, 4]\nn = len(xs)\nmx, my = sum(xs) / n, sum(ys) / n\nm = sum((x - mx) * (y - my) for x, y in zip(xs, ys)) / sum((x - mx) ** 2 for x in xs)\nprint(round(m, 2), round(my - m * mx, 2))  # 0.8 1.5"
+        },
+        "id": "ml-connection",
+        "label": "Connect it to linear regression"
+      }
+    ],
+    "version": {
+      "$numberInt": "1"
+    }
+  },
+  "revision": {
+    "$numberInt": "5"
+  },
+  "revisionId": "r2",
+  "sourceKind": "zip",
+  "status": "frozen",
+  "title": "ML Module 2 — Least Squares",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498546"
+    }
+  },
+  "updatedBy": {
+    "$oid": "000000000000000000000000"
+  }
+}

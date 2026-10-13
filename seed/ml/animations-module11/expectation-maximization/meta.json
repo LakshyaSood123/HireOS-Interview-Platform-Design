@@ -1,0 +1,66 @@
+{
+  "title": "Expectation Maximization: E and M, repeated",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "initial-components",
+      "label": "Initialize the components",
+      "pseudocode": "Start from guessed components.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\npoints = [1.5, 2.0, 2.8, 3.4, 4.5, 5.2, 6.1, 6.8, 7.5, 8.3]\ndef e_step(points, comps):\n    out = []\n    for x in points:\n        sc = [w * pdf(x, m, s) for w, m, s in comps]\n        t = sum(sc)\n        out.append([v / t for v in sc])\n    return out\ndef m_step(points, resp):\n    new = []\n    for k in range(len(resp[0])):\n        n = sum(r[k] for r in resp)\n        mu = sum(r[k] * x for r, x in zip(resp, points)) / n\n        sd = math.sqrt(sum(r[k] * (x - mu) ** 2 for r, x in zip(resp, points)) / n)\n        new.append((n / len(points), mu, sd))\n    return new\ndef loglik(points, comps):\n    return sum(math.log(sum(w * pdf(x, m, s) for w, m, s in comps)) for x in points)\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]\nprint(round(loglik(points, comps), 3))\n# prints: -21.609"
+    },
+    {
+      "id": "e-step-1",
+      "label": "E-step 1",
+      "pseudocode": "Compute responsibilities with fixed components.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\npoints = [1.5, 2.0, 2.8, 3.4, 4.5, 5.2, 6.1, 6.8, 7.5, 8.3]\ndef e_step(points, comps):\n    out = []\n    for x in points:\n        sc = [w * pdf(x, m, s) for w, m, s in comps]\n        t = sum(sc)\n        out.append([v / t for v in sc])\n    return out\ndef m_step(points, resp):\n    new = []\n    for k in range(len(resp[0])):\n        n = sum(r[k] for r in resp)\n        mu = sum(r[k] * x for r, x in zip(resp, points)) / n\n        sd = math.sqrt(sum(r[k] * (x - mu) ** 2 for r, x in zip(resp, points)) / n)\n        new.append((n / len(points), mu, sd))\n    return new\ndef loglik(points, comps):\n    return sum(math.log(sum(w * pdf(x, m, s) for w, m, s in comps)) for x in points)\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]\nresp = e_step(points, comps)\nprint(len(resp), 'rows')\n# prints: 10 rows"
+    },
+    {
+      "id": "responsibilities-1",
+      "label": "Responsibilities 1",
+      "pseudocode": "Soft memberships for every point.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\npoints = [1.5, 2.0, 2.8, 3.4, 4.5, 5.2, 6.1, 6.8, 7.5, 8.3]\ndef e_step(points, comps):\n    out = []\n    for x in points:\n        sc = [w * pdf(x, m, s) for w, m, s in comps]\n        t = sum(sc)\n        out.append([v / t for v in sc])\n    return out\ndef m_step(points, resp):\n    new = []\n    for k in range(len(resp[0])):\n        n = sum(r[k] for r in resp)\n        mu = sum(r[k] * x for r, x in zip(resp, points)) / n\n        sd = math.sqrt(sum(r[k] * (x - mu) ** 2 for r, x in zip(resp, points)) / n)\n        new.append((n / len(points), mu, sd))\n    return new\ndef loglik(points, comps):\n    return sum(math.log(sum(w * pdf(x, m, s) for w, m, s in comps)) for x in points)\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]\nresp = e_step(points, comps)\nprint([round(r[0], 2) for r in resp])\n# prints: [0.97, 0.96, 0.91, 0.81, 0.35, 0.09, 0.01, 0.0, 0.0, 0.0]"
+    },
+    {
+      "id": "m-step-1",
+      "label": "M-step 1",
+      "pseudocode": "Refit the components.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\npoints = [1.5, 2.0, 2.8, 3.4, 4.5, 5.2, 6.1, 6.8, 7.5, 8.3]\ndef e_step(points, comps):\n    out = []\n    for x in points:\n        sc = [w * pdf(x, m, s) for w, m, s in comps]\n        t = sum(sc)\n        out.append([v / t for v in sc])\n    return out\ndef m_step(points, resp):\n    new = []\n    for k in range(len(resp[0])):\n        n = sum(r[k] for r in resp)\n        mu = sum(r[k] * x for r, x in zip(resp, points)) / n\n        sd = math.sqrt(sum(r[k] * (x - mu) ** 2 for r, x in zip(resp, points)) / n)\n        new.append((n / len(points), mu, sd))\n    return new\ndef loglik(points, comps):\n    return sum(math.log(sum(w * pdf(x, m, s) for w, m, s in comps)) for x in points)\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]\nnew = m_step(points, e_step(points, comps))\nprint([tuple(round(v, 2) for v in c) for c in new])\n# prints: [(0.41, 2.63, 1.0), (0.59, 6.31, 1.5)]"
+    },
+    {
+      "id": "components-move",
+      "label": "The components move",
+      "pseudocode": "Compare the means before and after.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\npoints = [1.5, 2.0, 2.8, 3.4, 4.5, 5.2, 6.1, 6.8, 7.5, 8.3]\ndef e_step(points, comps):\n    out = []\n    for x in points:\n        sc = [w * pdf(x, m, s) for w, m, s in comps]\n        t = sum(sc)\n        out.append([v / t for v in sc])\n    return out\ndef m_step(points, resp):\n    new = []\n    for k in range(len(resp[0])):\n        n = sum(r[k] for r in resp)\n        mu = sum(r[k] * x for r, x in zip(resp, points)) / n\n        sd = math.sqrt(sum(r[k] * (x - mu) ** 2 for r, x in zip(resp, points)) / n)\n        new.append((n / len(points), mu, sd))\n    return new\ndef loglik(points, comps):\n    return sum(math.log(sum(w * pdf(x, m, s) for w, m, s in comps)) for x in points)\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]\nnew = m_step(points, e_step(points, comps))\nprint([c[1] for c in comps], '->', [round(c[1], 2) for c in new])\n# prints: [3, 6] -> [2.63, 6.31]"
+    },
+    {
+      "id": "e-step-2",
+      "label": "E-step 2",
+      "pseudocode": "Responsibilities with the new components.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\npoints = [1.5, 2.0, 2.8, 3.4, 4.5, 5.2, 6.1, 6.8, 7.5, 8.3]\ndef e_step(points, comps):\n    out = []\n    for x in points:\n        sc = [w * pdf(x, m, s) for w, m, s in comps]\n        t = sum(sc)\n        out.append([v / t for v in sc])\n    return out\ndef m_step(points, resp):\n    new = []\n    for k in range(len(resp[0])):\n        n = sum(r[k] for r in resp)\n        mu = sum(r[k] * x for r, x in zip(resp, points)) / n\n        sd = math.sqrt(sum(r[k] * (x - mu) ** 2 for r, x in zip(resp, points)) / n)\n        new.append((n / len(points), mu, sd))\n    return new\ndef loglik(points, comps):\n    return sum(math.log(sum(w * pdf(x, m, s) for w, m, s in comps)) for x in points)\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]\ncomps = m_step(points, e_step(points, comps))\nprint([round(r[0], 2) for r in e_step(points, comps)])\n# prints: [0.99, 0.98, 0.94, 0.84, 0.27, 0.05, 0.0, 0.0, 0.0, 0.0]"
+    },
+    {
+      "id": "m-step-2",
+      "label": "M-step 2",
+      "pseudocode": "Refit again.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\npoints = [1.5, 2.0, 2.8, 3.4, 4.5, 5.2, 6.1, 6.8, 7.5, 8.3]\ndef e_step(points, comps):\n    out = []\n    for x in points:\n        sc = [w * pdf(x, m, s) for w, m, s in comps]\n        t = sum(sc)\n        out.append([v / t for v in sc])\n    return out\ndef m_step(points, resp):\n    new = []\n    for k in range(len(resp[0])):\n        n = sum(r[k] for r in resp)\n        mu = sum(r[k] * x for r, x in zip(resp, points)) / n\n        sd = math.sqrt(sum(r[k] * (x - mu) ** 2 for r, x in zip(resp, points)) / n)\n        new.append((n / len(points), mu, sd))\n    return new\ndef loglik(points, comps):\n    return sum(math.log(sum(w * pdf(x, m, s) for w, m, s in comps)) for x in points)\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]\nfor _ in range(2):\n    comps = m_step(points, e_step(points, comps))\nprint([tuple(round(v, 2) for v in c) for c in comps])\n# prints: [(0.41, 2.56, 0.92), (0.59, 6.36, 1.42)]"
+    },
+    {
+      "id": "likelihood-improves",
+      "label": "The likelihood improves",
+      "pseudocode": "The log-likelihood rises each round.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\npoints = [1.5, 2.0, 2.8, 3.4, 4.5, 5.2, 6.1, 6.8, 7.5, 8.3]\ndef e_step(points, comps):\n    out = []\n    for x in points:\n        sc = [w * pdf(x, m, s) for w, m, s in comps]\n        t = sum(sc)\n        out.append([v / t for v in sc])\n    return out\ndef m_step(points, resp):\n    new = []\n    for k in range(len(resp[0])):\n        n = sum(r[k] for r in resp)\n        mu = sum(r[k] * x for r, x in zip(resp, points)) / n\n        sd = math.sqrt(sum(r[k] * (x - mu) ** 2 for r, x in zip(resp, points)) / n)\n        new.append((n / len(points), mu, sd))\n    return new\ndef loglik(points, comps):\n    return sum(math.log(sum(w * pdf(x, m, s) for w, m, s in comps)) for x in points)\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]\nfor step in range(1, 5):\n    comps = m_step(points, e_step(points, comps))\n    print(step, round(loglik(points, comps), 3))\n# prints: 1 -21.12\n# prints: 2 -21.03\n# prints: 3 -20.997\n# prints: 4 -20.981"
+    },
+    {
+      "id": "stabilize",
+      "label": "Stabilize",
+      "pseudocode": "After many rounds little changes.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\npoints = [1.5, 2.0, 2.8, 3.4, 4.5, 5.2, 6.1, 6.8, 7.5, 8.3]\ndef e_step(points, comps):\n    out = []\n    for x in points:\n        sc = [w * pdf(x, m, s) for w, m, s in comps]\n        t = sum(sc)\n        out.append([v / t for v in sc])\n    return out\ndef m_step(points, resp):\n    new = []\n    for k in range(len(resp[0])):\n        n = sum(r[k] for r in resp)\n        mu = sum(r[k] * x for r, x in zip(resp, points)) / n\n        sd = math.sqrt(sum(r[k] * (x - mu) ** 2 for r, x in zip(resp, points)) / n)\n        new.append((n / len(points), mu, sd))\n    return new\ndef loglik(points, comps):\n    return sum(math.log(sum(w * pdf(x, m, s) for w, m, s in comps)) for x in points)\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]\nfor _ in range(60):\n    comps = m_step(points, e_step(points, comps))\nprint([tuple(round(v, 2) for v in c) for c in comps], round(loglik(points, comps), 3))\n# prints: [(0.37, 2.38, 0.74), (0.63, 6.25, 1.45)] -20.951"
+    },
+    {
+      "id": "em-summary",
+      "label": "The EM loop",
+      "pseudocode": "A different start can end in a different place.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\npoints = [1.5, 2.0, 2.8, 3.4, 4.5, 5.2, 6.1, 6.8, 7.5, 8.3]\ndef e_step(points, comps):\n    out = []\n    for x in points:\n        sc = [w * pdf(x, m, s) for w, m, s in comps]\n        t = sum(sc)\n        out.append([v / t for v in sc])\n    return out\ndef m_step(points, resp):\n    new = []\n    for k in range(len(resp[0])):\n        n = sum(r[k] for r in resp)\n        mu = sum(r[k] * x for r, x in zip(resp, points)) / n\n        sd = math.sqrt(sum(r[k] * (x - mu) ** 2 for r, x in zip(resp, points)) / n)\n        new.append((n / len(points), mu, sd))\n    return new\ndef loglik(points, comps):\n    return sum(math.log(sum(w * pdf(x, m, s) for w, m, s in comps)) for x in points)\ndef run(start):\n    comps = start\n    for _ in range(60):\n        comps = m_step(points, e_step(points, comps))\n    return round(loglik(points, comps), 3)\n\nprint(run([(0.4, 3, 1.0), (0.6, 6, 1.5)]), run([(0.5, 7, 0.5), (0.5, 8, 0.5)]))\n# prints: -20.951 -21.209"
+    }
+  ]
+}

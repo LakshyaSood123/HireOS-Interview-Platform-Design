@@ -1,0 +1,60 @@
+{
+  "title": "Why gradients matter: the learning loop",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "model-parameters",
+      "label": "A tiny model with one weight",
+      "pseudocode": "The model is prediction = w * x. Start with w = 0.",
+      "python": "x, y = 2, 6\nw = 0.0\nprint(w, x, y)"
+    },
+    {
+      "id": "make-prediction",
+      "label": "Make a prediction",
+      "pseudocode": "prediction = w * x",
+      "python": "x, y = 2, 6\nw = 0.0\nprediction = w * x\nprint(prediction)   # 0.0"
+    },
+    {
+      "id": "compute-loss",
+      "label": "Measure the miss with the loss",
+      "pseudocode": "loss = (prediction - y) squared",
+      "python": "x, y = 2, 6\nw = 0.0\nprediction = w * x\nloss = (prediction - y) ** 2\nprint(loss)   # 36.0"
+    },
+    {
+      "id": "parameter-change",
+      "label": "Change the weight, watch the loss",
+      "pseudocode": "Try a different weight and compute the loss again.",
+      "python": "x, y = 2, 6\nfor w in [0.0, 0.5, 1.0]:\n    print(w, (w * x - y) ** 2)   # 0.0 36.0 / 0.5 25.0 / 1.0 16.0"
+    },
+    {
+      "id": "gradient",
+      "label": "The gradient says how the loss reacts",
+      "pseudocode": "gradient = 2 * (prediction - y) * x",
+      "python": "x, y = 2, 6\nw = 0.0\nprediction = w * x\ngradient = 2 * (prediction - y) * x\nprint(gradient)   # -24.0"
+    },
+    {
+      "id": "downhill-direction",
+      "label": "Go the opposite way of the slope's sign",
+      "pseudocode": "A negative gradient means the loss falls as w rises, so w should go up.",
+      "python": "gradient = -24.0\ndirection = -gradient   # step AGAINST the gradient\nprint(direction)   # 24.0: positive, so w goes up"
+    },
+    {
+      "id": "update",
+      "label": "Update the weight",
+      "pseudocode": "w = w - learning_rate * gradient",
+      "python": "x, y = 2, 6\nw, eta = 0.0, 0.05\ngradient = 2 * (w * x - y) * x\nw = w - eta * gradient\nprint(round(w, 2), round((w * x - y) ** 2, 2))   # 1.2 12.96"
+    },
+    {
+      "id": "repeat",
+      "label": "Repeat with the new gradient",
+      "pseudocode": "Recompute the gradient at the new weight, update again, and repeat.",
+      "python": "x, y = 2, 6\nw, eta = 0.0, 0.05\nfor step in range(4):\n    gradient = 2 * (w * x - y) * x\n    print(step, round(w, 3), round(gradient, 3))\n    w = w - eta * gradient\n# 0 0.0 -24.0 / 1 1.2 -14.4 / 2 1.92 -8.64 / 3 2.352 -5.184"
+    },
+    {
+      "id": "learning-connection",
+      "label": "This loop is how models learn",
+      "pseudocode": "Predict, measure the loss, compute the gradient, update the weights. Repeat.",
+      "python": "x, y = 2, 6\nw, eta = 0.0, 0.05\nfor step in range(30):\n    prediction = w * x            # 1 predict\n    loss = (prediction - y) ** 2  # 2 measure the loss\n    gradient = 2 * (prediction - y) * x   # 3 compute the gradient\n    w = w - eta * gradient        # 4 update the weights\nprint(round(w, 3), round(loss, 6))   # w is very close to 3"
+    }
+  ]
+}

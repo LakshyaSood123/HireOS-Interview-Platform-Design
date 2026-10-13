@@ -1,0 +1,30 @@
+{
+ "scalar": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "A **scalar** is a single number, such as the area of one house: **1200**. Everything in linear algebra is built up from numbers like this."
+ },
+ "vector": {
+  "h": "A VECTOR IS A LIST OF NUMBERS",
+  "t": "Put several numbers in order and you get a **vector**. This house is **x = [1200, 2, 10]**: area, bedrooms and age together."
+ },
+ "dimensions": {
+  "h": "THE DIMENSION COUNTS THE ENTRIES",
+  "t": "x has **3 entries** (area, bedrooms, age), so it is a **3-dimensional vector**."
+ },
+ "matrix": {
+  "h": "STACK VECTORS INTO A MATRIX",
+  "t": "Stack **one vector per house** and you get a **matrix X**: a table of numbers."
+ },
+ "rows-columns": {
+  "h": "ROWS ARE HOUSES, COLUMNS ARE FEATURES",
+  "t": "Each **row** is one house. Each **column** is one feature, measured for every house."
+ },
+ "transpose": {
+  "h": "TRANSPOSE: SWAP ROWS AND COLUMNS",
+  "t": "The **transpose** flips the table: rows become columns and columns become rows."
+ },
+ "ml-dataset": {
+  "h": "TAKEAWAY",
+  "t": "In machine learning a **dataset is a matrix of examples**: one row per example, one column per feature."
+ }
+}

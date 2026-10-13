@@ -1,0 +1,60 @@
+{
+  "title": "Logistic intuition: squash a score into a probability",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "linear-score",
+      "label": "A linear score",
+      "pseudocode": "z = w * x + b with w = 1 and b = -4.",
+      "python": "w, b = 1.0, -4.0\nfor x in (0.5, 4.0, 9.0):\n    print(x, w * x + b)\n# prints: 0.5 -3.5\n# prints: 4.0 0.0\n# prints: 9.0 5.0"
+    },
+    {
+      "id": "unbounded-score",
+      "label": "An unbounded score",
+      "pseudocode": "z can be any real number.",
+      "python": "w, b = 1.0, -4.0\nprint(w * 0.5 + b, w * 9.0 + b, w * 1000 + b)\n# prints: -3.5 5.0 996.0"
+    },
+    {
+      "id": "sigmoid",
+      "label": "The sigmoid squashes",
+      "pseudocode": "sigmoid(z) = 1 / (1 + exp(-z)) maps any z into (0, 1).",
+      "python": "import math\n\ndef sigmoid(z):\n    return 1 / (1 + math.exp(-z))\n\nprint(sigmoid(0), round(sigmoid(-50), 6), round(sigmoid(50), 6))\n# prints: 0.5 0.0 1.0"
+    },
+    {
+      "id": "map-negative",
+      "label": "Negative score: probability near 0",
+      "pseudocode": "A negative score gives a low probability.",
+      "python": "import math\n\ndef sigmoid(z):\n    return 1 / (1 + math.exp(-z))\n\nprint(round(sigmoid(-3), 3))\n# prints: 0.047"
+    },
+    {
+      "id": "map-zero",
+      "label": "Zero score: probability 0.5",
+      "pseudocode": "A zero score gives probability 0.5.",
+      "python": "import math\n\ndef sigmoid(z):\n    return 1 / (1 + math.exp(-z))\n\nprint(sigmoid(0))\n# prints: 0.5"
+    },
+    {
+      "id": "map-positive",
+      "label": "Positive score: probability near 1",
+      "pseudocode": "A positive score gives a high probability.",
+      "python": "import math\n\ndef sigmoid(z):\n    return 1 / (1 + math.exp(-z))\n\nprint(round(sigmoid(3), 3))\n# prints: 0.953"
+    },
+    {
+      "id": "probability",
+      "label": "Probabilities for our emails",
+      "pseudocode": "Compute z, then the probability, for several emails.",
+      "python": "import math\n\ndef sigmoid(z):\n    return 1 / (1 + math.exp(-z))\n\nfor x in (0.5, 4.5, 9.0):\n    print(x, round(sigmoid(x - 4.0), 3))\n# prints: 0.5 0.029\n# prints: 4.5 0.622\n# prints: 9.0 0.993"
+    },
+    {
+      "id": "threshold",
+      "label": "Apply a threshold",
+      "pseudocode": "Threshold 0.5 on the probability is the same as z at least 0.",
+      "python": "import math\n\ndef sigmoid(z):\n    return 1 / (1 + math.exp(-z))\n\nfor x in (3.9, 4.0, 4.1):\n    p = sigmoid(x - 4.0)\n    print(x, round(p, 3), 1 if p >= 0.5 else 0)\n# prints: 3.9 0.475 0\n# prints: 4.0 0.5 1\n# prints: 4.1 0.525 1"
+    },
+    {
+      "id": "classification",
+      "label": "The whole chain",
+      "pseudocode": "features -> linear score -> sigmoid -> probability -> threshold -> class.",
+      "python": "import math\n\ndef sigmoid(z):\n    return 1 / (1 + math.exp(-z))\n\nx = 7.5\nz = 1.0 * x - 4.0\np = sigmoid(z)\nprint(z, round(p, 3), 'spam' if p >= 0.5 else 'not spam')\n# prints: 3.5 0.971 spam"
+    }
+  ]
+}

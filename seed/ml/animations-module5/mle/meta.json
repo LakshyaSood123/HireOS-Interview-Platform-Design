@@ -1,0 +1,54 @@
+{
+  "title": "Maximum likelihood estimation",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "observed-data",
+      "label": "The observed data are fixed",
+      "pseudocode": "The data are fixed: 4 heads and 1 tail, in the order H H T H H.",
+      "python": "flips = \"HHTHH\"\nheads = flips.count(\"H\")\ntails = len(flips) - heads\nprint(heads, tails)   # 4 1"
+    },
+    {
+      "id": "candidate-low",
+      "label": "Candidate p = 0.2",
+      "pseudocode": "Each head contributes p and each tail contributes 1 - p. Multiply them.",
+      "python": "p = 0.2\nchips = [p if f == 'H' else 1 - p for f in 'HHTHH']\nprint([round(c, 1) for c in chips])   # [0.2, 0.2, 0.8, 0.2, 0.2]\nlikelihood = 1\nfor c in chips:\n    likelihood *= c\nprint(round(likelihood, 4))           # 0.0013"
+    },
+    {
+      "id": "candidate-middle",
+      "label": "Candidate p = 0.5",
+      "pseudocode": "Same scoring for p = 0.5.",
+      "python": "p = 0.5\nchips = [p if f == 'H' else 1 - p for f in 'HHTHH']\nlikelihood = 1\nfor c in chips:\n    likelihood *= c\nprint(round(likelihood, 3))   # 0.031"
+    },
+    {
+      "id": "candidate-high",
+      "label": "Candidate p = 0.8",
+      "pseudocode": "Same scoring for p = 0.8.",
+      "python": "p = 0.8\nchips = [p if f == 'H' else 1 - p for f in 'HHTHH']\nprint([round(c, 1) for c in chips])   # [0.8, 0.8, 0.2, 0.8, 0.8]\nlikelihood = 1\nfor c in chips:\n    likelihood *= c\nprint(round(likelihood, 3))           # 0.082"
+    },
+    {
+      "id": "likelihood-curve",
+      "label": "The likelihood curve",
+      "pseudocode": "Evaluate L(p) for many values of p to trace the curve.",
+      "python": "flips = \"HHTHH\"\nheads = flips.count(\"H\")\ntails = len(flips) - heads\n\ndef likelihood(p):\n    return p ** heads * (1 - p) ** tails\nfor p in [0.2, 0.4, 0.6, 0.8, 0.9]:\n    print(p, round(likelihood(p), 4))\n# 0.2 0.0013 / 0.4 0.0154 / 0.6 0.0518 / 0.8 0.0819 / 0.9 0.0656"
+    },
+    {
+      "id": "maximum",
+      "label": "Find the maximum",
+      "pseudocode": "Search the grid for the p with the largest likelihood.",
+      "python": "flips = \"HHTHH\"\nheads = flips.count(\"H\")\ntails = len(flips) - heads\n\ndef likelihood(p):\n    return p ** heads * (1 - p) ** tails\ngrid = [i / 100 for i in range(1, 100)]\nprint(max(grid, key=likelihood))   # 0.8"
+    },
+    {
+      "id": "mle",
+      "label": "The maximum likelihood estimate",
+      "pseudocode": "p_MLE = argmax over p of L(p). Here it equals heads / flips.",
+      "python": "flips = \"HHTHH\"\nheads = flips.count(\"H\")\ntails = len(flips) - heads\nprint(heads / len(flips))   # 0.8: the peak equals the observed fraction"
+    },
+    {
+      "id": "ml-connection",
+      "label": "How models are fitted",
+      "pseudocode": "Maximize the log-likelihood: same peak, easier arithmetic.",
+      "python": "flips = \"HHTHH\"\nheads = flips.count(\"H\")\ntails = len(flips) - heads\nfrom math import log\n\ndef log_likelihood(p):\n    return heads * log(p) + tails * log(1 - p)\n\ngrid = [i / 100 for i in range(1, 100)]\nprint(max(grid, key=log_likelihood))   # 0.8: the same peak"
+    }
+  ]
+}

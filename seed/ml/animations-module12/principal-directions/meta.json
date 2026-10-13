@@ -1,0 +1,66 @@
+{
+  "title": "Principal directions",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "centered-cloud",
+      "label": "Centered cloud",
+      "pseudocode": "Search over unit directions through the center.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nprint([[round(v, 1) for v in r] for r in Xc][:3], '...')\n# prints: [[-2.5, -2.0], [-1.5, -1.0], [-0.5, -1.0]] ..."
+    },
+    {
+      "id": "candidate-axis",
+      "label": "A candidate axis",
+      "pseudocode": "Choose a direction by its angle.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\ndef spread(deg):\n    c, s = math.cos(math.radians(deg)), math.sin(math.radians(deg))\n    return S[0][0] * c * c + 2 * S[0][1] * c * s + S[1][1] * s * s\nprint('direction at 135 degrees:', round(math.cos(math.radians(135)), 3), round(math.sin(math.radians(135)), 3))\n# prints: direction at 135 degrees: -0.707 0.707"
+    },
+    {
+      "id": "project-points",
+      "label": "Project the points",
+      "pseudocode": "position = dot(point, direction)",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\ndef spread(deg):\n    c, s = math.cos(math.radians(deg)), math.sin(math.radians(deg))\n    return S[0][0] * c * c + 2 * S[0][1] * c * s + S[1][1] * s * s\nc, s = math.cos(math.radians(135)), math.sin(math.radians(135))\nprint([round(r[0] * c + r[1] * s, 2) for r in Xc])\n# prints: [0.35, 0.35, -0.35, 0.35, -0.71, 0.0]"
+    },
+    {
+      "id": "small-spread",
+      "label": "Small spread",
+      "pseudocode": "Compute the variance of the projections.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\ndef spread(deg):\n    c, s = math.cos(math.radians(deg)), math.sin(math.radians(deg))\n    return S[0][0] * c * c + 2 * S[0][1] * c * s + S[1][1] * s * s\nprint('variance at 135 degrees:', round(spread(135), 2))\n# prints: variance at 135 degrees: 0.2"
+    },
+    {
+      "id": "rotate-axis",
+      "label": "Rotate the axis",
+      "pseudocode": "Try other angles.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\ndef spread(deg):\n    c, s = math.cos(math.radians(deg)), math.sin(math.radians(deg))\n    return S[0][0] * c * c + 2 * S[0][1] * c * s + S[1][1] * s * s\nprint('variance at 90 degrees:', round(spread(90), 2))\n# prints: variance at 90 degrees: 2.7"
+    },
+    {
+      "id": "larger-spread",
+      "label": "Larger spread",
+      "pseudocode": "Keep rotating toward larger variance.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\ndef spread(deg):\n    c, s = math.cos(math.radians(deg)), math.sin(math.radians(deg))\n    return S[0][0] * c * c + 2 * S[0][1] * c * s + S[1][1] * s * s\nprint('variance at 60 degrees:', round(spread(60), 2))\n# prints: variance at 60 degrees: 5.41"
+    },
+    {
+      "id": "maximum-spread",
+      "label": "Maximum spread",
+      "pseudocode": "Pick the angle with the largest variance.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\ndef spread(deg):\n    c, s = math.cos(math.radians(deg)), math.sin(math.radians(deg))\n    return S[0][0] * c * c + 2 * S[0][1] * c * s + S[1][1] * s * s\nbest = max(range(0, 180), key=spread)\nprint('best angle (1 degree steps):', best, ' variance:', round(spread(best), 3))\n# prints: best angle (1 degree steps): 41  variance: 6.027"
+    },
+    {
+      "id": "first-direction",
+      "label": "First principal direction",
+      "pseudocode": "PC1 = direction of maximum variance.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\nv1 = (b / k, (lam1 - a) / k)\nv2 = (-v1[1], v1[0])\nprint('PC1:', tuple(round(v, 3) for v in v1), ' variance:', round(lam1, 2))\n# prints: PC1: (0.754, 0.657)  variance: 6.03"
+    },
+    {
+      "id": "orthogonal-second",
+      "label": "Orthogonal second direction",
+      "pseudocode": "PC2 = largest remaining variance, perpendicular to PC1.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\nv1 = (b / k, (lam1 - a) / k)\nv2 = (-v1[1], v1[0])\nprint('PC2:', tuple(round(v, 3) for v in v2), ' variance:', round(lam2, 2))\nprint('dot product:', round(v1[0] * v2[0] + v1[1] * v2[1], 6))\n# prints: PC2: (-0.657, 0.754)  variance: 0.17\n# prints: dot product: 0.0"
+    },
+    {
+      "id": "principal-directions",
+      "label": "Principal directions",
+      "pseudocode": "The variances along the principal directions sum to the total.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\nv1 = (b / k, (lam1 - a) / k)\nv2 = (-v1[1], v1[0])\nprint(round(lam1 + lam2, 2), 'equals total variance', round(S[0][0] + S[1][1], 2))\n# prints: 6.2 equals total variance 6.2"
+    }
+  ]
+}

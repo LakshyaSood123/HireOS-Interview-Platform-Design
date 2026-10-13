@@ -1,0 +1,66 @@
+{
+  "title": "KKT conditions",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "objective",
+      "label": "The objective again",
+      "pseudocode": "The unconstrained minimum is where the gradient is zero.",
+      "python": "def grad_f(w1, w2):\n    return (2 * (w1 - 3), 4 * (w2 - 1))\n\nprint(grad_f(3, 1))   # (0, 0)"
+    },
+    {
+      "id": "inequality-constraint",
+      "label": "An inequality constraint",
+      "pseudocode": "g(w) = w1 + w2 - 2 must be at most 0.",
+      "python": "def g(w1, w2):\n    return w1 + w2 - 2\n\nprint(g(1, 1), g(0, 0), g(3, 1))   # 0 -2 2"
+    },
+    {
+      "id": "feasible-region",
+      "label": "The feasible region is an area",
+      "pseudocode": "Feasible means g <= 0.",
+      "python": "def g(w1, w2):\n    return w1 + w2 - 2\n\nfor p in [(0, 0), (1, 1), (3, 1)]:\n    print(p, g(*p) <= 0)   # True / True / False"
+    },
+    {
+      "id": "inactive-constraint",
+      "label": "Case B: an inactive constraint",
+      "pseudocode": "With budget 6 the unconstrained optimum is strictly inside, so mu = 0.",
+      "python": "def g(w1, w2, budget):\n    return w1 + w2 - budget\n\nprint(g(3, 1, 6))   # -2 : strictly inside, the constraint is inactive\nmu = 0              # so its multiplier is zero"
+    },
+    {
+      "id": "active-constraint",
+      "label": "Case A: an active constraint",
+      "pseudocode": "With budget 2 the best point sits on the edge: g = 0.",
+      "python": "def g(w1, w2, budget):\n    return w1 + w2 - budget\n\nprint(abs(g(5 / 3, 1 / 3, 2)) < 1e-9)   # True : on the edge, the constraint is active"
+    },
+    {
+      "id": "multiplier",
+      "label": "The multiplier is at least 0",
+      "pseudocode": "Stationarity gives the multiplier: mu = -grad_f[0] / grad_g[0].",
+      "python": "def grad_f(w1, w2):\n    return (2 * (w1 - 3), 4 * (w2 - 1))\n\ngf = grad_f(5 / 3, 1 / 3)\nmu = -gf[0] / 1              # grad g = (1, 1)\nprint(round(mu, 2), mu >= 0)   # 2.67 True"
+    },
+    {
+      "id": "complementary-slackness",
+      "label": "Complementary slackness",
+      "pseudocode": "mu * g is zero in both cases.",
+      "python": "cases = {'B (inactive)': (0.0, -2.0), 'A (active)': (8 / 3, 0.0)}   # (mu, g)\nfor name, (mu, g) in cases.items():\n    print(name, abs(mu * g) < 1e-9)   # True / True"
+    },
+    {
+      "id": "stationarity",
+      "label": "Stationarity: the pushes balance",
+      "pseudocode": "grad f + mu * grad g = 0 at the solution.",
+      "python": "def grad_f(w1, w2):\n    return (2 * (w1 - 3), 4 * (w2 - 1))\n\ngf = grad_f(5 / 3, 1 / 3)\nmu = 8 / 3\ntotal = (gf[0] + mu * 1, gf[1] + mu * 1)\nprint(all(abs(t) < 1e-9 for t in total))   # True"
+    },
+    {
+      "id": "kkt-summary",
+      "label": "The four KKT conditions",
+      "pseudocode": "Check all four conditions at a candidate solution.",
+      "python": "def grad_f(w1, w2):\n    return (2 * (w1 - 3), 4 * (w2 - 1))\n\ndef check(point, budget, mu):\n    g = point[0] + point[1] - budget\n    gf = grad_f(*point)\n    return {\n        'primal feasible': g <= 1e-9,\n        'dual feasible': mu >= 0,\n        'complementary': abs(mu * g) < 1e-9,\n        'stationary': all(abs(gf[k] + mu) < 1e-9 for k in range(2)),\n    }\n\nprint(all(check((5 / 3, 1 / 3), 2, 8 / 3).values()))   # True : case A\nprint(all(check((3, 1), 6, 0).values()))               # True : case B"
+    },
+    {
+      "id": "ml-connection",
+      "label": "Why ML cares",
+      "pseudocode": "KKT conditions are used to solve constrained learning problems.",
+      "python": "uses = ['support vector machines', 'regularized models', 'constrained fitting']\nfor u in uses:\n    print(u)"
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "title": "Choose a model",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "problem-type",
+      "label": "Problem type",
+      "pseudocode": "Match the family of models to the problem.",
+      "python": "target_values = {0, 1}\nprint('binary classification:', len(target_values) == 2)\n# prints: binary classification: True"
+    },
+    {
+      "id": "baseline",
+      "label": "The baseline",
+      "pseudocode": "Always start from a baseline.",
+      "python": "VAL = {'baseline': (12, 10, 18, 110), 'logistic': (21, 12, 9, 108), 'tree': (24, 17, 6, 103)}   # (TP, FP, FN, TN) on 150 validation customers\ndef metrics(tp, fp, fn, tn):\n    p = tp / (tp + fp)\n    r = tp / (tp + fn)\n    return {'accuracy': (tp + tn) / (tp + fp + fn + tn), 'precision': p, 'recall': r, 'f1': 2 * p * r / (p + r)}\nbase = metrics(*VAL['baseline'])\nprint('baseline accuracy:', round(base['accuracy'], 3), ' recall:', round(base['recall'], 2))\n# prints: baseline accuracy: 0.813  recall: 0.4"
+    },
+    {
+      "id": "linear-model",
+      "label": "Logistic-style model",
+      "pseudocode": "Candidate 1: a weighted combination of features.",
+      "python": "weights = {'usage': -0.6, 'tickets': 0.5, 'idle days': 0.9}\nprint('one weight per feature:', weights)\n# prints: one weight per feature: {'usage': -0.6, 'tickets': 0.5, 'idle days': 0.9}"
+    },
+    {
+      "id": "tree-model",
+      "label": "Tree-style model",
+      "pseudocode": "Candidate 2: a sequence of questions.",
+      "python": "questions = ['idle days > 20?', 'support tickets > 2?']\nprint('a small tree asks', len(questions), 'questions in a row:', questions)\n# prints: a small tree asks 2 questions in a row: ['idle days > 20?', 'support tickets > 2?']"
+    },
+    {
+      "id": "complexity",
+      "label": "Complexity",
+      "pseudocode": "More complexity is not automatically better.",
+      "python": "complexity = {'baseline rule': 1, 'logistic-style': 2, 'tree-style': 3}\nprint(complexity)\n# prints: {'baseline rule': 1, 'logistic-style': 2, 'tree-style': 3}"
+    },
+    {
+      "id": "interpretability",
+      "label": "Interpretability",
+      "pseudocode": "Weigh how explainable each model is.",
+      "python": "explainable = {'baseline rule': 'yes', 'logistic-style': 'yes', 'tree-style': 'yes at small depth'}\nprint(explainable)\n# prints: {'baseline rule': 'yes', 'logistic-style': 'yes', 'tree-style': 'yes at small depth'}"
+    },
+    {
+      "id": "constraints",
+      "label": "Constraints",
+      "pseudocode": "Write constraints before choosing.",
+      "python": "constraints = {'explainable': True, 'scoring': 'once a day', 'training customers': 700}\nprint(constraints)\n# prints: {'explainable': True, 'scoring': 'once a day', 'training customers': 700}"
+    },
+    {
+      "id": "candidate-set",
+      "label": "Candidate set",
+      "pseudocode": "Candidates are hypotheses.",
+      "python": "candidates = ['baseline rule', 'logistic-style', 'tree-style']\nprint('chosen so far: none; to test:', candidates)\n# prints: chosen so far: none; to test: ['baseline rule', 'logistic-style', 'tree-style']"
+    },
+    {
+      "id": "choose-to-test",
+      "label": "Choose to test",
+      "pseudocode": "Compare candidates on validation data.",
+      "python": "protocol = {'train on': 700, 'measure on': 150, 'metrics': ['precision', 'recall', 'F1']}\nprint(protocol)\n# prints: {'train on': 700, 'measure on': 150, 'metrics': ['precision', 'recall', 'F1']}"
+    }
+  ]
+}

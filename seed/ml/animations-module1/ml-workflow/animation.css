@@ -1,0 +1,139 @@
+body {
+  margin: 0;
+  padding: 14px;
+  box-sizing: border-box;
+  background: #0b1d16;
+  color: #e6f5ec;
+  font-family: system-ui, sans-serif;
+}
+.scene {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.step-label {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #a7ce65;
+}
+svg {
+  width: 100%;
+  height: auto;
+  max-width: 640px;
+  background: #071510;
+  border-radius: 10px;
+  border: 1px solid rgba(29, 181, 132, 0.35);
+}
+.link {
+  stroke: rgba(255, 255, 255, 0.14);
+  stroke-width: 3;
+  transition: stroke 0.5s ease;
+}
+.link.lit {
+  stroke: #1DB584;
+}
+.node-disc {
+  fill: #0f2a20;
+  stroke: rgba(255, 255, 255, 0.25);
+  stroke-width: 2;
+  transition: fill 0.4s ease, stroke 0.4s ease;
+}
+.node.done .node-disc {
+  fill: #164d3a;
+  stroke: #1DB584;
+}
+.node.active .node-disc {
+  fill: #E2B44A;
+  stroke: #ffffff;
+  stroke-width: 3;
+}
+.node-index {
+  font-size: 12px;
+  font-weight: 800;
+  fill: #e6f5ec;
+}
+.node.active .node-index {
+  fill: #0b1d16;
+}
+.node-label {
+  font-size: 11px;
+  font-weight: 700;
+  fill: #c9dccf;
+}
+.node.active .node-label {
+  fill: #E2B44A;
+}
+.token {
+  transition: transform 0.6s ease;
+}
+.token-body {
+  fill: #F9A8D4;
+}
+.token-roof {
+  fill: #ffffff;
+}
+.house {
+  border: 1px solid rgba(29, 181, 132, 0.35);
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.03);
+}
+.house-title {
+  margin: 0 0 4px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #F9A8D4;
+}
+.house-detail {
+  margin: 0;
+  font-size: 13px;
+  color: #e6f5ec;
+}
+.caption {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #c9dccf;
+  min-height: 40px;
+}
+
+/* ── explanation panel (shared by every generated ML animation) ── */
+.explain {
+  box-sizing: border-box;
+  max-width: 640px;
+  margin-top: 4px;
+  padding: 14px 18px 16px;
+  min-height: 150px;
+  border-radius: 12px;
+  background: rgba(29, 181, 132, 0.10);
+  border: 1px solid rgba(29, 181, 132, 0.45);
+  border-left: 5px solid #1db584;
+}
+.explain-h {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #a7ce65;
+}
+.explain-t {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.55;
+  color: #f1faf4;
+}
+.explain-t strong {
+  font-weight: 800;
+  color: #ffd98a;
+}

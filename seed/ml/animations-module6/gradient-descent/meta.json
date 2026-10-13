@@ -1,0 +1,60 @@
+{
+  "title": "Gradient descent: walking downhill",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "loss-curve",
+      "label": "The objective is a bowl",
+      "pseudocode": "The objective is a bowl with its lowest point at w = 3.",
+      "python": "def loss(w):\n    return (w - 3) ** 2\n\ndef grad(w):\n    return 2 * (w - 3)\n\nprint(loss(0), loss(3), loss(6))   # 9 0 9"
+    },
+    {
+      "id": "start-point",
+      "label": "Start somewhere",
+      "pseudocode": "Start at an initial guess and evaluate its loss.",
+      "python": "def loss(w):\n    return (w - 3) ** 2\n\ndef grad(w):\n    return 2 * (w - 3)\n\nw = 0.0\nprint(w, loss(w))   # 0.0 9.0"
+    },
+    {
+      "id": "compute-gradient",
+      "label": "Compute the gradient",
+      "pseudocode": "The gradient is the slope of the loss at the current point.",
+      "python": "def loss(w):\n    return (w - 3) ** 2\n\ndef grad(w):\n    return 2 * (w - 3)\n\nw = 0.0\nprint(grad(w))   # -6.0"
+    },
+    {
+      "id": "downhill-direction",
+      "label": "Downhill is the negative gradient",
+      "pseudocode": "The downhill direction is the negative of the gradient.",
+      "python": "def loss(w):\n    return (w - 3) ** 2\n\ndef grad(w):\n    return 2 * (w - 3)\n\nw = 0.0\nprint(-grad(w))   # 6.0: move right (w increases)"
+    },
+    {
+      "id": "take-step",
+      "label": "Take a step",
+      "pseudocode": "w_new = w_old - learning_rate * gradient",
+      "python": "def loss(w):\n    return (w - 3) ** 2\n\ndef grad(w):\n    return 2 * (w - 3)\n\nw, lr = 0.0, 0.1\nw = w - lr * grad(w)\nprint(round(w, 3))   # 0.6"
+    },
+    {
+      "id": "new-point",
+      "label": "We are at a new point",
+      "pseudocode": "Evaluate the loss and the gradient at the new point.",
+      "python": "def loss(w):\n    return (w - 3) ** 2\n\ndef grad(w):\n    return 2 * (w - 3)\n\nw = 0.6\nprint(round(loss(w), 2), round(grad(w), 2))   # 5.76 -4.8"
+    },
+    {
+      "id": "repeat",
+      "label": "Repeat",
+      "pseudocode": "Repeat: compute the gradient, then update.",
+      "python": "def loss(w):\n    return (w - 3) ** 2\n\ndef grad(w):\n    return 2 * (w - 3)\n\nw, lr = 0.0, 0.1\nfor _ in range(5):\n    w = w - lr * grad(w)\n    print(round(w, 3), round(loss(w), 3))\n# 0.6 5.76 / 1.08 3.686 / 1.464 2.359 / 1.771 1.51 / 2.017 0.966"
+    },
+    {
+      "id": "approach-minimum",
+      "label": "Approach the minimum",
+      "pseudocode": "After many steps the weight is close to the minimum.",
+      "python": "def loss(w):\n    return (w - 3) ** 2\n\ndef grad(w):\n    return 2 * (w - 3)\n\nw, lr = 0.0, 0.1\nfor _ in range(10):\n    w = w - lr * grad(w)\nprint(round(w, 3), round(loss(w), 3))   # 2.678 0.104"
+    },
+    {
+      "id": "ml-connection",
+      "label": "This loop trains a model",
+      "pseudocode": "Training loop: compute the loss, compute the gradient, update, repeat.",
+      "python": "def loss(w):\n    return (w - 3) ** 2\n\ndef grad(w):\n    return 2 * (w - 3)\n\nw, lr = 0.0, 0.1\nfor step in range(3):\n    current_loss = loss(w)       # 1 compute the loss\n    g = grad(w)                  # 2 compute the gradient\n    w = w - lr * g               # 3 update the parameter\n    print(step, round(current_loss, 2), round(w, 2))   # 4 repeat\n# 0 9.0 0.6 / 1 5.76 1.08 / 2 3.69 1.46"
+    }
+  ]
+}

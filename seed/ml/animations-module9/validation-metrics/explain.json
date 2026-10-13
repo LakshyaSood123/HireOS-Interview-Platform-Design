@@ -1,0 +1,42 @@
+{
+ "candidate-models": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Three classifiers have been scored on the **validation set**. Which one is best? That depends on **which question we care about**."
+ },
+ "accuracy-view": {
+  "h": "VIEW: ACCURACY",
+  "t": "By accuracy, **Model C** is best (**0.94**). But accuracy treats every mistake alike."
+ },
+ "precision-view": {
+  "h": "VIEW: PRECISION",
+  "t": "By precision, Model C is again best (**0.95**): when it flags an email, it is almost always right."
+ },
+ "recall-view": {
+  "h": "VIEW: RECALL",
+  "t": "By recall the winner is **Model A (0.95)**, and Model C is the worst (**0.45**): it **misses more than half** of the positives."
+ },
+ "f1-view": {
+  "h": "VIEW: F1",
+  "t": "By F1, which balances precision and recall, **Model B** wins (**0.83**, against 0.81 for A and 0.61 for C). **Each metric crowns a different model.**"
+ },
+ "application-costs": {
+  "h": "COSTS DECIDE THE METRIC",
+  "t": "**Spam filtering:** a false positive blocks legitimate mail, so precision matters. **Fraud screening:** a false negative is missed fraud, so recall matters. If both matter, **F1** is one balanced summary."
+ },
+ "choose-metric": {
+  "h": "CHOOSE THE METRIC FIRST",
+  "t": "The order is: understand the **cost of each mistake**, pick the metric that reflects it, then compare models. Precision and F1 evaluate models; they are not automatically the training loss."
+ },
+ "compare-validation": {
+  "h": "COMPARE ON VALIDATION DATA",
+  "t": "In fraud screening, where a person reviews flagged cases, **false alarms are cheap and missed fraud is costly**. Recall is the metric, and **Model A leads** on it."
+ },
+ "select-model": {
+  "h": "SELECT THE MODEL",
+  "t": "We select **Model A** using **validation data only**. Model choice and hyperparameters are decided on validation data, never on the test set."
+ },
+ "test-stays-locked": {
+  "h": "TAKEAWAY",
+  "t": "The test set is **scored once**, after the model and metric are final. If we picked the winner by test score, it would **stop being an honest estimate**."
+ }
+}

@@ -1,0 +1,60 @@
+{
+  "title": "Limitations of hard clustering",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "clean-kmeans",
+      "label": "K-Means at its best",
+      "pseudocode": "Compact, separated groups work well.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\npoints = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\ndef mean_point(m):\n    return (sum(p[0] for p in m) / len(m), sum(p[1] for p in m) / len(m))\ncenters = [(3, 4), (5, 3), (5, 9.5)]\ndef kmeans(centers, rounds):\n    for _ in range(rounds):\n        labels = [nearest_center(p, centers) for p in points]\n        centers = [mean_point([p for p, l in zip(points, labels) if l == i]) for i in range(len(centers))]\n    return labels, centers\nlabels, c = kmeans(centers, 3)\nprint(labels)\n# prints: [0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2]"
+    },
+    {
+      "id": "hard-assignment",
+      "label": "Hard assignment",
+      "pseudocode": "Each point gets exactly one id.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\npoints = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\ndef mean_point(m):\n    return (sum(p[0] for p in m) / len(m), sum(p[1] for p in m) / len(m))\ncenters = [(3, 4), (5, 3), (5, 9.5)]\ndef kmeans(centers, rounds):\n    for _ in range(rounds):\n        labels = [nearest_center(p, centers) for p in points]\n        centers = [mean_point([p for p, l in zip(points, labels) if l == i]) for i in range(len(centers))]\n    return labels, centers\nlabels, c = kmeans(centers, 3)\nprint('point 5 ->', labels[5])\n# prints: point 5 -> 1"
+    },
+    {
+      "id": "ambiguous-point",
+      "label": "An ambiguous point",
+      "pseudocode": "Distances to two centers are almost equal.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\nc = [(6.575, 6.125), (3.675, 8.275)]\nprint([round(distance((5, 7), x), 2) for x in c])\n# prints: [1.8, 1.84]"
+    },
+    {
+      "id": "forced-choice",
+      "label": "A forced choice",
+      "pseudocode": "A tiny move flips the hard label.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\nc = [(6.575, 6.125), (3.675, 8.275)]\nfor z in [(5, 7), (4.7, 7.1)]:\n    print(z, nearest_center(z, c))\n# prints: (5, 7) 0\n# prints: (4.7, 7.1) 1"
+    },
+    {
+      "id": "non-spherical-data",
+      "label": "Elongated groups",
+      "pseudocode": "Two long strips: K = 2 cuts across them.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\ndef mean_point(m):\n    return (sum(p[0] for p in m) / len(m), sum(p[1] for p in m) / len(m))\nstrip = [(x + 0.5, 2.2) for x in range(10)] + [(x + 0.5, 3.4) for x in range(10)]\ncenters = [(2, 2.2), (8, 3.4)]\nfor _ in range(5):\n    labels = [nearest_center(p, centers) for p in strip]\n    centers = [mean_point([p for p, l in zip(strip, labels) if l == i]) for i in range(2)]\nprint(labels[:10], labels[10:])\n# prints: [0, 0, 0, 0, 0, 1, 1, 1, 1, 1] [0, 0, 0, 0, 0, 1, 1, 1, 1, 1]"
+    },
+    {
+      "id": "unequal-density",
+      "label": "Unequal sizes",
+      "pseudocode": "A small tight group is merged with part of a big one.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\ndef mean_point(m):\n    return (sum(p[0] for p in m) / len(m), sum(p[1] for p in m) / len(m))\nbig = [(0.8 + (i % 6) * 1.0, 2.65 + (i // 6) * 1.1) for i in range(24)]\nsmall = [(7.8, 4.2), (8.2, 4.2), (8.0, 4.4), (7.8, 4.6), (8.2, 4.6)]\npts = big + small\ncenters = [(2, 4.5), (7, 4.5)]\nfor _ in range(8):\n    labels = [nearest_center(p, centers) for p in pts]\n    centers = [mean_point([p for p, l in zip(pts, labels) if l == i]) for i in range(2)]\nprint('small group ids:', set(labels[24:]), ' big-group points sharing it:', sum(1 for l in labels[:24] if l == labels[24]))\n# prints: small group ids: {1}  big-group points sharing it: 8"
+    },
+    {
+      "id": "initialization-change",
+      "label": "Initialization matters",
+      "pseudocode": "Different start, different final clusters.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\npoints = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\ndef mean_point(m):\n    return (sum(p[0] for p in m) / len(m), sum(p[1] for p in m) / len(m))\ndef kmeans(centers, rounds):\n    for _ in range(rounds):\n        labels = [nearest_center(p, centers) for p in points]\n        centers = [mean_point([p for p, l in zip(points, labels) if l == i]) for i in range(len(centers))]\n    return labels, centers\nfor start in ([(3, 4), (5, 3), (5, 9.5)], [(1, 2), (2, 2), (5, 7)]):\n    labels, c = kmeans(start, 6)\n    print(labels)\n# prints: [0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2]\n# prints: [0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2]"
+    },
+    {
+      "id": "choose-k",
+      "label": "You must choose K",
+      "pseudocode": "K changes the result.",
+      "python": "import math\n\ndef distance(a, b):\n    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)\n\ndef nearest_center(p, centers):\n    return min(range(len(centers)), key=lambda i: distance(p, centers[i]))\npoints = [(1, 2), (1.5, 1.8), (2, 2.5), (2.2, 1.7), (6, 6), (6.5, 5.5), (7, 6.2), (6.8, 6.8), (3, 8), (3.5, 8.5), (4, 7.8), (4.2, 8.8)]\ndef mean_point(m):\n    return (sum(p[0] for p in m) / len(m), sum(p[1] for p in m) / len(m))\ndef kmeans(centers, rounds):\n    for _ in range(rounds):\n        labels = [nearest_center(p, centers) for p in points]\n        centers = [mean_point([p for p, l in zip(points, labels) if l == i]) for i in range(len(centers))]\n    return labels, centers\ndef wcss(centers, labels):\n    return sum(distance(p, centers[l]) ** 2 for p, l in zip(points, labels))\nfor start in ([(1, 2), (6, 6)], [(3, 4), (5, 3), (5, 9.5)], [(2, 2), (6, 6), (3.5, 8.5), (7, 6.5)]):\n    labels, c = kmeans(start, 8)\n    print('K =', len(start), 'WCSS', round(wcss(c, labels), 2))\n# prints: K = 2 WCSS 30.24\n# prints: K = 3 WCSS 4.18\n# prints: K = 4 WCSS 3.19"
+    },
+    {
+      "id": "soft-membership-preview",
+      "label": "Soft membership",
+      "pseudocode": "Soft membership is a degree per cluster (illustration).",
+      "python": "membership = {'A': 0.02, 'B': 0.52, 'C': 0.46}      # illustration only\nprint(round(sum(membership.values()), 2), max(membership, key=membership.get))\n# prints: 1.0 B"
+    }
+  ]
+}

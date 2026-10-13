@@ -1,0 +1,66 @@
+{
+  "title": "The central limit theorem",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "source-distribution",
+      "label": "The population: a fair die",
+      "pseudocode": "The population is flat: each face 1 to 6 has probability 1/6.",
+      "python": "from math import sqrt\n\nfaces = [1, 2, 3, 4, 5, 6]\nmu = sum(faces) / 6\nsigma = sqrt(sum((x - mu) ** 2 for x in faces) / 6)\nprint(mu, round(sigma, 2))   # 3.5 1.71"
+    },
+    {
+      "id": "sample",
+      "label": "Take one sample",
+      "pseudocode": "Take a sample of 5 rolls.",
+      "python": "sample = [2, 6, 6, 1, 4]\nprint(len(sample), sample)"
+    },
+    {
+      "id": "sample-mean",
+      "label": "Compute the sample mean",
+      "pseudocode": "The sample mean is the average of the sample.",
+      "python": "sample = [2, 6, 6, 1, 4]\nprint(sum(sample) / len(sample))   # 3.8"
+    },
+    {
+      "id": "repeat",
+      "label": "Repeat many times",
+      "pseudocode": "Draw many fresh samples and record each sample mean.",
+      "python": "import random\nfrom math import sqrt\n\nsigma = sqrt(35 / 12)\n\ndef sample_mean(n):\n    return sum(random.randint(1, 6) for _ in range(n)) / n\nrandom.seed(0)\nmeans = [sample_mean(5) for _ in range(5)]\nprint([round(m, 1) for m in means])   # [3.4, 3.6, 3.4, 3.2, 3.4]: each sample gives one mean"
+    },
+    {
+      "id": "means-histogram",
+      "label": "Histogram of the sample means",
+      "pseudocode": "Collect 2000 sample means (n = 5) and summarize them.",
+      "python": "import random\nfrom math import sqrt\n\nsigma = sqrt(35 / 12)\n\ndef sample_mean(n):\n    return sum(random.randint(1, 6) for _ in range(n)) / n\nrandom.seed(0)\nmeans = [sample_mean(5) for _ in range(2000)]\nm = sum(means) / len(means)\nsd = sqrt(sum((x - m) ** 2 for x in means) / len(means))\nprint(round(m, 2), round(sd, 2))   # 3.49 0.77"
+    },
+    {
+      "id": "larger-n",
+      "label": "Use bigger samples",
+      "pseudocode": "Repeat with n = 30: the sample means are more concentrated.",
+      "python": "import random\nfrom math import sqrt\n\nsigma = sqrt(35 / 12)\n\ndef sample_mean(n):\n    return sum(random.randint(1, 6) for _ in range(n)) / n\nrandom.seed(0)\nmeans = [sample_mean(30) for _ in range(2000)]\nm = sum(means) / len(means)\nsd = sqrt(sum((x - m) ** 2 for x in means) / len(means))\nprint(round(m, 2), round(sd, 2))   # 3.5 0.31"
+    },
+    {
+      "id": "normal-shape",
+      "label": "A normal curve fits",
+      "pseudocode": "About 68% of values from a normal curve lie within one standard deviation of the mean.",
+      "python": "import random\nfrom math import sqrt\n\nsigma = sqrt(35 / 12)\n\ndef sample_mean(n):\n    return sum(random.randint(1, 6) for _ in range(n)) / n\nrandom.seed(0)\nmeans = [sample_mean(30) for _ in range(2000)]\nse = sigma / sqrt(30)\nshare = sum(1 for x in means if abs(x - 3.5) <= se) / len(means)\nprint(round(share, 2))   # 0.69: close to 0.68, as for a bell shape"
+    },
+    {
+      "id": "narrower-spread",
+      "label": "Bigger n, narrower spread",
+      "pseudocode": "standard error = sigma / sqrt(n)",
+      "python": "from math import sqrt\n\nsigma = sqrt(35 / 12)\nfor n in [5, 30, 120]:\n    print(n, round(sigma / sqrt(n), 2))   # 5 0.76 / 30 0.31 / 120 0.16"
+    },
+    {
+      "id": "lln-vs-clt",
+      "label": "LLN versus CLT",
+      "pseudocode": "LLN: where one sample mean goes. CLT: how many sample means are distributed.",
+      "python": "lln = 'one sample mean settles toward mu as n grows'\nclt = 'many sample means are approximately normal, spread sigma / sqrt(n)'\nprint(lln)\nprint(clt)"
+    },
+    {
+      "id": "ml-connection",
+      "label": "Why ML cares",
+      "pseudocode": "Uncertainty about an average shrinks like 1 / sqrt(n).",
+      "python": "from math import sqrt\n\nsigma = sqrt(35 / 12)\nfor n in [100, 400]:\n    print(n, round(sigma / sqrt(n), 3))   # 100 0.171 / 400 0.085: four times the data halves it"
+    }
+  ]
+}

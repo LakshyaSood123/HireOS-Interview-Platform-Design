@@ -1,0 +1,30 @@
+{
+ "vector": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Here is one vector **v**: an **arrow from the origin**. Think of it as a direction and a length."
+ },
+ "scale-vector": {
+  "h": "SCALING STRETCHES OR FLIPS IT",
+  "t": "Multiplying by a number scales the arrow: **2v is twice as long**, and a **negative number flips** it."
+ },
+ "combine-vectors": {
+  "h": "COMBINE TWO VECTORS",
+  "t": "With a second vector **w**, we can build **a·v + b·w**: scale each one, then add them."
+ },
+ "span-line": {
+  "h": "ONE VECTOR SPANS A LINE",
+  "t": "All the scaled copies of a single vector lie on **one line through the origin**. That line is its **span**."
+ },
+ "span-plane": {
+  "h": "TWO INDEPENDENT VECTORS SPAN THE PLANE",
+  "t": "If v and w do not point along the same line, their combinations reach **every point in the plane**."
+ },
+ "subspace": {
+  "h": "A SUBSPACE IS A FLAT SPACE THROUGH THE ORIGIN",
+  "t": "The line is a **subspace** of the plane: it contains the origin, and adding or scaling its vectors **never leaves it**."
+ },
+ "ml-connection": {
+  "h": "TAKEAWAY",
+  "t": "Real data often sits **close to a line or plane inside a bigger space**. Finding it lets us describe the data with **fewer numbers**."
+ }
+}

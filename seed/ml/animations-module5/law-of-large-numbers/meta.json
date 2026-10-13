@@ -1,0 +1,54 @@
+{
+  "title": "The law of large numbers",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "few-samples",
+      "label": "Only a few flips",
+      "pseudocode": "After few flips the fraction of heads is a rough guess.",
+      "python": "import random\n\nrandom.seed(3)\np = 0.8\nflips = [1 if random.random() < p else 0 for _ in range(1000)]\nrunning = [sum(flips[:n]) / n for n in range(1, 1001)]\nprint(round(running[4], 2))   # 1.0 with this seed: the fraction after 5 flips"
+    },
+    {
+      "id": "running-average",
+      "label": "Track the running average",
+      "pseudocode": "running average after n flips = heads so far / n",
+      "python": "import random\n\nrandom.seed(3)\np = 0.8\nflips = [1 if random.random() < p else 0 for _ in range(1000)]\nrunning = [sum(flips[:n]) / n for n in range(1, 1001)]\nprint([round(r, 2) for r in running[:10]])\n# [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.88, 0.89, 0.9]"
+    },
+    {
+      "id": "fluctuation",
+      "label": "Early fluctuation",
+      "pseudocode": "Early averages swing widely.",
+      "python": "import random\n\nrandom.seed(3)\np = 0.8\nflips = [1 if random.random() < p else 0 for _ in range(1000)]\nrunning = [sum(flips[:n]) / n for n in range(1, 1001)]\nearly = running[:30]\nprint(round(min(early), 2), round(max(early), 2))   # 0.77 1.0: lowest and highest running average in the first 30 flips"
+    },
+    {
+      "id": "more-samples",
+      "label": "More samples, a second run",
+      "pseudocode": "Another run of the same coin takes a different path.",
+      "python": "import random\n\ndef run(seed, n=1000, p=0.8):\n    random.seed(seed)\n    flips = [1 if random.random() < p else 0 for _ in range(n)]\n    return [sum(flips[:k]) / k for k in range(1, n + 1)]\n\na, b = run(9), run(6)\nprint(round(a[99], 2), round(b[99], 2))   # 0.85 0.79: two runs, 100 flips each"
+    },
+    {
+      "id": "stabilize",
+      "label": "The averages settle",
+      "pseudocode": "With many flips the running averages move much less.",
+      "python": "import random\n\ndef run(seed, n=1000, p=0.8):\n    random.seed(seed)\n    flips = [1 if random.random() < p else 0 for _ in range(n)]\n    return [sum(flips[:k]) / k for k in range(1, n + 1)]\n\na, b = run(9), run(6)\nprint(round(a[999], 2), round(b[999], 2))   # 0.81 0.8: two runs, 1000 flips each"
+    },
+    {
+      "id": "true-mean",
+      "label": "They settle near the true value",
+      "pseudocode": "Compare the final running average with the true p.",
+      "python": "import random\n\nrandom.seed(3)\np = 0.8\nflips = [1 if random.random() < p else 0 for _ in range(1000)]\nrunning = [sum(flips[:n]) / n for n in range(1, 1001)]\nprint(round(abs(running[999] - 0.8), 3))   # 0.005: a small error at n = 1000"
+    },
+    {
+      "id": "lln-idea",
+      "label": "What the law says (and does not)",
+      "pseudocode": "The running average can move away from the true value for a while before settling.",
+      "python": "import random\n\nrandom.seed(3)\np = 0.8\nflips = [1 if random.random() < p else 0 for _ in range(1000)]\nrunning = [sum(flips[:n]) / n for n in range(1, 1001)]\naway = sum(1 for n in range(10, 300) if abs(running[n] - p) > abs(running[n - 1] - p))\nprint(away > 0)   # True: some steps move AWAY from p"
+    },
+    {
+      "id": "ml-connection",
+      "label": "Why ML cares",
+      "pseudocode": "An average over more data is a steadier estimate of an expectation.",
+      "python": "import random\n\nrandom.seed(2)\nfor n in [10, 100, 10000]:\n    losses = [(random.random() - 0.5) ** 2 for _ in range(n)]\n    print(n, round(sum(losses) / n, 3))   # tends toward the true expected loss 1/12 = 0.083"
+    }
+  ]
+}

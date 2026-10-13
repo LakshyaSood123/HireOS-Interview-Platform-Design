@@ -1,0 +1,96 @@
+{
+  "title": "The final ML workflow",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "problem",
+      "label": "Frame the problem",
+      "pseudocode": "Frame the problem first.",
+      "python": "frame = {'unit': 'subscriber-month', 'target': 'churned_30d', 'horizon_days': 30}\nprint(frame)\n# prints: {'unit': 'subscriber-month', 'target': 'churned_30d', 'horizon_days': 30}"
+    },
+    {
+      "id": "data",
+      "label": "Data",
+      "pseudocode": "Know the data and the base rate.",
+      "python": "n, churn_rate = 1000, 0.20\nprint(n, 'observations; expected churners:', int(n * churn_rate))\n# prints: 1000 observations; expected churners: 200"
+    },
+    {
+      "id": "features-target",
+      "label": "Features and target",
+      "pseudocode": "Check leakage before anything else.",
+      "python": "features = ['tenure', 'usage', 'tickets', 'price', 'days idle']\nprint(len(features), 'features; dropped: account_closed_date (leakage)')\n# prints: 5 features; dropped: account_closed_date (leakage)"
+    },
+    {
+      "id": "split",
+      "label": "Split",
+      "pseudocode": "Split before looking at results.",
+      "python": "sizes = {'train': 700, 'validation': 150, 'test': 150}\nprint(sizes, 'total', sum(sizes.values()))\n# prints: {'train': 700, 'validation': 150, 'test': 150} total 1000"
+    },
+    {
+      "id": "baseline",
+      "label": "Baseline",
+      "pseudocode": "Establish a baseline.",
+      "python": "VAL = {'baseline': (12, 10, 18, 110), 'logistic': (21, 12, 9, 108), 'tree': (24, 17, 6, 103)}   # (TP, FP, FN, TN) on 150 validation customers\ndef metrics(tp, fp, fn, tn):\n    p = tp / (tp + fp)\n    r = tp / (tp + fn)\n    return {'accuracy': (tp + tn) / (tp + fp + fn + tn), 'precision': p, 'recall': r, 'f1': 2 * p * r / (p + r)}\nb = metrics(*VAL['baseline'])\nprint('baseline accuracy', round(b['accuracy'], 2), 'recall', round(b['recall'], 2))\n# prints: baseline accuracy 0.81 recall 0.4"
+    },
+    {
+      "id": "choose-model",
+      "label": "Choose models",
+      "pseudocode": "Choose candidates to evaluate.",
+      "python": "candidates = ['logistic-style', 'tree-style']\nprint('to test:', candidates)\n# prints: to test: ['logistic-style', 'tree-style']"
+    },
+    {
+      "id": "train",
+      "label": "Train",
+      "pseudocode": "Fit parameters on train.",
+      "python": "learned_from = 'training data only'\nprint('parameters are learned from', learned_from)\n# prints: parameters are learned from training data only"
+    },
+    {
+      "id": "validate",
+      "label": "Validate",
+      "pseudocode": "Evaluate on validation data.",
+      "python": "VAL = {'baseline': (12, 10, 18, 110), 'logistic': (21, 12, 9, 108), 'tree': (24, 17, 6, 103)}   # (TP, FP, FN, TN) on 150 validation customers\ndef metrics(tp, fp, fn, tn):\n    p = tp / (tp + fp)\n    r = tp / (tp + fn)\n    return {'accuracy': (tp + tn) / (tp + fp + fn + tn), 'precision': p, 'recall': r, 'f1': 2 * p * r / (p + r)}\ndef meets_goal(m):\n    return m['recall'] >= 0.75 and m['precision'] >= 0.5\nm = metrics(*VAL['logistic'])\nprint('F1', round(m['f1'], 2), 'recall', round(m['recall'], 2), 'meets goal:', meets_goal(m))\n# prints: F1 0.67 recall 0.7 meets goal: False"
+    },
+    {
+      "id": "diagnose",
+      "label": "Diagnose",
+      "pseudocode": "Read train versus validation scores.",
+      "python": "RESULTS = [(1, 0.48, 0.46), (2, 0.62, 0.58), (4, 0.76, 0.676), (8, 0.97, 0.59)]   # (max_depth, train F1, validation F1)\ndef diagnose(train, valid):\n    gap = train - valid\n    if train < 0.65 and valid < 0.65 and gap < 0.10:\n        return 'underfitting'\n    if gap > 0.20:\n        return 'overfitting'\n    return 'no clear fit problem'\nfor d, tr, va in (RESULTS[0], RESULTS[3]):\n    print('depth', d, '->', diagnose(tr, va))\n# prints: depth 1 -> underfitting\n# prints: depth 8 -> overfitting"
+    },
+    {
+      "id": "tune",
+      "label": "Tune",
+      "pseudocode": "Choose hyperparameters on validation.",
+      "python": "RESULTS = [(1, 0.48, 0.46), (2, 0.62, 0.58), (4, 0.76, 0.676), (8, 0.97, 0.59)]   # (max_depth, train F1, validation F1)\nbest = max(RESULTS, key=lambda r: r[2])\nprint('max_depth', best[0], 'F1', best[2])\n# prints: max_depth 4 F1 0.676"
+    },
+    {
+      "id": "compare",
+      "label": "Compare",
+      "pseudocode": "Compare under one protocol.",
+      "python": "VAL = {'baseline': (12, 10, 18, 110), 'logistic': (21, 12, 9, 108), 'tree': (24, 17, 6, 103)}   # (TP, FP, FN, TN) on 150 validation customers\ndef metrics(tp, fp, fn, tn):\n    p = tp / (tp + fp)\n    r = tp / (tp + fn)\n    return {'accuracy': (tp + tn) / (tp + fp + fn + tn), 'precision': p, 'recall': r, 'f1': 2 * p * r / (p + r)}\ndef meets_goal(m):\n    return m['recall'] >= 0.75 and m['precision'] >= 0.5\nm = metrics(*VAL['tree'])\nprint('tree recall', round(m['recall'], 2), 'precision', round(m['precision'], 2), 'meets goal:', meets_goal(m))\n# prints: tree recall 0.8 precision 0.59 meets goal: True"
+    },
+    {
+      "id": "lock",
+      "label": "Lock",
+      "pseudocode": "Freeze the choice.",
+      "python": "locked = {'model': 'tree-style', 'max_depth': 4}\nprint('locked:', locked)\n# prints: locked: {'model': 'tree-style', 'max_depth': 4}"
+    },
+    {
+      "id": "final-test",
+      "label": "Final test",
+      "pseudocode": "Evaluate once on the test set.",
+      "python": "VAL = {'baseline': (12, 10, 18, 110), 'logistic': (21, 12, 9, 108), 'tree': (24, 17, 6, 103)}   # (TP, FP, FN, TN) on 150 validation customers\ndef metrics(tp, fp, fn, tn):\n    p = tp / (tp + fp)\n    r = tp / (tp + fn)\n    return {'accuracy': (tp + tn) / (tp + fp + fn + tn), 'precision': p, 'recall': r, 'f1': 2 * p * r / (p + r)}\ndef meets_goal(m):\n    return m['recall'] >= 0.75 and m['precision'] >= 0.5\nTEST = (22, 19, 6, 103)\nval, test = metrics(*VAL['tree']), metrics(*TEST)\nprint('validation F1', round(val['f1'], 3), ' test F1', round(test['f1'], 3))\nprint('test precision', round(test['precision'], 3), 'recall', round(test['recall'], 3), 'meets goal:', meets_goal(test))\n# prints: validation F1 0.676  test F1 0.638\n# prints: test precision 0.537 recall 0.786 meets goal: True"
+    },
+    {
+      "id": "monitor",
+      "label": "Monitor",
+      "pseudocode": "Watch for drift after deployment.",
+      "python": "train_usage, recent_usage, tolerance = 12.0, 9.0, 0.15\nshift = (recent_usage - train_usage) / train_usage\nprint('shift', round(shift, 2), ' investigate:', abs(shift) > tolerance)\n# prints: shift -0.25  investigate: True"
+    },
+    {
+      "id": "complete-workflow",
+      "label": "The complete workflow",
+      "pseudocode": "Iterate: diagnose, tune and compare feed back into the choice of model.",
+      "python": "workflow = ['frame', 'data', 'features', 'split', 'baseline', 'choose', 'train', 'validate', 'diagnose', 'tune', 'compare', 'lock', 'final test', 'monitor']\nprint(len(workflow), 'stages; iterate between choose and compare')\n# prints: 14 stages; iterate between choose and compare"
+    }
+  ]
+}

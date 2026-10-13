@@ -1,0 +1,30 @@
+{
+ "two-input-function": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Now the loss depends on **two weights**: **L(w₁, w₂) = (w₁ − 3)² + 2(w₂ − 1)²**. The map shows w₁ across and w₂ up; rings join points with equal loss. We stand at **(1, 3)**, where **L = 12**."
+ },
+ "vary-x": {
+  "h": "VARY w₁ ALONE",
+  "t": "Slide **only w₁** left and right along the yellow line. The loss changes as we go, and the right-hand curve records it."
+ },
+ "hold-y": {
+  "h": "HOLD w₂ STILL",
+  "t": "While w₁ moves, **w₂ stays frozen at 3**. The loss then depends on one variable only: **L = (w₁ − 3)² + 8**, an ordinary curve we already know how to handle."
+ },
+ "partial-x": {
+  "h": "THE SLOPE IN THE w₁ DIRECTION",
+  "t": "The slope of that curve at w₁ = 1 is the **partial derivative** with respect to w₁: **∂L/∂w₁ = 2(w₁ − 3) = −4**. Raising w₁ lowers the loss."
+ },
+ "vary-y": {
+  "h": "NOW VARY w₂ ALONE",
+  "t": "Switch knobs. **Freeze w₁ at 1** and slide only w₂ up and down the pink line. The loss now follows a different curve: **L = 4 + 2(w₂ − 1)²**."
+ },
+ "partial-y": {
+  "h": "THE SLOPE IN THE w₂ DIRECTION",
+  "t": "At w₂ = 3 the slope of this curve is **∂L/∂w₂ = 4(w₂ − 1) = +8**. Raising w₂ **raises** the loss, so w₂ should go down."
+ },
+ "ml-parameters": {
+  "h": "TAKEAWAY",
+  "t": "**Each weight gets its own partial derivative**, and each says how to nudge that weight: **−4 says raise w₁; +8 says lower w₂.**"
+ }
+}

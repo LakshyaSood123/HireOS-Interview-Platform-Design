@@ -1,0 +1,66 @@
+{
+  "title": "Compare models",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "candidate-models",
+      "label": "Candidate models",
+      "pseudocode": "List the candidates.",
+      "python": "candidates = ['baseline rule', 'logistic-style', 'tree-style (max_depth 4)']\nprint(candidates)\n# prints: ['baseline rule', 'logistic-style', 'tree-style (max_depth 4)']"
+    },
+    {
+      "id": "same-data",
+      "label": "Same data",
+      "pseudocode": "Use identical data for every model.",
+      "python": "train_size, validation_size = 700, 150\nprint('every model: train on', train_size, ' judge on', validation_size)\n# prints: every model: train on 700  judge on 150"
+    },
+    {
+      "id": "same-protocol",
+      "label": "Same protocol",
+      "pseudocode": "One fair protocol.",
+      "python": "protocol = ['same training data', 'same validation set', 'same metrics', 'test set not used']\nprint(len(protocol), 'rules:', protocol)\n# prints: 4 rules: ['same training data', 'same validation set', 'same metrics', 'test set not used']"
+    },
+    {
+      "id": "metric-table",
+      "label": "Metric table",
+      "pseudocode": "Compute the same metrics for each model.",
+      "python": "VAL = {'baseline': (12, 10, 18, 110), 'logistic': (21, 12, 9, 108), 'tree': (24, 17, 6, 103)}   # (TP, FP, FN, TN) on 150 validation customers\ndef metrics(tp, fp, fn, tn):\n    p = tp / (tp + fp)\n    r = tp / (tp + fn)\n    return {'accuracy': (tp + tn) / (tp + fp + fn + tn), 'precision': p, 'recall': r, 'f1': 2 * p * r / (p + r)}\nfor name, counts in VAL.items():\n    m = metrics(*counts)\n    print(name, round(m['precision'], 2), round(m['recall'], 2), round(m['f1'], 2))\n# prints: baseline 0.55 0.4 0.46\n# prints: logistic 0.64 0.7 0.67\n# prints: tree 0.59 0.8 0.68"
+    },
+    {
+      "id": "performance",
+      "label": "Performance against the goal",
+      "pseudocode": "Check each model against the goal.",
+      "python": "VAL = {'baseline': (12, 10, 18, 110), 'logistic': (21, 12, 9, 108), 'tree': (24, 17, 6, 103)}   # (TP, FP, FN, TN) on 150 validation customers\ndef metrics(tp, fp, fn, tn):\n    p = tp / (tp + fp)\n    r = tp / (tp + fn)\n    return {'accuracy': (tp + tn) / (tp + fp + fn + tn), 'precision': p, 'recall': r, 'f1': 2 * p * r / (p + r)}\ndef meets_goal(m):\n    return m['recall'] >= 0.75 and m['precision'] >= 0.5\nfor name, counts in VAL.items():\n    print(name, 'meets goal:', meets_goal(metrics(*counts)))\n# prints: baseline meets goal: False\n# prints: logistic meets goal: False\n# prints: tree meets goal: True"
+    },
+    {
+      "id": "complexity",
+      "label": "Complexity",
+      "pseudocode": "Weigh complexity.",
+      "python": "complexity = {'baseline rule': 1, 'logistic-style': 2, 'tree-style': 3}\nprint(complexity)\n# prints: {'baseline rule': 1, 'logistic-style': 2, 'tree-style': 3}"
+    },
+    {
+      "id": "interpretability",
+      "label": "Interpretability",
+      "pseudocode": "Weigh interpretability.",
+      "python": "explainable = {'baseline rule': True, 'logistic-style': True, 'tree-style (depth 4)': True}\nprint(explainable)\n# prints: {'baseline rule': True, 'logistic-style': True, 'tree-style (depth 4)': True}"
+    },
+    {
+      "id": "select-model",
+      "label": "Select the model",
+      "pseudocode": "Choose the candidate that meets the goal.",
+      "python": "VAL = {'baseline': (12, 10, 18, 110), 'logistic': (21, 12, 9, 108), 'tree': (24, 17, 6, 103)}   # (TP, FP, FN, TN) on 150 validation customers\ndef metrics(tp, fp, fn, tn):\n    p = tp / (tp + fp)\n    r = tp / (tp + fn)\n    return {'accuracy': (tp + tn) / (tp + fp + fn + tn), 'precision': p, 'recall': r, 'f1': 2 * p * r / (p + r)}\ndef meets_goal(m):\n    return m['recall'] >= 0.75 and m['precision'] >= 0.5\npassing = [n for n, c in VAL.items() if meets_goal(metrics(*c))]\nprint('meet the goal:', passing)\n# prints: meet the goal: ['tree']"
+    },
+    {
+      "id": "lock-choice",
+      "label": "Lock the choice",
+      "pseudocode": "Freeze the model and settings.",
+      "python": "locked = {'model': 'tree-style', 'max_depth': 4}\nprint('locked:', locked)\n# prints: locked: {'model': 'tree-style', 'max_depth': 4}"
+    },
+    {
+      "id": "test-ready",
+      "label": "Test set ready",
+      "pseudocode": "Evaluate once on the test set.",
+      "python": "test_evaluations_allowed = 1\nprint('test evaluations allowed:', test_evaluations_allowed)\n# prints: test evaluations allowed: 1"
+    }
+  ]
+}

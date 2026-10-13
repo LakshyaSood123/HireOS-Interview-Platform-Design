@@ -1,4 +1,4 @@
-import { defineConfig, type HtmlTagDescriptor, type Plugin } from 'vite'
+import { defineConfig, loadEnv, type HtmlTagDescriptor, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'node:path'
@@ -6,7 +6,7 @@ import path from 'node:path'
 import siteConfiguration from './.figma/make/site.json'
 
 // Vite config — https://vitejs.dev/config/
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode, command }) => {
   // .figma/make/deploy-preview passes `--mode development` for cached-preview builds.
   const emitSourcemaps = mode === 'development'
 
@@ -17,6 +17,7 @@ export default defineConfig(({ mode }) => {
       minify: !emitSourcemaps,
     },
     plugins: [
+      reagvisProductionApiGuard(command, mode),
       react(),
       tailwindcss(),
       figmaSiteConfiguration(siteConfiguration),
@@ -50,6 +51,39 @@ export default defineConfig(({ mode }) => {
     },
   }
 })
+
+
+/**
+ * A production bundle must not silently talk to http://localhost:4883 (the
+ * development fallback in src/learning/services/apiClient.ts). `vite build` in
+ * production mode therefore requires VITE_REAGVIS_API_URL — either an absolute
+ * https URL of the API, or a same-origin path such as /api/v1 when the reverse
+ * proxy serves the frontend and the API from one host. Set it in the build
+ * environment or in .env.production (see .env.production.example).
+ *
+ * `--mode development` builds (used by the Figma preview deploy) are not affected.
+ */
+function reagvisProductionApiGuard(command: string, mode: string): Plugin {
+  return {
+    name: 'reagvis-production-api-guard',
+    apply: 'build',
+    buildStart() {
+      if (command !== 'build' || mode !== 'production') return
+      const env = loadEnv(mode, process.cwd(), 'VITE_')
+      const url = (process.env.VITE_REAGVIS_API_URL ?? env.VITE_REAGVIS_API_URL ?? '').trim()
+      const problems: string[] = []
+      if (!url) problems.push('VITE_REAGVIS_API_URL is not set.')
+      else if (/localhost|127\.0\.0\.1/.test(url)) problems.push(`VITE_REAGVIS_API_URL points at a local address (${url}).`)
+      else if (!url.startsWith('/') && !/^https:\/\//.test(url)) problems.push('VITE_REAGVIS_API_URL must be an https:// URL or a same-origin path such as /api/v1.')
+      if (problems.length) {
+        throw new Error(
+          ['Refusing to build a production bundle with a broken API URL:', ...problems.map((p) => '  - ' + p),
+            'Set VITE_REAGVIS_API_URL (e.g. https://api.example.com/api/v1, or /api/v1 behind a same-origin proxy).'].join('\n'),
+        )
+      }
+    },
+  }
+}
 
 type FigmaSiteConfiguration = {
   title?: string

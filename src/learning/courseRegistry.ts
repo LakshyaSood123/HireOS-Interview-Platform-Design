@@ -31,6 +31,7 @@ import { binarySearchModule } from "./content/binarySearchModule"
 import { intervalsModule } from "./content/intervalsModule"
 import { fullCurriculumModules } from "./content/fullCurriculumModules"
 import { DSA_ZONES, buildSkeletonModule } from "./content/dsaSkeleton"
+import { isBackendPinnedCourse } from "./courseSources"
 
 /** Modules authored directly in the new content model — these REPLACE
  * whatever the legacy-TrailNode loop below would have built for the same
@@ -241,8 +242,12 @@ export function getCourseById(courseId: string): Course | undefined {
   return coursesById[courseId]
 }
 
+/** True for every course the learner can enter: static-curriculum courses
+ * registered in `coursesById`, and backend-pinned courses (whose curriculum is
+ * loaded at runtime — see courseSources.ts). `getCourseById` is still
+ * static-only; a backend-pinned course's Course object lives in AppStateContext. */
 export function isCourseAvailable(courseId: string): boolean {
-  return courseId in coursesById
+  return courseId in coursesById || isBackendPinnedCourse(courseId)
 }
 
 export function getAllCheckpointsInOrder(course: Course): Checkpoint[] {

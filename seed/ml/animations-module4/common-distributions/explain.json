@@ -1,0 +1,34 @@
+{
+ "distribution-idea": {
+  "h": "WHAT A DISTRIBUTION IS",
+  "t": "A distribution says **which values a random variable can take and how likely each one is**. The taller the bar, the more likely the value. Named distributions are ready-made shapes for common situations."
+ },
+ "bernoulli": {
+  "h": "BERNOULLI: ONE YES-OR-NO",
+  "t": "A Bernoulli variable is **0 or 1**. With **p = 0.3**, “spam” (1) has probability **0.3** and “not spam” (0) has **0.7**. Every binary label in classification is a Bernoulli outcome."
+ },
+ "binomial": {
+  "h": "BINOMIAL: COUNT THE SUCCESSES",
+  "t": "Count the spam emails among **10**, each spam with probability 0.3. The count is **Binomial**. Three is the most likely (about **0.27**); zero is rare (about **0.03**)."
+ },
+ "uniform": {
+  "h": "UNIFORM: NO FAVORITE",
+  "t": "A Uniform variable on **[0, 1]** treats every part of the range alike: equal-width slices are **equally likely**. It models “no preference”."
+ },
+ "gaussian": {
+  "h": "GAUSSIAN: THE BELL CURVE",
+  "t": "The Gaussian is a symmetric bell around its mean **μ**. Its width is the standard deviation **σ**, and about **68%** of the values fall within one σ of the mean. It fits quantities built from many small effects, like measurement noise."
+ },
+ "compare": {
+  "h": "THE FOUR SIDE BY SIDE",
+  "t": "**Bernoulli and Binomial** are for counts of yes/no events. **Uniform and Gaussian** are for continuous values. The shape of each tells what kind of data it describes."
+ },
+ "choose-model": {
+  "h": "CHOOSING A DISTRIBUTION",
+  "t": "Start from the question. A yes/no label: **Bernoulli**. How many yeses in n tries: **Binomial**. No preference over a range: **Uniform**. A continuous value clustered around a typical one: **Gaussian**."
+ },
+ "ml-connection": {
+  "h": "TAKEAWAY",
+  "t": "Models quietly assume distributions. **Classification treats a label as Bernoulli; linear regression treats the noise as Gaussian.** Choosing the right one is choosing the right model of the data."
+ }
+}

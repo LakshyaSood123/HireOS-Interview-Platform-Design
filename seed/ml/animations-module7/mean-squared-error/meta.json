@@ -1,0 +1,54 @@
+{
+  "title": "Mean squared error: one number for the errors",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "predictions",
+      "label": "Predictions from the line",
+      "pseudocode": "Predict every house with y_hat = 1.5 x + 0.5.",
+      "python": "sizes = [1.0, 1.5, 2.0, 2.5, 3.0]\nprices = [2.0, 2.8, 3.7, 4.1, 5.2]\nw, b = 1.5, 0.5\nprint([round(w * x + b, 2) for x in sizes])\n# prints: [2.0, 2.75, 3.5, 4.25, 5.0]"
+    },
+    {
+      "id": "residuals",
+      "label": "Residuals: prediction minus target",
+      "pseudocode": "residual = y_hat - y.",
+      "python": "sizes = [1.0, 1.5, 2.0, 2.5, 3.0]\nprices = [2.0, 2.8, 3.7, 4.1, 5.2]\nw, b = 1.5, 0.5\nresiduals = [(w * x + b) - y for x, y in zip(sizes, prices)]\nprint([round(r, 2) for r in residuals])\n# prints: [0.0, -0.05, -0.2, 0.15, -0.2]"
+    },
+    {
+      "id": "signed-errors",
+      "label": "Signs would cancel",
+      "pseudocode": "Adding signed residuals lets positives and negatives cancel.",
+      "python": "sizes = [1.0, 1.5, 2.0, 2.5, 3.0]\nprices = [2.0, 2.8, 3.7, 4.1, 5.2]\nw, b = 1.5, 0.5\nresiduals = [(w * x + b) - y for x, y in zip(sizes, prices)]\nprint(round(sum(residuals), 2))\n# prints: -0.3"
+    },
+    {
+      "id": "square-errors",
+      "label": "Square each residual",
+      "pseudocode": "Squaring makes every miss positive and punishes big misses.",
+      "python": "sizes = [1.0, 1.5, 2.0, 2.5, 3.0]\nprices = [2.0, 2.8, 3.7, 4.1, 5.2]\nw, b = 1.5, 0.5\nresiduals = [(w * x + b) - y for x, y in zip(sizes, prices)]\nsquares = [r * r for r in residuals]\nprint([round(s, 4) for s in squares])\n# prints: [0.0, 0.0025, 0.04, 0.0225, 0.04]"
+    },
+    {
+      "id": "sum",
+      "label": "Add up the squares",
+      "pseudocode": "Sum the squared residuals.",
+      "python": "sizes = [1.0, 1.5, 2.0, 2.5, 3.0]\nprices = [2.0, 2.8, 3.7, 4.1, 5.2]\nw, b = 1.5, 0.5\nresiduals = [(w * x + b) - y for x, y in zip(sizes, prices)]\nsquares = [r * r for r in residuals]\nprint(round(sum(squares), 4))\n# prints: 0.105"
+    },
+    {
+      "id": "average",
+      "label": "Average over the houses",
+      "pseudocode": "MSE = sum of squares / number of houses.",
+      "python": "sizes = [1.0, 1.5, 2.0, 2.5, 3.0]\nprices = [2.0, 2.8, 3.7, 4.1, 5.2]\nw, b = 1.5, 0.5\nresiduals = [(w * x + b) - y for x, y in zip(sizes, prices)]\nsquares = [r * r for r in residuals]\nprint(round(sum(squares) / len(squares), 4))\n# prints: 0.021"
+    },
+    {
+      "id": "compare-two-lines",
+      "label": "Score a second line",
+      "pseudocode": "Score line B the same way.",
+      "python": "sizes = [1.0, 1.5, 2.0, 2.5, 3.0]\nprices = [2.0, 2.8, 3.7, 4.1, 5.2]\ndef mse_of(w, b):\n    r = [(w * x + b) - y for x, y in zip(sizes, prices)]\n    return sum(e * e for e in r) / len(r)\n\nprint(round(mse_of(1.5, 0.5), 3), round(mse_of(1.0, 1.0), 3))\n# prints: 0.021 0.476"
+    },
+    {
+      "id": "lower-mse",
+      "label": "Lower MSE is the better fit",
+      "pseudocode": "The line with the lower MSE fits better.",
+      "python": "sizes = [1.0, 1.5, 2.0, 2.5, 3.0]\nprices = [2.0, 2.8, 3.7, 4.1, 5.2]\ndef mse_of(w, b):\n    r = [(w * x + b) - y for x, y in zip(sizes, prices)]\n    return sum(e * e for e in r) / len(r)\n\nscores = {'A': mse_of(1.5, 0.5), 'B': mse_of(1.0, 1.0)}\nprint(min(scores, key=scores.get), {k: round(v, 3) for k, v in scores.items()})\n# prints: A {'A': 0.021, 'B': 0.476}"
+    }
+  ]
+}

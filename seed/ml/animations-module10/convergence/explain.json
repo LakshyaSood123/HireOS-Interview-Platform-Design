@@ -1,0 +1,42 @@
+{
+ "initial-state": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "K-Means alternates assignment and update. We track the **objective**: the sum of squared distances from every point to its assigned center (**WCSS**). Smaller means tighter clusters."
+ },
+ "assignment-1": {
+  "h": "ASSIGNMENT 1",
+  "t": "Assign each customer to its nearest center. With these starting centers the **WCSS is 82.06**."
+ },
+ "update-1": {
+  "h": "UPDATE 1",
+  "t": "Move each center to the mean of its group. With the same memberships, the **WCSS falls to 13.06**."
+ },
+ "objective-drops": {
+  "h": "THE OBJECTIVE DROPS",
+  "t": "From **82.06 to 13.06** just by moving the centers. The update step **cannot make the objective larger**, because the mean is the best center for a fixed group."
+ },
+ "assignment-2": {
+  "h": "ASSIGNMENT 2",
+  "t": "With the moved centers, the stray customer at **(6.8, 6.8)** switches to the middle cluster. Reassigning to nearer centers cannot raise the objective: it is now **6.31**."
+ },
+ "update-2": {
+  "h": "UPDATE 2",
+  "t": "Move the centers to the new group means: **(1.68, 2.0), (6.58, 6.12) and (3.67, 8.28)**. The WCSS is **4.18**."
+ },
+ "objective-drops-again": {
+  "h": "THE OBJECTIVE DROPS AGAIN",
+  "t": "**6.31 to 4.18.** Every step either lowers the objective or leaves it unchanged, so K-Means cannot wander."
+ },
+ "stable-centers": {
+  "h": "NOTHING CHANGES",
+  "t": "A third assignment changes **no memberships**, so a third update would not move the centers. The WCSS stays at **4.18**."
+ },
+ "converged": {
+  "h": "CONVERGED",
+  "t": "Memberships and centers are stable: K-Means has **converged** after two updates. Convergence is guaranteed to happen in a finite number of rounds."
+ },
+ "different-initialization-preview": {
+  "h": "TAKEAWAY",
+  "t": "Convergence is **not** the global best. From the starting centers (1, 2), (2, 2) and (5, 7) the loop also converges, but to a **worse solution (WCSS 29.48)**: one natural group is split and two are merged."
+ }
+}

@@ -1,0 +1,66 @@
+{
+  "title": "Lagrange multipliers",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "objective-contours",
+      "label": "The objective and its contours",
+      "pseudocode": "The objective has contours of equal loss around (3, 1).",
+      "python": "def loss(w1, w2):\n    return (w1 - 3) ** 2 + 2 * (w2 - 1) ** 2\n\nprint(loss(3, 1), loss(2, 1))   # 0 1"
+    },
+    {
+      "id": "constraint-curve",
+      "label": "An equality constraint",
+      "pseudocode": "Only points with g(w1, w2) = 2 are allowed.",
+      "python": "def g(w1, w2):\n    return w1 + w2\n\nprint(g(2, 0), g(1, 1), g(1, 2))   # 2 2 3 : the first two are on the constraint"
+    },
+    {
+      "id": "candidate-point",
+      "label": "A candidate on the line",
+      "pseudocode": "Take the point (2, 0) on the constraint and evaluate the loss.",
+      "python": "def loss(w1, w2):\n    return (w1 - 3) ** 2 + 2 * (w2 - 1) ** 2\n\nprint(loss(2, 0))   # 3"
+    },
+    {
+      "id": "move-along-constraint",
+      "label": "Slide along the constraint",
+      "pseudocode": "Slide along the line w2 = 2 - w1 and watch the loss fall.",
+      "python": "def loss(w1, w2):\n    return (w1 - 3) ** 2 + 2 * (w2 - 1) ** 2\n\nfor w1 in [2.0, 1.9, 1.8, 1.7, 5 / 3]:\n    print(round(w1, 2), round(loss(w1, 2 - w1), 3))\n# 2.0 3.0 / 1.9 2.83 / 1.8 2.72 / 1.7 2.67 / 1.67 2.667"
+    },
+    {
+      "id": "better-point",
+      "label": "A better point",
+      "pseudocode": "At (5/3, 1/3) the loss is 8/3.",
+      "python": "def loss(w1, w2):\n    return (w1 - 3) ** 2 + 2 * (w2 - 1) ** 2\n\nprint(round(loss(5 / 3, 1 / 3), 3))   # 2.667"
+    },
+    {
+      "id": "tangent-point",
+      "label": "The contour just touches the line",
+      "pseudocode": "On the constraint, no point has a lower loss than (5/3, 1/3).",
+      "python": "def loss(w1, w2):\n    return (w1 - 3) ** 2 + 2 * (w2 - 1) ** 2\n\ngrid = [i / 1000 for i in range(-1000, 3501)]\nbest = min(grid, key=lambda w1: loss(w1, 2 - w1))\nprint(round(best, 3), round(loss(best, 2 - best), 3))   # 1.667 2.667"
+    },
+    {
+      "id": "gradient-objective",
+      "label": "The objective's gradient",
+      "pseudocode": "The gradient of the objective at the best point.",
+      "python": "def grad_f(w1, w2):\n    return (2 * (w1 - 3), 4 * (w2 - 1))\n\nprint([round(v, 2) for v in grad_f(5 / 3, 1 / 3)])   # [-2.67, -2.67]"
+    },
+    {
+      "id": "gradient-constraint",
+      "label": "The constraint's gradient",
+      "pseudocode": "The gradient of g = w1 + w2 is (1, 1).",
+      "python": "grad_g = (1, 1)   # gradient of g(w1, w2) = w1 + w2\nprint(grad_g)"
+    },
+    {
+      "id": "parallel-gradients",
+      "label": "The gradients are parallel",
+      "pseudocode": "Find lambda with grad f = lambda * grad g.",
+      "python": "def grad_f(w1, w2):\n    return (2 * (w1 - 3), 4 * (w2 - 1))\n\ngf = grad_f(5 / 3, 1 / 3)\nlam = gf[0] / 1\nprint(round(lam, 2), abs(gf[1] - lam * 1) < 1e-9)   # -2.67 True"
+    },
+    {
+      "id": "lagrange-form",
+      "label": "The Lagrangian",
+      "pseudocode": "L = f - lam * (g - c). Its derivatives vanish at the solution.",
+      "python": "def grad_f(w1, w2):\n    return (2 * (w1 - 3), 4 * (w2 - 1))\n\nw1, w2, lam = 5 / 3, 1 / 3, -8 / 3\nd1 = 2 * (w1 - 3) - lam * 1\nd2 = 4 * (w2 - 1) - lam * 1\nprint(abs(d1) < 1e-9, abs(d2) < 1e-9, abs(w1 + w2 - 2) < 1e-9)   # True True True"
+    }
+  ]
+}

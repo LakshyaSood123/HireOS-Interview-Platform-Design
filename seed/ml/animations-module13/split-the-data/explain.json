@@ -1,0 +1,42 @@
+{
+ "full-dataset": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Each box is one week of customer observations: **50 customers per week for 20 weeks, 1,000 in total.** Before looking at any results, we must decide how to divide this data."
+ },
+ "shuffle-or-time-order": {
+  "h": "CHOOSE HOW TO SPLIT",
+  "t": "Top row: weeks in **order**. Bottom row: the same weeks **mixed at random**. Because the model will predict **forward in time**, keeping the weeks in order matches how it will really be used."
+ },
+ "training-split": {
+  "h": "TRAINING SET",
+  "t": "Weeks 1–14 turn blue: the **training set**, 700 customers. This is the only data the model **learns from**: its parameters are fitted here."
+ },
+ "validation-split": {
+  "h": "VALIDATION SET",
+  "t": "Weeks 15–17 turn gold: the **validation set**, 150 customers. We use it to **compare models and choose settings**, because the model has not trained on these customers."
+ },
+ "test-split": {
+  "h": "TEST SET",
+  "t": "Weeks 18–20 turn pink: the **test set**, 150 customers. It is held back for **one final estimate** of how the finished model performs on genuinely new data."
+ },
+ "train-open": {
+  "h": "TRAINING IS OPEN",
+  "t": "The training data is open for learning: the model may use it as often as it needs while its **parameters change**. Nothing measured on training data is treated as a fair test."
+ },
+ "validation-open": {
+  "h": "VALIDATION IS OPEN",
+  "t": "Validation is open for **decisions**: which model, which settings, which threshold. Using it repeatedly is acceptable because it is the data we are allowed to tune against."
+ },
+ "test-locked": {
+  "h": "THE TEST SET STAYS LOCKED",
+  "t": "The padlock marks the test set as **off limits** until the very end. If we peeked and then adjusted anything, the final score would no longer be an honest estimate."
+ },
+ "leakage-warning": {
+  "h": "WHY NOT SPLIT AT RANDOM?",
+  "t": "In the random split, **144 of 150** validation customers were observed **before** the newest training customer, so the model effectively sees the future. The chronological split has **0**, which is the honest setup."
+ },
+ "final-split": {
+  "h": "TAKEAWAY",
+  "t": "**700 / 150 / 150**, no overlap, test locked. **Remember:** split first, split in a way that matches how the model will be used, and leave the test set untouched until the choices are final."
+ }
+}

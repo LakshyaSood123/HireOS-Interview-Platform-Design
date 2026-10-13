@@ -1,0 +1,54 @@
+{
+  "title": "Classification errors: four outcomes",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "predictions",
+      "label": "Predictions and true classes",
+      "pseudocode": "Predict every email; positive class = spam.",
+      "python": "spam_scores = [0.5, 1.0, 2.0, 3.0, 4.5, 3.5, 5.0, 6.0, 7.5, 9.0]\nlabels = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1]\npredictions = [1 if s >= 4.0 else 0 for s in spam_scores]\nprint(predictions)\n# prints: [0, 0, 0, 0, 1, 0, 1, 1, 1, 1]"
+    },
+    {
+      "id": "correct-positive",
+      "label": "True positives",
+      "pseudocode": "Predicted spam and actually spam.",
+      "python": "spam_scores = [0.5, 1.0, 2.0, 3.0, 4.5, 3.5, 5.0, 6.0, 7.5, 9.0]\nlabels = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1]\npredictions = [1 if s >= 4.0 else 0 for s in spam_scores]\nprint([s for s, p, y in zip(spam_scores, predictions, labels) if p == 1 and y == 1])\n# prints: [5.0, 6.0, 7.5, 9.0]"
+    },
+    {
+      "id": "correct-negative",
+      "label": "True negatives",
+      "pseudocode": "Predicted not spam and actually not spam.",
+      "python": "spam_scores = [0.5, 1.0, 2.0, 3.0, 4.5, 3.5, 5.0, 6.0, 7.5, 9.0]\nlabels = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1]\npredictions = [1 if s >= 4.0 else 0 for s in spam_scores]\nprint([s for s, p, y in zip(spam_scores, predictions, labels) if p == 0 and y == 0])\n# prints: [0.5, 1.0, 2.0, 3.0]"
+    },
+    {
+      "id": "false-positive",
+      "label": "A false positive",
+      "pseudocode": "Predicted spam but actually real mail.",
+      "python": "spam_scores = [0.5, 1.0, 2.0, 3.0, 4.5, 3.5, 5.0, 6.0, 7.5, 9.0]\nlabels = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1]\npredictions = [1 if s >= 4.0 else 0 for s in spam_scores]\nprint([s for s, p, y in zip(spam_scores, predictions, labels) if p == 1 and y == 0])\n# prints: [4.5]"
+    },
+    {
+      "id": "false-negative",
+      "label": "A false negative",
+      "pseudocode": "Predicted not spam but actually spam.",
+      "python": "spam_scores = [0.5, 1.0, 2.0, 3.0, 4.5, 3.5, 5.0, 6.0, 7.5, 9.0]\nlabels = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1]\npredictions = [1 if s >= 4.0 else 0 for s in spam_scores]\nprint([s for s, p, y in zip(spam_scores, predictions, labels) if p == 0 and y == 1])\n# prints: [3.5]"
+    },
+    {
+      "id": "compare-errors",
+      "label": "All four outcomes",
+      "pseudocode": "Count all four outcomes.",
+      "python": "spam_scores = [0.5, 1.0, 2.0, 3.0, 4.5, 3.5, 5.0, 6.0, 7.5, 9.0]\nlabels = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1]\npredictions = [1 if s >= 4.0 else 0 for s in spam_scores]\ncounts = {'TP': 0, 'TN': 0, 'FP': 0, 'FN': 0}\nfor p, y in zip(predictions, labels):\n    counts[('T' if p == y else 'F') + ('P' if p == 1 else 'N')] += 1\nprint(counts, sum(counts.values()))\n# prints: {'TP': 4, 'TN': 4, 'FP': 1, 'FN': 1} 10"
+    },
+    {
+      "id": "different-costs",
+      "label": "Errors have different costs",
+      "pseudocode": "Different errors can have different consequences.",
+      "python": "costs = {'false positive': 'a job offer goes to the spam folder', 'false negative': 'a phishing email reaches the inbox'}\nfor name, cost in costs.items():\n    print(name, '->', cost)\n# prints: false positive -> a job offer goes to the spam folder\n# prints: false negative -> a phishing email reaches the inbox"
+    },
+    {
+      "id": "module9-preview",
+      "label": "What comes next",
+      "pseudocode": "The four counts are the starting point for Model Evaluation.",
+      "python": "spam_scores = [0.5, 1.0, 2.0, 3.0, 4.5, 3.5, 5.0, 6.0, 7.5, 9.0]\nlabels = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1]\npredictions = [1 if s >= 4.0 else 0 for s in spam_scores]\ntp = sum(p == 1 and y == 1 for p, y in zip(predictions, labels))\ntn = sum(p == 0 and y == 0 for p, y in zip(predictions, labels))\nfp = sum(p == 1 and y == 0 for p, y in zip(predictions, labels))\nfn = sum(p == 0 and y == 1 for p, y in zip(predictions, labels))\nprint(tp, tn, fp, fn, tp + tn + fp + fn)\n# prints: 4 4 1 1 10"
+    }
+  ]
+}

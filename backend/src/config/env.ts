@@ -84,6 +84,43 @@ const envSchema = z
 
 export type Env = z.infer<typeof envSchema>;
 
+/**
+ * Extra rules that apply ONLY when NODE_ENV=production. Development keeps its
+ * localhost defaults; a production process must be configured on purpose, and
+ * refuses to boot on a value that would silently be wrong or unsafe. Values are
+ * never printed — only which variable is wrong and why.
+ */
+export function productionConfigProblems(value: Env, source: NodeJS.ProcessEnv): string[] {
+  if (!value.isProduction) return [];
+  const problems: string[] = [];
+  const explicit = (name: string) => typeof source[name] === "string" && source[name]!.trim() !== "";
+
+  if (!explicit("CORS_ORIGINS")) {
+    problems.push("CORS_ORIGINS: required in production — the exact https origin(s) of the frontend, comma separated (no localhost default).");
+  } else {
+    for (const origin of value.CORS_ORIGINS) {
+      if (origin === "*" || origin.includes("*")) problems.push("CORS_ORIGINS: wildcard origins are not allowed (the API uses credentials).");
+      else if (!/^https?:\/\/[^/\s]+$/.test(origin)) problems.push(`CORS_ORIGINS: "${origin}" must be a bare origin like https://app.example.com (scheme + host, no path).`);
+      else if (/localhost|127\.0\.0\.1/.test(origin)) problems.push(`CORS_ORIGINS: "${origin}" is a local origin; not allowed in production.`);
+      else if (origin.startsWith("http://")) problems.push(`CORS_ORIGINS: "${origin}" is not https.`);
+    }
+  }
+  if (!explicit("TRUST_PROXY")) {
+    problems.push("TRUST_PROXY: required in production — e.g. 1 when exactly one trusted reverse proxy sits in front (needed for real client IPs and rate limiting).");
+  } else if (/^(true|\*)$/i.test(value.TRUST_PROXY.trim())) {
+    problems.push("TRUST_PROXY: do not trust every proxy hop (true/*); use a hop count such as 1, or the proxy's address/CIDR.");
+  }
+  const weak = /replace-me|change-?me|changeme|your-secret|password/i;
+  for (const name of ["JWT_ACCESS_SECRET", "JWT_REFRESH_SECRET"] as const) {
+    if (weak.test(value[name])) problems.push(`${name}: looks like a placeholder/weak value; generate a random one (node -e "console.log(require('crypto').randomBytes(48).toString('base64url'))").`);
+  }
+  if (value.JWT_ACCESS_SECRET === value.JWT_REFRESH_SECRET) problems.push("JWT_REFRESH_SECRET: must differ from JWT_ACCESS_SECRET.");
+  if (!explicit("MONGO_DB_NAME")) problems.push("MONGO_DB_NAME: required in production (the default is the development database name).");
+  else if (/_dev$|_test$/.test(value.MONGO_DB_NAME)) problems.push("MONGO_DB_NAME: a *_dev / *_test database name must not be used in production.");
+  if (value.LOG_PRETTY) problems.push("LOG_PRETTY: must be false in production (structured JSON logs).");
+  return problems;
+}
+
 function parseEnv(source: NodeJS.ProcessEnv): Env {
   const result = envSchema.safeParse(source);
 
@@ -98,6 +135,13 @@ function parseEnv(source: NodeJS.ProcessEnv): Env {
 
     // Thrown before the logger exists, so this is intentionally a plain write.
     process.stderr.write(`\nInvalid environment configuration:\n${problems}\n\n${hint}\n\n`);
+    process.exit(1);
+  }
+
+  const prodProblems = productionConfigProblems(result.data, source);
+  if (prodProblems.length) {
+    const lines = prodProblems.map((p) => `  - ${p}`);
+    process.stderr.write(["", "Invalid PRODUCTION configuration:", ...lines, "", "See backend/.env.production.example and docs/PILOT_DEPLOYMENT.md.", "", ""].join("\n"));
     process.exit(1);
   }
 

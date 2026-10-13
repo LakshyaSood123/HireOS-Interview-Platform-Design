@@ -1,0 +1,60 @@
+{
+  "title": "Recall: of all the real spam, how much was caught?",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "matrix",
+      "label": "Our confusion matrix",
+      "pseudocode": "The confusion matrix of the evaluation set.",
+      "python": "tp, fn, fp, tn = 16, 4, 8, 72        # positive class = spam\nprint([[tp, fn], [fp, tn]])\n# prints: [[16, 4], [8, 72]]"
+    },
+    {
+      "id": "actual-positive-row",
+      "label": "The actual-spam row",
+      "pseudocode": "All actual positives = TP + FN.",
+      "python": "tp, fn, fp, tn = 16, 4, 8, 72        # positive class = spam\nprint('actual spam:', tp + fn)\n# prints: actual spam: 20"
+    },
+    {
+      "id": "select-tp",
+      "label": "Spam that was caught",
+      "pseudocode": "True positives are the spam that was caught.",
+      "python": "tp, fn, fp, tn = 16, 4, 8, 72        # positive class = spam\nprint('caught:', tp)\n# prints: caught: 16"
+    },
+    {
+      "id": "select-fn",
+      "label": "Spam that was missed",
+      "pseudocode": "False negatives are spam that was missed.",
+      "python": "tp, fn, fp, tn = 16, 4, 8, 72        # positive class = spam\nprint('missed:', fn)\n# prints: missed: 4"
+    },
+    {
+      "id": "recall-question",
+      "label": "The recall question",
+      "pseudocode": "Of the actual spam, what share was caught?",
+      "python": "tp, fn, fp, tn = 16, 4, 8, 72        # positive class = spam\nprint(tp, 'of', tp + fn, 'spam emails caught')\n# prints: 16 of 20 spam emails caught"
+    },
+    {
+      "id": "numerator",
+      "label": "The numerator",
+      "pseudocode": "Numerator: true positives.",
+      "python": "tp, fn, fp, tn = 16, 4, 8, 72        # positive class = spam\nnumerator = tp\nprint(numerator)\n# prints: 16"
+    },
+    {
+      "id": "denominator",
+      "label": "The denominator",
+      "pseudocode": "Denominator: all actual positives.",
+      "python": "tp, fn, fp, tn = 16, 4, 8, 72        # positive class = spam\ndenominator = tp + fn\nprint(denominator)\n# prints: 20"
+    },
+    {
+      "id": "calculate",
+      "label": "Calculate recall",
+      "pseudocode": "recall = TP / (TP + FN)",
+      "python": "def precision(tp, fp):\n    return tp / (tp + fp) if tp + fp else None\n\ndef recall(tp, fn):\n    return tp / (tp + fn) if tp + fn else None\n\ndef f1(p, r):\n    return 2 * p * r / (p + r) if p and r else 0.0\n\ntp, fn, fp, tn = 16, 4, 8, 72        # positive class = spam\nprint(recall(tp, fn))\n# prints: 0.8"
+    },
+    {
+      "id": "interpret",
+      "label": "Interpret it",
+      "pseudocode": "Recall 0.80 means 20 percent of spam gets through.",
+      "python": "def precision(tp, fp):\n    return tp / (tp + fp) if tp + fp else None\n\ndef recall(tp, fn):\n    return tp / (tp + fn) if tp + fn else None\n\ndef f1(p, r):\n    return 2 * p * r / (p + r) if p and r else 0.0\n\ntp, fn, fp, tn = 16, 4, 8, 72        # positive class = spam\nr = recall(tp, fn)\nprint(round(1 - r, 2), 'of spam gets through')\nprint('no actual spam:', recall(0, 0))\n# prints: 0.2 of spam gets through\n# prints: no actual spam: None"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+ "validation-data": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "The bar shows the **150 validation customers**: **30 churn (20%)** and 120 stay. The model has **not trained** on them, so scoring them tells us how it handles customers it has never seen."
+ },
+ "predictions": {
+  "h": "PREDICTIONS",
+  "t": "The logistic-style model **flags 33** customers as likely to churn. Of those, **21 really do churn** and 12 would have stayed, so some flags are right and some are wasted contacts."
+ },
+ "confusion-matrix": {
+  "h": "THE CONFUSION MATRIX",
+  "t": "The four counts: **TP 21** (churners caught), **FN 9** (churners missed), **FP 12** (flagged but stayed) and **TN 108**. Every metric that follows is computed from these four numbers."
+ },
+ "accuracy": {
+  "h": "ACCURACY",
+  "t": "Accuracy counts the green cells: **(21 + 108) / 150 = 0.86**. It looks strong, but most customers stay, so accuracy is dominated by easy cases and can hide missed churners."
+ },
+ "precision": {
+  "h": "PRECISION",
+  "t": "Precision looks at the **flagged column**: of 33 flagged, 21 churn, so **21 / 33 = 0.64**. It answers “when we flag someone, how often are we right?”"
+ },
+ "recall": {
+  "h": "RECALL",
+  "t": "Recall looks at the **churned row**: of 30 real churners we caught 21, so **21 / 30 = 0.70**. It answers “of the people who leave, how many do we find?”"
+ },
+ "f1": {
+  "h": "F1",
+  "t": "**F1 = 0.67** blends precision and recall into one number and rewards balance. It is a summary, though: the business goal may care more about one of the two."
+ },
+ "business-priority": {
+  "h": "MATCH THE METRIC TO THE GOAL",
+  "t": "Missing a churner is costly, so **recall matters most**. The bars show recall **0.70 falls short** of the 0.75 goal, while precision **0.64 passes** its 0.50 goal."
+ },
+ "evaluation-summary": {
+  "h": "TAKEAWAY",
+  "t": "Accuracy of **0.86** looks good, yet the baseline had **0.81** with recall of only 0.40. **Remember:** judge a model with several metrics against the goal. This is validation data; the test set stays locked."
+ }
+}

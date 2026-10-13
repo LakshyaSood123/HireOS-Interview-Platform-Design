@@ -1,0 +1,48 @@
+{
+  "title": "Eigenvalues and eigenvectors",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "original-space",
+      "label": "Start with vectors in many directions",
+      "pseudocode": "Take vectors of equal length pointing in many different directions.",
+      "python": "import math\n\nvectors = [[math.cos(a), math.sin(a)] for a in (0.0, 0.8, 1.6, 2.4)]\nprint(len(vectors))"
+    },
+    {
+      "id": "transform",
+      "label": "Apply the matrix",
+      "pseudocode": "Multiply every vector by the matrix A.",
+      "python": "A = [[2, 1], [1, 2]]\n\ndef apply(A, v):\n    return [sum(A[i][j] * v[j] for j in range(len(v))) for i in range(len(A))]\n\nprint(apply(A, [1, 0]))  # [2, 1]"
+    },
+    {
+      "id": "most-vectors-turn",
+      "label": "Notice most vectors turn",
+      "pseudocode": "Compare each vector with its transformed version. For most vectors the direction is different.",
+      "python": "A = [[2, 1], [1, 2]]\n\ndef apply(A, v):\n    return [sum(A[i][j] * v[j] for j in range(len(v))) for i in range(len(A))]\n\nprint([1, 0], '->', apply(A, [1, 0]))  # direction changed"
+    },
+    {
+      "id": "special-direction",
+      "label": "Find a direction that stays put",
+      "pseudocode": "Look for vectors whose transformed version stays on the same line through the origin.",
+      "python": "A = [[2, 1], [1, 2]]\n\ndef apply(A, v):\n    return [sum(A[i][j] * v[j] for j in range(len(v))) for i in range(len(A))]\n\nprint([1, 1], '->', apply(A, [1, 1]))  # [3, 3], same line"
+    },
+    {
+      "id": "eigenvector",
+      "label": "Name it an eigenvector",
+      "pseudocode": "A vector that only gets scaled by A, without changing direction, is an eigenvector.",
+      "python": "A = [[2, 1], [1, 2]]\n\ndef apply(A, v):\n    return [sum(A[i][j] * v[j] for j in range(len(v))) for i in range(len(A))]\n\nprint([1, -1], '->', apply(A, [1, -1]))  # [1, -1], same line"
+    },
+    {
+      "id": "eigenvalue",
+      "label": "Read off the eigenvalue",
+      "pseudocode": "The factor by which the eigenvector is scaled is its eigenvalue: A v = lambda v.",
+      "python": "A = [[2, 1], [1, 2]]\n\ndef apply(A, v):\n    return [sum(A[i][j] * v[j] for j in range(len(v))) for i in range(len(A))]\n\nv = [1, 1]\nAv = apply(A, v)\nprint(Av[0] / v[0])  # 3.0"
+    },
+    {
+      "id": "ml-connection",
+      "label": "Connect it to data",
+      "pseudocode": "The eigenvectors of a data covariance matrix point along the main directions of the data.",
+      "python": "cov = [[2, 1], [1, 2]]  # covariance of a stretched cloud\n\ndef apply(A, v):\n    return [sum(A[i][j] * v[j] for j in range(len(v))) for i in range(len(A))]\n\nprint(apply(cov, [1, 1]))  # [3, 3]: [1, 1] is a main direction"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+ "one-dimensional-normal": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "The Gaussian you know: a bell over **one variable**, centered at the mean **μ** with width given by the standard deviation **σ**. Values near μ are the most likely."
+ },
+ "two-variables": {
+  "h": "TWO VARIABLES: A BELL OVER A PLANE",
+  "t": "Now we describe two variables at once, say a house's size x₁ and price x₂. Each pair is a **point on a plane**, and the bell becomes a **hill** rising over that plane. Where the hill is high, pairs are likely."
+ },
+ "mean-point": {
+  "h": "THE MEAN VECTOR",
+  "t": "The hill peaks at the **mean vector μ = [3, 2]**: one mean per variable. It is the two-variable version of the center of the bell."
+ },
+ "circular-contours": {
+  "h": "CONTOURS: LINES OF EQUAL HEIGHT",
+  "t": "Slice the hill at constant heights and look from above to get **contours**. With **Σ = [[1, 0], [0, 1]]** (variance 1 each, covariance 0) the contours are **circles**: no relationship between x₁ and x₂."
+ },
+ "covariance": {
+  "h": "ADD COVARIANCE",
+  "t": "Now let the off-diagonal entry, the **covariance**, grow from 0 to **0.8**. The circles stretch and tilt: when x₁ is high, x₂ tends to be high too."
+ },
+ "tilted-ellipse": {
+  "h": "A TILTED ELLIPSE",
+  "t": "With **Σ = [[1, 0.8], [0.8, 1]]** the contours are **tilted ellipses**. The long axis points along **[1, 1]**, the direction in which the variables vary together most. The short axis is across it."
+ },
+ "samples": {
+  "h": "SAMPLES FROM THE DISTRIBUTION",
+  "t": "Draw random pairs from this distribution. They **cluster near the mean** and thin out along ellipses, stretched along the long axis. The ellipses are the shape of the data cloud."
+ },
+ "ml-connection": {
+  "h": "TAKEAWAY",
+  "t": "A multivariate Gaussian is described by just **μ and Σ**. A **Gaussian Mixture Model**, coming later, describes data with several such clouds, each with its own mean and covariance, for example two clusters tilted in different directions."
+ }
+}

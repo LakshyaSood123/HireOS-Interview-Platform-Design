@@ -1,0 +1,95 @@
+{
+  "version": 1,
+  "steps": [
+    {
+      "id": "problem",
+      "label": "Define the problem",
+      "animationEvent": "problem",
+      "code": {
+        "pseudocode": "Decide the decision the model supports and the quantity to predict. Here: the sale price of a house.",
+        "python": "goal = {'predict': 'sale price', 'for': 'a house before it is sold'}\nprint(goal['predict'])"
+      }
+    },
+    {
+      "id": "data",
+      "label": "Collect and understand the data",
+      "animationEvent": "data",
+      "code": {
+        "pseudocode": "Gather records of past sales and check that they are complete, correct and representative of the houses the model will see.",
+        "python": "sales = [(1200, 2, 10, 45), (1800, 3, 4, 72), (900, 1, 15, 32)]\nprint(len(sales), 'past sales')"
+      }
+    },
+    {
+      "id": "features-target",
+      "label": "Choose features and target",
+      "animationEvent": "features-target",
+      "code": {
+        "pseudocode": "Pick the inputs X the model may use at prediction time, such as area, bedrooms and age. Pick the target y, the sale price.",
+        "python": "sales = [(1200, 2, 10, 45), (1800, 3, 4, 72), (900, 1, 15, 32)]\nX = [row[:3] for row in sales]\ny = [row[3] for row in sales]\nprint(X[0], y[0])"
+      }
+    },
+    {
+      "id": "split",
+      "label": "Split the data",
+      "animationEvent": "split",
+      "code": {
+        "pseudocode": "Separate the houses into training, validation and test groups before fitting anything. Ratios like 70/15/15 are examples.",
+        "python": "sales = [(1200, 2, 10, 45), (1800, 3, 4, 72), (900, 1, 15, 32)]\nn = len(sales)\nn_train = int(n * 0.70)\nprint(n_train, \"houses for training\")"
+      }
+    },
+    {
+      "id": "model",
+      "label": "Choose a simple model",
+      "animationEvent": "model",
+      "code": {
+        "pseudocode": "Start with a simple model: a weighted sum of the features plus a bias. Its parameters are what training will adjust.",
+        "python": "def predict(x, w, b):\n    return sum(wi * xi for wi, xi in zip(w, x)) + b\n\nprint(predict([1200, 2, 10], [0.01, 5.0, -1.0], 10.0))"
+      }
+    },
+    {
+      "id": "train",
+      "label": "Train on the training houses",
+      "animationEvent": "train",
+      "code": {
+        "pseudocode": "Adjust the parameters so predictions on training houses match their known prices as closely as possible.",
+        "python": "train_prices = [45, 72]\nestimate = sum(train_prices) / len(train_prices)\nprint(estimate)"
+      }
+    },
+    {
+      "id": "validate",
+      "label": "Validate on unseen houses",
+      "animationEvent": "validate",
+      "code": {
+        "pseudocode": "Measure error on validation houses that training did not use. Compare candidate settings with this error.",
+        "python": "train_prices = [45, 72]\nestimate = sum(train_prices) / len(train_prices)\nval_prices = [32]\nval_error = abs(estimate - val_prices[0])\nprint(val_error)"
+      }
+    },
+    {
+      "id": "improve",
+      "label": "Improve and re-check",
+      "animationEvent": "improve",
+      "code": {
+        "pseudocode": "If validation error is too high, change the features or the model, retrain, and validate again. Choices are made only on validation results.",
+        "python": "candidates = {'area only': 9.0, 'area and bedrooms': 6.5}\nbest = min(candidates, key=candidates.get)\nprint(best)"
+      }
+    },
+    {
+      "id": "test",
+      "label": "Evaluate once on the test houses",
+      "animationEvent": "test",
+      "code": {
+        "pseudocode": "After all decisions are fixed, measure error once on the test houses. This is the estimate reported for the model.",
+        "python": "train_prices = [45, 72]\nestimate = sum(train_prices) / len(train_prices)\ntest_prices = [60]\nfinal_error = abs(estimate - test_prices[0])\nprint(final_error)"
+      }
+    },
+    {
+      "id": "inference",
+      "label": "Predict a new house",
+      "animationEvent": "inference",
+      "code": {
+        "pseudocode": "Give the trained model the features of a new house. It returns an estimated price. No target is needed at this point.",
+        "python": "def predict(x, w, b):\n    return sum(wi * xi for wi, xi in zip(w, x)) + b\n\nnew_house = [1500, 3, 6]\nprint(predict(new_house, [0.01, 5.0, -1.0], 10.0))"
+      }
+    }
+  ]
+}

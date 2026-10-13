@@ -1,0 +1,147 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322c4e9cccef168ecf5"
+  },
+  "assets": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498501"
+    }
+  },
+  "createdBy": {
+    "$oid": "000000000000000000000000"
+  },
+  "css": "body {\r\n  margin: 0;\r\n  padding: 14px;\r\n  box-sizing: border-box;\r\n  background: #0b1d16;\r\n  color: #e6f5ec;\r\n  font-family: system-ui, sans-serif;\r\n}\r\n.scene {\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 8px;\r\n}\r\n.step-label {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  letter-spacing: 0.08em;\r\n  text-transform: uppercase;\r\n  color: #a7ce65;\r\n}\r\nsvg {\r\n  width: 100%;\r\n  height: auto;\r\n  max-width: 640px;\r\n  background: #071510;\r\n  border-radius: 10px;\r\n  border: 1px solid rgba(29, 181, 132, 0.35);\r\n}\r\nsvg g,\r\nsvg line,\r\nsvg polygon,\r\nsvg path,\r\nsvg ellipse,\r\nsvg circle,\r\nsvg rect,\r\nsvg text {\r\n  transition: opacity 0.4s ease, transform 0.6s ease;\r\n}\r\n.axis {\r\n  stroke: rgba(167, 206, 101, 0.3);\r\n  stroke-width: 1;\r\n}\r\n.tick {\r\n  font-size: 10px;\r\n  fill: #8fa89c;\r\n}\r\n.lbl,\r\n.big,\r\n.note,\r\n.mono {\r\n  paint-order: stroke;\r\n  stroke: #071510;\r\n  stroke-width: 3px;\r\n  stroke-linejoin: round;\r\n}\r\n.lbl {\r\n  font-size: 12px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.lbl-g { fill: #1db584; }\r\n.lbl-y { fill: #e2b44a; }\r\n.lbl-p { fill: #f472b6; }\r\n.lbl-b { fill: #38bdf8; }\r\n.lbl-r { fill: #f87171; }\r\n.big {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.note {\r\n  font-size: 11px;\r\n  fill: #c9dccf;\r\n}\r\n.mono {\r\n  font-family: ui-monospace, Consolas, monospace;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.caption {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  line-height: 1.5;\r\n  color: #c9dccf;\r\n  min-height: 40px;\r\n}\r\n.cell rect {\r\n  fill: rgba(255, 255, 255, 0.05);\r\n  stroke: rgba(255, 255, 255, 0.28);\r\n  stroke-width: 1.2;\r\n}\r\n.cell text {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.cell.hl-row rect { fill: rgba(226, 180, 74, 0.25); stroke: #e2b44a; }\r\n.cell.hl-col rect { fill: rgba(29, 181, 132, 0.25); stroke: #1db584; }\r\n.cell.hl-both rect { fill: rgba(244, 114, 182, 0.28); stroke: #f472b6; }\r\n.dim { opacity: 0.25; }\r\n.dash { stroke-dasharray: 5 4; }\r\n.fillA { fill: rgba(56, 189, 248, 0.16); stroke: #38bdf8; stroke-width: 2; }\r\n.fillB { fill: rgba(244, 114, 182, 0.18); stroke: #f472b6; stroke-width: 2; }\r\n.fillG { fill: rgba(29, 181, 132, 0.16); stroke: #1db584; stroke-width: 2; }\r\n.contour { stroke: rgba(56, 189, 248, 0.45); stroke-width: 1.5; }\n.curve { fill: none; stroke: #38bdf8; stroke-width: 3; }\n.curve-y { fill: none; stroke: #e2b44a; stroke-width: 3; }\n.curve-p { fill: none; stroke: #f472b6; stroke-width: 3; }\n.curve-g { fill: none; stroke: #1db584; stroke-width: 3; }\n.ghost { fill: none; stroke: rgba(201, 220, 207, 0.4); stroke-width: 2; }\n.lbl-w { fill: #e6f5ec; }\n.lbl-s { font-size: 11px; font-weight: 600; fill: #c9dccf; }\n\n/* ── explanation panel (shared by every generated ML animation) ── */\n.explain {\n  box-sizing: border-box;\n  max-width: 640px;\n  margin-top: 4px;\n  padding: 14px 18px 16px;\n  min-height: 150px;\n  border-radius: 12px;\n  background: rgba(29, 181, 132, 0.10);\n  border: 1px solid rgba(29, 181, 132, 0.45);\n  border-left: 5px solid #1db584;\n}\n.explain-h {\n  margin: 0 0 8px;\n  font-size: 13px;\n  font-weight: 800;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.explain-t {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.55;\n  color: #f1faf4;\n}\n.explain-t strong {\n  font-weight: 800;\n  color: #ffd98a;\n}\n\n",
+  "html": "<div class=\"scene\">\n  <p class=\"step-label\" id=\"step-label\"></p>\n  <svg id=\"scene\" viewBox=\"0 0 640 360\" role=\"img\" aria-label=\"Derivatives: the slope at one point\"></svg>\n  <section class=\"explain\" aria-live=\"polite\">\n    <h3 class=\"explain-h\" id=\"explain-h\"></h3>\n    <p class=\"explain-t\" id=\"caption\"></p>\n  </section>\n</div>\n",
+  "js": "(function () {\n  // ── shared helpers (SVG, tweening) ─────────────────────────────────────────\r\n  var NS = \"http://www.w3.org/2000/svg\";\r\n  var svg = document.getElementById(\"scene\");\r\n  var labelEl = document.getElementById(\"step-label\");\r\n  var captionEl = document.getElementById(\"caption\");\r\n\r\n  function el(name, attrs, parent) {\r\n    var node = document.createElementNS(NS, name);\r\n    for (var key in attrs) node.setAttribute(key, attrs[key]);\r\n    if (parent) parent.appendChild(node);\r\n    return node;\r\n  }\r\n  function txt(parent, x, y, cls, str, anchor) {\r\n    var t = el(\"text\", { x: x, y: y, class: cls }, parent);\r\n    if (anchor) t.setAttribute(\"text-anchor\", anchor);\r\n    t.textContent = str;\r\n    return t;\r\n  }\r\n  function show(node, on) {\r\n    node.setAttribute(\"opacity\", on ? \"1\" : \"0\");\r\n  }\r\n  function place(node, x, y) {\r\n    node.style.transform = \"translate(\" + x + \"px,\" + y + \"px)\";\r\n  }\r\n  function setLine(node, x1, y1, x2, y2) {\r\n    node.setAttribute(\"x1\", x1);\r\n    node.setAttribute(\"y1\", y1);\r\n    node.setAttribute(\"x2\", x2);\r\n    node.setAttribute(\"y2\", y2);\r\n  }\r\n  function lerp(a, b, e) {\r\n    return a + (b - a) * e;\r\n  }\r\n  function round1(v) {\r\n    return (Math.round(v * 10) / 10).toFixed(1);\r\n  }\r\n\r\n  // Eased animation. fn(e) is called with e from 0 to 1. Without\r\n  // requestAnimationFrame (or with ms = 0) it jumps straight to fn(1).\r\n  var animTokens = {};\r\n  function anim(key, ms, fn) {\r\n    var token = (animTokens[key] || 0) + 1;\r\n    animTokens[key] = token;\r\n    if (typeof requestAnimationFrame !== \"function\" || ms <= 0) {\r\n      fn(1);\r\n      return;\r\n    }\r\n    var start = null;\r\n    function frame(now) {\r\n      if (animTokens[key] !== token) return;\r\n      if (start === null) start = now;\r\n      var p = Math.min(1, (now - start) / ms);\r\n      var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;\r\n      fn(e);\r\n      if (p < 1) requestAnimationFrame(frame);\r\n    }\r\n    requestAnimationFrame(frame);\r\n  }\r\n\r\n  // Arrowheads, one marker per colour.\r\n  var COLORS = { g: \"#1DB584\", y: \"#E2B44A\", p: \"#F472B6\", b: \"#38BDF8\", w: \"#c9dccf\", r: \"#F87171\" };\r\n  var defs = el(\"defs\", {}, svg);\r\n  Object.keys(COLORS).forEach(function (k) {\r\n    var m = el(\"marker\", { id: \"ah-\" + k, viewBox: \"0 0 10 10\", refX: 9, refY: 5, markerUnits: \"userSpaceOnUse\", markerWidth: 13, markerHeight: 13, orient: \"auto\" }, defs);\r\n    el(\"path\", { d: \"M0 0 L10 5 L0 10 Z\", fill: COLORS[k] }, m);\r\n  });\r\n  function arrow(parent, colorKey, width) {\r\n    return el(\"line\", { x1: 0, y1: 0, x2: 0, y2: 0, stroke: COLORS[colorKey], \"stroke-width\": width || 3, \"marker-end\": \"url(#ah-\" + colorKey + \")\", \"stroke-linecap\": \"round\" }, parent);\r\n  }\r\n  function polygon(parent, cls) {\r\n    return el(\"polygon\", { points: \"\", class: cls }, parent);\r\n  }\r\n  function setPoly(node, pts) {\r\n    node.setAttribute(\"points\", pts.map(function (p) { return p[0].toFixed(1) + \",\" + p[1].toFixed(1); }).join(\" \"));\r\n  }\r\n  function lerpPts(a, b, e) {\r\n    return a.map(function (p, i) { return [lerp(p[0], b[i][0], e), lerp(p[1], b[i][1], e)]; });\r\n  }\r\n  // Maps maths coordinates (x right, y up) to screen pixels.\r\n  function makePlane(cx, cy, s) {\r\n    return {\r\n      x: function (v) { return cx + s * v; },\r\n      y: function (v) { return cy - s * v; },\r\n      pt: function (p) { return [cx + s * p[0], cy - s * p[1]]; },\r\n      s: s, cx: cx, cy: cy\r\n    };\r\n  }\r\n  function axes(parent, plane, xr, yr) {\r\n    el(\"line\", { x1: plane.x(-xr), y1: plane.y(0), x2: plane.x(xr), y2: plane.y(0), class: \"axis\" }, parent);\r\n    el(\"line\", { x1: plane.x(0), y1: plane.y(-yr), x2: plane.x(0), y2: plane.y(yr), class: \"axis\" }, parent);\r\n  }\r\n\n  // ── Module 3 helpers: graphs, curves, contour plane ───────────────────────\n  // makeGraph maps maths values to pixels with separate x and y scales.\n  function makeGraph(ox, oy, sx, sy) {\n    return {\n      ox: ox, oy: oy, sx: sx, sy: sy,\n      x: function (v) { return ox + sx * v; },\n      y: function (v) { return oy - sy * v; }\n    };\n  }\n  function curveD(g, f, a, b, n) {\n    var d = \"\";\n    for (var i = 0; i <= n; i++) {\n      var v = a + ((b - a) * i) / n;\n      d += (i ? \" L \" : \"M \") + g.x(v).toFixed(1) + \" \" + g.y(f(v)).toFixed(1);\n    }\n    return d;\n  }\n  function setD(node, d) {\n    node.setAttribute(\"d\", d);\n  }\n  function fmt(v, n) {\n    return (Math.round(v * 100000) / 100000).toFixed(n === undefined ? 1 : n);\n  }\n  function drawAxes(parent, g, xmax, ymax, xticks, yticks) {\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(xmax), y2: g.y(0), class: \"axis\" }, parent);\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(0), y2: g.y(ymax), class: \"axis\" }, parent);\n    (xticks || []).forEach(function (t) { txt(parent, g.x(t), g.y(0) + 15, \"tick\", String(t), \"middle\"); });\n    (yticks || []).forEach(function (t) { txt(parent, g.x(0) - 7, g.y(t) + 4, \"tick\", String(t), \"end\"); });\n  }\n  function card(parent, x, y, w, h, cls) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: 10, class: cls || \"fillG\" }, parent);\n  }\n  function ring(parent, cx, cy, rx, ry, cls) {\n    return el(\"ellipse\", { cx: cx, cy: cy, rx: rx, ry: ry, fill: \"none\", class: cls || \"contour\" }, parent);\n  }\n  function clipTo(id, x, y, w, h) {\n    var c = el(\"clipPath\", { id: id }, defs);\n    el(\"rect\", { x: x, y: y, width: w, height: h }, c);\n  }\n\n  var EXPLAIN = {\"two-points\":{\"h\":\"WHAT YOU ARE LOOKING AT\",\"t\":\"Take the loss curve **L(w) = (w − 3)²**. Pick two points on it: **A at w = 1** and **B at w = 2**. We want to know **how steep** the curve is.\"},\"secant-slope\":{\"h\":\"THE SLOPE BETWEEN THEM\",\"t\":\"Draw a straight line through A and B. Its slope is **rise over run**: the loss falls by 3 while w moves right by 1, so the slope is **−3**.\"},\"points-move-closer\":{\"h\":\"SLIDE B CLOSER TO A\",\"t\":\"Keep A fixed and slide B toward it. The gap **h shrinks**, and the slope settles toward one number: **−3.5, −3.9, −3.99 …** It heads to **−4**.\"},\"tangent\":{\"h\":\"THE LINE THAT JUST TOUCHES THE CURVE\",\"t\":\"When B sits almost on top of A, the line only **touches the curve at that one point**. This is the **tangent line**, and its slope is the steepness of the curve right there.\"},\"derivative\":{\"h\":\"THAT SLOPE IS THE DERIVATIVE\",\"t\":\"The slope of the tangent is the **derivative** of the loss, written **dL/dw**. For this loss **dL/dw = 2(w − 3)**, which is **−4 at w = 1**.\"},\"positive-negative-zero\":{\"h\":\"NEGATIVE, ZERO, POSITIVE\",\"t\":\"At **w = 1** the slope is **−4** (the curve goes down as w grows). At **w = 3** it is **0** (flat bottom). At **w = 5** it is **+4** (the curve goes up).\"},\"ml-sensitivity\":{\"h\":\"TAKEAWAY\",\"t\":\"The derivative says **which way to move a weight and how strongly the loss reacts**. Slope −4: raise w to lower the loss. Nudge w by +0.1 and the loss drops by about **0.4**.\"}};\n  // ── scene ──\n  var steps = [\r\n    { id: \"two-points\", label: \"Two points on the curve\", caption: \"Take the loss curve L(w) = (w − 3)². Pick two points on it: A at w = 1 and B at w = 2. We want to know how steep the curve is.\" },\r\n    { id: \"secant-slope\", label: \"The slope between them\", caption: \"Draw a straight line through A and B. Its slope is rise over run: the loss falls by 3 while w moves right by 1, so the slope is −3.\" },\r\n    { id: \"points-move-closer\", label: \"Slide B closer to A\", caption: \"Keep A fixed and slide B toward it. The gap h shrinks, and the slope settles toward one number: −3.5, −3.9, −3.99 … it heads to −4.\" },\r\n    { id: \"tangent\", label: \"The line that just touches the curve\", caption: \"When B sits almost on top of A, the line only touches the curve at that one point. This is the tangent line, and its slope is the steepness of the curve right there.\" },\r\n    { id: \"derivative\", label: \"That slope is the derivative\", caption: \"The slope of the tangent is the derivative of the loss, written dL/dw. For this loss dL/dw = 2(w − 3), which is −4 at w = 1.\" },\r\n    { id: \"positive-negative-zero\", label: \"Negative, zero, positive\", caption: \"At w = 1 the slope is −4 (the curve goes down as w grows). At w = 3 it is 0 (flat bottom). At w = 5 it is +4 (the curve goes up).\" },\r\n    { id: \"ml-sensitivity\", label: \"What a model learns from it\", caption: \"The derivative says which way to move a weight and how strongly the loss reacts. Slope −4: raise w to lower the loss. Nudge w by +0.1 and the loss drops by about 0.4.\" }\r\n  ];\r\n\r\n  function L(w) { return (w - 3) * (w - 3); }\r\n  var g = makeGraph(50, 318, 58, 30);\r\n  drawAxes(svg, g, 6.3, 9.8, [0, 1, 2, 3, 4, 5, 6], [0, 3, 6, 9]);\r\n  txt(svg, g.x(6.3), g.y(0) + 28, \"note\", \"weight w\", \"end\");\r\n  txt(svg, g.x(0) + 8, g.y(9.8) - 2, \"note\", \"loss L(w)\", \"start\");\r\n  el(\"path\", { class: \"curve\", d: curveD(g, L, 0, 6, 60) }, svg);\r\n\r\n  var A = 1;\r\n  var run = el(\"line\", { class: \"dash\", stroke: \"#c9dccf\", \"stroke-width\": 2 }, svg);\r\n  var rise = el(\"line\", { class: \"dash\", stroke: \"#f472b6\", \"stroke-width\": 2 }, svg);\r\n  var runLbl = txt(svg, 0, 0, \"lbl\", \"\", \"middle\");\r\n  var riseLbl = txt(svg, 0, 0, \"lbl lbl-p\", \"\", \"start\");\r\n  var sec = el(\"line\", { stroke: \"#e2b44a\", \"stroke-width\": 3, \"stroke-linecap\": \"round\" }, svg);\r\n  var trio = el(\"g\", {}, svg);\r\n  var trioLines = [];\r\n  [[1, \"#f472b6\", \"−4: going down\"], [3, \"#1db584\", \"0: flat\"], [5, \"#e2b44a\", \"+4: going up\"]].forEach(function (t) {\r\n    var a = t[0];\r\n    var m = 2 * (a - 3);\r\n    var ln = el(\"line\", { stroke: t[1], \"stroke-width\": 3, \"stroke-linecap\": \"round\" }, trio);\r\n    setLine(ln, g.x(a - 0.9), g.y(L(a) - m * 0.9), g.x(a + 0.9), g.y(L(a) + m * 0.9));\r\n    el(\"circle\", { cx: g.x(a), cy: g.y(L(a)), r: 5, fill: t[1] }, trio);\r\n    var tx = txt(trio, g.x(a), g.y(L(a)) - 26, \"lbl\", t[2], \"middle\");\r\n    tx.setAttribute(\"fill\", t[1]);\r\n  });\r\n  var ptA = el(\"circle\", { cx: g.x(A), cy: g.y(L(A)), r: 7, fill: \"#e2b44a\", stroke: \"#071510\", \"stroke-width\": 2 }, svg);\r\n  var ptB = el(\"circle\", { r: 7, fill: \"#38bdf8\", stroke: \"#071510\", \"stroke-width\": 2 }, svg);\r\n  var lblA = txt(svg, g.x(A) - 10, g.y(L(A)) - 12, \"lbl lbl-y\", \"A\", \"end\");\r\n  var lblB = txt(svg, 0, 0, \"lbl lbl-b\", \"B\", \"start\");\r\n  var arrRaise = arrow(svg, \"g\", 4);\r\n  var raiseLbl = txt(svg, 0, 0, \"lbl lbl-g\", \"raise w\", \"middle\");\r\n\r\n  var panel = el(\"g\", {}, svg);\r\n  card(panel, 410, 40, 215, 120, \"fillG\");\r\n  var p1 = txt(panel, 517, 66, \"note\", \"\", \"middle\");\r\n  var p2 = txt(panel, 517, 94, \"mono\", \"\", \"middle\");\r\n  var p3 = txt(panel, 517, 122, \"big\", \"\", \"middle\");\r\n  var p4 = txt(panel, 517, 146, \"note\", \"\", \"middle\");\r\n\r\n  function draw(h, withTriangle) {\r\n    var bx = A + h;\r\n    var m = (L(bx) - L(A)) / h;\r\n    setLine(sec, g.x(0.3), g.y(L(A) + m * (0.3 - A)), g.x(2.2), g.y(L(A) + m * (2.2 - A)));\r\n    ptB.setAttribute(\"cx\", g.x(bx));\r\n    ptB.setAttribute(\"cy\", g.y(L(bx)));\r\n    lblB.setAttribute(\"x\", g.x(bx) + 12);\r\n    lblB.setAttribute(\"y\", g.y(L(bx)) - 10);\r\n    setLine(run, g.x(A), g.y(L(A)), g.x(bx), g.y(L(A)));\r\n    setLine(rise, g.x(bx), g.y(L(A)), g.x(bx), g.y(L(bx)));\r\n    runLbl.setAttribute(\"x\", g.x(A + h / 2));\r\n    runLbl.setAttribute(\"y\", g.y(L(A)) - 8);\r\n    riseLbl.setAttribute(\"x\", g.x(bx) + 8);\r\n    riseLbl.setAttribute(\"y\", g.y((L(A) + L(bx)) / 2) + 4);\r\n    return m;\r\n  }\r\n\r\n  function render(index, id) {\r\n    var tri = id === \"secant-slope\" || id === \"derivative\";\r\n    show(run, tri); show(rise, tri); show(runLbl, tri); show(riseLbl, tri);\r\n    show(sec, id !== \"two-points\" && id !== \"positive-negative-zero\");\r\n    show(ptA, id !== \"positive-negative-zero\");\r\n    show(ptB, id === \"two-points\" || id === \"secant-slope\" || id === \"points-move-closer\");\r\n    show(lblA, id === \"two-points\" || id === \"secant-slope\");\r\n    show(lblB, id === \"two-points\" || id === \"secant-slope\");\r\n    show(trio, id === \"positive-negative-zero\");\r\n    show(arrRaise, id === \"ml-sensitivity\");\r\n    show(raiseLbl, id === \"ml-sensitivity\");\r\n    show(panel, id !== \"two-points\" && id !== \"positive-negative-zero\");\r\n    p1.textContent = \"\"; p2.textContent = \"\"; p3.textContent = \"\"; p4.textContent = \"\";\r\n    sec.setAttribute(\"stroke\", id === \"tangent\" || id === \"derivative\" || id === \"ml-sensitivity\" ? \"#1db584\" : \"#e2b44a\");\r\n\r\n    if (id === \"two-points\") {\r\n      draw(1, false);\r\n    } else if (id === \"secant-slope\") {\r\n      draw(1, true);\r\n      runLbl.textContent = \"run = 1\";\r\n      riseLbl.textContent = \"rise = −3\";\r\n      p1.textContent = \"slope of the line A to B\";\r\n      p2.textContent = \"(1 − 4) / (2 − 1)\";\r\n      p3.textContent = \"= −3\";\r\n    } else if (id === \"points-move-closer\") {\r\n      p1.textContent = \"B slides toward A\";\r\n      anim(\"h\", 2200, function (e) {\r\n        var h = Math.max(0.001, 1 - 0.999 * e);\r\n        var m = draw(h, false);\r\n        p2.textContent = \"gap h = \" + fmt(h, h < 0.01 ? 3 : 2);\r\n        p3.textContent = \"slope \" + fmt(m, 3);\r\n        p4.textContent = \"heading toward −4\";\r\n      });\r\n    } else if (id === \"tangent\") {\r\n      var mt = draw(0.001, false);\r\n      p1.textContent = \"the tangent line\";\r\n      p2.textContent = \"touches at one point\";\r\n      p3.textContent = \"slope ≈ \" + fmt(mt, 2);\r\n    } else if (id === \"derivative\") {\r\n      draw(1, false);\r\n      setLine(sec, g.x(0.3), g.y(4 - 4 * (0.3 - 1)), g.x(2.2), g.y(4 - 4 * (2.2 - 1)));\r\n      setLine(run, g.x(1), g.y(4), g.x(2), g.y(4));\r\n      setLine(rise, g.x(2), g.y(4), g.x(2), g.y(0));\r\n      runLbl.setAttribute(\"x\", g.x(1.5)); runLbl.setAttribute(\"y\", g.y(4) - 8);\r\n      riseLbl.setAttribute(\"x\", g.x(2) + 8); riseLbl.setAttribute(\"y\", g.y(2) + 4);\r\n      runLbl.textContent = \"run = 1\";\r\n      riseLbl.textContent = \"rise = −4\";\r\n      show(ptB, false);\r\n      p1.textContent = \"derivative at w = 1\";\r\n      p2.textContent = \"dL/dw = 2(w − 3)\";\r\n      p3.textContent = \"= −4\";\r\n    } else if (id === \"positive-negative-zero\") {\r\n      p1.textContent = \"\";\r\n    } else {\r\n      draw(0.001, false);\r\n      setLine(sec, g.x(0.3), g.y(4 - 4 * (0.3 - 1)), g.x(2.2), g.y(4 - 4 * (2.2 - 1)));\r\n      setLine(arrRaise, g.x(1) + 14, g.y(4), g.x(2.3), g.y(4));\r\n      raiseLbl.setAttribute(\"x\", g.x(1.7)); raiseLbl.setAttribute(\"y\", g.y(4) - 10);\r\n      p1.textContent = \"slope −4 → raise w\";\r\n      p2.textContent = \"Δw = +0.1\";\r\n      p3.textContent = \"ΔL ≈ −0.4\";\r\n      p4.textContent = \"(−4 × 0.1)\";\r\n    }\r\n  }\r\n\n\n  // ── shared runtime: stepping, explanation panel, educational autoplay pacing, bridge ──\n  var current = 0;\n  var explainHeadEl = document.getElementById(\"explain-h\");\n\n  // **bold** markers in an explanation become <strong> nodes (built with DOM calls, never innerHTML).\n  function setRich(node, str) {\n    node.textContent = \"\";\n    var parts = String(str).split(\"**\");\n    for (var i = 0; i < parts.length; i++) {\n      if (parts[i] === \"\") continue;\n      var seg = document.createElement(i % 2 ? \"strong\" : \"span\");\n      seg.textContent = parts[i];\n      node.appendChild(seg);\n    }\n  }\n\n  function explanationFor(index) {\n    var ex = (typeof EXPLAIN === \"object\" && EXPLAIN) ? EXPLAIN[steps[index].id] : null;\n    return ex || { h: \"WHAT IS HAPPENING\", t: steps[index].caption };\n  }\n\n  // Autoplay pace: 4.5 to 10.5 seconds per step, longer for longer explanations, so a learner can read.\n  function stepMs(index) {\n    var words = String(explanationFor(index).t).replace(/\\*\\*/g, \"\").split(/\\s+/).length;\n    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));\n  }\n\n  function renderStep(index) {\n    var ex = explanationFor(index);\n    labelEl.textContent = steps[index].label;\n    if (explainHeadEl) explainHeadEl.textContent = ex.h;\n    setRich(captionEl, ex.t);\n    render(index, steps[index].id);\n  }\n\n  function goTo(index) {\n    if (index < 0 || index >= steps.length) return;\n    current = index;\n    renderStep(current);\n    if (window.ReagvisBridge) window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n\n  renderStep(current);\n\n  // Autoplay: exactly one timer, one step per tick, stops on the final step.\n  // PLAY on the final step restarts from the first step and plays again.\n  var timer = null;\n\n  function stopAuto() {\n    if (timer !== null) {\n      clearTimeout(timer);\n      timer = null;\n    }\n  }\n\n  function scheduleNext() {\n    timer = setTimeout(function () {\n      timer = null;\n      if (current >= steps.length - 1) return;\n      goTo(current + 1);\n      if (current < steps.length - 1) scheduleNext();\n    }, stepMs(current));\n  }\n\n  function startAuto() {\n    if (timer !== null) return;\n    if (current >= steps.length - 1) goTo(0);\n    scheduleNext();\n  }\n\n  window.addEventListener(\"pagehide\", stopAuto);\n\n  window.ReagvisAnimation = {\n    stepDuration: stepMs,\n    onCommand: function (type, stepId) {\n      if (type === \"PLAY\") startAuto();\n      else if (type === \"PAUSE\") stopAuto();\n      else if (type === \"NEXT\") { stopAuto(); goTo(current + 1); }\n      else if (type === \"PREVIOUS\") { stopAuto(); goTo(current - 1); }\n      else if (type === \"RESET\") { stopAuto(); goTo(0); }\n      else if (type === \"GOTO_STEP\") {\n        stopAuto();\n        for (var i = 0; i < steps.length; i++) {\n          if (steps[i].id === stepId) { goTo(i); break; }\n        }\n      }\n    },\n  };\n\n  if (window.ReagvisBridge) {\n    window.ReagvisBridge.ready();\n    window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n})();\n",
+  "lastFrozenContentHash": null,
+  "lastFrozenRevisionId": null,
+  "manifest": {
+    "bridgeVersion": {
+      "$numberInt": "1"
+    },
+    "capabilities": [
+      "play",
+      "pause",
+      "next",
+      "previous",
+      "reset",
+      "gotoStep"
+    ],
+    "heightPx": {
+      "$numberInt": "590"
+    },
+    "traceEvents": [
+      "two-points",
+      "secant-slope",
+      "points-move-closer",
+      "tangent",
+      "derivative",
+      "positive-negative-zero",
+      "ml-sensitivity"
+    ]
+  },
+  "packageId": "684273db-9915-4767-bdb6-61bef149f016",
+  "packageTrace": {
+    "steps": [
+      {
+        "animationEvent": "two-points",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Pick two points on the loss curve: A at w = 1 and B at w = 2.",
+          "python": "def loss(w):\n    return (w - 3) ** 2\n\nA = (1, loss(1))\nB = (2, loss(2))\nprint(A, B)   # (1, 4) (2, 1)"
+        },
+        "id": "two-points",
+        "label": "Two points on the curve"
+      },
+      {
+        "animationEvent": "secant-slope",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "slope = (change in loss) / (change in w)",
+          "python": "def loss(w):\n    return (w - 3) ** 2\n\nslope = (loss(2) - loss(1)) / (2 - 1)\nprint(slope)   # -3.0"
+        },
+        "id": "secant-slope",
+        "label": "The slope between them"
+      },
+      {
+        "animationEvent": "points-move-closer",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Make the gap h between the two points smaller and smaller, and recompute the slope each time.",
+          "python": "def loss(w):\n    return (w - 3) ** 2\n\nfor h in [1.0, 0.5, 0.1, 0.001]:\n    print(h, round((loss(1 + h) - loss(1)) / h, 3))\n# 1.0 -3.0 / 0.5 -3.5 / 0.1 -3.9 / 0.001 -3.999"
+        },
+        "id": "points-move-closer",
+        "label": "Slide B closer to A"
+      },
+      {
+        "animationEvent": "tangent",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "With a very small gap, the secant line becomes the tangent line.",
+          "python": "def loss(w):\n    return (w - 3) ** 2\n\nh = 0.0001   # a very small gap\nprint(round((loss(1 + h) - loss(1)) / h, 2))   # -4.0"
+        },
+        "id": "tangent",
+        "label": "The line that just touches the curve"
+      },
+      {
+        "animationEvent": "derivative",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "The derivative dL/dw is the slope the secants settle toward. For this loss it is 2 * (w - 3).",
+          "python": "def derivative(w):\n    return 2 * (w - 3)   # worked out by hand with the power rule\n\nprint(derivative(1))   # -4"
+        },
+        "id": "derivative",
+        "label": "That slope is the derivative"
+      },
+      {
+        "animationEvent": "positive-negative-zero",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Negative slope: the loss goes down as w grows. Zero: flat. Positive: the loss goes up.",
+          "python": "def derivative(w):\n    return 2 * (w - 3)\n\nfor w in [1, 3, 5]:\n    print(w, derivative(w))   # 1 -4 / 3 0 / 5 4"
+        },
+        "id": "positive-negative-zero",
+        "label": "Negative, zero, positive"
+      },
+      {
+        "animationEvent": "ml-sensitivity",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "The sign tells which way to move w. The size tells how strongly the loss reacts.",
+          "python": "def derivative(w):\n    return 2 * (w - 3)\n\nchange_in_w = 0.1\nprint(derivative(1) * change_in_w)   # -0.4: about how much the loss changes"
+        },
+        "id": "ml-sensitivity",
+        "label": "What a model learns from it"
+      }
+    ],
+    "version": {
+      "$numberInt": "1"
+    }
+  },
+  "revision": {
+    "$numberInt": "5"
+  },
+  "revisionId": "r2",
+  "sourceKind": "zip",
+  "status": "frozen",
+  "title": "ML Module 3 — Derivatives",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498501"
+    }
+  },
+  "updatedBy": {
+    "$oid": "000000000000000000000000"
+  }
+}

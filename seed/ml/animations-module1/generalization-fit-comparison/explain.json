@@ -1,0 +1,26 @@
+{
+ "dataset": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "**30 examples** follow a gentle curve with some noise. **Half (green) are used for training**, which is what the model learns from, and **half (amber) are held out for validation**: new data to check it on."
+ },
+ "underfit": {
+  "h": "UNDERFIT: TOO SIMPLE",
+  "t": "A **flat line ignores the curve**. It is wrong on the training points **and** on the validation points, because the model is too simple to capture the pattern."
+ },
+ "good-fit": {
+  "h": "GOOD FIT: CAPTURES THE TREND",
+  "t": "This curve follows the **main pattern** without chasing every dot. Its training and validation errors are **both small**, so it should work on new data too."
+ },
+ "overfit": {
+  "h": "OVERFIT: MEMORIZES THE NOISE",
+  "t": "This curve passes through **every training point**, so its training error is **zero**. But it wiggles between them and **misses the validation points**: it learned the noise, not the pattern."
+ },
+ "train-vs-validation": {
+  "h": "TRAINING VS VALIDATION ERROR",
+  "t": "Compare the two bars for each model. **Training error can keep falling while validation error gets worse.** A big gap between them is the warning sign of overfitting."
+ },
+ "generalize": {
+  "h": "TAKEAWAY",
+  "t": "The goal is **not the lowest training error**. The goal is **performance on unseen data**: that is what generalization means."
+ }
+}

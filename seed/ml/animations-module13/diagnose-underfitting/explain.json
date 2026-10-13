@@ -1,0 +1,38 @@
+{
+ "training-result": {
+  "h": "STEP 1: TRAINING SCORE",
+  "t": "We start with a tree allowed only **one question** (maximum depth 1). On the data it trained on, it scores **F1 0.48**, well under the 0.65 mark that the goal needs."
+ },
+ "validation-result": {
+  "h": "STEP 2: VALIDATION SCORE",
+  "t": "On unseen validation data the same tree scores **F1 0.46**. Now we have both numbers, and comparing them is what lets us diagnose the problem."
+ },
+ "both-poor": {
+  "h": "THE PATTERN: POOR ON BOTH",
+  "t": "**0.48 on training and 0.46 on validation**: low on both, and almost equal. A model that is weak even on the data it learned from has not captured the pattern. That is **underfitting**."
+ },
+ "inspect-model": {
+  "h": "LOOK AT THE DATA",
+  "t": "Each dot is a toy customer (red churns, green stays). A churner needs **both** many idle days and many tickets. Underfitting has several causes, so we inspect what this model can actually express."
+ },
+ "simple-boundary": {
+  "h": "ONE CUT IS NOT ENOUGH",
+  "t": "A depth-1 tree makes **one straight cut**. Everything right of the dashed line is flagged, so the **six circled stayers** are wrongly flagged. One question cannot express a two-signal pattern."
+ },
+ "weak-features": {
+  "h": "OTHER POSSIBLE CAUSES",
+  "t": "A model that is too simple is only one cause. **Weak or missing features**, training that stopped early, or a noisy label can also give low scores on both sets."
+ },
+ "possible-fixes": {
+  "h": "WHAT TO TRY",
+  "t": "Better features, a more flexible model, checking that training finished, or revisiting the framing. **Change one thing at a time** so you can tell what helped."
+ },
+ "retry": {
+  "h": "TRY A FIX AND RE-MEASURE",
+  "t": "Allowing **depth 2** adds a second cut and lifts the scores to **0.62 on training and 0.58 on validation**. That is better but still below 0.65, so the diagnosis is not finished."
+ },
+ "underfit-summary": {
+  "h": "TAKEAWAY",
+  "t": "**Poor on both training and validation** points to underfitting. Check the model, features and training, then re-measure on **validation data, never on the test set**."
+ }
+}

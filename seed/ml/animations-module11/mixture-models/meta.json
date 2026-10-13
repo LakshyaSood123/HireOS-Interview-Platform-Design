@@ -1,0 +1,60 @@
+{
+  "title": "Mixture models: several components, one density",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "multipeak-data",
+      "label": "Data with several peaks",
+      "pseudocode": "The data has three clumps.",
+      "python": "spend = [1.3, 1.8, 2.1, 2.4, 2.9, 3.9, 4.4, 4.8, 5.1, 5.4, 5.9, 6.2, 7.3, 7.9, 8.4, 8.9]\nprint([sum(1 for x in spend if lo <= x < hi) for lo, hi in [(0, 3.5), (3.5, 6.5), (6.5, 10)]], 'customers per clump')\n# prints: [5, 7, 4] customers per clump"
+    },
+    {
+      "id": "single-distribution-problem",
+      "label": "One bell curve is not enough",
+      "pseudocode": "A single Gaussian peaks in the middle.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\nspend = [1.3, 1.8, 2.1, 2.4, 2.9, 3.9, 4.4, 4.8, 5.1, 5.4, 5.9, 6.2, 7.3, 7.9, 8.4, 8.9]\nn = len(spend)\nm = sum(spend) / n\ns = math.sqrt(sum((x - m) ** 2 for x in spend) / n)\nprint(round(m, 2), round(s, 2), round(pdf(3.5, m, s), 4), round(pdf(2, m, s), 4))\n# prints: 4.92 2.34 0.1417 0.0784"
+    },
+    {
+      "id": "component-a",
+      "label": "Component A",
+      "pseudocode": "Component A: weight 0.30, mean 2, sigma 0.8.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\nprint(round(0.30 * pdf(2, 2, 0.8), 4))\n# prints: 0.1496"
+    },
+    {
+      "id": "component-b",
+      "label": "Component B",
+      "pseudocode": "Component B: weight 0.45, mean 5, sigma 1.0.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\nprint(round(0.45 * pdf(5, 5, 1.0), 4))\n# prints: 0.1795"
+    },
+    {
+      "id": "component-c",
+      "label": "Component C",
+      "pseudocode": "Component C: weight 0.25, mean 8, sigma 0.9.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\nprint(round(0.25 * pdf(8, 8, 0.9), 4))\n# prints: 0.1108"
+    },
+    {
+      "id": "mixing-weights",
+      "label": "The mixing weights",
+      "pseudocode": "The weights are positive and sum to 1.",
+      "python": "weights = [0.30, 0.45, 0.25]\nprint(round(sum(weights), 2))\n# prints: 1.0"
+    },
+    {
+      "id": "combine-components",
+      "label": "Add the components",
+      "pseudocode": "Sum the weighted components at one x.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\nmix = [(0.30, 2, 0.8), (0.45, 5, 1.0), (0.25, 8, 0.9)]      # (weight, mean, sigma)\nmixture = lambda x: sum(w * pdf(x, m, s) for w, m, s in mix)\nx = 3.5\nprint([round(w * pdf(x, m, s), 4) for w, m, s in mix])\n# prints: [0.0258, 0.0583, 0.0]"
+    },
+    {
+      "id": "overall-density",
+      "label": "The overall density",
+      "pseudocode": "The mixture density is the weighted sum.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\nmix = [(0.30, 2, 0.8), (0.45, 5, 1.0), (0.25, 8, 0.9)]      # (weight, mean, sigma)\nmixture = lambda x: sum(w * pdf(x, m, s) for w, m, s in mix)\nprint([round(mixture(x), 4) for x in (2, 3.5, 5)])\n# prints: [0.1516, 0.0841, 0.1801]"
+    },
+    {
+      "id": "mixture-idea",
+      "label": "The mixture idea",
+      "pseudocode": "Compare one curve with the mixture on the data.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\nspend = [1.3, 1.8, 2.1, 2.4, 2.9, 3.9, 4.4, 4.8, 5.1, 5.4, 5.9, 6.2, 7.3, 7.9, 8.4, 8.9]\nmix = [(0.30, 2, 0.8), (0.45, 5, 1.0), (0.25, 8, 0.9)]      # (weight, mean, sigma)\nmixture = lambda x: sum(w * pdf(x, m, s) for w, m, s in mix)\nn = len(spend)\nm = sum(spend) / n\ns = math.sqrt(sum((x - m) ** 2 for x in spend) / n)\nprint(round(sum(math.log(pdf(x, m, s)) for x in spend) / n, 3), round(sum(math.log(mixture(x)) for x in spend) / n, 3))\n# prints: -2.271 -2.101"
+    }
+  ]
+}

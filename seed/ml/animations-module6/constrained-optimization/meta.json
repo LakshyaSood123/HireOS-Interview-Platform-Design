@@ -1,0 +1,60 @@
+{
+  "title": "Constrained optimization",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "objective",
+      "label": "The objective we want to minimize",
+      "pseudocode": "The objective scores every (w1, w2).",
+      "python": "def loss(w1, w2):\n    return (w1 - 3) ** 2 + 2 * (w2 - 1) ** 2\n\nprint(loss(1, 1))   # 4"
+    },
+    {
+      "id": "unconstrained-minimum",
+      "label": "Best choice with no rules",
+      "pseudocode": "With no rules the minimum is at (3, 1).",
+      "python": "def loss(w1, w2):\n    return (w1 - 3) ** 2 + 2 * (w2 - 1) ** 2\n\nprint(loss(3, 1))   # 0"
+    },
+    {
+      "id": "add-constraint",
+      "label": "Add a constraint (a rule)",
+      "pseudocode": "Add the rule: w1 + w2 must be at most 2.",
+      "python": "def loss(w1, w2):\n    return (w1 - 3) ** 2 + 2 * (w2 - 1) ** 2\n\ndef feasible(w1, w2):\n    return w1 + w2 <= 2\n\nprint(feasible(3, 1))   # False : 3 + 1 = 4 > 2"
+    },
+    {
+      "id": "feasible-region",
+      "label": "The feasible region",
+      "pseudocode": "Feasible points satisfy the rule.",
+      "python": "def loss(w1, w2):\n    return (w1 - 3) ** 2 + 2 * (w2 - 1) ** 2\n\ndef feasible(w1, w2):\n    return w1 + w2 <= 2\n\nprint(feasible(1, 1), feasible(2, 0), feasible(1.5, 0.5))   # True True True"
+    },
+    {
+      "id": "infeasible-region",
+      "label": "The infeasible region",
+      "pseudocode": "Infeasible points break the rule.",
+      "python": "def loss(w1, w2):\n    return (w1 - 3) ** 2 + 2 * (w2 - 1) ** 2\n\ndef feasible(w1, w2):\n    return w1 + w2 <= 2\n\nprint(feasible(3, 1), feasible(3, 0))   # False False"
+    },
+    {
+      "id": "search-feasible",
+      "label": "Search among feasible points",
+      "pseudocode": "Compare feasible candidates by their loss.",
+      "python": "def loss(w1, w2):\n    return (w1 - 3) ** 2 + 2 * (w2 - 1) ** 2\n\ndef feasible(w1, w2):\n    return w1 + w2 <= 2\n\nfor p in [(1, 1), (2, 0), (1.5, 0.5)]:\n    print(p, feasible(*p), loss(*p))\n# (1, 1) True 4 / (2, 0) True 3 / (1.5, 0.5) True 2.75"
+    },
+    {
+      "id": "boundary",
+      "label": "Slide along the boundary",
+      "pseudocode": "Along the boundary w2 = 2 - w1 the loss falls then rises.",
+      "python": "def loss(w1, w2):\n    return (w1 - 3) ** 2 + 2 * (w2 - 1) ** 2\n\nfor w1 in [3, 2, 5 / 3, 1, 0]:\n    print(round(w1, 2), round(loss(w1, 2 - w1), 2))\n# 3 8.0 / 2 3.0 / 1.67 2.67 / 1 4.0 / 0 11.0"
+    },
+    {
+      "id": "best-feasible-point",
+      "label": "The best feasible point",
+      "pseudocode": "Search the feasible grid for the lowest loss.",
+      "python": "def loss(w1, w2):\n    return (w1 - 3) ** 2 + 2 * (w2 - 1) ** 2\n\ndef feasible(w1, w2):\n    return w1 + w2 <= 2\n\ngrid = [(i / 10, j / 10) for i in range(-30, 61) for j in range(-30, 61)]\nallowed = [p for p in grid if feasible(*p)]\nbest = min(allowed, key=lambda p: loss(*p))\nprint(best, round(loss(*best), 2))   # (1.7, 0.3) 2.67"
+    },
+    {
+      "id": "ml-connection",
+      "label": "Constraints in ML",
+      "pseudocode": "A budget on the total size of the weights is a constraint.",
+      "python": "def within_budget(w, budget=2.0):\n    return sum(w) <= budget\n\nprint(within_budget([1.0, 0.5]), within_budget([2.0, 1.5]))   # True False"
+    }
+  ]
+}

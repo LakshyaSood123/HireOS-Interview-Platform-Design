@@ -1,0 +1,34 @@
+{
+ "bowl": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Our objective **L(w) = (w − 3)²** is a bowl: one smooth valley. We call this shape **convex**. Let us see what that shape guarantees."
+ },
+ "two-points": {
+  "h": "PICK TWO POINTS ON THE CURVE",
+  "t": "Choose two points on the graph, at **w = 1 and w = 5**. Both have loss **4**."
+ },
+ "chord": {
+  "h": "DRAW THE CHORD",
+  "t": "The straight line joining them is the **chord**. Every point on the chord is a weighted mix of the two: height **λ·f(x) + (1 − λ)·f(y)**."
+ },
+ "function-below-chord": {
+  "h": "THE FUNCTION SITS BELOW THE CHORD",
+  "t": "Between the two points the curve is **below** the chord: at **w = 3** the curve has height 0 and the chord has height 4. This is convexity: **f(λx + (1 − λ)y) ≤ λ f(x) + (1 − λ) f(y)**."
+ },
+ "minimum": {
+  "h": "ONE VALLEY, ONE BOTTOM",
+  "t": "Because the curve never rises above its chords, it has **just one valley**. Its bottom, **w = 3**, is the minimum."
+ },
+ "local-global": {
+  "h": "LOCAL MINIMUM = GLOBAL MINIMUM",
+  "t": "For a convex function, any point with no better point nearby (a **local minimum**) is automatically the best point overall (the **global minimum**). Gradient descent from either side ends at the same place."
+ },
+ "nonconvex-contrast": {
+  "h": "A NON-CONVEX CONTRAST",
+  "t": "Now **f(w) = (w² − 1)² + 0.3w** has **two valleys**, and the curve rises **above** the chord from w = −1 to 1. Gradient descent from w = −2 ends in the left valley (−0.31); from w = 2, in the right (0.29). **Different answers; only one is best overall.**"
+ },
+ "ml-connection": {
+  "h": "TAKEAWAY",
+  "t": "Linear regression with squared loss has a **convex objective**, so gradient descent can reach the global minimum. Neural-network objectives generally are not convex. **Never assume every loss landscape is a bowl.**"
+ }
+}

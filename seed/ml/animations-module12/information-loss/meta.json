@@ -1,0 +1,66 @@
+{
+  "title": "Information loss",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "original-data",
+      "label": "Original data",
+      "pseudocode": "Start from the data.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nprint(len(X), 'customers x', len(X[0]), 'features')\n# prints: 6 customers x 2 features"
+    },
+    {
+      "id": "pc1-pc2",
+      "label": "PC1 and PC2",
+      "pseudocode": "Find both principal components.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\nv1 = (b / k, (lam1 - a) / k)\nv2 = (-v1[1], v1[0])\nprint('PC1:', tuple(round(v, 3) for v in v1), ' PC2:', tuple(round(v, 3) for v in v2))\n# prints: PC1: (0.754, 0.657)  PC2: (-0.657, 0.754)"
+    },
+    {
+      "id": "variance-bars",
+      "label": "Variance per component",
+      "pseudocode": "explained variance = eigenvalue / total",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\nv1 = (b / k, (lam1 - a) / k)\nv2 = (-v1[1], v1[0])\nprint([round(l, 2) for l in (lam1, lam2)], [round(l / (lam1 + lam2), 3) for l in (lam1, lam2)])\n# prints: [6.03, 0.17] [0.972, 0.028]"
+    },
+    {
+      "id": "keep-both",
+      "label": "Keep both",
+      "pseudocode": "k = d keeps everything.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\nv1 = (b / k, (lam1 - a) / k)\nv2 = (-v1[1], v1[0])\nz1 = [r[0] * v1[0] + r[1] * v1[1] for r in Xc]\nz2 = [r[0] * v2[0] + r[1] * v2[1] for r in Xc]\nprint('variance of the Z columns:', round(sum(z * z for z in z1) / (n - 1), 3), round(sum(z * z for z in z2) / (n - 1), 3), ' total:', round(lam1 + lam2, 3))\n# prints: variance of the Z columns: 6.027 0.173  total: 6.2"
+    },
+    {
+      "id": "drop-pc2",
+      "label": "Drop PC2",
+      "pseudocode": "Keep only the first column of Z.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\nv1 = (b / k, (lam1 - a) / k)\nv2 = (-v1[1], v1[0])\nz1 = [r[0] * v1[0] + r[1] * v1[1] for r in Xc]\nz2 = [r[0] * v2[0] + r[1] * v2[1] for r in Xc]\nprint('discarded PC2 coordinates:', [round(v, 2) for v in z2])\n# prints: discarded PC2 coordinates: [0.13, 0.23, -0.43, 0.43, -0.61, 0.24]"
+    },
+    {
+      "id": "projected-representation",
+      "label": "Projected representation",
+      "pseudocode": "Z has one column.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\nv1 = (b / k, (lam1 - a) / k)\nv2 = (-v1[1], v1[0])\nz1 = [r[0] * v1[0] + r[1] * v1[1] for r in Xc]\nz2 = [r[0] * v2[0] + r[1] * v2[1] for r in Xc]\nprint([round(v, 2) for v in z1])\n# prints: [-3.2, -1.79, -1.03, 1.03, 1.46, 3.53]"
+    },
+    {
+      "id": "reconstruct",
+      "label": "Reconstruct",
+      "pseudocode": "x_hat = mean + z * v1",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\nv1 = (b / k, (lam1 - a) / k)\nv2 = (-v1[1], v1[0])\nz1 = [r[0] * v1[0] + r[1] * v1[1] for r in Xc]\nz2 = [r[0] * v2[0] + r[1] * v2[1] for r in Xc]\nrec = [(mean[0] + z * v1[0], mean[1] + z * v1[1]) for z in z1]\nprint('customer 5:', X[4], '->', tuple(round(v, 2) for v in rec[4]))\n# prints: customer 5: (6, 4.0) -> (5.6, 4.46)"
+    },
+    {
+      "id": "reconstruction-error",
+      "label": "Reconstruction error",
+      "pseudocode": "error = sum of squared distances",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\nv1 = (b / k, (lam1 - a) / k)\nv2 = (-v1[1], v1[0])\nz1 = [r[0] * v1[0] + r[1] * v1[1] for r in Xc]\nz2 = [r[0] * v2[0] + r[1] * v2[1] for r in Xc]\nrec = [(mean[0] + z * v1[0], mean[1] + z * v1[1]) for z in z1]\nerr = sum((p[0] - q[0]) ** 2 + (p[1] - q[1]) ** 2 for p, q in zip(X, rec))\nprint(round(err, 4), round((n - 1) * lam2, 4))\n# prints: 0.8627 0.8627"
+    },
+    {
+      "id": "explained-variance",
+      "label": "Explained variance",
+      "pseudocode": "ratio = lambda1 / (lambda1 + lambda2)",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\nv1 = (b / k, (lam1 - a) / k)\nv2 = (-v1[1], v1[0])\nprint('kept:', round(lam1 / (lam1 + lam2), 4), ' lost:', round(lam2 / (lam1 + lam2), 4))\n# prints: kept: 0.9722  lost: 0.0278"
+    },
+    {
+      "id": "tradeoff-summary",
+      "label": "The trade-off",
+      "pseudocode": "Choose k by variance kept and by task performance.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\nv1 = (b / k, (lam1 - a) / k)\nv2 = (-v1[1], v1[0])\ntotal = lam1 + lam2\nfor kept, lam in ((1, lam1), (2, lam1 + lam2)):\n    print(kept, 'component(s): explained variance', round(lam / total, 3))\n# prints: 1 component(s): explained variance 0.972\n# prints: 2 component(s): explained variance 1.0"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+ "clean-kmeans": {
+  "h": "K-MEANS AT ITS BEST",
+  "t": "On compact, well-separated groups like our customers, K-Means works very well: **three clean clusters** with their centers."
+ },
+ "hard-assignment": {
+  "h": "HARD ASSIGNMENT",
+  "t": "K-Means is a **hard clustering** method: every point belongs to **exactly one** cluster. This customer is in cluster 1, completely."
+ },
+ "ambiguous-point": {
+  "h": "AN AMBIGUOUS POINT",
+  "t": "A new customer **Z = (5, 7)** lies between two groups. Its distance to the middle center is **1.80** and to the top-left center **1.84**: almost a tie."
+ },
+ "forced-choice": {
+  "h": "A FORCED CHOICE",
+  "t": "K-Means must pick one cluster, and a tiny move flips the choice. Z at (5, 7) goes to the middle cluster; at **(4.7, 7.1)** it goes to the top-left one. The hard label **hides how uncertain it is**."
+ },
+ "non-spherical-data": {
+  "h": "ELONGATED GROUPS",
+  "t": "Distance to centers favors **round, compact** clusters. Two long parallel strips are the natural groups, but K-Means with K = 2 **cuts across them** into a left half and a right half."
+ },
+ "unequal-density": {
+  "h": "UNEQUAL SIZES",
+  "t": "A large spread-out group beside a small tight one: K-Means gives the small group (and a third of the big one) to the same cluster, an **unintuitive split**."
+ },
+ "initialization-change": {
+  "h": "INITIALIZATION MATTERS",
+  "t": "With different starting centers on our customers, K-Means converges to a **worse solution (WCSS 29.48 instead of 4.18)**. The result depends on where you start."
+ },
+ "choose-k": {
+  "h": "YOU MUST CHOOSE K",
+  "t": "K is supplied in advance. **K = 2** merges two real groups, **K = 3** matches the data, and **K = 4** splits a group. The WCSS always falls as K grows, so it cannot choose K by itself."
+ },
+ "soft-membership-preview": {
+  "h": "TAKEAWAY",
+  "t": "Sometimes we want **membership degrees** instead of one label, for example 0.02, 0.52 and 0.46 for the ambiguous customer. That is **soft clustering**, covered next. This is an illustration only."
+ }
+}

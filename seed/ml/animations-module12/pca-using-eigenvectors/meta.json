@@ -1,0 +1,66 @@
+{
+  "title": "PCA with eigenvectors",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "covariance-matrix",
+      "label": "Covariance matrix",
+      "pseudocode": "Build S from the centered data.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\nprint([[round(v, 2) for v in row] for row in S])\n# prints: [[3.5, 2.9], [2.9, 2.7]]"
+    },
+    {
+      "id": "candidate-directions",
+      "label": "Candidate directions",
+      "pseudocode": "Compare v with S v.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\ne1 = (b / k, (lam1 - a) / k)\ndef Sv(v):\n    return (S[0][0] * v[0] + S[0][1] * v[1], S[1][0] * v[0] + S[1][1] * v[1])\nfor deg in (20, 75, 130):\n    w = Sv((math.cos(math.radians(deg)), math.sin(math.radians(deg))))\n    print(deg, 'degrees -> S v points at', round(math.degrees(math.atan2(w[1], w[0])), 1), 'degrees')\n# prints: 20 degrees -> S v points at 40.4 degrees\n# prints: 75 degrees -> S v points at 42.2 degrees\n# prints: 130 degrees -> S v points at 97.9 degrees"
+    },
+    {
+      "id": "eigenvector-one",
+      "label": "Eigenvector one",
+      "pseudocode": "Find v with S v parallel to v.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\ne1 = (b / k, (lam1 - a) / k)\ndef Sv(v):\n    return (S[0][0] * v[0] + S[0][1] * v[1], S[1][0] * v[0] + S[1][1] * v[1])\nprint('v1:', tuple(round(x, 3) for x in e1))\nprint('S v1:', tuple(round(x, 3) for x in Sv(e1)))\n# prints: v1: (0.754, 0.657)\n# prints: S v1: (4.544, 3.96)"
+    },
+    {
+      "id": "eigenvalue-one",
+      "label": "Eigenvalue one",
+      "pseudocode": "S v = lambda v",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\ne1 = (b / k, (lam1 - a) / k)\ndef Sv(v):\n    return (S[0][0] * v[0] + S[0][1] * v[1], S[1][0] * v[0] + S[1][1] * v[1])\nw = Sv(e1)\nprint('ratios:', round(w[0] / e1[0], 4), round(w[1] / e1[1], 4), ' lambda1:', round(lam1, 4))\n# prints: ratios: 6.0275 6.0275  lambda1: 6.0275"
+    },
+    {
+      "id": "eigenvector-two",
+      "label": "Eigenvector two",
+      "pseudocode": "The second eigenvector is perpendicular.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\ne1 = (b / k, (lam1 - a) / k)\ndef Sv(v):\n    return (S[0][0] * v[0] + S[0][1] * v[1], S[1][0] * v[0] + S[1][1] * v[1])\ne2 = (-e1[1], e1[0])\nprint('v2:', tuple(round(x, 3) for x in e2))\nprint('S v2:', tuple(round(x, 3) for x in Sv(e2)))\n# prints: v2: (-0.657, 0.754)\n# prints: S v2: (-0.113, 0.13)"
+    },
+    {
+      "id": "eigenvalue-two",
+      "label": "Eigenvalue two",
+      "pseudocode": "S v2 = lambda2 v2",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\ne1 = (b / k, (lam1 - a) / k)\ndef Sv(v):\n    return (S[0][0] * v[0] + S[0][1] * v[1], S[1][0] * v[0] + S[1][1] * v[1])\ne2 = (-e1[1], e1[0])\nw = Sv(e2)\nprint('ratios:', round(w[0] / e2[0], 4), round(w[1] / e2[1], 4), ' lambda2:', round(lam2, 4))\n# prints: ratios: 0.1725 0.1725  lambda2: 0.1725"
+    },
+    {
+      "id": "sort-eigenvalues",
+      "label": "Sort",
+      "pseudocode": "Order components by eigenvalue.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\ne1 = (b / k, (lam1 - a) / k)\ndef Sv(v):\n    return (S[0][0] * v[0] + S[0][1] * v[1], S[1][0] * v[0] + S[1][1] * v[1])\nprint(sorted([lam1, lam2], reverse=True))\n# prints: [6.02745623366089, 0.1725437663391105]"
+    },
+    {
+      "id": "pc1",
+      "label": "PC1",
+      "pseudocode": "PC1 = eigenvector of the largest eigenvalue.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\ne1 = (b / k, (lam1 - a) / k)\ndef Sv(v):\n    return (S[0][0] * v[0] + S[0][1] * v[1], S[1][0] * v[0] + S[1][1] * v[1])\nprint('PC1:', tuple(round(x, 3) for x in e1), ' share of variance:', round(lam1 / (lam1 + lam2), 3))\n# prints: PC1: (0.754, 0.657)  share of variance: 0.972"
+    },
+    {
+      "id": "pc2",
+      "label": "PC2",
+      "pseudocode": "PC2 = eigenvector of the next eigenvalue.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\ne1 = (b / k, (lam1 - a) / k)\ndef Sv(v):\n    return (S[0][0] * v[0] + S[0][1] * v[1], S[1][0] * v[0] + S[1][1] * v[1])\ne2 = (-e1[1], e1[0])\nprint('PC2:', tuple(round(x, 3) for x in e2), ' share of variance:', round(lam2 / (lam1 + lam2), 3))\n# prints: PC2: (-0.657, 0.754)  share of variance: 0.028"
+    },
+    {
+      "id": "eigen-interpretation",
+      "label": "Meaning",
+      "pseudocode": "eigenvector = direction, eigenvalue = variance there.",
+      "python": "import math\nX = [(2, 1.5), (3, 2.5), (4, 2.5), (5, 4.5), (6, 4.0), (7, 6.0)]\nn = len(X)\nmean = [sum(r[j] for r in X) / n for j in range(2)]\nXc = [[r[j] - mean[j] for j in range(2)] for r in X]\nS = [[sum(r[i] * r[j] for r in Xc) / (n - 1) for j in range(2)] for i in range(2)]\na, b, d = S[0][0], S[0][1], S[1][1]\nmid, rad = (a + d) / 2, math.sqrt(((a - d) / 2) ** 2 + b * b)\nlam1, lam2 = mid + rad, mid - rad\nk = math.hypot(b, lam1 - a)\ne1 = (b / k, (lam1 - a) / k)\ndef Sv(v):\n    return (S[0][0] * v[0] + S[0][1] * v[1], S[1][0] * v[0] + S[1][1] * v[1])\nw = Sv((-e1[0], -e1[1]))\nprint('lambda1 + lambda2 =', round(lam1 + lam2, 2), ' S(-v1) / (-v1) =', round(w[0] / -e1[0], 4))\n# prints: lambda1 + lambda2 = 6.2  S(-v1) / (-v1) = 6.0275"
+    }
+  ]
+}

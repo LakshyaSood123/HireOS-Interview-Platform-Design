@@ -1,0 +1,38 @@
+{
+ "matrix": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "The same evaluation set: **100 emails**, rows actual, columns predicted, spam positive. **TP = 16, FN = 4, FP = 8, TN = 72.**"
+ },
+ "actual-positive-row": {
+  "h": "THE ACTUAL-SPAM ROW",
+  "t": "Recall starts from the emails that **really are spam**. That is the actual-spam **row** of the matrix: 16 + 4 = **20** emails."
+ },
+ "select-tp": {
+  "h": "SPAM THAT WAS CAUGHT",
+  "t": "Of the 20 actual spam emails, **16 were caught**: the true positives."
+ },
+ "select-fn": {
+  "h": "SPAM THAT WAS MISSED",
+  "t": "The other **4** spam emails were missed: false negatives that **reached the inbox**."
+ },
+ "recall-question": {
+  "h": "THE RECALL QUESTION",
+  "t": "Recall asks: **of all the actual spam, how much did the model catch?**"
+ },
+ "numerator": {
+  "h": "THE NUMERATOR",
+  "t": "The numerator counts the spam the model caught: **TP = 16**."
+ },
+ "denominator": {
+  "h": "THE DENOMINATOR",
+  "t": "The denominator is **all actual positives**, the whole actual-spam row: **TP + FN = 20**. Compare precision, whose denominator is the predicted column."
+ },
+ "calculate": {
+  "h": "CALCULATE RECALL",
+  "t": "**Recall = TP / (TP + FN) = 16 / 20 = 0.80.** The model found four fifths of the spam."
+ },
+ "interpret": {
+  "h": "TAKEAWAY",
+  "t": "The filter **finds 80 percent of the spam** and lets 20 percent through. High recall means few positives are missed, which can matter greatly in screening. Recall **ignores false alarms**; that is what precision measures."
+ }
+}

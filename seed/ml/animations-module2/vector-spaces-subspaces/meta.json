@@ -1,0 +1,48 @@
+{
+  "title": "Vector spaces and subspaces",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "vector",
+      "label": "Draw one vector",
+      "pseudocode": "A vector is an arrow from the origin. It has a direction and a length.",
+      "python": "v = [2, 1]\nprint(v)"
+    },
+    {
+      "id": "scale-vector",
+      "label": "Scale the vector",
+      "pseudocode": "Multiply every entry by a number. A positive number stretches, a negative number flips the direction.",
+      "python": "v = [2, 1]\n\ndef scale(a, v):\n    return [a * x for x in v]\n\nprint(scale(2, v), scale(-1, v))  # [4, 2] [-2, -1]"
+    },
+    {
+      "id": "combine-vectors",
+      "label": "Combine two vectors",
+      "pseudocode": "Scale each vector, then add them entry by entry. This is a linear combination.",
+      "python": "v, w = [2, 1], [-1, 2]\n\ndef combine(a, v, b, w):\n    return [a * x + b * y for x, y in zip(v, w)]\n\nprint(combine(1.5, v, 1, w))  # [2.0, 3.5]"
+    },
+    {
+      "id": "span-line",
+      "label": "One vector spans a line",
+      "pseudocode": "Every scaled copy of v lies on the same line through the origin. That line is the span of v.",
+      "python": "v = [2, 1]\npoints = [[a * x for x in v] for a in (-2, -1, 0, 1, 2)]\nprint(points)  # all on one line"
+    },
+    {
+      "id": "span-plane",
+      "label": "Two vectors span the plane",
+      "pseudocode": "If v and w do not point along one line, their combinations reach every point in the plane.",
+      "python": "v, w = [2, 1], [-1, 2]\n\ndef reach(target):\n    # Solve a*v + b*w = target for 2D vectors.\n    det = v[0] * w[1] - v[1] * w[0]\n    a = (target[0] * w[1] - target[1] * w[0]) / det\n    b = (v[0] * target[1] - v[1] * target[0]) / det\n    return a, b\n\nprint(reach([3, 4]))  # (2.0, 1.0): 2v + 1w = [3, 4]"
+    },
+    {
+      "id": "subspace",
+      "label": "Recognise a subspace",
+      "pseudocode": "A subspace contains the origin, and adding or scaling its vectors never leaves it.",
+      "python": "v = [2, 1]\na = [3 * x for x in v]    # 3v\nb = [-1 * x for x in v]   # -v\ntotal = [p + q for p, q in zip(a, b)]\nprint(total)  # [4, 2] = 2v, still on the same line"
+    },
+    {
+      "id": "ml-connection",
+      "label": "Find the subspace the data lives near",
+      "pseudocode": "If data sits close to a line, one number per point (its position along the line) can describe it.",
+      "python": "points = [[2, 1.1], [4, 1.9], [-2, -1.0], [6, 3.2]]\nd = [2, 1]\nlength = (d[0] ** 2 + d[1] ** 2) ** 0.5\nposition = [(p[0] * d[0] + p[1] * d[1]) / length for p in points]\nprint([round(t, 2) for t in position])"
+    }
+  ]
+}

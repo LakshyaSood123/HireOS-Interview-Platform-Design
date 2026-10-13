@@ -1,0 +1,38 @@
+{
+ "training-high": {
+  "h": "STEP 1: TRAINING SCORE",
+  "t": "Now let the tree grow to **depth 8**. On the data it trained on it reaches **F1 0.97**, which looks excellent. But the training score alone cannot tell us whether it will work on new customers."
+ },
+ "validation-lower": {
+  "h": "STEP 2: VALIDATION SCORE",
+  "t": "The yellow line is validation. At depth 8 it falls to **0.59**, lower than the depth-4 tree's **0.676**. Extra flexibility stopped helping on new data."
+ },
+ "performance-gap": {
+  "h": "THE GAP",
+  "t": "The red bracket marks the gap: **0.97 − 0.59 = 0.38**. Strong on training but much weaker on validation is the signature of **overfitting**. It is evidence, not proof of one particular cause."
+ },
+ "complex-model": {
+  "h": "A POSSIBLE CAUSE: COMPLEXITY",
+  "t": "A depth-8 tree can **memorize which of the 700 training customers churned**, including accidental details that do not carry over. Too much flexibility for the data is the classic cause."
+ },
+ "leakage-check": {
+  "h": "ANOTHER POSSIBLE CAUSE: LEAKAGE",
+  "t": "A leaky feature also gives a **strong training score that collapses elsewhere**. So before blaming complexity, we also check the features and how validation has been used."
+ },
+ "regularization": {
+  "h": "REMEDY: LIMIT THE COMPLEXITY",
+  "t": "**Regularization** penalizes complexity, much as ridge regression penalizes large weights. For a tree, using a smaller depth does the same job."
+ },
+ "simpler-model": {
+  "h": "A SIMPLER MODEL",
+  "t": "At **depth 4** the scores are **0.76 on training and 0.676 on validation**, a gap of only **0.08**. The simpler model gives up some training score but does better on new data."
+ },
+ "new-validation": {
+  "h": "RE-MEASURE ON VALIDATION",
+  "t": "After any change we measure again on **validation data**. The test set is not used to decide, or it would stop being an honest final check."
+ },
+ "overfit-summary": {
+  "h": "TAKEAWAY",
+  "t": "**Strong on training but much weaker on validation** suggests overfitting. Form a hypothesis, change one thing, and measure on validation again."
+ }
+}

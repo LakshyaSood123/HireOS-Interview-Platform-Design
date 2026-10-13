@@ -1,0 +1,42 @@
+{
+ "objective": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Same objective **L = f(w1, w2) = (w1 − 3)² + 2(w2 − 1)²**, lowest at (3, 1). This time the constraints are **limits** rather than exact lines."
+ },
+ "inequality-constraint": {
+  "h": "AN INEQUALITY CONSTRAINT",
+  "t": "The budget is a limit, not an exact value: **g(w) = w1 + w2 − 2 ≤ 0**. The line is the edge, and the **green ticks point toward the allowed side**."
+ },
+ "feasible-region": {
+  "h": "THE FEASIBLE REGION IS AN AREA",
+  "t": "Everything with **g ≤ 0** is allowed: an area, not just a line. The solution may sit **on the edge or strictly inside**. Deciding that needs extra logic: the **KKT conditions**."
+ },
+ "inactive-constraint": {
+  "h": "CASE B: AN INACTIVE CONSTRAINT",
+  "t": "Raise the budget to 6 (**g = w1 + w2 − 6 ≤ 0**). The best unconstrained point (3, 1) is now **inside**: g = −2 < 0. The constraint is **inactive**; delete it and nothing changes. Its multiplier is **μ = 0**."
+ },
+ "active-constraint": {
+  "h": "CASE A: AN ACTIVE CONSTRAINT",
+  "t": "With budget 2 the unconstrained optimum is outside, so the answer is **pushed to the edge**: **(5/3, 1/3)**, where g = 0. The constraint is **active**: it is really holding the answer back."
+ },
+ "multiplier": {
+  "h": "THE MULTIPLIER IS NON-NEGATIVE",
+  "t": "At the active solution the objective wants to go outward (cyan), and the constraint pushes back inward with strength **μ** (pink). Here **μ = 8/3**. A limit can only push inward, so **μ can never be negative**."
+ },
+ "complementary-slackness": {
+  "h": "COMPLEMENTARY SLACKNESS",
+  "t": "Either the constraint is **inactive (g < 0) and its multiplier is zero**, or it is **active (g = 0) and its multiplier may be positive**. In both cases **μ × g = 0**."
+ },
+ "stationarity": {
+  "h": "STATIONARITY: THE PUSHES BALANCE",
+  "t": "At the solution the objective's gradient and the active constraint's pull cancel: **∇f + μ∇g = [−8/3, −8/3] + [8/3, 8/3] = [0, 0]**. No direction inside the region improves the loss."
+ },
+ "kkt-summary": {
+  "h": "THE FOUR KKT CONDITIONS",
+  "t": "**Primal feasibility:** g ≤ 0. **Dual feasibility:** μ ≥ 0. **Complementary slackness:** μ g = 0. **Stationarity:** ∇f + μ∇g = 0. Case A (μ = 8/3) and case B (μ = 0) satisfy all four."
+ },
+ "ml-connection": {
+  "h": "TAKEAWAY",
+  "t": "KKT conditions underlie **support vector machines** and many regularized models. For convex problems a point satisfying them is a **global minimum**; for non-convex problems they only point to **candidates**."
+ }
+}

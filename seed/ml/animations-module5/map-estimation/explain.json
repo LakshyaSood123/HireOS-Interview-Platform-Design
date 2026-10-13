@@ -1,0 +1,34 @@
+{
+ "likelihood": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Same coin, same data **H H T H H**. For each of nine candidate values of p, the likelihood **p⁴(1 − p)** says how well that p explains the flips."
+ },
+ "mle-peak": {
+  "h": "THE MLE: THE LIKELIHOOD'S PEAK",
+  "t": "The likelihood is highest at **0.8**, so the **maximum likelihood estimate is 0.8**. This uses **the data only**."
+ },
+ "prior": {
+  "h": "ADD THE PRIOR",
+  "t": "Before the data, we believed the coin was **probably close to fair**: the prior peaks at **0.5**. MAP estimation lets this belief count too."
+ },
+ "combine": {
+  "h": "COMBINE: LIKELIHOOD × PRIOR",
+  "t": "Multiply likelihood and prior **candidate by candidate**. A candidate scores high only if **the data like it and the prior does not object**."
+ },
+ "posterior": {
+  "h": "THE POSTERIOR",
+  "t": "After rescaling to add up to 1, the scores are the **posterior probabilities**. Dropping the rescaling would not change where the peak is, which is why **MAP can skip the normalizer**."
+ },
+ "map-peak": {
+  "h": "THE MAP: THE POSTERIOR'S PEAK",
+  "t": "The posterior is highest at **0.7**. The MAP estimate is **θ_MAP = argmax P(data | θ) × P(θ) = 0.7**."
+ },
+ "compare": {
+  "h": "MLE VS MAP ON THE SAME DATA",
+  "t": "**MLE = 0.8** and **MAP = 0.7**. With only 5 flips, the prior pulled the best estimate from 0.8 toward 0.5. With a flat prior, nothing would be pulled and the two would be equal."
+ },
+ "ml-connection": {
+  "h": "TAKEAWAY",
+  "t": "Many training methods maximize **data fit plus a preference about parameters**. MAP is the probabilistic version of that idea; we meet its relatives, such as regularization, later."
+ }
+}

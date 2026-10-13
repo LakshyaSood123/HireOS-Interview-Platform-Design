@@ -1,0 +1,38 @@
+{
+ "initialize": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "We start from a blank guess: **w = 0, b = 0** (a flat line along the bottom) with **learning rate η = 0.1**. Training will improve it step by step."
+ },
+ "predict": {
+  "h": "PREDICT",
+  "t": "Predict every house with the current line **ŷ = w·x + b**. With w = 0 and b = 0, every prediction is **0**."
+ },
+ "measure-error": {
+  "h": "MEASURE THE ERROR",
+  "t": "The residuals **ŷ − y** are −2.0, −2.8, −3.7, −4.1 and −5.2, so the **MSE is huge: 13.876**. The line is far below every house."
+ },
+ "compute-gradients": {
+  "h": "COMPUTE THE GRADIENTS",
+  "t": "The slopes of the MSE are **∂MSE/∂w = −15.78** and **∂MSE/∂b = −7.12**. Both are negative, so **raising w and b lowers the MSE**."
+ },
+ "update-w": {
+  "h": "UPDATE w",
+  "t": "**w ← w − η·∂MSE/∂w = 0 − 0.1 × (−15.78) = 1.578.** Stepping against the gradient tilts the line upward."
+ },
+ "update-b": {
+  "h": "UPDATE b",
+  "t": "**b ← b − η·∂MSE/∂b = 0 − 0.1 × (−7.12) = 0.712.** Both parameters are updated together, from the same residuals."
+ },
+ "new-line": {
+  "h": "THE NEW LINE",
+  "t": "After one round the line passes through the houses, and the **MSE has dropped from 13.876 to 0.1122**."
+ },
+ "repeat": {
+  "h": "REPEAT THE LOOP",
+  "t": "**Predict, measure, compute gradients, update**, again and again. The line settles quickly and the MSE falls by orders of magnitude."
+ },
+ "trained-line": {
+  "h": "TAKEAWAY",
+  "t": "After 500 rounds: **w = 1.54, b = 0.48, MSE 0.0166**. This is the least-squares line. **Training is just this loop, run many times.**"
+ }
+}

@@ -1,0 +1,120 @@
+body {
+  margin: 0;
+  padding: 16px;
+  box-sizing: border-box;
+  background: #0b1d16;
+  color: #e6f5ec;
+  font-family: system-ui, sans-serif;
+}
+.scene {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.step-label {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #a7ce65;
+}
+.dataset {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.dataset th,
+.dataset td {
+  padding: 6px 10px;
+  border: 1px solid rgba(29, 181, 132, 0.25);
+  text-align: right;
+  transition: background 0.35s ease, color 0.35s ease;
+}
+.dataset th {
+  color: #a7ce65;
+  font-weight: 700;
+}
+.dataset .feature-hl {
+  background: rgba(29, 181, 132, 0.18);
+  color: #7ee8bd;
+}
+.dataset .label-hl {
+  background: rgba(226, 180, 74, 0.2);
+  color: #e2b44a;
+}
+.split {
+  display: none;
+  gap: 10px;
+}
+.split.on {
+  display: flex;
+}
+.pane {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(29, 181, 132, 0.35);
+  font-size: 12px;
+}
+.y-pane {
+  border-color: rgba(226, 180, 74, 0.5);
+}
+.pane-title {
+  font-weight: 700;
+}
+.sample {
+  display: none;
+  gap: 10px;
+  align-items: center;
+  font-size: 13px;
+}
+.sample.on {
+  display: flex;
+}
+.sample span:first-child {
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(29, 181, 132, 0.15);
+}
+.arrow {
+  color: #a7ce65;
+}
+.caption {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #c9dccf;
+  min-height: 40px;
+}
+
+/* ── explanation panel (shared by every generated ML animation) ── */
+.explain {
+  box-sizing: border-box;
+  max-width: 640px;
+  margin-top: 4px;
+  padding: 14px 18px 16px;
+  min-height: 150px;
+  border-radius: 12px;
+  background: rgba(29, 181, 132, 0.10);
+  border: 1px solid rgba(29, 181, 132, 0.45);
+  border-left: 5px solid #1db584;
+}
+.explain-h {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #a7ce65;
+}
+.explain-t {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.55;
+  color: #f1faf4;
+}
+.explain-t strong {
+  font-weight: 800;
+  color: #ffd98a;
+}

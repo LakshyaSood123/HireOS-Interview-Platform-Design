@@ -1,0 +1,19 @@
+{
+  "heightPx": 560,
+  "capabilities": [
+    "play",
+    "pause",
+    "next",
+    "previous",
+    "reset",
+    "gotoStep"
+  ],
+  "traceEvents": [
+    "dataset",
+    "underfit",
+    "good-fit",
+    "overfit",
+    "train-vs-validation",
+    "generalize"
+  ]
+}

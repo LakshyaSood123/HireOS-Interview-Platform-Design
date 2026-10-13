@@ -1,0 +1,171 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322c4e9cccef168ed01"
+  },
+  "assets": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498511"
+    }
+  },
+  "createdBy": {
+    "$oid": "000000000000000000000000"
+  },
+  "css": "body {\r\n  margin: 0;\r\n  padding: 14px;\r\n  box-sizing: border-box;\r\n  background: #0b1d16;\r\n  color: #e6f5ec;\r\n  font-family: system-ui, sans-serif;\r\n}\r\n.scene {\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 8px;\r\n}\r\n.step-label {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  letter-spacing: 0.08em;\r\n  text-transform: uppercase;\r\n  color: #a7ce65;\r\n}\r\nsvg {\r\n  width: 100%;\r\n  height: auto;\r\n  max-width: 640px;\r\n  background: #071510;\r\n  border-radius: 10px;\r\n  border: 1px solid rgba(29, 181, 132, 0.35);\r\n}\r\nsvg g,\r\nsvg line,\r\nsvg polygon,\r\nsvg path,\r\nsvg ellipse,\r\nsvg circle,\r\nsvg rect,\r\nsvg text {\r\n  transition: opacity 0.4s ease, transform 0.6s ease;\r\n}\r\n.axis {\r\n  stroke: rgba(167, 206, 101, 0.3);\r\n  stroke-width: 1;\r\n}\r\n.tick {\r\n  font-size: 10px;\r\n  fill: #8fa89c;\r\n}\r\n.lbl,\r\n.big,\r\n.note,\r\n.mono {\r\n  paint-order: stroke;\r\n  stroke: #071510;\r\n  stroke-width: 3px;\r\n  stroke-linejoin: round;\r\n}\r\n.lbl {\r\n  font-size: 12px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.lbl-g { fill: #1db584; }\r\n.lbl-y { fill: #e2b44a; }\r\n.lbl-p { fill: #f472b6; }\r\n.lbl-b { fill: #38bdf8; }\r\n.lbl-r { fill: #f87171; }\r\n.big {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.note {\r\n  font-size: 11px;\r\n  fill: #c9dccf;\r\n}\r\n.mono {\r\n  font-family: ui-monospace, Consolas, monospace;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.caption {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  line-height: 1.5;\r\n  color: #c9dccf;\r\n  min-height: 40px;\r\n}\r\n.cell rect {\r\n  fill: rgba(255, 255, 255, 0.05);\r\n  stroke: rgba(255, 255, 255, 0.28);\r\n  stroke-width: 1.2;\r\n}\r\n.cell text {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.cell.hl-row rect { fill: rgba(226, 180, 74, 0.25); stroke: #e2b44a; }\r\n.cell.hl-col rect { fill: rgba(29, 181, 132, 0.25); stroke: #1db584; }\r\n.cell.hl-both rect { fill: rgba(244, 114, 182, 0.28); stroke: #f472b6; }\r\n.dim { opacity: 0.25; }\r\n.dash { stroke-dasharray: 5 4; }\r\n.fillA { fill: rgba(56, 189, 248, 0.16); stroke: #38bdf8; stroke-width: 2; }\r\n.fillB { fill: rgba(244, 114, 182, 0.18); stroke: #f472b6; stroke-width: 2; }\r\n.fillG { fill: rgba(29, 181, 132, 0.16); stroke: #1db584; stroke-width: 2; }\r\n.contour { stroke: rgba(56, 189, 248, 0.45); stroke-width: 1.5; }\n.curve { fill: none; stroke: #38bdf8; stroke-width: 3; }\n.curve-y { fill: none; stroke: #e2b44a; stroke-width: 3; }\n.curve-p { fill: none; stroke: #f472b6; stroke-width: 3; }\n.curve-g { fill: none; stroke: #1db584; stroke-width: 3; }\n.ghost { fill: none; stroke: rgba(201, 220, 207, 0.4); stroke-width: 2; }\n.lbl-w { fill: #e6f5ec; }\n.lbl-s { font-size: 11px; font-weight: 600; fill: #c9dccf; }\n\n/* ── explanation panel (shared by every generated ML animation) ── */\n.explain {\n  box-sizing: border-box;\n  max-width: 640px;\n  margin-top: 4px;\n  padding: 14px 18px 16px;\n  min-height: 150px;\n  border-radius: 12px;\n  background: rgba(29, 181, 132, 0.10);\n  border: 1px solid rgba(29, 181, 132, 0.45);\n  border-left: 5px solid #1db584;\n}\n.explain-h {\n  margin: 0 0 8px;\n  font-size: 13px;\n  font-weight: 800;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.explain-t {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.55;\n  color: #f1faf4;\n}\n.explain-t strong {\n  font-weight: 800;\n  color: #ffd98a;\n}\n\n",
+  "html": "<div class=\"scene\">\n  <p class=\"step-label\" id=\"step-label\"></p>\n  <svg id=\"scene\" viewBox=\"0 0 640 360\" role=\"img\" aria-label=\"Why gradients matter: the learning loop\"></svg>\n  <section class=\"explain\" aria-live=\"polite\">\n    <h3 class=\"explain-h\" id=\"explain-h\"></h3>\n    <p class=\"explain-t\" id=\"caption\"></p>\n  </section>\n</div>\n",
+  "js": "(function () {\n  // ── shared helpers (SVG, tweening) ─────────────────────────────────────────\r\n  var NS = \"http://www.w3.org/2000/svg\";\r\n  var svg = document.getElementById(\"scene\");\r\n  var labelEl = document.getElementById(\"step-label\");\r\n  var captionEl = document.getElementById(\"caption\");\r\n\r\n  function el(name, attrs, parent) {\r\n    var node = document.createElementNS(NS, name);\r\n    for (var key in attrs) node.setAttribute(key, attrs[key]);\r\n    if (parent) parent.appendChild(node);\r\n    return node;\r\n  }\r\n  function txt(parent, x, y, cls, str, anchor) {\r\n    var t = el(\"text\", { x: x, y: y, class: cls }, parent);\r\n    if (anchor) t.setAttribute(\"text-anchor\", anchor);\r\n    t.textContent = str;\r\n    return t;\r\n  }\r\n  function show(node, on) {\r\n    node.setAttribute(\"opacity\", on ? \"1\" : \"0\");\r\n  }\r\n  function place(node, x, y) {\r\n    node.style.transform = \"translate(\" + x + \"px,\" + y + \"px)\";\r\n  }\r\n  function setLine(node, x1, y1, x2, y2) {\r\n    node.setAttribute(\"x1\", x1);\r\n    node.setAttribute(\"y1\", y1);\r\n    node.setAttribute(\"x2\", x2);\r\n    node.setAttribute(\"y2\", y2);\r\n  }\r\n  function lerp(a, b, e) {\r\n    return a + (b - a) * e;\r\n  }\r\n  function round1(v) {\r\n    return (Math.round(v * 10) / 10).toFixed(1);\r\n  }\r\n\r\n  // Eased animation. fn(e) is called with e from 0 to 1. Without\r\n  // requestAnimationFrame (or with ms = 0) it jumps straight to fn(1).\r\n  var animTokens = {};\r\n  function anim(key, ms, fn) {\r\n    var token = (animTokens[key] || 0) + 1;\r\n    animTokens[key] = token;\r\n    if (typeof requestAnimationFrame !== \"function\" || ms <= 0) {\r\n      fn(1);\r\n      return;\r\n    }\r\n    var start = null;\r\n    function frame(now) {\r\n      if (animTokens[key] !== token) return;\r\n      if (start === null) start = now;\r\n      var p = Math.min(1, (now - start) / ms);\r\n      var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;\r\n      fn(e);\r\n      if (p < 1) requestAnimationFrame(frame);\r\n    }\r\n    requestAnimationFrame(frame);\r\n  }\r\n\r\n  // Arrowheads, one marker per colour.\r\n  var COLORS = { g: \"#1DB584\", y: \"#E2B44A\", p: \"#F472B6\", b: \"#38BDF8\", w: \"#c9dccf\", r: \"#F87171\" };\r\n  var defs = el(\"defs\", {}, svg);\r\n  Object.keys(COLORS).forEach(function (k) {\r\n    var m = el(\"marker\", { id: \"ah-\" + k, viewBox: \"0 0 10 10\", refX: 9, refY: 5, markerUnits: \"userSpaceOnUse\", markerWidth: 13, markerHeight: 13, orient: \"auto\" }, defs);\r\n    el(\"path\", { d: \"M0 0 L10 5 L0 10 Z\", fill: COLORS[k] }, m);\r\n  });\r\n  function arrow(parent, colorKey, width) {\r\n    return el(\"line\", { x1: 0, y1: 0, x2: 0, y2: 0, stroke: COLORS[colorKey], \"stroke-width\": width || 3, \"marker-end\": \"url(#ah-\" + colorKey + \")\", \"stroke-linecap\": \"round\" }, parent);\r\n  }\r\n  function polygon(parent, cls) {\r\n    return el(\"polygon\", { points: \"\", class: cls }, parent);\r\n  }\r\n  function setPoly(node, pts) {\r\n    node.setAttribute(\"points\", pts.map(function (p) { return p[0].toFixed(1) + \",\" + p[1].toFixed(1); }).join(\" \"));\r\n  }\r\n  function lerpPts(a, b, e) {\r\n    return a.map(function (p, i) { return [lerp(p[0], b[i][0], e), lerp(p[1], b[i][1], e)]; });\r\n  }\r\n  // Maps maths coordinates (x right, y up) to screen pixels.\r\n  function makePlane(cx, cy, s) {\r\n    return {\r\n      x: function (v) { return cx + s * v; },\r\n      y: function (v) { return cy - s * v; },\r\n      pt: function (p) { return [cx + s * p[0], cy - s * p[1]]; },\r\n      s: s, cx: cx, cy: cy\r\n    };\r\n  }\r\n  function axes(parent, plane, xr, yr) {\r\n    el(\"line\", { x1: plane.x(-xr), y1: plane.y(0), x2: plane.x(xr), y2: plane.y(0), class: \"axis\" }, parent);\r\n    el(\"line\", { x1: plane.x(0), y1: plane.y(-yr), x2: plane.x(0), y2: plane.y(yr), class: \"axis\" }, parent);\r\n  }\r\n\n  // ── Module 3 helpers: graphs, curves, contour plane ───────────────────────\n  // makeGraph maps maths values to pixels with separate x and y scales.\n  function makeGraph(ox, oy, sx, sy) {\n    return {\n      ox: ox, oy: oy, sx: sx, sy: sy,\n      x: function (v) { return ox + sx * v; },\n      y: function (v) { return oy - sy * v; }\n    };\n  }\n  function curveD(g, f, a, b, n) {\n    var d = \"\";\n    for (var i = 0; i <= n; i++) {\n      var v = a + ((b - a) * i) / n;\n      d += (i ? \" L \" : \"M \") + g.x(v).toFixed(1) + \" \" + g.y(f(v)).toFixed(1);\n    }\n    return d;\n  }\n  function setD(node, d) {\n    node.setAttribute(\"d\", d);\n  }\n  function fmt(v, n) {\n    return (Math.round(v * 100000) / 100000).toFixed(n === undefined ? 1 : n);\n  }\n  function drawAxes(parent, g, xmax, ymax, xticks, yticks) {\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(xmax), y2: g.y(0), class: \"axis\" }, parent);\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(0), y2: g.y(ymax), class: \"axis\" }, parent);\n    (xticks || []).forEach(function (t) { txt(parent, g.x(t), g.y(0) + 15, \"tick\", String(t), \"middle\"); });\n    (yticks || []).forEach(function (t) { txt(parent, g.x(0) - 7, g.y(t) + 4, \"tick\", String(t), \"end\"); });\n  }\n  function card(parent, x, y, w, h, cls) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: 10, class: cls || \"fillG\" }, parent);\n  }\n  function ring(parent, cx, cy, rx, ry, cls) {\n    return el(\"ellipse\", { cx: cx, cy: cy, rx: rx, ry: ry, fill: \"none\", class: cls || \"contour\" }, parent);\n  }\n  function clipTo(id, x, y, w, h) {\n    var c = el(\"clipPath\", { id: id }, defs);\n    el(\"rect\", { x: x, y: y, width: w, height: h }, c);\n  }\n\n  var EXPLAIN = {\"model-parameters\":{\"h\":\"WHAT YOU ARE LOOKING AT\",\"t\":\"The model is **prediction = w × x**. The input is **x = 2** and the true answer is **y = 6**, so the best weight is 3. We start at **w = 0**.\"},\"make-prediction\":{\"h\":\"MAKE A PREDICTION\",\"t\":\"With w = 0 the model predicts **0 × 2 = 0**. The true answer is 6, so the prediction is **far off**.\"},\"compute-loss\":{\"h\":\"MEASURE THE MISS WITH THE LOSS\",\"t\":\"**Loss = (prediction − y)² = (0 − 6)² = 36.** The graph shows the loss for every possible weight. We are standing **high on the left** of the bowl.\"},\"parameter-change\":{\"h\":\"CHANGE THE WEIGHT, WATCH THE LOSS\",\"t\":\"Nudge w and the prediction changes, and so does the loss. **The loss is a function of the weight**, and we want the weight with the smallest loss.\"},\"gradient\":{\"h\":\"THE GRADIENT SAYS HOW THE LOSS REACTS\",\"t\":\"The slope of the loss with respect to w is **2 × (prediction − y) × x = 2 × (−6) × 2 = −24.** Negative: raising w lowers the loss. Large: the ground is steep here.\"},\"downhill-direction\":{\"h\":\"GO AGAINST THE SLOPE'S SIGN\",\"t\":\"A **negative gradient** means downhill is to the right, so **w should go up**. The rule: **step against the gradient**.\"},\"update\":{\"h\":\"UPDATE THE WEIGHT\",\"t\":\"**w ← w − η × gradient**, with learning rate η = 0.05: new w = 0 − 0.05 × (−24) = **1.2**. The prediction is now 2.4 and the loss has fallen from **36 to 12.96**.\"},\"repeat\":{\"h\":\"REPEAT WITH THE NEW GRADIENT\",\"t\":\"Recompute the gradient at the new weight (**−14.4**) and step again: **w goes 1.2 → 1.92 → 2.35 …** The gradients shrink as the ground flattens, so the steps shrink too.\"},\"learning-connection\":{\"h\":\"TAKEAWAY\",\"t\":\"**Predict, measure the loss, compute the gradient, update the weights, and repeat.** Training a large model is this same loop with millions of weights.\"}};\n  // ── scene ──\n  var steps = [\r\n    { id: \"model-parameters\", label: \"A tiny model with one weight\", caption: \"The model is prediction = w × x. The input is x = 2, and the true answer is y = 6, so the best weight is 3. We start at w = 0.\" },\r\n    { id: \"make-prediction\", label: \"Make a prediction\", caption: \"With w = 0 the model predicts 0 × 2 = 0. The true answer is 6, so the prediction is far off.\" },\r\n    { id: \"compute-loss\", label: \"Measure the miss with the loss\", caption: \"Loss = (prediction − y)² = (0 − 6)² = 36. The graph shows the loss for every possible weight. We are standing high on the left of the bowl.\" },\r\n    { id: \"parameter-change\", label: \"Change the weight, watch the loss\", caption: \"Nudge w and the prediction changes, and so does the loss. The loss is a function of the weight. We want to find the weight with the smallest loss.\" },\r\n    { id: \"gradient\", label: \"The gradient says how the loss reacts\", caption: \"The slope of the loss with respect to w is 2 × (prediction − y) × x = 2 × (−6) × 2 = −24. Negative: raising w lowers the loss. Large: the ground is steep here.\" },\r\n    { id: \"downhill-direction\", label: \"Go the opposite way of the slope's sign\", caption: \"A negative gradient means downhill is to the right. So w should go up. Rule: step against the gradient.\" },\r\n    { id: \"update\", label: \"Update the weight\", caption: \"w ← w − η × gradient, with learning rate η = 0.05. New w = 0 − 0.05 × (−24) = 1.2. The prediction is now 2.4 and the loss has fallen from 36 to 12.96.\" },\r\n    { id: \"repeat\", label: \"Repeat with the new gradient\", caption: \"Recompute the gradient at the new weight (−14.4) and step again. w goes 1.2 → 1.92 → 2.35 … The gradients shrink as the ground flattens, so the steps shrink too.\" },\r\n    { id: \"learning-connection\", label: \"This loop is how models learn\", caption: \"Predict, measure the loss, compute the gradient, update the weights, and repeat. Training a large model is this same loop with millions of weights.\" }\r\n  ];\r\n\r\n  var X = 2, Y = 6, ETA = 0.05;\r\n  function L(w) { return (w * X - Y) * (w * X - Y); }\r\n  function grad(w) { return 2 * (w * X - Y) * X; }\r\n  var ws = [0];\r\n  for (var s = 0; s < 6; s++) ws.push(ws[ws.length - 1] - ETA * grad(ws[ws.length - 1]));\r\n\r\n  // Pipeline across the top.\r\n  var pipe = el(\"g\", {}, svg);\r\n  card(pipe, 14, 14, 100, 70, \"fillA\");\r\n  txt(pipe, 64, 36, \"note\", \"input x\", \"middle\");\r\n  txt(pipe, 64, 68, \"big\", \"2\", \"middle\");\r\n  txt(pipe, 136, 56, \"big\", \"×\", \"middle\");\r\n  var wBox = card(pipe, 158, 14, 110, 70, \"fillG\");\r\n  txt(pipe, 213, 36, \"note\", \"weight w\", \"middle\");\r\n  var wTxt = txt(pipe, 213, 68, \"big\", \"0.0\", \"middle\");\r\n  var a1 = arrow(pipe, \"w\", 3); setLine(a1, 270, 49, 306, 49);\r\n  card(pipe, 308, 14, 130, 70, \"fillB\");\r\n  txt(pipe, 373, 36, \"note\", \"prediction = w × x\", \"middle\");\r\n  var predTxt = txt(pipe, 373, 68, \"big\", \"?\", \"middle\");\r\n  var a2 = arrow(pipe, \"w\", 3); setLine(a2, 440, 49, 476, 49);\r\n  card(pipe, 478, 14, 148, 70, \"fillA\");\r\n  txt(pipe, 552, 36, \"note\", \"loss = (prediction − 6)²\", \"middle\");\r\n  var lossTxt = txt(pipe, 552, 68, \"big\", \"?\", \"middle\");\r\n  var target = txt(pipe, 552, 100, \"lbl lbl-y\", \"true answer y = 6\", \"middle\");\r\n\r\n  var goal = el(\"g\", {}, svg);\r\n  card(goal, 60, 170, 520, 120, \"fillG\");\r\n  txt(goal, 320, 204, \"lbl\", \"The goal of training\", \"middle\");\r\n  txt(goal, 320, 232, \"note\", \"find the weight w that makes the loss as small as possible.\", \"middle\");\r\n  txt(goal, 320, 258, \"note\", \"Here we can see the answer is w = 3, but a real model has to FIND it.\", \"middle\");\r\n\r\n  // Loss graph (bottom left).\r\n  var g = makeGraph(52, 336, 75, 5.2);\r\n  var gr = el(\"g\", {}, svg);\r\n  drawAxes(gr, g, 4.2, 38, [0, 1, 2, 3, 4], [0, 12, 24, 36]);\r\n  txt(gr, g.x(4.2) + 8, g.y(0) + 4, \"note\", \"weight w\", \"start\");\r\n  txt(gr, g.x(0) + 8, g.y(38) + 4, \"note\", \"loss\", \"start\");\r\n  el(\"path\", { class: \"curve\", d: curveD(g, L, 0, 4, 60) }, gr);\r\n  var tan = el(\"line\", { stroke: \"#1db584\", \"stroke-width\": 3, \"stroke-linecap\": \"round\" }, svg);\r\n  setLine(tan, g.x(-0.1), g.y(36 + 24 * 0.1), g.x(0.7), g.y(36 - 24 * 0.7));\r\n  var tanLbl = txt(svg, g.x(0.75), g.y(36 - 24 * 0.7) + 2, \"lbl lbl-g\", \"slope −24\", \"start\");\r\n  var dirArrow = arrow(svg, \"g\", 5);\r\n  setLine(dirArrow, g.x(0) + 14, g.y(36) - 22, g.x(1.1), g.y(36) - 22);\r\n  var dirLbl = txt(svg, g.x(0.6), g.y(36) - 32, \"lbl lbl-g\", \"w should go UP\", \"middle\");\r\n  var trail = el(\"g\", {}, svg);\r\n  var trailDots = ws.map(function (w, i) { return el(\"circle\", { cx: g.x(w), cy: g.y(L(w)), r: 4.5, fill: \"#38bdf8\", stroke: \"#071510\", \"stroke-width\": 1.5 }, trail); });\r\n  var trailLine = el(\"polyline\", { fill: \"none\", stroke: \"#38bdf8\", \"stroke-width\": 2, \"stroke-dasharray\": \"4 3\" }, trail);\r\n  trailLine.setAttribute(\"points\", ws.map(function (w) { return g.x(w) + \",\" + g.y(L(w)); }).join(\" \"));\r\n  var marker = el(\"circle\", { r: 8, fill: \"#e2b44a\", stroke: \"#071510\", \"stroke-width\": 2 }, svg);\r\n\r\n  // Readout panel (bottom right).\r\n  var panel = el(\"g\", {}, svg);\r\n  card(panel, 372, 120, 254, 120, \"fillG\");\r\n  var p1 = txt(panel, 499, 146, \"note\", \"\", \"middle\");\r\n  var p2 = txt(panel, 499, 174, \"mono\", \"\", \"middle\");\r\n  var p3 = txt(panel, 499, 200, \"mono\", \"\", \"middle\");\r\n  var p4 = txt(panel, 499, 228, \"big\", \"\", \"middle\");\r\n\r\n  // Learning loop diagram (final step).\r\n  var loop = el(\"g\", {}, svg);\r\n  [\"1  predict\", \"2  measure the loss\", \"3  compute the gradient\", \"4  update the weights\"].forEach(function (name, i) {\r\n    var y = 122 + i * 52;\r\n    card(loop, 392, y, 190, 36, i === 3 ? \"fillB\" : \"fillG\");\r\n    txt(loop, 487, y + 23, \"lbl\", name, \"middle\");\r\n    if (i < 3) { var a = arrow(loop, \"w\", 3); setLine(a, 487, y + 38, 487, y + 50); }\r\n  });\r\n  var back = el(\"path\", { d: \"M 584 296 L 606 296 L 606 140 L 586 140\", fill: \"none\", stroke: \"#c9dccf\", \"stroke-width\": 3, \"marker-end\": \"url(#ah-w)\" }, loop);\r\n  txt(loop, 624, 220, \"note\", \"repeat\", \"middle\").setAttribute(\"transform\", \"rotate(90 624 220)\");\r\n\r\n  function setW(w, loss) {\r\n    marker.setAttribute(\"cx\", g.x(w)); marker.setAttribute(\"cy\", g.y(L(w)));\r\n    wTxt.textContent = fmt(w, w === Math.round(w) ? 1 : 2);\r\n    predTxt.textContent = fmt(w * X, 2).replace(/\\.?0+$/, \"\") || \"0\";\r\n    lossTxt.textContent = fmt(L(w), 2).replace(/\\.?0+$/, \"\") || \"0\";\r\n  }\r\n\r\n  function render(index, id) {\r\n    var i = index;\r\n    show(target, i >= 1);\r\n    show(goal, i <= 1);\r\n    show(gr, i >= 2 && i !== 8 || i === 8);\r\n    show(marker, i >= 2);\r\n    show(tan, i === 4); show(tanLbl, i === 4);\r\n    show(dirArrow, i === 5); show(dirLbl, i === 5);\r\n    show(trail, i >= 7);\r\n    show(panel, i >= 3 && i <= 7);\r\n    show(loop, i === 8);\r\n    p1.textContent = \"\"; p2.textContent = \"\"; p3.textContent = \"\"; p4.textContent = \"\";\r\n    if (i <= 1) { predTxt.textContent = i === 0 ? \"?\" : \"0\"; lossTxt.textContent = \"?\"; wTxt.textContent = \"0.0\"; }\r\n    if (i >= 2) setW(0);\r\n\r\n    if (i === 3) {\r\n      p1.textContent = \"loss depends on the weight\";\r\n      anim(\"w\", 2400, function (e) { var w = 0.9 * Math.sin(Math.PI * e); setW(w); p3.textContent = \"w = \" + fmt(w, 2) + \"   loss = \" + fmt(L(w), 1); });\r\n    } else if (i === 4) {\r\n      p1.textContent = \"gradient at w = 0\";\r\n      p2.textContent = \"2 × (0 − 6) × 2\";\r\n      p4.textContent = \"= −24\";\r\n      p3.textContent = \"negative: raise w\";\r\n    } else if (i === 5) {\r\n      p1.textContent = \"gradient = −24\";\r\n      p2.textContent = \"against it = +24\";\r\n      p3.textContent = \"so w moves UP\";\r\n    } else if (i === 6) {\r\n      p1.textContent = \"w ← w − η × gradient\";\r\n      p2.textContent = \"= 0 − 0.05 × (−24)\";\r\n      p4.textContent = \"w = 1.2, loss 12.96\";\r\n      anim(\"w\", 1400, function (e) { setW(lerp(0, ws[1], e)); });\r\n    } else if (i === 7) {\r\n      p1.textContent = \"w:    0 → 1.2 → 1.92 → 2.35\";\r\n      p2.textContent = \"loss: 36 → 12.96 → 4.67 → 1.68\";\r\n      p3.textContent = \"gradient: −24, −14.4, −8.6 …\";\r\n      p4.textContent = \"w heads to 3\";\r\n      anim(\"w\", 3200, function (e) {\r\n        var t = e * (ws.length - 1), j = Math.min(ws.length - 2, Math.floor(t)), f = t - j;\r\n        setW(lerp(ws[j], ws[j + 1], f));\r\n        trailDots.forEach(function (d, k) { d.setAttribute(\"opacity\", k <= t + 0.01 ? \"1\" : \"0\"); });\r\n      });\r\n    } else if (i === 8) {\r\n      setW(ws[ws.length - 1]);\r\n    }\r\n  }\r\n\n\n  // ── shared runtime: stepping, explanation panel, educational autoplay pacing, bridge ──\n  var current = 0;\n  var explainHeadEl = document.getElementById(\"explain-h\");\n\n  // **bold** markers in an explanation become <strong> nodes (built with DOM calls, never innerHTML).\n  function setRich(node, str) {\n    node.textContent = \"\";\n    var parts = String(str).split(\"**\");\n    for (var i = 0; i < parts.length; i++) {\n      if (parts[i] === \"\") continue;\n      var seg = document.createElement(i % 2 ? \"strong\" : \"span\");\n      seg.textContent = parts[i];\n      node.appendChild(seg);\n    }\n  }\n\n  function explanationFor(index) {\n    var ex = (typeof EXPLAIN === \"object\" && EXPLAIN) ? EXPLAIN[steps[index].id] : null;\n    return ex || { h: \"WHAT IS HAPPENING\", t: steps[index].caption };\n  }\n\n  // Autoplay pace: 4.5 to 10.5 seconds per step, longer for longer explanations, so a learner can read.\n  function stepMs(index) {\n    var words = String(explanationFor(index).t).replace(/\\*\\*/g, \"\").split(/\\s+/).length;\n    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));\n  }\n\n  function renderStep(index) {\n    var ex = explanationFor(index);\n    labelEl.textContent = steps[index].label;\n    if (explainHeadEl) explainHeadEl.textContent = ex.h;\n    setRich(captionEl, ex.t);\n    render(index, steps[index].id);\n  }\n\n  function goTo(index) {\n    if (index < 0 || index >= steps.length) return;\n    current = index;\n    renderStep(current);\n    if (window.ReagvisBridge) window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n\n  renderStep(current);\n\n  // Autoplay: exactly one timer, one step per tick, stops on the final step.\n  // PLAY on the final step restarts from the first step and plays again.\n  var timer = null;\n\n  function stopAuto() {\n    if (timer !== null) {\n      clearTimeout(timer);\n      timer = null;\n    }\n  }\n\n  function scheduleNext() {\n    timer = setTimeout(function () {\n      timer = null;\n      if (current >= steps.length - 1) return;\n      goTo(current + 1);\n      if (current < steps.length - 1) scheduleNext();\n    }, stepMs(current));\n  }\n\n  function startAuto() {\n    if (timer !== null) return;\n    if (current >= steps.length - 1) goTo(0);\n    scheduleNext();\n  }\n\n  window.addEventListener(\"pagehide\", stopAuto);\n\n  window.ReagvisAnimation = {\n    stepDuration: stepMs,\n    onCommand: function (type, stepId) {\n      if (type === \"PLAY\") startAuto();\n      else if (type === \"PAUSE\") stopAuto();\n      else if (type === \"NEXT\") { stopAuto(); goTo(current + 1); }\n      else if (type === \"PREVIOUS\") { stopAuto(); goTo(current - 1); }\n      else if (type === \"RESET\") { stopAuto(); goTo(0); }\n      else if (type === \"GOTO_STEP\") {\n        stopAuto();\n        for (var i = 0; i < steps.length; i++) {\n          if (steps[i].id === stepId) { goTo(i); break; }\n        }\n      }\n    },\n  };\n\n  if (window.ReagvisBridge) {\n    window.ReagvisBridge.ready();\n    window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n})();\n",
+  "lastFrozenContentHash": null,
+  "lastFrozenRevisionId": null,
+  "manifest": {
+    "bridgeVersion": {
+      "$numberInt": "1"
+    },
+    "capabilities": [
+      "play",
+      "pause",
+      "next",
+      "previous",
+      "reset",
+      "gotoStep"
+    ],
+    "heightPx": {
+      "$numberInt": "590"
+    },
+    "traceEvents": [
+      "model-parameters",
+      "make-prediction",
+      "compute-loss",
+      "parameter-change",
+      "gradient",
+      "downhill-direction",
+      "update",
+      "repeat",
+      "learning-connection"
+    ]
+  },
+  "packageId": "c4e6707f-9d6f-47c2-bdcb-07315544849d",
+  "packageTrace": {
+    "steps": [
+      {
+        "animationEvent": "model-parameters",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "The model is prediction = w * x. Start with w = 0.",
+          "python": "x, y = 2, 6\nw = 0.0\nprint(w, x, y)"
+        },
+        "id": "model-parameters",
+        "label": "A tiny model with one weight"
+      },
+      {
+        "animationEvent": "make-prediction",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "prediction = w * x",
+          "python": "x, y = 2, 6\nw = 0.0\nprediction = w * x\nprint(prediction)   # 0.0"
+        },
+        "id": "make-prediction",
+        "label": "Make a prediction"
+      },
+      {
+        "animationEvent": "compute-loss",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "loss = (prediction - y) squared",
+          "python": "x, y = 2, 6\nw = 0.0\nprediction = w * x\nloss = (prediction - y) ** 2\nprint(loss)   # 36.0"
+        },
+        "id": "compute-loss",
+        "label": "Measure the miss with the loss"
+      },
+      {
+        "animationEvent": "parameter-change",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Try a different weight and compute the loss again.",
+          "python": "x, y = 2, 6\nfor w in [0.0, 0.5, 1.0]:\n    print(w, (w * x - y) ** 2)   # 0.0 36.0 / 0.5 25.0 / 1.0 16.0"
+        },
+        "id": "parameter-change",
+        "label": "Change the weight, watch the loss"
+      },
+      {
+        "animationEvent": "gradient",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "gradient = 2 * (prediction - y) * x",
+          "python": "x, y = 2, 6\nw = 0.0\nprediction = w * x\ngradient = 2 * (prediction - y) * x\nprint(gradient)   # -24.0"
+        },
+        "id": "gradient",
+        "label": "The gradient says how the loss reacts"
+      },
+      {
+        "animationEvent": "downhill-direction",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "A negative gradient means the loss falls as w rises, so w should go up.",
+          "python": "gradient = -24.0\ndirection = -gradient   # step AGAINST the gradient\nprint(direction)   # 24.0: positive, so w goes up"
+        },
+        "id": "downhill-direction",
+        "label": "Go the opposite way of the slope's sign"
+      },
+      {
+        "animationEvent": "update",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "w = w - learning_rate * gradient",
+          "python": "x, y = 2, 6\nw, eta = 0.0, 0.05\ngradient = 2 * (w * x - y) * x\nw = w - eta * gradient\nprint(round(w, 2), round((w * x - y) ** 2, 2))   # 1.2 12.96"
+        },
+        "id": "update",
+        "label": "Update the weight"
+      },
+      {
+        "animationEvent": "repeat",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Recompute the gradient at the new weight, update again, and repeat.",
+          "python": "x, y = 2, 6\nw, eta = 0.0, 0.05\nfor step in range(4):\n    gradient = 2 * (w * x - y) * x\n    print(step, round(w, 3), round(gradient, 3))\n    w = w - eta * gradient\n# 0 0.0 -24.0 / 1 1.2 -14.4 / 2 1.92 -8.64 / 3 2.352 -5.184"
+        },
+        "id": "repeat",
+        "label": "Repeat with the new gradient"
+      },
+      {
+        "animationEvent": "learning-connection",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Predict, measure the loss, compute the gradient, update the weights. Repeat.",
+          "python": "x, y = 2, 6\nw, eta = 0.0, 0.05\nfor step in range(30):\n    prediction = w * x            # 1 predict\n    loss = (prediction - y) ** 2  # 2 measure the loss\n    gradient = 2 * (prediction - y) * x   # 3 compute the gradient\n    w = w - eta * gradient        # 4 update the weights\nprint(round(w, 3), round(loss, 6))   # w is very close to 3"
+        },
+        "id": "learning-connection",
+        "label": "This loop is how models learn"
+      }
+    ],
+    "version": {
+      "$numberInt": "1"
+    }
+  },
+  "revision": {
+    "$numberInt": "6"
+  },
+  "revisionId": "r2",
+  "sourceKind": "zip",
+  "status": "frozen",
+  "title": "ML Module 3 — Why Gradients Matter in ML",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498511"
+    }
+  },
+  "updatedBy": {
+    "$oid": "000000000000000000000000"
+  }
+}

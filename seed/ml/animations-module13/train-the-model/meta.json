@@ -1,0 +1,60 @@
+{
+  "title": "Train the model",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "training-data",
+      "label": "Training data",
+      "pseudocode": "Training uses labelled training data.",
+      "python": "days = [2, 5, 8, 12, 20, 25, 30, 35]\nchurn = [0, 0, 0, 0, 1, 0, 1, 1]\nprint(len(days), 'toy customers, churners:', sum(churn))\n# prints: 8 toy customers, churners: 3"
+    },
+    {
+      "id": "initial-parameters",
+      "label": "Initial parameters",
+      "pseudocode": "Start from arbitrary parameters.",
+      "python": "import math\ndays = [2, 5, 8, 12, 20, 25, 30, 35]\nchurn = [0, 0, 0, 0, 1, 0, 1, 1]\nx = [d / 10 for d in days]\nlr = 0.5\nsig = lambda z: 1 / (1 + math.exp(-z))\ndef loss(w, b):\n    return -sum(y * math.log(sig(w * xi + b)) + (1 - y) * math.log(1 - sig(w * xi + b)) for xi, y in zip(x, churn)) / len(x)\ndef grads(w, b):\n    e = [sig(w * xi + b) - y for xi, y in zip(x, churn)]\n    return sum(ei * xi for ei, xi in zip(e, x)) / len(x), sum(e) / len(x)\ndef step(w, b):\n    gw, gb = grads(w, b)\n    return w - lr * gw, b - lr * gb\nw, b = 0.0, 0.0\nprint('w', w, 'b', b, ' probability for every customer:', sig(w * x[0] + b))\n# prints: w 0.0 b 0.0  probability for every customer: 0.5"
+    },
+    {
+      "id": "predictions",
+      "label": "Predictions",
+      "pseudocode": "predict probabilities with current parameters",
+      "python": "import math\ndays = [2, 5, 8, 12, 20, 25, 30, 35]\nchurn = [0, 0, 0, 0, 1, 0, 1, 1]\nx = [d / 10 for d in days]\nlr = 0.5\nsig = lambda z: 1 / (1 + math.exp(-z))\ndef loss(w, b):\n    return -sum(y * math.log(sig(w * xi + b)) + (1 - y) * math.log(1 - sig(w * xi + b)) for xi, y in zip(x, churn)) / len(x)\ndef grads(w, b):\n    e = [sig(w * xi + b) - y for xi, y in zip(x, churn)]\n    return sum(ei * xi for ei, xi in zip(e, x)) / len(x), sum(e) / len(x)\ndef step(w, b):\n    gw, gb = grads(w, b)\n    return w - lr * gw, b - lr * gb\nw, b = 0.0, 0.0\nprint([round(sig(w * xi + b), 2) for xi in x])\n# prints: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5]"
+    },
+    {
+      "id": "loss",
+      "label": "Loss",
+      "pseudocode": "loss = average log-loss",
+      "python": "import math\ndays = [2, 5, 8, 12, 20, 25, 30, 35]\nchurn = [0, 0, 0, 0, 1, 0, 1, 1]\nx = [d / 10 for d in days]\nlr = 0.5\nsig = lambda z: 1 / (1 + math.exp(-z))\ndef loss(w, b):\n    return -sum(y * math.log(sig(w * xi + b)) + (1 - y) * math.log(1 - sig(w * xi + b)) for xi, y in zip(x, churn)) / len(x)\ndef grads(w, b):\n    e = [sig(w * xi + b) - y for xi, y in zip(x, churn)]\n    return sum(ei * xi for ei, xi in zip(e, x)) / len(x), sum(e) / len(x)\ndef step(w, b):\n    gw, gb = grads(w, b)\n    return w - lr * gw, b - lr * gb\nprint('loss:', round(loss(0.0, 0.0), 4))\n# prints: loss: 0.6931"
+    },
+    {
+      "id": "gradient",
+      "label": "Gradient",
+      "pseudocode": "gradient = direction of increasing loss",
+      "python": "import math\ndays = [2, 5, 8, 12, 20, 25, 30, 35]\nchurn = [0, 0, 0, 0, 1, 0, 1, 1]\nx = [d / 10 for d in days]\nlr = 0.5\nsig = lambda z: 1 / (1 + math.exp(-z))\ndef loss(w, b):\n    return -sum(y * math.log(sig(w * xi + b)) + (1 - y) * math.log(1 - sig(w * xi + b)) for xi, y in zip(x, churn)) / len(x)\ndef grads(w, b):\n    e = [sig(w * xi + b) - y for xi, y in zip(x, churn)]\n    return sum(ei * xi for ei, xi in zip(e, x)) / len(x), sum(e) / len(x)\ndef step(w, b):\n    gw, gb = grads(w, b)\n    return w - lr * gw, b - lr * gb\ngw, gb = grads(0.0, 0.0)\nprint('grad_w', round(gw, 3), ' grad_b', round(gb, 3))\n# prints: grad_w -0.206  grad_b 0.125"
+    },
+    {
+      "id": "update",
+      "label": "Update",
+      "pseudocode": "parameter = parameter - learning rate * gradient",
+      "python": "import math\ndays = [2, 5, 8, 12, 20, 25, 30, 35]\nchurn = [0, 0, 0, 0, 1, 0, 1, 1]\nx = [d / 10 for d in days]\nlr = 0.5\nsig = lambda z: 1 / (1 + math.exp(-z))\ndef loss(w, b):\n    return -sum(y * math.log(sig(w * xi + b)) + (1 - y) * math.log(1 - sig(w * xi + b)) for xi, y in zip(x, churn)) / len(x)\ndef grads(w, b):\n    e = [sig(w * xi + b) - y for xi, y in zip(x, churn)]\n    return sum(ei * xi for ei, xi in zip(e, x)) / len(x), sum(e) / len(x)\ndef step(w, b):\n    gw, gb = grads(w, b)\n    return w - lr * gw, b - lr * gb\nw, b = step(0.0, 0.0)\nprint('w', round(w, 3), 'b', round(b, 3), ' loss', round(loss(w, b), 4))\n# prints: w 0.103 b -0.062  loss 0.6674"
+    },
+    {
+      "id": "repeat",
+      "label": "Repeat",
+      "pseudocode": "loop until the loss stops improving",
+      "python": "import math\ndays = [2, 5, 8, 12, 20, 25, 30, 35]\nchurn = [0, 0, 0, 0, 1, 0, 1, 1]\nx = [d / 10 for d in days]\nlr = 0.5\nsig = lambda z: 1 / (1 + math.exp(-z))\ndef loss(w, b):\n    return -sum(y * math.log(sig(w * xi + b)) + (1 - y) * math.log(1 - sig(w * xi + b)) for xi, y in zip(x, churn)) / len(x)\ndef grads(w, b):\n    e = [sig(w * xi + b) - y for xi, y in zip(x, churn)]\n    return sum(ei * xi for ei, xi in zip(e, x)) / len(x), sum(e) / len(x)\ndef step(w, b):\n    gw, gb = grads(w, b)\n    return w - lr * gw, b - lr * gb\nw, b = 0.0, 0.0\nfor s in range(1, 6):\n    w, b = step(w, b)\n    print('step', s, ': loss', round(loss(w, b), 4))\n# prints: step 1 : loss 0.6674\n# prints: step 2 : loss 0.6487\n# prints: step 3 : loss 0.6318\n# prints: step 4 : loss 0.6162\n# prints: step 5 : loss 0.6016"
+    },
+    {
+      "id": "loss-decreases",
+      "label": "Loss decreases",
+      "pseudocode": "A falling loss means the fit is improving.",
+      "python": "import math\ndays = [2, 5, 8, 12, 20, 25, 30, 35]\nchurn = [0, 0, 0, 0, 1, 0, 1, 1]\nx = [d / 10 for d in days]\nlr = 0.5\nsig = lambda z: 1 / (1 + math.exp(-z))\ndef loss(w, b):\n    return -sum(y * math.log(sig(w * xi + b)) + (1 - y) * math.log(1 - sig(w * xi + b)) for xi, y in zip(x, churn)) / len(x)\ndef grads(w, b):\n    e = [sig(w * xi + b) - y for xi, y in zip(x, churn)]\n    return sum(ei * xi for ei, xi in zip(e, x)) / len(x), sum(e) / len(x)\ndef step(w, b):\n    gw, gb = grads(w, b)\n    return w - lr * gw, b - lr * gb\nw, b = 0.0, 0.0\nstart = loss(w, b)\nfor s in range(5):\n    w, b = step(w, b)\nprint('loss', round(start, 4), '->', round(loss(w, b), 4))\n# prints: loss 0.6931 -> 0.6016"
+    },
+    {
+      "id": "trained-model",
+      "label": "Trained model",
+      "pseudocode": "Training fits parameters; validation judges the result.",
+      "python": "import math\ndays = [2, 5, 8, 12, 20, 25, 30, 35]\nchurn = [0, 0, 0, 0, 1, 0, 1, 1]\nx = [d / 10 for d in days]\nlr = 0.5\nsig = lambda z: 1 / (1 + math.exp(-z))\ndef loss(w, b):\n    return -sum(y * math.log(sig(w * xi + b)) + (1 - y) * math.log(1 - sig(w * xi + b)) for xi, y in zip(x, churn)) / len(x)\ndef grads(w, b):\n    e = [sig(w * xi + b) - y for xi, y in zip(x, churn)]\n    return sum(ei * xi for ei, xi in zip(e, x)) / len(x), sum(e) / len(x)\ndef step(w, b):\n    gw, gb = grads(w, b)\n    return w - lr * gw, b - lr * gb\nw, b = 0.0, 0.0\nfor s in range(5):\n    w, b = step(w, b)\nprint('trained: w', round(w, 3), 'b', round(b, 3), ' validation used in training: False')\n# prints: trained: w 0.287 b -0.378  validation used in training: False"
+    }
+  ]
+}

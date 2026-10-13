@@ -1,0 +1,42 @@
+{
+ "covariance-matrix": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "The symmetric covariance matrix **S**. The dashed circle holds **unit directions**; the pink outline is the shape S turns that circle into. A long, thin shape means very unequal spread."
+ },
+ "candidate-directions": {
+  "h": "MOST DIRECTIONS TURN",
+  "t": "For most directions **v** (blue), the transformed vector **S v** (pink) points somewhere else. The matrix both stretches and **turns** them."
+ },
+ "eigenvector-one": {
+  "h": "EIGENVECTOR 1",
+  "t": "For one special direction, **S v₁ stays on the same line as v₁**: the pink arrow lies along the yellow one. Such a direction is an **eigenvector** of S."
+ },
+ "eigenvalue-one": {
+  "h": "EIGENVALUE 1",
+  "t": "The pink arrow is **6.03 times as long** as the yellow one, so **S v₁ = 6.03 v₁**. That stretch factor, the **eigenvalue**, is also the variance along v₁."
+ },
+ "eigenvector-two": {
+  "h": "EIGENVECTOR 2",
+  "t": "A second special direction, **perpendicular** to the first, is also kept on its own line: S v₂ is parallel to v₂."
+ },
+ "eigenvalue-two": {
+  "h": "EIGENVALUE 2",
+  "t": "Here the stretch is only **0.17**: **S v₂ = 0.17 v₂**. A much smaller eigenvalue means much less variance along this direction."
+ },
+ "sort-eigenvalues": {
+  "h": "SORT THEM",
+  "t": "Sort the eigenvalues from largest to smallest (**6.03, then 0.17**) and keep each eigenvector with its eigenvalue. That order ranks the directions by variance."
+ },
+ "pc1": {
+  "h": "PC1",
+  "t": "The eigenvector with the **largest eigenvalue** is the first principal component. It carries **97.2%** of the total variance."
+ },
+ "pc2": {
+  "h": "PC2",
+  "t": "The eigenvector with the next eigenvalue is PC2. It carries the remaining **2.8%** of the variance."
+ },
+ "eigen-interpretation": {
+  "h": "TAKEAWAY",
+  "t": "An **eigenvector is a direction** and its **eigenvalue is the variance along it**. The dashed line shows that **−v₁ is the same axis** as v₁, so the sign of an eigenvector is arbitrary."
+ }
+}

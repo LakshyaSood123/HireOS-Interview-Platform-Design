@@ -1,0 +1,18 @@
+{
+  "heightPx": 460,
+  "capabilities": [
+    "play",
+    "pause",
+    "next",
+    "previous",
+    "reset",
+    "gotoStep"
+  ],
+  "traceEvents": [
+    "rules",
+    "data",
+    "train",
+    "unseen-input",
+    "generalize"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ac4f846a36afa4600ccd441"
+  },
+  "courseId": "machine-learning-foundations",
+  "courseType": "standard",
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791293510447"
+    }
+  },
+  "latestDraftVersion": null,
+  "latestPublishedVersion": "v18",
+  "title": "Machine Learning Foundations",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791907939969"
+    }
+  }
+}

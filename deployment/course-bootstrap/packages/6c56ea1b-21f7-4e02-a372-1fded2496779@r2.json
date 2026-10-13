@@ -1,0 +1,147 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322c4e9cccef168eced"
+  },
+  "assets": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498494"
+    }
+  },
+  "createdBy": {
+    "$oid": "000000000000000000000000"
+  },
+  "css": "body {\r\n  margin: 0;\r\n  padding: 14px;\r\n  box-sizing: border-box;\r\n  background: #0b1d16;\r\n  color: #e6f5ec;\r\n  font-family: system-ui, sans-serif;\r\n}\r\n.scene {\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 8px;\r\n}\r\n.step-label {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  letter-spacing: 0.08em;\r\n  text-transform: uppercase;\r\n  color: #a7ce65;\r\n}\r\nsvg {\r\n  width: 100%;\r\n  height: auto;\r\n  max-width: 640px;\r\n  background: #071510;\r\n  border-radius: 10px;\r\n  border: 1px solid rgba(29, 181, 132, 0.35);\r\n}\r\nsvg g,\r\nsvg line,\r\nsvg polygon,\r\nsvg path,\r\nsvg ellipse,\r\nsvg circle,\r\nsvg rect,\r\nsvg text {\r\n  transition: opacity 0.4s ease, transform 0.6s ease;\r\n}\r\n.axis {\r\n  stroke: rgba(167, 206, 101, 0.3);\r\n  stroke-width: 1;\r\n}\r\n.tick {\r\n  font-size: 10px;\r\n  fill: #8fa89c;\r\n}\r\n.lbl,\r\n.big,\r\n.note,\r\n.mono {\r\n  paint-order: stroke;\r\n  stroke: #071510;\r\n  stroke-width: 3px;\r\n  stroke-linejoin: round;\r\n}\r\n.lbl {\r\n  font-size: 12px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.lbl-g { fill: #1db584; }\r\n.lbl-y { fill: #e2b44a; }\r\n.lbl-p { fill: #f472b6; }\r\n.lbl-b { fill: #38bdf8; }\r\n.lbl-r { fill: #f87171; }\r\n.big {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.note {\r\n  font-size: 11px;\r\n  fill: #c9dccf;\r\n}\r\n.mono {\r\n  font-family: ui-monospace, Consolas, monospace;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.caption {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  line-height: 1.5;\r\n  color: #c9dccf;\r\n  min-height: 40px;\r\n}\r\n.cell rect {\r\n  fill: rgba(255, 255, 255, 0.05);\r\n  stroke: rgba(255, 255, 255, 0.28);\r\n  stroke-width: 1.2;\r\n}\r\n.cell text {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.cell.hl-row rect { fill: rgba(226, 180, 74, 0.25); stroke: #e2b44a; }\r\n.cell.hl-col rect { fill: rgba(29, 181, 132, 0.25); stroke: #1db584; }\r\n.cell.hl-both rect { fill: rgba(244, 114, 182, 0.28); stroke: #f472b6; }\r\n.dim { opacity: 0.25; }\r\n.dash { stroke-dasharray: 5 4; }\r\n.fillA { fill: rgba(56, 189, 248, 0.16); stroke: #38bdf8; stroke-width: 2; }\r\n.fillB { fill: rgba(244, 114, 182, 0.18); stroke: #f472b6; stroke-width: 2; }\r\n.fillG { fill: rgba(29, 181, 132, 0.16); stroke: #1db584; stroke-width: 2; }\r\n\n/* ── explanation panel (shared by every generated ML animation) ── */\n.explain {\n  box-sizing: border-box;\n  max-width: 640px;\n  margin-top: 4px;\n  padding: 14px 18px 16px;\n  min-height: 150px;\n  border-radius: 12px;\n  background: rgba(29, 181, 132, 0.10);\n  border: 1px solid rgba(29, 181, 132, 0.45);\n  border-left: 5px solid #1db584;\n}\n.explain-h {\n  margin: 0 0 8px;\n  font-size: 13px;\n  font-weight: 800;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.explain-t {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.55;\n  color: #f1faf4;\n}\n.explain-t strong {\n  font-weight: 800;\n  color: #ffd98a;\n}\n\n",
+  "html": "<div class=\"scene\">\n  <p class=\"step-label\" id=\"step-label\"></p>\n  <svg id=\"scene\" viewBox=\"0 0 640 360\" role=\"img\" aria-label=\"Matrix diagonalization\"></svg>\n  <section class=\"explain\" aria-live=\"polite\">\n    <h3 class=\"explain-h\" id=\"explain-h\"></h3>\n    <p class=\"explain-t\" id=\"caption\"></p>\n  </section>\n</div>\n",
+  "js": "(function () {\n  // ── shared helpers (SVG, tweening) ─────────────────────────────────────────\r\n  var NS = \"http://www.w3.org/2000/svg\";\r\n  var svg = document.getElementById(\"scene\");\r\n  var labelEl = document.getElementById(\"step-label\");\r\n  var captionEl = document.getElementById(\"caption\");\r\n\r\n  function el(name, attrs, parent) {\r\n    var node = document.createElementNS(NS, name);\r\n    for (var key in attrs) node.setAttribute(key, attrs[key]);\r\n    if (parent) parent.appendChild(node);\r\n    return node;\r\n  }\r\n  function txt(parent, x, y, cls, str, anchor) {\r\n    var t = el(\"text\", { x: x, y: y, class: cls }, parent);\r\n    if (anchor) t.setAttribute(\"text-anchor\", anchor);\r\n    t.textContent = str;\r\n    return t;\r\n  }\r\n  function show(node, on) {\r\n    node.setAttribute(\"opacity\", on ? \"1\" : \"0\");\r\n  }\r\n  function place(node, x, y) {\r\n    node.style.transform = \"translate(\" + x + \"px,\" + y + \"px)\";\r\n  }\r\n  function setLine(node, x1, y1, x2, y2) {\r\n    node.setAttribute(\"x1\", x1);\r\n    node.setAttribute(\"y1\", y1);\r\n    node.setAttribute(\"x2\", x2);\r\n    node.setAttribute(\"y2\", y2);\r\n  }\r\n  function lerp(a, b, e) {\r\n    return a + (b - a) * e;\r\n  }\r\n  function round1(v) {\r\n    return (Math.round(v * 10) / 10).toFixed(1);\r\n  }\r\n\r\n  // Eased animation. fn(e) is called with e from 0 to 1. Without\r\n  // requestAnimationFrame (or with ms = 0) it jumps straight to fn(1).\r\n  var animTokens = {};\r\n  function anim(key, ms, fn) {\r\n    var token = (animTokens[key] || 0) + 1;\r\n    animTokens[key] = token;\r\n    if (typeof requestAnimationFrame !== \"function\" || ms <= 0) {\r\n      fn(1);\r\n      return;\r\n    }\r\n    var start = null;\r\n    function frame(now) {\r\n      if (animTokens[key] !== token) return;\r\n      if (start === null) start = now;\r\n      var p = Math.min(1, (now - start) / ms);\r\n      var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;\r\n      fn(e);\r\n      if (p < 1) requestAnimationFrame(frame);\r\n    }\r\n    requestAnimationFrame(frame);\r\n  }\r\n\r\n  // Arrowheads, one marker per colour.\r\n  var COLORS = { g: \"#1DB584\", y: \"#E2B44A\", p: \"#F472B6\", b: \"#38BDF8\", w: \"#c9dccf\", r: \"#F87171\" };\r\n  var defs = el(\"defs\", {}, svg);\r\n  Object.keys(COLORS).forEach(function (k) {\r\n    var m = el(\"marker\", { id: \"ah-\" + k, viewBox: \"0 0 10 10\", refX: 9, refY: 5, markerUnits: \"userSpaceOnUse\", markerWidth: 13, markerHeight: 13, orient: \"auto\" }, defs);\r\n    el(\"path\", { d: \"M0 0 L10 5 L0 10 Z\", fill: COLORS[k] }, m);\r\n  });\r\n  function arrow(parent, colorKey, width) {\r\n    return el(\"line\", { x1: 0, y1: 0, x2: 0, y2: 0, stroke: COLORS[colorKey], \"stroke-width\": width || 3, \"marker-end\": \"url(#ah-\" + colorKey + \")\", \"stroke-linecap\": \"round\" }, parent);\r\n  }\r\n  function polygon(parent, cls) {\r\n    return el(\"polygon\", { points: \"\", class: cls }, parent);\r\n  }\r\n  function setPoly(node, pts) {\r\n    node.setAttribute(\"points\", pts.map(function (p) { return p[0].toFixed(1) + \",\" + p[1].toFixed(1); }).join(\" \"));\r\n  }\r\n  function lerpPts(a, b, e) {\r\n    return a.map(function (p, i) { return [lerp(p[0], b[i][0], e), lerp(p[1], b[i][1], e)]; });\r\n  }\r\n  // Maps maths coordinates (x right, y up) to screen pixels.\r\n  function makePlane(cx, cy, s) {\r\n    return {\r\n      x: function (v) { return cx + s * v; },\r\n      y: function (v) { return cy - s * v; },\r\n      pt: function (p) { return [cx + s * p[0], cy - s * p[1]]; },\r\n      s: s, cx: cx, cy: cy\r\n    };\r\n  }\r\n  function axes(parent, plane, xr, yr) {\r\n    el(\"line\", { x1: plane.x(-xr), y1: plane.y(0), x2: plane.x(xr), y2: plane.y(0), class: \"axis\" }, parent);\r\n    el(\"line\", { x1: plane.x(0), y1: plane.y(-yr), x2: plane.x(0), y2: plane.y(yr), class: \"axis\" }, parent);\r\n  }\r\n\n  var EXPLAIN = {\"complex-transform\":{\"h\":\"WHAT YOU ARE LOOKING AT\",\"t\":\"Apply **A** to the blue square. It becomes the pink slanted shape: **stretched and sheared** in a hard-to-read way.\"},\"eigen-directions\":{\"h\":\"FIND ITS SPECIAL DIRECTIONS\",\"t\":\"A has two **eigen-directions**, **[1, 1] and [1, −1]**. They are the natural axes of this transformation.\"},\"change-basis\":{\"h\":\"CHANGE COORDINATES TO THOSE DIRECTIONS\",\"t\":\"Rotate the view so the eigen-directions line up with the screen axes. This is the **P⁻¹ step**: we look at the same problem from a better angle.\"},\"diagonal-space\":{\"h\":\"HERE A ONLY STRETCHES EACH AXIS\",\"t\":\"In these coordinates A does something simple: it **stretches the first axis by 3 and the second by 1**. That is a **diagonal matrix D**.\"},\"scale\":{\"h\":\"SCALE EACH AXIS INDEPENDENTLY\",\"t\":\"Apply D: stretch by 3 along the first axis and leave the second alone. The axes **do not affect each other**.\"},\"change-back\":{\"h\":\"CHANGE BACK TO THE ORIGINAL COORDINATES\",\"t\":\"Rotate back (the **P step**). The result is exactly the slanted shape that A produced directly in the first step.\"},\"decomposition\":{\"h\":\"TAKEAWAY\",\"t\":\"**A = P D P⁻¹.** Change coordinates, scale each axis, change back: a hard transformation becomes **three simple moves**.\"}};\n  // ── scene ──\n  var steps = [\r\n    { id: \"complex-transform\", label: \"A transformation that looks complicated\", caption: \"Apply A to the blue square. It becomes the pink slanted shape: stretched and sheared in a hard-to-read way.\" },\r\n    { id: \"eigen-directions\", label: \"Find its special directions\", caption: \"A has two eigen-directions, [1, 1] and [1, −1]. They are the natural axes of this transformation.\" },\r\n    { id: \"change-basis\", label: \"Change coordinates to those directions\", caption: \"Rotate the view so the eigen-directions line up with the screen axes. This is the P⁻¹ step.\" },\r\n    { id: \"diagonal-space\", label: \"Here A only stretches each axis\", caption: \"In these coordinates A does something simple: it stretches the first axis by 3 and the second by 1. That is a diagonal matrix D.\" },\r\n    { id: \"scale\", label: \"Scale each axis independently\", caption: \"Apply D: stretch by 3 along the first axis and leave the second alone. The axes do not affect each other.\" },\r\n    { id: \"change-back\", label: \"Change back to the original coordinates\", caption: \"Rotate back (the P step). The result is exactly the pink shape that A produced directly.\" },\r\n    { id: \"decomposition\", label: \"A = P D P⁻¹\", caption: \"Change coordinates, scale each axis, change back. A hard transformation becomes three simple moves.\" }\r\n  ];\r\n\r\n  var P = makePlane(200, 190, 38);\r\n  var K = 1.2;\r\n  var S = [[0, 0], [K, 0], [K, K], [0, K]];\r\n  var Am = [[2, 1], [1, 2]];\r\n  var AS = S.map(function (p) { return [Am[0][0] * p[0] + Am[0][1] * p[1], Am[1][0] * p[0] + Am[1][1] * p[1]]; });\r\n  var C45 = Math.cos(Math.PI / 4);\r\n\r\n  function rot(p, deg) {\r\n    var r = (deg * Math.PI) / 180;\r\n    return [p[0] * Math.cos(r) - p[1] * Math.sin(r), p[0] * Math.sin(r) + p[1] * Math.cos(r)];\r\n  }\r\n  // change basis (rotate by -45° · a), scale (sx, 1), change back (rotate by +45° · b)\r\n  var st = { a: 0, b: 0, sx: 1 };\r\n  function xf(p) {\r\n    var q = rot(p, -45 * st.a);\r\n    q = [q[0] * st.sx, q[1]];\r\n    return rot(q, 45 * st.b);\r\n  }\r\n  // Axis lines and tags follow the rotations but are NOT stretched.\r\n  function xfAxis(p) {\r\n    return rot(rot(p, -45 * st.a), 45 * st.b);\r\n  }\r\n\r\n  axes(svg, P, 5, 4.9);\r\n  var ghost = polygon(svg, \"fillB\");\r\n  setPoly(ghost, AS.map(P.pt));\r\n  var ghostLab = txt(svg, P.x(AS[2][0]) + 8, P.y(AS[2][1]) - 6, \"lbl lbl-p\", \"A applied directly\", \"start\");\r\n  var shape = polygon(svg, \"fillA\");\r\n  var lineA = el(\"line\", { stroke: \"#e2b44a\", \"stroke-width\": 2, class: \"dash\" }, svg);\r\n  var lineB = el(\"line\", { stroke: \"#f472b6\", \"stroke-width\": 2, class: \"dash\" }, svg);\r\n  var tagX = txt(svg, 0, 0, \"lbl lbl-y\", \"\", \"start\");\r\n  var tagY = txt(svg, 0, 0, \"lbl lbl-p\", \"\", \"start\");\r\n\r\n  function draw() {\r\n    setPoly(shape, S.map(function (p) { return P.pt(xf(p)); }));\r\n    var a1 = P.pt(xfAxis([-4.2, -4.2])), a2 = P.pt(xfAxis([4.2, 4.2]));\r\n    var b1 = P.pt(xfAxis([-3.2, 3.2])), b2 = P.pt(xfAxis([3.2, -3.2]));\r\n    setLine(lineA, a1[0], a1[1], a2[0], a2[1]);\r\n    setLine(lineB, b1[0], b1[1], b2[0], b2[1]);\r\n    var ta = P.pt(xfAxis([3.4, 3.4]));\r\n    var tb = P.pt(xfAxis([-2.2, 2.2]));\r\n    tagX.setAttribute(\"x\", ta[0] + 6); tagX.setAttribute(\"y\", ta[1] - 4);\r\n    tagY.setAttribute(\"x\", tb[0] + 6); tagY.setAttribute(\"y\", tb[1] - 4);\r\n  }\r\n  draw();\r\n\r\n  // Decomposition panel.\r\n  var panel = el(\"g\", { opacity: 0 }, svg);\r\n  var rows = [[\"1\", \"change coordinates\", \"P⁻¹\"], [\"2\", \"scale each axis\", \"D\"], [\"3\", \"change back\", \"P\"]];\r\n  rows.forEach(function (r, i) {\r\n    el(\"rect\", { x: 420, y: 64 + i * 78, width: 204, height: 56, rx: 12, class: \"fillG\" }, panel);\r\n    txt(panel, 436, 88 + i * 78, \"lbl\", r[0] + \"  \" + r[1], \"start\");\r\n    txt(panel, 436, 108 + i * 78, \"mono\", r[2], \"start\");\r\n    if (i < 2) el(\"line\", { x1: 522, y1: 122 + i * 78, x2: 522, y2: 140 + i * 78, stroke: \"#a7ce65\", \"stroke-width\": 2.5, \"marker-end\": \"url(#ah-g)\" }, panel);\r\n  });\r\n  var formula = txt(svg, 520, 322, \"big\", \"A = P D P⁻¹\", \"middle\");\r\n  show(formula, false);\r\n\r\n  function goState(target, ms) {\r\n    var from = { a: st.a, b: st.b, sx: st.sx };\r\n    anim(\"diag\", ms, function (e) {\r\n      st.a = lerp(from.a, target.a, e);\r\n      st.b = lerp(from.b, target.b, e);\r\n      st.sx = lerp(from.sx, target.sx, e);\r\n      draw();\r\n    });\r\n  }\r\n\r\n  function render(index, id) {\r\n    show(ghost, id === \"complex-transform\" || id === \"change-back\" || id === \"decomposition\");\r\n    show(ghostLab, id === \"change-back\" || id === \"complex-transform\");\r\n    show(lineA, index >= 1); show(lineB, index >= 1);\r\n    show(panel, id === \"decomposition\");\r\n    show(formula, id === \"decomposition\");\r\n    tagX.textContent = \"\"; tagY.textContent = \"\";\r\n\r\n    if (id === \"complex-transform\") goState({ a: 0, b: 0, sx: 1 }, 300);\r\n    else if (id === \"eigen-directions\") goState({ a: 0, b: 0, sx: 1 }, 300);\r\n    else if (id === \"change-basis\") goState({ a: 1, b: 0, sx: 1 }, 1100);\r\n    else if (id === \"diagonal-space\") {\r\n      goState({ a: 1, b: 0, sx: 1 }, 200);\r\n      tagX.textContent = \"×3\";\r\n      tagY.textContent = \"×1\";\r\n    } else if (id === \"scale\") {\r\n      goState({ a: 1, b: 0, sx: 3 }, 1100);\r\n      tagX.textContent = \"×3\";\r\n      tagY.textContent = \"×1\";\r\n    } else if (id === \"change-back\") goState({ a: 1, b: 1, sx: 3 }, 1100);\r\n    else goState({ a: 1, b: 1, sx: 3 }, 200);\r\n  }\r\n\n\n  // ── shared runtime: stepping, explanation panel, educational autoplay pacing, bridge ──\n  var current = 0;\n  var explainHeadEl = document.getElementById(\"explain-h\");\n\n  // **bold** markers in an explanation become <strong> nodes (built with DOM calls, never innerHTML).\n  function setRich(node, str) {\n    node.textContent = \"\";\n    var parts = String(str).split(\"**\");\n    for (var i = 0; i < parts.length; i++) {\n      if (parts[i] === \"\") continue;\n      var seg = document.createElement(i % 2 ? \"strong\" : \"span\");\n      seg.textContent = parts[i];\n      node.appendChild(seg);\n    }\n  }\n\n  function explanationFor(index) {\n    var ex = (typeof EXPLAIN === \"object\" && EXPLAIN) ? EXPLAIN[steps[index].id] : null;\n    return ex || { h: \"WHAT IS HAPPENING\", t: steps[index].caption };\n  }\n\n  // Autoplay pace: 4.5 to 10.5 seconds per step, longer for longer explanations, so a learner can read.\n  function stepMs(index) {\n    var words = String(explanationFor(index).t).replace(/\\*\\*/g, \"\").split(/\\s+/).length;\n    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));\n  }\n\n  function renderStep(index) {\n    var ex = explanationFor(index);\n    labelEl.textContent = steps[index].label;\n    if (explainHeadEl) explainHeadEl.textContent = ex.h;\n    setRich(captionEl, ex.t);\n    render(index, steps[index].id);\n  }\n\n  function goTo(index) {\n    if (index < 0 || index >= steps.length) return;\n    current = index;\n    renderStep(current);\n    if (window.ReagvisBridge) window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n\n  renderStep(current);\n\n  // Autoplay: exactly one timer, one step per tick, stops on the final step.\n  // PLAY on the final step restarts from the first step and plays again.\n  var timer = null;\n\n  function stopAuto() {\n    if (timer !== null) {\n      clearTimeout(timer);\n      timer = null;\n    }\n  }\n\n  function scheduleNext() {\n    timer = setTimeout(function () {\n      timer = null;\n      if (current >= steps.length - 1) return;\n      goTo(current + 1);\n      if (current < steps.length - 1) scheduleNext();\n    }, stepMs(current));\n  }\n\n  function startAuto() {\n    if (timer !== null) return;\n    if (current >= steps.length - 1) goTo(0);\n    scheduleNext();\n  }\n\n  window.addEventListener(\"pagehide\", stopAuto);\n\n  window.ReagvisAnimation = {\n    stepDuration: stepMs,\n    onCommand: function (type, stepId) {\n      if (type === \"PLAY\") startAuto();\n      else if (type === \"PAUSE\") stopAuto();\n      else if (type === \"NEXT\") { stopAuto(); goTo(current + 1); }\n      else if (type === \"PREVIOUS\") { stopAuto(); goTo(current - 1); }\n      else if (type === \"RESET\") { stopAuto(); goTo(0); }\n      else if (type === \"GOTO_STEP\") {\n        stopAuto();\n        for (var i = 0; i < steps.length; i++) {\n          if (steps[i].id === stepId) { goTo(i); break; }\n        }\n      }\n    },\n  };\n\n  if (window.ReagvisBridge) {\n    window.ReagvisBridge.ready();\n    window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n})();\n",
+  "lastFrozenContentHash": null,
+  "lastFrozenRevisionId": null,
+  "manifest": {
+    "bridgeVersion": {
+      "$numberInt": "1"
+    },
+    "capabilities": [
+      "play",
+      "pause",
+      "next",
+      "previous",
+      "reset",
+      "gotoStep"
+    ],
+    "heightPx": {
+      "$numberInt": "590"
+    },
+    "traceEvents": [
+      "complex-transform",
+      "eigen-directions",
+      "change-basis",
+      "diagonal-space",
+      "scale",
+      "change-back",
+      "decomposition"
+    ]
+  },
+  "packageId": "6c56ea1b-21f7-4e02-a372-1fded2496779",
+  "packageTrace": {
+    "steps": [
+      {
+        "animationEvent": "complex-transform",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Applying A to a shape stretches and shears it in a way that is hard to describe.",
+          "python": "A = [[2, 1], [1, 2]]\n\ndef apply(A, v):\n    return [sum(A[i][j] * v[j] for j in range(len(v))) for i in range(len(A))]\n\nprint(apply(A, [2, 0]))  # [4, 2]"
+        },
+        "id": "complex-transform",
+        "label": "Apply the matrix directly"
+      },
+      {
+        "animationEvent": "eigen-directions",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Find directions that A only scales. Here they are [1, 1] and [1, -1].",
+          "python": "A = [[2, 1], [1, 2]]\n\ndef apply(A, v):\n    return [sum(A[i][j] * v[j] for j in range(len(v))) for i in range(len(A))]\n\nprint(apply(A, [1, 1]), apply(A, [1, -1]))  # [3, 3] [1, -1]"
+        },
+        "id": "eigen-directions",
+        "label": "Find the eigen-directions"
+      },
+      {
+        "animationEvent": "change-basis",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Describe every vector by how much it uses of each eigen-direction.",
+          "python": "e1, e2 = [1, 1], [1, -1]\nv = [2, 0]\nc1 = (v[0] * e1[0] + v[1] * e1[1]) / 2   # each eigenvector has length-squared 2\nc2 = (v[0] * e2[0] + v[1] * e2[1]) / 2\nprint(c1, c2)  # 1.0 1.0"
+        },
+        "id": "change-basis",
+        "label": "Change coordinates"
+      },
+      {
+        "animationEvent": "diagonal-space",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "In eigen-coordinates, A only multiplies each coordinate by a number: 3 for the first, 1 for the second.",
+          "python": "D = [3, 1]  # the diagonal of D\nc = [1.0, 1.0]\nprint([d * x for d, x in zip(D, c)])  # [3.0, 1.0]"
+        },
+        "id": "diagonal-space",
+        "label": "Recognise the diagonal form"
+      },
+      {
+        "animationEvent": "scale",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Multiply each coordinate by its own eigenvalue. The coordinates do not interact.",
+          "python": "D = [3, 1]\nc = [1.0, 1.0]\nscaled = [d * x for d, x in zip(D, c)]\nprint(scaled)  # [3.0, 1.0]"
+        },
+        "id": "scale",
+        "label": "Scale each coordinate"
+      },
+      {
+        "animationEvent": "change-back",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Rebuild the vector from the scaled coordinates using the eigenvectors.",
+          "python": "e1, e2 = [1, 1], [1, -1]\nscaled = [3.0, 1.0]\nresult = [scaled[0] * e1[i] + scaled[1] * e2[i] for i in range(2)]\nprint(result)  # [4.0, 2.0], same as A applied directly"
+        },
+        "id": "change-back",
+        "label": "Change back"
+      },
+      {
+        "animationEvent": "decomposition",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "A equals: change coordinates, scale each axis, change back.",
+          "python": "A = [[2, 1], [1, 2]]\nv = [2, 0]\ndirect = [A[0][0] * v[0] + A[0][1] * v[1], A[1][0] * v[0] + A[1][1] * v[1]]\nvia = [3.0 * 1 + 1.0 * 1, 3.0 * 1 + 1.0 * -1]  # 3*e1 + 1*e2\nprint(direct, via)  # [4, 2] [4.0, 2.0]"
+        },
+        "id": "decomposition",
+        "label": "Put it together: A = P D P^-1"
+      }
+    ],
+    "version": {
+      "$numberInt": "1"
+    }
+  },
+  "revision": {
+    "$numberInt": "5"
+  },
+  "revisionId": "r2",
+  "sourceKind": "zip",
+  "status": "frozen",
+  "title": "ML Module 2 — Matrix Diagonalization",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498494"
+    }
+  },
+  "updatedBy": {
+    "$oid": "000000000000000000000000"
+  }
+}

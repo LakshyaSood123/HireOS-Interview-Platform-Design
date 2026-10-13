@@ -1,0 +1,54 @@
+{
+  "title": "Least squares: the best-fitting line",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "data",
+      "label": "Look at the data",
+      "pseudocode": "Four points, and no single straight line passes through all of them.",
+      "python": "points = [(1, 2), (2, 3), (3, 5), (4, 4)]\nprint(points)"
+    },
+    {
+      "id": "candidate-line",
+      "label": "Try a candidate line",
+      "pseudocode": "Choose a slope m and an intercept b. The line predicts y = m * x + b.",
+      "python": "def predict(x, m, b):\n    return m * x + b\n\nprint(predict(3, 0.5, 2))  # 3.5"
+    },
+    {
+      "id": "residuals",
+      "label": "Measure each residual",
+      "pseudocode": "For every point, subtract the predicted value from the actual value.",
+      "python": "points = [(1, 2), (2, 3), (3, 5), (4, 4)]\nresiduals = [y - (0.5 * x + 2) for x, y in points]\nprint(residuals)  # [-0.5, 0.0, 1.5, 0.0]"
+    },
+    {
+      "id": "square-errors",
+      "label": "Square and add the errors",
+      "pseudocode": "Square each residual so errors are positive and large misses count more, then add them up.",
+      "python": "points = [(1, 2), (2, 3), (3, 5), (4, 4)]\ntotal = sum((y - (0.5 * x + 2)) ** 2 for x, y in points)\nprint(total)  # 2.5"
+    },
+    {
+      "id": "compare-lines",
+      "label": "Compare other lines",
+      "pseudocode": "Compute the same total for other candidate lines.",
+      "python": "points = [(1, 2), (2, 3), (3, 5), (4, 4)]\n\ndef total(m, b):\n    return sum((y - (m * x + b)) ** 2 for x, y in points)\n\nprint(round(total(0.5, 2), 2), round(total(1, 1), 2), round(total(0.8, 1.5), 2))"
+    },
+    {
+      "id": "minimum",
+      "label": "Keep the line with the smallest total",
+      "pseudocode": "The least-squares line is the one with the smallest total squared error.",
+      "python": "points = [(1, 2), (2, 3), (3, 5), (4, 4)]\n\ndef total(m, b):\n    return sum((y - (m * x + b)) ** 2 for x, y in points)\n\ncandidates = [(0.5, 2), (1, 1), (0.8, 1.5)]\nprint(min(candidates, key=lambda c: total(*c)))  # (0.8, 1.5)"
+    },
+    {
+      "id": "projection-view",
+      "label": "See it as a projection",
+      "pseudocode": "The best prediction vector is the projection of the data vector onto the space of possible predictions.",
+      "python": "# The residual of the best line is perpendicular to the inputs.\nxs, ys = [1, 2, 3, 4], [2, 3, 5, 4]\nres = [y - (0.8 * x + 1.5) for x, y in zip(xs, ys)]\nprint(round(sum(r * x for r, x in zip(res, xs)), 6), round(sum(res), 6))  # 0.0 0.0"
+    },
+    {
+      "id": "ml-connection",
+      "label": "Connect it to linear regression",
+      "pseudocode": "Linear regression fits exactly this line. Its solution satisfies the normal equations.",
+      "python": "xs, ys = [1, 2, 3, 4], [2, 3, 5, 4]\nn = len(xs)\nmx, my = sum(xs) / n, sum(ys) / n\nm = sum((x - mx) * (y - my) for x, y in zip(xs, ys)) / sum((x - mx) ** 2 for x in xs)\nprint(round(m, 2), round(my - m * mx, 2))  # 0.8 1.5"
+    }
+  ]
+}

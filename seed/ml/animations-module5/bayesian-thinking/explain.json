@@ -1,0 +1,34 @@
+{
+ "unknown-p": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "We still do not know the coin's **p**. A Bayesian keeps a **belief** about it: for each of **nine candidate values**, how plausible is it? Before looking at any data, we have to start somewhere."
+ },
+ "prior": {
+  "h": "THE PRIOR: BELIEF BEFORE DATA",
+  "t": "We suspect the coin is **probably close to fair**. The prior puts the most weight on **0.5** and less on extreme values: **1, 2, 3, 4, 5, 4, 3, 2, 1 out of 25**. This is what we believe before seeing any flips."
+ },
+ "observe-data": {
+  "h": "OBSERVE THE DATA",
+  "t": "Now we flip the coin 5 times and see **H H T H H**: 4 heads and 1 tail. This is the **evidence**."
+ },
+ "likelihood": {
+  "h": "THE LIKELIHOOD: WHAT THE DATA SAY",
+  "t": "For each candidate p, the likelihood is **p⁴(1 − p)**: how well that p explains the flips. Ignoring our prior, the data point to values **near 0.8**."
+ },
+ "combine": {
+  "h": "COMBINE: PRIOR × LIKELIHOOD",
+  "t": "Multiply the prior and the likelihood **candidate by candidate**. A candidate must be plausible in **both** to stay tall. This is Bayes' rule for a parameter: **posterior ∝ likelihood × prior**."
+ },
+ "posterior": {
+  "h": "THE POSTERIOR: UPDATED BELIEF",
+  "t": "Rescale the products so they add up to 1 and we get the **posterior**, the updated belief. Its largest weights are at **0.7 (0.24)** and **0.6 (0.23)**."
+ },
+ "shift-belief": {
+  "h": "HOW THE BELIEF SHIFTED",
+  "t": "The belief moved from the prior's peak at **0.5** toward the data's **0.8**, and settled at **0.7**. The data pulled it toward heads, while the prior kept it from jumping all the way."
+ },
+ "ml-connection": {
+  "h": "TAKEAWAY",
+  "t": "Bayesian models keep a **whole belief** about their parameters instead of one number. That lets them **use prior knowledge** and report how uncertain they remain."
+ }
+}

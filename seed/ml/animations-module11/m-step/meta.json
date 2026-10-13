@@ -1,0 +1,66 @@
+{
+  "title": "M-step: refit the components",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "fixed-responsibilities",
+      "label": "The responsibilities are fixed",
+      "pseudocode": "Start from the E-step responsibilities.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\npoints = [1.5, 2.0, 2.8, 3.4, 4.5, 5.2, 6.1, 6.8, 7.5, 8.3]\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]\ndef e_step(points, comps):\n    out = []\n    for x in points:\n        sc = [w * pdf(x, m, s) for w, m, s in comps]\n        t = sum(sc)\n        out.append([v / t for v in sc])\n    return out\nresp = e_step(points, comps)\nprint(len(resp), 'rows of responsibilities')\n# prints: 10 rows of responsibilities"
+    },
+    {
+      "id": "select-component",
+      "label": "Refit component A",
+      "pseudocode": "Take the A column.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\npoints = [1.5, 2.0, 2.8, 3.4, 4.5, 5.2, 6.1, 6.8, 7.5, 8.3]\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]\ndef e_step(points, comps):\n    out = []\n    for x in points:\n        sc = [w * pdf(x, m, s) for w, m, s in comps]\n        t = sum(sc)\n        out.append([v / t for v in sc])\n    return out\nresp = e_step(points, comps)\nr_a = [r[0] for r in resp]\nprint(r_a[:3])\n# prints: [0.9669140216112958, 0.9550217706210222, 0.9051286697987942]"
+    },
+    {
+      "id": "point-weights",
+      "label": "Responsibility = weight",
+      "pseudocode": "Each point's responsibility is its weight.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\npoints = [1.5, 2.0, 2.8, 3.4, 4.5, 5.2, 6.1, 6.8, 7.5, 8.3]\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]\ndef e_step(points, comps):\n    out = []\n    for x in points:\n        sc = [w * pdf(x, m, s) for w, m, s in comps]\n        t = sum(sc)\n        out.append([v / t for v in sc])\n    return out\nresp = e_step(points, comps)\nprint([round(r[0], 2) for r in resp])\n# prints: [0.97, 0.96, 0.91, 0.81, 0.35, 0.09, 0.01, 0.0, 0.0, 0.0]"
+    },
+    {
+      "id": "weighted-points",
+      "label": "Weighted points",
+      "pseudocode": "Weight each point.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\npoints = [1.5, 2.0, 2.8, 3.4, 4.5, 5.2, 6.1, 6.8, 7.5, 8.3]\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]\ndef e_step(points, comps):\n    out = []\n    for x in points:\n        sc = [w * pdf(x, m, s) for w, m, s in comps]\n        t = sum(sc)\n        out.append([v / t for v in sc])\n    return out\nresp = e_step(points, comps)\nprint([round(r[0] * x, 2) for r, x in zip(resp, points)])\n# prints: [1.45, 1.91, 2.53, 2.74, 1.57, 0.48, 0.05, 0.01, 0.0, 0.0]"
+    },
+    {
+      "id": "weighted-sum",
+      "label": "The weighted sum",
+      "pseudocode": "Total responsibility N_A.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\npoints = [1.5, 2.0, 2.8, 3.4, 4.5, 5.2, 6.1, 6.8, 7.5, 8.3]\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]\ndef e_step(points, comps):\n    out = []\n    for x in points:\n        sc = [w * pdf(x, m, s) for w, m, s in comps]\n        t = sum(sc)\n        out.append([v / t for v in sc])\n    return out\nresp = e_step(points, comps)\nprint(round(sum(r[0] for r in resp), 3))\n# prints: 4.083"
+    },
+    {
+      "id": "update-mean",
+      "label": "Update the mean",
+      "pseudocode": "mu = sum(r * x) / sum(r)",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\npoints = [1.5, 2.0, 2.8, 3.4, 4.5, 5.2, 6.1, 6.8, 7.5, 8.3]\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]\ndef e_step(points, comps):\n    out = []\n    for x in points:\n        sc = [w * pdf(x, m, s) for w, m, s in comps]\n        t = sum(sc)\n        out.append([v / t for v in sc])\n    return out\nresp = e_step(points, comps)\nprint(round(sum(r[0] * x for r, x in zip(resp, points)) / sum(r[0] for r in resp), 3))\n# prints: 2.631"
+    },
+    {
+      "id": "update-spread",
+      "label": "Update the spread",
+      "pseudocode": "Weighted standard deviation.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\npoints = [1.5, 2.0, 2.8, 3.4, 4.5, 5.2, 6.1, 6.8, 7.5, 8.3]\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]\ndef e_step(points, comps):\n    out = []\n    for x in points:\n        sc = [w * pdf(x, m, s) for w, m, s in comps]\n        t = sum(sc)\n        out.append([v / t for v in sc])\n    return out\ndef m_step(points, resp):\n    new = []\n    for k in range(len(resp[0])):\n        n = sum(r[k] for r in resp)\n        mu = sum(r[k] * x for r, x in zip(resp, points)) / n\n        sd = math.sqrt(sum(r[k] * (x - mu) ** 2 for r, x in zip(resp, points)) / n)\n        new.append((n / len(points), mu, sd))\n    return new\nprint(round(m_step(points, e_step(points, comps))[0][2], 3))\n# prints: 0.998"
+    },
+    {
+      "id": "update-mixture-weight",
+      "label": "Update the mixing weight",
+      "pseudocode": "pi = N_k / N",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\npoints = [1.5, 2.0, 2.8, 3.4, 4.5, 5.2, 6.1, 6.8, 7.5, 8.3]\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]\ndef e_step(points, comps):\n    out = []\n    for x in points:\n        sc = [w * pdf(x, m, s) for w, m, s in comps]\n        t = sum(sc)\n        out.append([v / t for v in sc])\n    return out\ndef m_step(points, resp):\n    new = []\n    for k in range(len(resp[0])):\n        n = sum(r[k] for r in resp)\n        mu = sum(r[k] * x for r, x in zip(resp, points)) / n\n        sd = math.sqrt(sum(r[k] * (x - mu) ** 2 for r, x in zip(resp, points)) / n)\n        new.append((n / len(points), mu, sd))\n    return new\nprint(round(m_step(points, e_step(points, comps))[0][0], 3))\n# prints: 0.408"
+    },
+    {
+      "id": "all-components-updated",
+      "label": "Both components updated",
+      "pseudocode": "Refit both components.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\npoints = [1.5, 2.0, 2.8, 3.4, 4.5, 5.2, 6.1, 6.8, 7.5, 8.3]\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]\ndef e_step(points, comps):\n    out = []\n    for x in points:\n        sc = [w * pdf(x, m, s) for w, m, s in comps]\n        t = sum(sc)\n        out.append([v / t for v in sc])\n    return out\ndef m_step(points, resp):\n    new = []\n    for k in range(len(resp[0])):\n        n = sum(r[k] for r in resp)\n        mu = sum(r[k] * x for r, x in zip(resp, points)) / n\n        sd = math.sqrt(sum(r[k] * (x - mu) ** 2 for r, x in zip(resp, points)) / n)\n        new.append((n / len(points), mu, sd))\n    return new\nfor c in m_step(points, e_step(points, comps)):\n    print(tuple(round(v, 3) for v in c))\n# prints: (0.408, 2.631, 0.998)\n# prints: (0.592, 6.314, 1.501)"
+    },
+    {
+      "id": "m-step-summary",
+      "label": "What changed and what did not",
+      "pseudocode": "Responsibilities fixed, parameters updated.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\npoints = [1.5, 2.0, 2.8, 3.4, 4.5, 5.2, 6.1, 6.8, 7.5, 8.3]\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]\ndef e_step(points, comps):\n    out = []\n    for x in points:\n        sc = [w * pdf(x, m, s) for w, m, s in comps]\n        t = sum(sc)\n        out.append([v / t for v in sc])\n    return out\ndef m_step(points, resp):\n    new = []\n    for k in range(len(resp[0])):\n        n = sum(r[k] for r in resp)\n        mu = sum(r[k] * x for r, x in zip(resp, points)) / n\n        sd = math.sqrt(sum(r[k] * (x - mu) ** 2 for r, x in zip(resp, points)) / n)\n        new.append((n / len(points), mu, sd))\n    return new\nresp = e_step(points, comps)\nnew = m_step(points, resp)\nprint('parameters changed:', new != comps)\n# prints: parameters changed: True"
+    }
+  ]
+}

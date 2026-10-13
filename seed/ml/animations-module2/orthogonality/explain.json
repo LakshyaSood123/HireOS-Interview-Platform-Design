@@ -1,0 +1,26 @@
+{
+ "two-vectors": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Two vectors, **u and v**. We want a number that says **how much they point the same way**."
+ },
+ "dot-product": {
+  "h": "THE DOT PRODUCT",
+  "t": "Multiply matching entries and add: **u · v = u₁v₁ + u₂v₂**. The result is **one number**."
+ },
+ "aligned": {
+  "h": "POINTING THE SAME WAY",
+  "t": "When v points the same way as u, the dot product is **large and positive**: the vectors share a lot of direction."
+ },
+ "perpendicular": {
+  "h": "TURN v TO A RIGHT ANGLE",
+  "t": "Rotate v until it makes a **right angle** with u. They no longer share any direction."
+ },
+ "zero-dot": {
+  "h": "PERPENDICULAR MEANS DOT PRODUCT 0",
+  "t": "At **90°** the dot product is exactly **0**. Vectors with **u · v = 0** are called **orthogonal**."
+ },
+ "ml-meaning": {
+  "h": "TAKEAWAY",
+  "t": "**Orthogonal directions are independent**: they do not overlap, so each coordinate can be read off separately. That is why machine learning likes them."
+ }
+}

@@ -1,0 +1,60 @@
+{
+  "title": "Learning rate: how big a step to take",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "same-start",
+      "label": "Same objective, same start",
+      "pseudocode": "Same objective and start; only the learning rate changes.",
+      "python": "def grad(w):\n    return 2 * (w - 3)\n\ndef run(lr, steps=10, w=0.0):\n    path = [w]\n    for _ in range(steps):\n        w = w - lr * grad(w)\n        path.append(w)\n    return path\n\nfor lr in [0.02, 0.3, 0.9, 1.1]:\n    print(lr, run(lr)[0])   # every run starts at w = 0.0"
+    },
+    {
+      "id": "small-rate",
+      "label": "A small learning rate: 0.02",
+      "pseudocode": "A small learning rate takes tiny steps.",
+      "python": "def grad(w):\n    return 2 * (w - 3)\n\ndef run(lr, steps=10, w=0.0):\n    path = [w]\n    for _ in range(steps):\n        w = w - lr * grad(w)\n        path.append(w)\n    return path\n\nprint([round(v, 2) for v in run(0.02)[:5]])   # [0.0, 0.12, 0.24, 0.35, 0.45]"
+    },
+    {
+      "id": "small-progress",
+      "label": "Small rate: safe but slow",
+      "pseudocode": "After 10 steps the weight is still far from 3.",
+      "python": "def grad(w):\n    return 2 * (w - 3)\n\ndef run(lr, steps=10, w=0.0):\n    path = [w]\n    for _ in range(steps):\n        w = w - lr * grad(w)\n        path.append(w)\n    return path\n\npath = run(0.02)\nprint(round(path[-1], 2), round((path[-1] - 3) ** 2, 2))   # 1.01 3.98"
+    },
+    {
+      "id": "good-rate",
+      "label": "A good learning rate: 0.3",
+      "pseudocode": "A good learning rate takes big steps at first, then smaller ones.",
+      "python": "def grad(w):\n    return 2 * (w - 3)\n\ndef run(lr, steps=10, w=0.0):\n    path = [w]\n    for _ in range(steps):\n        w = w - lr * grad(w)\n        path.append(w)\n    return path\n\nprint([round(v, 2) for v in run(0.3)[:5]])   # [0.0, 1.8, 2.52, 2.81, 2.92]"
+    },
+    {
+      "id": "good-progress",
+      "label": "Good rate: fast and steady",
+      "pseudocode": "After 5 steps the weight is almost at the minimum.",
+      "python": "def grad(w):\n    return 2 * (w - 3)\n\ndef run(lr, steps=10, w=0.0):\n    path = [w]\n    for _ in range(steps):\n        w = w - lr * grad(w)\n        path.append(w)\n    return path\n\npath = run(0.3, steps=5)\nprint(round(path[-1], 2), round((path[-1] - 3) ** 2, 4))   # 2.97 0.0009"
+    },
+    {
+      "id": "large-rate",
+      "label": "A large learning rate: 0.9",
+      "pseudocode": "A large learning rate jumps past the minimum on the first step.",
+      "python": "def grad(w):\n    return 2 * (w - 3)\n\ndef run(lr, steps=10, w=0.0):\n    path = [w]\n    for _ in range(steps):\n        w = w - lr * grad(w)\n        path.append(w)\n    return path\n\npath = run(0.9)\nprint(path[0], round(path[1], 1))   # 0.0 5.4: past the minimum at 3"
+    },
+    {
+      "id": "overshoot",
+      "label": "Overshoot and oscillation",
+      "pseudocode": "The weight bounces from side to side around the minimum.",
+      "python": "def grad(w):\n    return 2 * (w - 3)\n\ndef run(lr, steps=10, w=0.0):\n    path = [w]\n    for _ in range(steps):\n        w = w - lr * grad(w)\n        path.append(w)\n    return path\n\nprint([round(v, 2) for v in run(0.9)[:5]])   # [0.0, 5.4, 1.08, 4.54, 1.77]"
+    },
+    {
+      "id": "diverge",
+      "label": "Too large: divergence",
+      "pseudocode": "With a learning rate above 1 each bounce is bigger and the loss grows.",
+      "python": "def grad(w):\n    return 2 * (w - 3)\n\ndef run(lr, steps=10, w=0.0):\n    path = [w]\n    for _ in range(steps):\n        w = w - lr * grad(w)\n        path.append(w)\n    return path\n\nprint([round(v, 2) for v in run(1.1)[:5]])   # [0.0, 6.6, -1.32, 8.18, -3.22]"
+    },
+    {
+      "id": "compare",
+      "label": "Compare the four",
+      "pseudocode": "Compare the final loss after 10 steps for each learning rate.",
+      "python": "def grad(w):\n    return 2 * (w - 3)\n\ndef run(lr, steps=10, w=0.0):\n    path = [w]\n    for _ in range(steps):\n        w = w - lr * grad(w)\n        path.append(w)\n    return path\n\nfor lr in [0.02, 0.3, 0.9, 1.1]:\n    path = run(lr)\n    print(lr, round((path[-1] - 3) ** 2, 3))\n# 0.02 3.978 / 0.3 0.0 / 0.9 0.104 / 1.1 345.038"
+    }
+  ]
+}

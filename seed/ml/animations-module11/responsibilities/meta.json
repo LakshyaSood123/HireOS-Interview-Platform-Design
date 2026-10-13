@@ -1,0 +1,60 @@
+{
+  "title": "Responsibilities: soft membership",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "same-point",
+      "label": "The same ambiguous point",
+      "pseudocode": "A two-component model and one customer.",
+      "python": "comps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]      # (weight, mean, sigma)\nx = 4.5\nprint(comps, x)\n# prints: [(0.4, 3, 1.0), (0.6, 6, 1.5)] 4.5"
+    },
+    {
+      "id": "kmeans-hard-choice",
+      "label": "A hard choice",
+      "pseudocode": "K-Means with centers 3 and 6 sees a tie at 4.5.",
+      "python": "x = 4.5\nprint(abs(x - 3), abs(x - 6))\n# prints: 1.5 1.5"
+    },
+    {
+      "id": "gmm-components",
+      "label": "The GMM components",
+      "pseudocode": "A GMM keeps both components.",
+      "python": "comps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]      # (weight, mean, sigma)\nx = 4.5\nprint(len(comps), 'components kept')\n# prints: 2 components kept"
+    },
+    {
+      "id": "density-under-a",
+      "label": "How well does A explain x?",
+      "pseudocode": "Density of A at x.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]      # (weight, mean, sigma)\nx = 4.5\nprint(round(pdf(x, 3, 1.0), 4))\n# prints: 0.1295"
+    },
+    {
+      "id": "density-under-b",
+      "label": "How well does B explain x?",
+      "pseudocode": "Density of B at x.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]      # (weight, mean, sigma)\nx = 4.5\nprint(round(pdf(x, 6, 1.5), 4))\n# prints: 0.1613"
+    },
+    {
+      "id": "combine-with-weights",
+      "label": "Include the mixing weights",
+      "pseudocode": "Multiply each density by its weight.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]      # (weight, mean, sigma)\nx = 4.5\nprint([round(w * pdf(x, m, s), 4) for w, m, s in comps])\n# prints: [0.0518, 0.0968]"
+    },
+    {
+      "id": "normalize",
+      "label": "Normalize",
+      "pseudocode": "Divide by the total.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]      # (weight, mean, sigma)\nx = 4.5\nscores = [w * pdf(x, m, s) for w, m, s in comps]\ntotal = sum(scores)\nresp = [sc / total for sc in scores]\nprint(round(total, 4))\n# prints: 0.1486"
+    },
+    {
+      "id": "responsibilities",
+      "label": "The responsibilities",
+      "pseudocode": "The shares sum to 1.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]      # (weight, mean, sigma)\nx = 4.5\nscores = [w * pdf(x, m, s) for w, m, s in comps]\ntotal = sum(scores)\nresp = [sc / total for sc in scores]\nprint([round(r, 4) for r in resp], round(sum(resp), 4))\n# prints: [0.3486, 0.6514] 1.0"
+    },
+    {
+      "id": "soft-membership",
+      "label": "Soft membership",
+      "pseudocode": "Weights differ from responsibilities.",
+      "python": "import math\n\ndef pdf(x, m, s):\n    return math.exp(-((x - m) ** 2) / (2 * s * s)) / (math.sqrt(2 * math.pi) * s)\ncomps = [(0.4, 3, 1.0), (0.6, 6, 1.5)]      # (weight, mean, sigma)\nx = 4.5\nscores = [w * pdf(x, m, s) for w, m, s in comps]\ntotal = sum(scores)\nresp = [sc / total for sc in scores]\nprint('weights', [w for w, m, s in comps], 'responsibilities', [round(r, 2) for r in resp])\n# prints: weights [0.4, 0.6] responsibilities [0.35, 0.65]"
+    }
+  ]
+}

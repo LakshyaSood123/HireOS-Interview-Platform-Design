@@ -1,0 +1,34 @@
+{
+ "overfit-model": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "The **degree-4 curve (λ = 0)** hits every training house but swings wildly outside them. Its **validation MSE is 3.0073**."
+ },
+ "large-weights": {
+  "h": "LARGE WEIGHTS",
+  "t": "The wiggle comes from **large weights on the curved terms**. The sum of squared weights **Σw² is 4.73**. A flexible model with big weights can bend sharply."
+ },
+ "add-penalty": {
+  "h": "ADD A PENALTY",
+  "t": "Ridge changes what we minimize. The loss is still the squared error, but **objective = MSE + λ·Σw²** adds a **price for large weights**. The intercept is left out of the penalty."
+ },
+ "small-lambda": {
+  "h": "A SMALL λ = 0.01",
+  "t": "A little penalty already tames the curve. Training MSE rises slightly to **0.0061** and validation MSE falls from 3.0073 to **0.7002**. λ is a hyperparameter we choose; it is **not the learning rate η**."
+ },
+ "balanced-lambda": {
+  "h": "A BALANCED λ = 0.3",
+  "t": "The weights shrink to **Σw² = 0.752**, the curve is smooth, training MSE is **0.091** and validation MSE is down to **0.0822**. We traded a worse training fit for a **better generalization**."
+ },
+ "large-lambda": {
+  "h": "TOO LARGE: λ = 10",
+  "t": "Now the penalty overwhelms the data: the weights are almost zero (**Σw² = 0.009**) and the curve is nearly flat. Both errors are high (training **1.018**, validation **1.9712**). This is **underfitting**."
+ },
+ "compare-models": {
+  "h": "COMPARE ALL THE λ VALUES",
+  "t": "As λ grows, **training error rises** and the weights shrink. **Validation error falls and then rises again**; λ = 0.3 is the best of these."
+ },
+ "generalization": {
+  "h": "TAKEAWAY",
+  "t": "Pick λ with **held-out data**, never by training error. Note that the plain straight line (validation **0.0111**) still beats every ridge curve here: regularization rescues a flexible model, it does not beat a model that already suits the data."
+ }
+}

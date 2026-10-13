@@ -1,0 +1,30 @@
+{
+ "input-output": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "A **function** is a rule: you give it an input and it gives back exactly **one output**. For a model, the input is a setting such as the weight **w**, and the output says **how wrong the model is**."
+ },
+ "function-rule": {
+  "h": "THE RULE IS A FORMULA",
+  "t": "Our loss rule is **L(w) = (w − 3)²**. Put in **w = 2** and the rule gives **(2 − 3)² = 1**. Different inputs give different outputs."
+ },
+ "plot-function": {
+  "h": "PLOT EVERY INPUT AND ITS OUTPUT",
+  "t": "Plot each input along the bottom and its output as the height. The result is a **smooth bowl** with its lowest point at **w = 3**."
+ },
+ "change-input": {
+  "h": "CHANGE THE INPUT A LITTLE",
+  "t": "Nudge **w from 2.0 to 2.5**. The loss moves from **1.00 to 0.25**. A small change in, a small change out."
+ },
+ "continuous-change": {
+  "h": "CONTINUOUS: NO JUMPS",
+  "t": "Slide w along the curve: the loss changes **smoothly at every point**. You could draw the whole curve without lifting your pen. That is what **continuous** means."
+ },
+ "discontinuity-contrast": {
+  "h": "CONTRAST: A RULE WITH A JUMP",
+  "t": "Now a rule that outputs **0 below w = 2 and 1 at or above it**. Right at w = 2 the output **jumps by 1** although w barely moved. This rule is **not continuous**."
+ },
+ "ml-connection": {
+  "h": "TAKEAWAY",
+  "t": "Training follows the slope downhill, which only works when **small changes give small changes**. That is why models are trained on a **smooth loss**, not a jumpy one."
+ }
+}

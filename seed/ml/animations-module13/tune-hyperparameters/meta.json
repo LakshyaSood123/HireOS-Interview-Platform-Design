@@ -1,0 +1,66 @@
+{
+  "title": "Tune hyperparameters",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "base-model",
+      "label": "Base model",
+      "pseudocode": "Separate learned values from chosen settings.",
+      "python": "learned = ['split questions inside the tree', 'weights', 'bias']\nchosen = ['max_depth', 'regularization strength', 'learning rate', 'decision threshold']\nprint('learned:', len(learned), ' chosen by us:', len(chosen))\n# prints: learned: 3  chosen by us: 4"
+    },
+    {
+      "id": "hyperparameter",
+      "label": "The hyperparameter",
+      "pseudocode": "Pick the setting to tune.",
+      "python": "candidates = [1, 2, 4, 8]\nprint('max_depth candidates:', candidates)\n# prints: max_depth candidates: [1, 2, 4, 8]"
+    },
+    {
+      "id": "candidate-a",
+      "label": "Candidate a: depth 1",
+      "pseudocode": "Candidate setting 1.",
+      "python": "RESULTS = [(1, 0.48, 0.46), (2, 0.62, 0.58), (4, 0.76, 0.676), (8, 0.97, 0.59)]   # (max_depth, train F1, validation F1)\nprint('candidate a: max_depth', RESULTS[0][0])\n# prints: candidate a: max_depth 1"
+    },
+    {
+      "id": "candidate-b",
+      "label": "Candidate b: depth 2",
+      "pseudocode": "Candidate setting 2.",
+      "python": "RESULTS = [(1, 0.48, 0.46), (2, 0.62, 0.58), (4, 0.76, 0.676), (8, 0.97, 0.59)]   # (max_depth, train F1, validation F1)\nprint('candidate b: max_depth', RESULTS[1][0])\n# prints: candidate b: max_depth 2"
+    },
+    {
+      "id": "candidate-c",
+      "label": "Candidate c: depth 4",
+      "pseudocode": "Candidate setting 3.",
+      "python": "RESULTS = [(1, 0.48, 0.46), (2, 0.62, 0.58), (4, 0.76, 0.676), (8, 0.97, 0.59)]   # (max_depth, train F1, validation F1)\nprint('candidate c: max_depth', RESULTS[2][0])\n# prints: candidate c: max_depth 4"
+    },
+    {
+      "id": "candidate-d",
+      "label": "Candidate d: depth 8",
+      "pseudocode": "Candidate setting 4.",
+      "python": "RESULTS = [(1, 0.48, 0.46), (2, 0.62, 0.58), (4, 0.76, 0.676), (8, 0.97, 0.59)]   # (max_depth, train F1, validation F1)\nprint('candidate d: max_depth', RESULTS[3][0])\n# prints: candidate d: max_depth 8"
+    },
+    {
+      "id": "train-each",
+      "label": "Train each candidate",
+      "pseudocode": "Fit one model per setting on train.",
+      "python": "RESULTS = [(1, 0.48, 0.46), (2, 0.62, 0.58), (4, 0.76, 0.676), (8, 0.97, 0.59)]   # (max_depth, train F1, validation F1)\nfor d, tr, va in RESULTS:\n    print('max_depth', d, ': fitted on 700 training customers, train F1', tr)\n# prints: max_depth 1 : fitted on 700 training customers, train F1 0.48\n# prints: max_depth 2 : fitted on 700 training customers, train F1 0.62\n# prints: max_depth 4 : fitted on 700 training customers, train F1 0.76\n# prints: max_depth 8 : fitted on 700 training customers, train F1 0.97"
+    },
+    {
+      "id": "validation-results",
+      "label": "Validation results",
+      "pseudocode": "Score each candidate on validation.",
+      "python": "RESULTS = [(1, 0.48, 0.46), (2, 0.62, 0.58), (4, 0.76, 0.676), (8, 0.97, 0.59)]   # (max_depth, train F1, validation F1)\nprint([va for d, tr, va in RESULTS])\n# prints: [0.46, 0.58, 0.676, 0.59]"
+    },
+    {
+      "id": "select-setting",
+      "label": "Select the setting",
+      "pseudocode": "Choose by validation score.",
+      "python": "RESULTS = [(1, 0.48, 0.46), (2, 0.62, 0.58), (4, 0.76, 0.676), (8, 0.97, 0.59)]   # (max_depth, train F1, validation F1)\nbest = max(RESULTS, key=lambda r: r[2])\nprint('selected by validation:', best[0], ' by training score we would pick:', max(RESULTS, key=lambda r: r[1])[0])\n# prints: selected by validation: 4  by training score we would pick: 8"
+    },
+    {
+      "id": "test-stays-locked",
+      "label": "Test stays locked",
+      "pseudocode": "Never tune on the test set.",
+      "python": "RESULTS = [(1, 0.48, 0.46), (2, 0.62, 0.58), (4, 0.76, 0.676), (8, 0.97, 0.59)]   # (max_depth, train F1, validation F1)\ntest_used_for_tuning = False\nprint('test set used for tuning:', test_used_for_tuning)\n# prints: test set used for tuning: False"
+    }
+  ]
+}

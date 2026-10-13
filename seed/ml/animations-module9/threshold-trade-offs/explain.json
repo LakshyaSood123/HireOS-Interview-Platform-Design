@@ -1,0 +1,50 @@
+{
+ "fixed-probabilities": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "A classifier gave these **eight emails a probability of spam**. Each bar is P(spam); the dot is the true class (pink spam, blue legitimate). Five emails are spam. **These probabilities will not change.**"
+ },
+ "threshold-050": {
+  "h": "THRESHOLD 0.50",
+  "t": "The usual decision rule: **flag an email as spam if its probability is at least the threshold**. We start with 0.50."
+ },
+ "predictions": {
+  "h": "PREDICTIONS AT 0.50",
+  "t": "Five emails reach the line and are flagged (pink bars). Each flagged or unflagged email is then a **TP, FP, FN or TN**."
+ },
+ "matrix": {
+  "h": "THE CONFUSION MATRIX AT 0.50",
+  "t": "Counting the outcomes at this threshold: **TP = 4, FN = 1, FP = 1, TN = 2**."
+ },
+ "precision-recall": {
+  "h": "PRECISION AND RECALL AT 0.50",
+  "t": "**Precision = 4 / 5 = 0.80** and **recall = 4 / 5 = 0.80**. Now watch what moving the threshold does."
+ },
+ "lower-threshold": {
+  "h": "LOWER THE THRESHOLD TO 0.30",
+  "t": "We slide the threshold **left**. The bars, the probabilities, **do not move**; only the decision rule changes."
+ },
+ "more-positives": {
+  "h": "MORE EMAILS ARE FLAGGED",
+  "t": "At 0.30 **seven** emails are flagged. The two newly flagged ones (**0.45 legitimate** and **0.38 spam**) are outlined."
+ },
+ "higher-recall": {
+  "h": "RECALL RISES, PRECISION FALLS",
+  "t": "Now all **5 spam** emails are caught: **recall 1.00**. But 2 legitimate emails are flagged too, so **precision drops to 0.714**. Lower thresholds generally raise recall and may lower precision."
+ },
+ "raise-threshold": {
+  "h": "RAISE THE THRESHOLD TO 0.70",
+  "t": "Now we slide the threshold **right**, past 0.50. The probabilities are still exactly the same."
+ },
+ "fewer-positives": {
+  "h": "FEWER EMAILS ARE FLAGGED",
+  "t": "At 0.70 only **three** emails are flagged. The two that dropped out (**0.62 legitimate** and **0.58 spam**) are outlined."
+ },
+ "precision-recall-change": {
+  "h": "PRECISION RISES, RECALL FALLS",
+  "t": "All flagged emails are spam: **precision 1.00**. But only 3 of 5 spam emails are found: **recall 0.60**. Higher thresholds may raise precision and generally lower recall."
+ },
+ "compare": {
+  "h": "TAKEAWAY",
+  "t": "Same probabilities, four thresholds. **Lowering the threshold trades precision for recall; raising it does the opposite.** The right choice depends on which mistake costs more."
+ }
+}

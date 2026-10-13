@@ -1,0 +1,30 @@
+{
+ "quadratic-form": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "For a matrix A and a vector x, the **quadratic form xᵀ A x** is one number. For **A = [[2, 0], [0, 1]]** it equals **2x₁² + x₂²**."
+ },
+ "directions": {
+  "h": "TRY MANY DIRECTIONS",
+  "t": "Evaluate **xᵀ A x** for vectors pointing in many directions. Each arrow shows its value."
+ },
+ "positive-values": {
+  "h": "EVERY DIRECTION GIVES A POSITIVE VALUE",
+  "t": "No matter which **non-zero direction** we pick, the value is above zero. That is what **positive definite** means."
+ },
+ "bowl": {
+  "h": "POSITIVE VALUES MAKE A BOWL",
+  "t": "Plot the value as height and you get an **upward-curving bowl** with a single lowest point: a **stable minimum**."
+ },
+ "eigenvalues": {
+  "h": "EQUIVALENT TEST: ALL EIGENVALUES POSITIVE",
+  "t": "A symmetric matrix is positive definite **exactly when all its eigenvalues are positive**. Here they are **2 and 1**."
+ },
+ "non-pd-contrast": {
+  "h": "COMPARE WITH AN INDEFINITE MATRIX",
+  "t": "Take **B = [[1, 0], [0, −1]]**. Its value is positive along one axis but **negative along the other**, so the surface is a **saddle**."
+ },
+ "ml-connection": {
+  "h": "TAKEAWAY",
+  "t": "Positive curvature means a loss has a **stable minimum**, and covariance matrices have this property. **Saddles are where optimization gets stuck.**"
+ }
+}

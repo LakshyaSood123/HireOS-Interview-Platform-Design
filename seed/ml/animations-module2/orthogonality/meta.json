@@ -1,0 +1,42 @@
+{
+  "title": "Orthogonality and the dot product",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "two-vectors",
+      "label": "Start with two vectors",
+      "pseudocode": "Take two vectors of the same length, u and v.",
+      "python": "u = [3, 0]\nv = [1.6, 1.9]\nprint(u, v)"
+    },
+    {
+      "id": "dot-product",
+      "label": "Compute the dot product",
+      "pseudocode": "Multiply matching entries and add the results.",
+      "python": "def dot(u, v):\n    return sum(a * b for a, b in zip(u, v))\n\nprint(dot([3, 0], [1.6, 1.9]))  # 4.8"
+    },
+    {
+      "id": "aligned",
+      "label": "Vectors pointing the same way",
+      "pseudocode": "When two vectors point the same way, the dot product is large and positive.",
+      "python": "def dot(u, v):\n    return sum(a * b for a, b in zip(u, v))\n\nprint(dot([3, 0], [2.5, 0]))  # 7.5"
+    },
+    {
+      "id": "perpendicular",
+      "label": "Rotate to a right angle",
+      "pseudocode": "Turn v until it makes a right angle with u.",
+      "python": "u = [3, 0]\nv = [0, 2.5]  # pointing straight up\nprint(u, v)"
+    },
+    {
+      "id": "zero-dot",
+      "label": "Check that the dot product is zero",
+      "pseudocode": "If the dot product of two non-zero vectors is zero, they are orthogonal.",
+      "python": "def dot(u, v):\n    return sum(a * b for a, b in zip(u, v))\n\nprint(dot([3, 0], [0, 2.5]))  # 0.0\nprint(dot([1, 2], [2, -1]))   # 0: also orthogonal"
+    },
+    {
+      "id": "ml-meaning",
+      "label": "Read coordinates independently",
+      "pseudocode": "With perpendicular directions, each coordinate is a separate dot product. Nothing overlaps.",
+      "python": "def dot(u, v):\n    return sum(a * b for a, b in zip(u, v))\n\npoint = [2.2, 1.8]\nprint(dot(point, [1, 0]), dot(point, [0, 1]))  # 2.2 1.8"
+    }
+  ]
+}

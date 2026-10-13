@@ -1,0 +1,34 @@
+{
+ "model-parameter": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "A model has a **knob we can turn**: a parameter **w**. Different settings of w make the model behave differently, and **training means choosing a good setting**."
+ },
+ "objective-rule": {
+  "h": "THE OBJECTIVE SCORES A SETTING",
+  "t": "An **objective function** takes a setting of the knob and returns **one number** saying how good or bad it is. Ours is **L(w) = (w − 3)²**. Lower is better, so we want to **minimize** it."
+ },
+ "candidate-one": {
+  "h": "TRY w = 0",
+  "t": "Candidate **w = 0** gives **L(0) = (0 − 3)² = 9**. That is a high, and therefore **bad**, score."
+ },
+ "candidate-two": {
+  "h": "TRY w = 2",
+  "t": "Candidate **w = 2** gives **L(2) = (2 − 3)² = 1**. That is much better than 9."
+ },
+ "candidate-three": {
+  "h": "TRY w = 3 AND w = 5",
+  "t": "**w = 3** gives **L(3) = 0**, the lowest possible score. **w = 5** gives L(5) = 4, worse again. The score **falls and then rises**."
+ },
+ "plot-objective": {
+  "h": "PLOT THE OBJECTIVE",
+  "t": "Plotting the score for every w, not just four, shows a **bowl**. The four candidates are points on it."
+ },
+ "find-minimum": {
+  "h": "FIND THE MINIMUM",
+  "t": "The bottom of the bowl is at **w = 3**, where the score is **0**. The best parameter is the **minimizer**. Training must find it without being shown the whole bowl."
+ },
+ "ml-training": {
+  "h": "TAKEAWAY",
+  "t": "Training a model is this search: **try parameters, score them with the objective, and move toward better scores**. The next lessons say what goes into the objective and how the search moves."
+ }
+}

@@ -1,0 +1,34 @@
+{
+ "prior": {
+  "h": "THE PRIOR: BELIEF BEFORE EVIDENCE",
+  "t": "Before reading an email, **40 of every 100** are spam. So our starting belief, the **prior, is P(spam) = 0.4**. It is a belief held **before** looking at this email's words."
+ },
+ "evidence": {
+  "h": "THE EVIDENCE ARRIVES",
+  "t": "Now the email arrives and it contains the word **“free”**. That is the evidence. **30 of the 100** emails contain it (outlined)."
+ },
+ "likelihood": {
+  "h": "THE LIKELIHOOD: EVIDENCE GIVEN THE CAUSE",
+  "t": "We can measure how often spam contains “free”: **24 of the 40 spam emails**, so **P(free | spam) = 0.6**. This is the likelihood. Only 6 of 60 normal emails contain it: **0.1**."
+ },
+ "reverse-condition": {
+  "h": "WE NEED THE CONDITION REVERSED",
+  "t": "We know **P(free | spam)**: from the cause to the evidence. But what we want is **P(spam | free)**: from the evidence back to the cause. **Bayes' rule turns one arrow around.**"
+ },
+ "normalize": {
+  "h": "NORMALIZE BY THE TOTAL EVIDENCE",
+  "t": "How often does “free” show up at all? From spam: **0.6 × 0.4 = 0.24**. From normal mail: **0.1 × 0.6 = 0.06**. Together **P(free) = 0.30**. Dividing by it makes the two explanations share the evidence fairly."
+ },
+ "posterior": {
+  "h": "THE POSTERIOR: THE UPDATED BELIEF",
+  "t": "**P(spam | free) = likelihood × prior / evidence = 0.6 × 0.4 / 0.30 = 0.24 / 0.30 = 0.8.** This is the **posterior**, the belief after seeing the evidence."
+ },
+ "compare-before-after": {
+  "h": "BEFORE AND AFTER",
+  "t": "The belief moved from **0.4 (prior) to 0.8 (posterior)**. The evidence was stronger for spam than for normal mail, so it pushed the belief up."
+ },
+ "ml-connection": {
+  "h": "TAKEAWAY",
+  "t": "A **naive Bayes classifier** does exactly this: it estimates priors and likelihoods from data, then computes the posterior for each new email and **predicts the more probable class**."
+ }
+}

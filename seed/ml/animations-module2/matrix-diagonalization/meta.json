@@ -1,0 +1,48 @@
+{
+  "title": "Matrix diagonalization",
+  "heightPx": 470,
+  "steps": [
+    {
+      "id": "complex-transform",
+      "label": "Apply the matrix directly",
+      "pseudocode": "Applying A to a shape stretches and shears it in a way that is hard to describe.",
+      "python": "A = [[2, 1], [1, 2]]\n\ndef apply(A, v):\n    return [sum(A[i][j] * v[j] for j in range(len(v))) for i in range(len(A))]\n\nprint(apply(A, [2, 0]))  # [4, 2]"
+    },
+    {
+      "id": "eigen-directions",
+      "label": "Find the eigen-directions",
+      "pseudocode": "Find directions that A only scales. Here they are [1, 1] and [1, -1].",
+      "python": "A = [[2, 1], [1, 2]]\n\ndef apply(A, v):\n    return [sum(A[i][j] * v[j] for j in range(len(v))) for i in range(len(A))]\n\nprint(apply(A, [1, 1]), apply(A, [1, -1]))  # [3, 3] [1, -1]"
+    },
+    {
+      "id": "change-basis",
+      "label": "Change coordinates",
+      "pseudocode": "Describe every vector by how much it uses of each eigen-direction.",
+      "python": "e1, e2 = [1, 1], [1, -1]\nv = [2, 0]\nc1 = (v[0] * e1[0] + v[1] * e1[1]) / 2   # each eigenvector has length-squared 2\nc2 = (v[0] * e2[0] + v[1] * e2[1]) / 2\nprint(c1, c2)  # 1.0 1.0"
+    },
+    {
+      "id": "diagonal-space",
+      "label": "Recognise the diagonal form",
+      "pseudocode": "In eigen-coordinates, A only multiplies each coordinate by a number: 3 for the first, 1 for the second.",
+      "python": "D = [3, 1]  # the diagonal of D\nc = [1.0, 1.0]\nprint([d * x for d, x in zip(D, c)])  # [3.0, 1.0]"
+    },
+    {
+      "id": "scale",
+      "label": "Scale each coordinate",
+      "pseudocode": "Multiply each coordinate by its own eigenvalue. The coordinates do not interact.",
+      "python": "D = [3, 1]\nc = [1.0, 1.0]\nscaled = [d * x for d, x in zip(D, c)]\nprint(scaled)  # [3.0, 1.0]"
+    },
+    {
+      "id": "change-back",
+      "label": "Change back",
+      "pseudocode": "Rebuild the vector from the scaled coordinates using the eigenvectors.",
+      "python": "e1, e2 = [1, 1], [1, -1]\nscaled = [3.0, 1.0]\nresult = [scaled[0] * e1[i] + scaled[1] * e2[i] for i in range(2)]\nprint(result)  # [4.0, 2.0], same as A applied directly"
+    },
+    {
+      "id": "decomposition",
+      "label": "Put it together: A = P D P^-1",
+      "pseudocode": "A equals: change coordinates, scale each axis, change back.",
+      "python": "A = [[2, 1], [1, 2]]\nv = [2, 0]\ndirect = [A[0][0] * v[0] + A[0][1] * v[1], A[1][0] * v[0] + A[1][1] * v[1]]\nvia = [3.0 * 1 + 1.0 * 1, 3.0 * 1 + 1.0 * -1]  # 3*e1 + 1*e2\nprint(direct, via)  # [4, 2] [4.0, 2.0]"
+    }
+  ]
+}

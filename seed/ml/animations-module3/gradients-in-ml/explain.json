@@ -1,0 +1,38 @@
+{
+ "model-parameters": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "The model is **prediction = w × x**. The input is **x = 2** and the true answer is **y = 6**, so the best weight is 3. We start at **w = 0**."
+ },
+ "make-prediction": {
+  "h": "MAKE A PREDICTION",
+  "t": "With w = 0 the model predicts **0 × 2 = 0**. The true answer is 6, so the prediction is **far off**."
+ },
+ "compute-loss": {
+  "h": "MEASURE THE MISS WITH THE LOSS",
+  "t": "**Loss = (prediction − y)² = (0 − 6)² = 36.** The graph shows the loss for every possible weight. We are standing **high on the left** of the bowl."
+ },
+ "parameter-change": {
+  "h": "CHANGE THE WEIGHT, WATCH THE LOSS",
+  "t": "Nudge w and the prediction changes, and so does the loss. **The loss is a function of the weight**, and we want the weight with the smallest loss."
+ },
+ "gradient": {
+  "h": "THE GRADIENT SAYS HOW THE LOSS REACTS",
+  "t": "The slope of the loss with respect to w is **2 × (prediction − y) × x = 2 × (−6) × 2 = −24.** Negative: raising w lowers the loss. Large: the ground is steep here."
+ },
+ "downhill-direction": {
+  "h": "GO AGAINST THE SLOPE'S SIGN",
+  "t": "A **negative gradient** means downhill is to the right, so **w should go up**. The rule: **step against the gradient**."
+ },
+ "update": {
+  "h": "UPDATE THE WEIGHT",
+  "t": "**w ← w − η × gradient**, with learning rate η = 0.05: new w = 0 − 0.05 × (−24) = **1.2**. The prediction is now 2.4 and the loss has fallen from **36 to 12.96**."
+ },
+ "repeat": {
+  "h": "REPEAT WITH THE NEW GRADIENT",
+  "t": "Recompute the gradient at the new weight (**−14.4**) and step again: **w goes 1.2 → 1.92 → 2.35 …** The gradients shrink as the ground flattens, so the steps shrink too."
+ },
+ "learning-connection": {
+  "h": "TAKEAWAY",
+  "t": "**Predict, measure the loss, compute the gradient, update the weights, and repeat.** Training a large model is this same loop with millions of weights."
+ }
+}

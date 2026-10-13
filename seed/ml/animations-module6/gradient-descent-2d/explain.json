@@ -1,0 +1,38 @@
+{
+ "two-parameters": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "Real models have many parameters. Here there are two, **w1 and w2**, so a setting of the model is **a point on a plane**. Each point has a score from the objective."
+ },
+ "loss-surface": {
+  "h": "THE OBJECTIVE IS A SURFACE",
+  "t": "The loss **L(w1, w2) = (w1 − 3)² + 2(w2 − 1)²** gives every point a height: a bowl-shaped surface. We look from above, and **the lighter the shading, the lower the loss**."
+ },
+ "contours": {
+  "h": "CONTOURS SHOW EQUAL LOSS",
+  "t": "The rings are **contours**, like lines on a hiking map: every point on one ring has the same loss (2, 6, 12). The lowest point, the minimum, is the middle at **(3, 1)**."
+ },
+ "current-point": {
+  "h": "WHERE THE MODEL IS NOW",
+  "t": "The model starts at **(w1, w2) = (1, 3)**, on the ring where the loss is **12**. We want to move toward the middle."
+ },
+ "gradient": {
+  "h": "THE GRADIENT VECTOR",
+  "t": "The gradient has one partial derivative per parameter: **∇L = [2(w1 − 3), 4(w2 − 1)] = [−4, 8]** here. It points steeply **uphill**: left in w1 and up in w2."
+ },
+ "negative-gradient": {
+  "h": "DOWNHILL IS THE NEGATIVE GRADIENT",
+  "t": "**−∇L = [4, −8]** points downhill: right in w1 and down in w2. It is the **steepest way down** from this point."
+ },
+ "update-both": {
+  "h": "UPDATE BOTH PARAMETERS AT ONCE",
+  "t": "**θ_new = θ_old − η ∇L(θ)** with η = 0.1: w1 moves by **+0.4** and w2 by **−0.8** in the same step, from (1, 3) to **(1.4, 2.2)**. The loss falls from 12 to **5.44**."
+ },
+ "optimization-path": {
+  "h": "REPEAT: THE PATH TO THE MINIMUM",
+  "t": "Recompute the gradient at each new point and step again. The path **curves**: w2 is the steeper direction, so it gets close to 1 sooner while w1 is still catching up."
+ },
+ "minimum": {
+  "h": "TAKEAWAY",
+  "t": "After enough steps the path arrives near **(3, 1)**, where the gradient is **[0, 0]** and the loss is about 0. With thousands of parameters the idea is identical, but we can no longer draw it."
+ }
+}

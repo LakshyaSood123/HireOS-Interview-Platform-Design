@@ -1,0 +1,30 @@
+{
+ "experiment": {
+  "h": "WHAT YOU ARE LOOKING AT",
+  "t": "We roll a **fair six-sided die**. Before the roll, nobody can say which face will come up. An experiment whose result is uncertain is called a **random experiment**."
+ },
+ "possible-outcomes": {
+  "h": "THE POSSIBLE OUTCOMES",
+  "t": "Each possible result is an **outcome**. A die has six: **1, 2, 3, 4, 5 and 6**. Exactly one of them happens on every roll."
+ },
+ "sample-space": {
+  "h": "THE SAMPLE SPACE",
+  "t": "The set of all possible outcomes is the **sample space**: **{1, 2, 3, 4, 5, 6}**. Everything we will ask about lives inside it."
+ },
+ "event": {
+  "h": "AN EVENT IS A GROUP OF OUTCOMES",
+  "t": "An **event** is any collection of outcomes we care about. “The roll is even” is the event **{2, 4, 6}**. It happens whenever the roll lands on one of those faces."
+ },
+ "assign-probability": {
+  "h": "GIVE EACH OUTCOME A PROBABILITY",
+  "t": "A fair die gives each face probability **1/6**. The probability of an event is the **sum over its outcomes**: P(even) = 1/6 + 1/6 + 1/6 = **1/2**."
+ },
+ "valid-probabilities": {
+  "h": "WHAT MAKES PROBABILITIES VALID",
+  "t": "Every probability must be **between 0 and 1**, and all outcomes together must **add to exactly 1**. Six faces at 1/6 add to 1. Six faces at 0.2 would add to 1.2, which is not valid."
+ },
+ "ml-connection": {
+  "h": "TAKEAWAY",
+  "t": "A classifier that outputs **spam 0.9 and not spam 0.1** is assigning probabilities to its two possible outcomes. They must **add to 1**, or the output is not a coherent belief."
+ }
+}

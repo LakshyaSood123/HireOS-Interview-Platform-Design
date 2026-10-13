@@ -1,0 +1,171 @@
+{
+  "__v": {
+    "$numberInt": "0"
+  },
+  "_id": {
+    "$oid": "6ace4322c4e9cccef168ed79"
+  },
+  "assets": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1791902498589"
+    }
+  },
+  "createdBy": {
+    "$oid": "000000000000000000000000"
+  },
+  "css": "body {\r\n  margin: 0;\r\n  padding: 14px;\r\n  box-sizing: border-box;\r\n  background: #0b1d16;\r\n  color: #e6f5ec;\r\n  font-family: system-ui, sans-serif;\r\n}\r\n.scene {\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 8px;\r\n}\r\n.step-label {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  letter-spacing: 0.08em;\r\n  text-transform: uppercase;\r\n  color: #a7ce65;\r\n}\r\nsvg {\r\n  width: 100%;\r\n  height: auto;\r\n  max-width: 640px;\r\n  background: #071510;\r\n  border-radius: 10px;\r\n  border: 1px solid rgba(29, 181, 132, 0.35);\r\n}\r\nsvg g,\r\nsvg line,\r\nsvg polygon,\r\nsvg path,\r\nsvg ellipse,\r\nsvg circle,\r\nsvg rect,\r\nsvg text {\r\n  transition: opacity 0.4s ease, transform 0.6s ease;\r\n}\r\n.axis {\r\n  stroke: rgba(167, 206, 101, 0.3);\r\n  stroke-width: 1;\r\n}\r\n.tick {\r\n  font-size: 10px;\r\n  fill: #8fa89c;\r\n}\r\n.lbl,\r\n.big,\r\n.note,\r\n.mono {\r\n  paint-order: stroke;\r\n  stroke: #071510;\r\n  stroke-width: 3px;\r\n  stroke-linejoin: round;\r\n}\r\n.lbl {\r\n  font-size: 12px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.lbl-g { fill: #1db584; }\r\n.lbl-y { fill: #e2b44a; }\r\n.lbl-p { fill: #f472b6; }\r\n.lbl-b { fill: #38bdf8; }\r\n.lbl-r { fill: #f87171; }\r\n.big {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.note {\r\n  font-size: 11px;\r\n  fill: #c9dccf;\r\n}\r\n.mono {\r\n  font-family: ui-monospace, Consolas, monospace;\r\n  font-size: 13px;\r\n  font-weight: 700;\r\n  fill: #e6f5ec;\r\n}\r\n.caption {\r\n  margin: 0;\r\n  font-size: 13px;\r\n  line-height: 1.5;\r\n  color: #c9dccf;\r\n  min-height: 40px;\r\n}\r\n.cell rect {\r\n  fill: rgba(255, 255, 255, 0.05);\r\n  stroke: rgba(255, 255, 255, 0.28);\r\n  stroke-width: 1.2;\r\n}\r\n.cell text {\r\n  font-size: 15px;\r\n  font-weight: 800;\r\n  fill: #e6f5ec;\r\n}\r\n.cell.hl-row rect { fill: rgba(226, 180, 74, 0.25); stroke: #e2b44a; }\r\n.cell.hl-col rect { fill: rgba(29, 181, 132, 0.25); stroke: #1db584; }\r\n.cell.hl-both rect { fill: rgba(244, 114, 182, 0.28); stroke: #f472b6; }\r\n.dim { opacity: 0.25; }\r\n.dash { stroke-dasharray: 5 4; }\r\n.fillA { fill: rgba(56, 189, 248, 0.16); stroke: #38bdf8; stroke-width: 2; }\r\n.fillB { fill: rgba(244, 114, 182, 0.18); stroke: #f472b6; stroke-width: 2; }\r\n.fillG { fill: rgba(29, 181, 132, 0.16); stroke: #1db584; stroke-width: 2; }\r\n.contour { stroke: rgba(56, 189, 248, 0.45); stroke-width: 1.5; }\n.curve { fill: none; stroke: #38bdf8; stroke-width: 3; }\n.curve-y { fill: none; stroke: #e2b44a; stroke-width: 3; }\n.curve-p { fill: none; stroke: #f472b6; stroke-width: 3; }\n.curve-g { fill: none; stroke: #1db584; stroke-width: 3; }\n.ghost { fill: none; stroke: rgba(201, 220, 207, 0.4); stroke-width: 2; }\n.lbl-w { fill: #e6f5ec; }\n.lbl-s { font-size: 11px; font-weight: 600; fill: #c9dccf; }\n.contour-hi { fill: none; stroke: #e2b44a; stroke-width: 3; }\n.feasible { fill: rgba(29, 181, 132, 0.16); stroke: none; }\n.infeasible { fill: rgba(248, 113, 113, 0.14); stroke: none; }\n\n/* ── explanation panel (shared by every generated ML animation) ── */\n.explain {\n  box-sizing: border-box;\n  max-width: 640px;\n  margin-top: 4px;\n  padding: 14px 18px 16px;\n  min-height: 150px;\n  border-radius: 12px;\n  background: rgba(29, 181, 132, 0.10);\n  border: 1px solid rgba(29, 181, 132, 0.45);\n  border-left: 5px solid #1db584;\n}\n.explain-h {\n  margin: 0 0 8px;\n  font-size: 13px;\n  font-weight: 800;\n  letter-spacing: 0.1em;\n  text-transform: uppercase;\n  color: #a7ce65;\n}\n.explain-t {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.55;\n  color: #f1faf4;\n}\n.explain-t strong {\n  font-weight: 800;\n  color: #ffd98a;\n}\n\n",
+  "html": "<div class=\"scene\">\n  <p class=\"step-label\" id=\"step-label\"></p>\n  <svg id=\"scene\" viewBox=\"0 0 640 360\" role=\"img\" aria-label=\"Constrained optimization\"></svg>\n  <section class=\"explain\" aria-live=\"polite\">\n    <h3 class=\"explain-h\" id=\"explain-h\"></h3>\n    <p class=\"explain-t\" id=\"caption\"></p>\n  </section>\n</div>\n",
+  "js": "(function () {\n  // ── shared helpers (SVG, tweening) ─────────────────────────────────────────\r\n  var NS = \"http://www.w3.org/2000/svg\";\r\n  var svg = document.getElementById(\"scene\");\r\n  var labelEl = document.getElementById(\"step-label\");\r\n  var captionEl = document.getElementById(\"caption\");\r\n\r\n  function el(name, attrs, parent) {\r\n    var node = document.createElementNS(NS, name);\r\n    for (var key in attrs) node.setAttribute(key, attrs[key]);\r\n    if (parent) parent.appendChild(node);\r\n    return node;\r\n  }\r\n  function txt(parent, x, y, cls, str, anchor) {\r\n    var t = el(\"text\", { x: x, y: y, class: cls }, parent);\r\n    if (anchor) t.setAttribute(\"text-anchor\", anchor);\r\n    t.textContent = str;\r\n    return t;\r\n  }\r\n  function show(node, on) {\r\n    node.setAttribute(\"opacity\", on ? \"1\" : \"0\");\r\n  }\r\n  function place(node, x, y) {\r\n    node.style.transform = \"translate(\" + x + \"px,\" + y + \"px)\";\r\n  }\r\n  function setLine(node, x1, y1, x2, y2) {\r\n    node.setAttribute(\"x1\", x1);\r\n    node.setAttribute(\"y1\", y1);\r\n    node.setAttribute(\"x2\", x2);\r\n    node.setAttribute(\"y2\", y2);\r\n  }\r\n  function lerp(a, b, e) {\r\n    return a + (b - a) * e;\r\n  }\r\n  function round1(v) {\r\n    return (Math.round(v * 10) / 10).toFixed(1);\r\n  }\r\n\r\n  // Eased animation. fn(e) is called with e from 0 to 1. Without\r\n  // requestAnimationFrame (or with ms = 0) it jumps straight to fn(1).\r\n  var animTokens = {};\r\n  function anim(key, ms, fn) {\r\n    var token = (animTokens[key] || 0) + 1;\r\n    animTokens[key] = token;\r\n    if (typeof requestAnimationFrame !== \"function\" || ms <= 0) {\r\n      fn(1);\r\n      return;\r\n    }\r\n    var start = null;\r\n    function frame(now) {\r\n      if (animTokens[key] !== token) return;\r\n      if (start === null) start = now;\r\n      var p = Math.min(1, (now - start) / ms);\r\n      var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;\r\n      fn(e);\r\n      if (p < 1) requestAnimationFrame(frame);\r\n    }\r\n    requestAnimationFrame(frame);\r\n  }\r\n\r\n  // Arrowheads, one marker per colour.\r\n  var COLORS = { g: \"#1DB584\", y: \"#E2B44A\", p: \"#F472B6\", b: \"#38BDF8\", w: \"#c9dccf\", r: \"#F87171\" };\r\n  var defs = el(\"defs\", {}, svg);\r\n  Object.keys(COLORS).forEach(function (k) {\r\n    var m = el(\"marker\", { id: \"ah-\" + k, viewBox: \"0 0 10 10\", refX: 9, refY: 5, markerUnits: \"userSpaceOnUse\", markerWidth: 13, markerHeight: 13, orient: \"auto\" }, defs);\r\n    el(\"path\", { d: \"M0 0 L10 5 L0 10 Z\", fill: COLORS[k] }, m);\r\n  });\r\n  function arrow(parent, colorKey, width) {\r\n    return el(\"line\", { x1: 0, y1: 0, x2: 0, y2: 0, stroke: COLORS[colorKey], \"stroke-width\": width || 3, \"marker-end\": \"url(#ah-\" + colorKey + \")\", \"stroke-linecap\": \"round\" }, parent);\r\n  }\r\n  function polygon(parent, cls) {\r\n    return el(\"polygon\", { points: \"\", class: cls }, parent);\r\n  }\r\n  function setPoly(node, pts) {\r\n    node.setAttribute(\"points\", pts.map(function (p) { return p[0].toFixed(1) + \",\" + p[1].toFixed(1); }).join(\" \"));\r\n  }\r\n  function lerpPts(a, b, e) {\r\n    return a.map(function (p, i) { return [lerp(p[0], b[i][0], e), lerp(p[1], b[i][1], e)]; });\r\n  }\r\n  // Maps maths coordinates (x right, y up) to screen pixels.\r\n  function makePlane(cx, cy, s) {\r\n    return {\r\n      x: function (v) { return cx + s * v; },\r\n      y: function (v) { return cy - s * v; },\r\n      pt: function (p) { return [cx + s * p[0], cy - s * p[1]]; },\r\n      s: s, cx: cx, cy: cy\r\n    };\r\n  }\r\n  function axes(parent, plane, xr, yr) {\r\n    el(\"line\", { x1: plane.x(-xr), y1: plane.y(0), x2: plane.x(xr), y2: plane.y(0), class: \"axis\" }, parent);\r\n    el(\"line\", { x1: plane.x(0), y1: plane.y(-yr), x2: plane.x(0), y2: plane.y(yr), class: \"axis\" }, parent);\r\n  }\r\n\n  // ── Module 3 helpers: graphs, curves, contour plane ───────────────────────\n  // makeGraph maps maths values to pixels with separate x and y scales.\n  function makeGraph(ox, oy, sx, sy) {\n    return {\n      ox: ox, oy: oy, sx: sx, sy: sy,\n      x: function (v) { return ox + sx * v; },\n      y: function (v) { return oy - sy * v; }\n    };\n  }\n  function curveD(g, f, a, b, n) {\n    var d = \"\";\n    for (var i = 0; i <= n; i++) {\n      var v = a + ((b - a) * i) / n;\n      d += (i ? \" L \" : \"M \") + g.x(v).toFixed(1) + \" \" + g.y(f(v)).toFixed(1);\n    }\n    return d;\n  }\n  function setD(node, d) {\n    node.setAttribute(\"d\", d);\n  }\n  function fmt(v, n) {\n    return (Math.round(v * 100000) / 100000).toFixed(n === undefined ? 1 : n);\n  }\n  function drawAxes(parent, g, xmax, ymax, xticks, yticks) {\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(xmax), y2: g.y(0), class: \"axis\" }, parent);\n    el(\"line\", { x1: g.x(0), y1: g.y(0), x2: g.x(0), y2: g.y(ymax), class: \"axis\" }, parent);\n    (xticks || []).forEach(function (t) { txt(parent, g.x(t), g.y(0) + 15, \"tick\", String(t), \"middle\"); });\n    (yticks || []).forEach(function (t) { txt(parent, g.x(0) - 7, g.y(t) + 4, \"tick\", String(t), \"end\"); });\n  }\n  function card(parent, x, y, w, h, cls) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: 10, class: cls || \"fillG\" }, parent);\n  }\n  function ring(parent, cx, cy, rx, ry, cls) {\n    return el(\"ellipse\", { cx: cx, cy: cy, rx: rx, ry: ry, fill: \"none\", class: cls || \"contour\" }, parent);\n  }\n  function clipTo(id, x, y, w, h) {\n    var c = el(\"clipPath\", { id: id }, defs);\n    el(\"rect\", { x: x, y: y, width: w, height: h }, c);\n  }\n\n  // ── Module 4 helpers: seeded randomness, small shapes ─────────────────────\n  function mulberry(seed) {\n    var a = seed;\n    return function () {\n      a |= 0; a = (a + 0x6D2B79F5) | 0;\n      var t = Math.imul(a ^ (a >>> 15), 1 | a);\n      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;\n      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;\n    };\n  }\n  function gaussSource(rand) {\n    return function () {\n      var u = 1 - rand(), v = rand();\n      return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);\n    };\n  }\n  function box(parent, x, y, w, h, fill, stroke, r) {\n    return el(\"rect\", { x: x, y: y, width: w, height: h, rx: r === undefined ? 6 : r, fill: fill, stroke: stroke || \"none\", \"stroke-width\": 2 }, parent);\n  }\n  function setBox(node, x, y, w, h) {\n    node.setAttribute(\"x\", x); node.setAttribute(\"y\", y); node.setAttribute(\"width\", Math.max(0, w)); node.setAttribute(\"height\", Math.max(0, h));\n  }\n  function vis(list, on) {\n    list.forEach(function (n) { show(n, on); });\n  }\n\n  // ── Module 5 helpers: coins, and rows of bars over the nine candidate values of p ──\n  function coin(parent, x, y, r, letter) {\n    var g = el(\"g\", {}, parent);\n    var head = letter === \"H\";\n    el(\"circle\", { cx: x, cy: y, r: r, fill: head ? \"rgba(244,114,182,0.35)\" : \"rgba(56,189,248,0.3)\", stroke: head ? \"#f472b6\" : \"#38bdf8\", \"stroke-width\": 3 }, g);\n    var t = txt(g, x, y + r * 0.36, \"big\", letter, \"middle\");\n    t.setAttribute(\"font-size\", String(Math.round(r * 1.05)));\n    return g;\n  }\n  var THETAS = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9];\n  var WEIGHTS = [1, 2, 3, 4, 5, 4, 3, 2, 1];\n  function lik(t, k, n) { return Math.pow(t, k) * Math.pow(1 - t, n - k); }\n  function normalized(arr) {\n    var s = 0;\n    arr.forEach(function (v) { s += v; });\n    return arr.map(function (v) { return v / s; });\n  }\n  function argmaxIndex(arr) {\n    var b = 0;\n    arr.forEach(function (v, i) { if (v > arr[b]) b = i; });\n    return b;\n  }\n  // A row of nine bars. set(values, maxValue) rescales heights so maxValue fills `height`.\n  function barRow(parent, x0, dx, base, bw, height, fill, stroke) {\n    var g = el(\"g\", {}, parent);\n    var bars = THETAS.map(function (t, i) {\n      return box(g, x0 + i * dx - bw / 2, base, bw, 0, fill, stroke || \"none\", 3);\n    });\n    var tick = THETAS.map(function (t, i) {\n      var tt = txt(g, x0 + i * dx, base + 14, \"tick\", String(t), \"middle\");\n      tt.setAttribute(\"opacity\", \"0\");\n      return tt;\n    });\n    return {\n      g: g,\n      bars: bars,\n      ticks: tick,\n      set: function (values, maxValue) {\n        values.forEach(function (v, i) {\n          var h = Math.max(0, (v / maxValue) * height);\n          setBox(bars[i], x0 + i * dx - bw / 2, base - h, bw, h);\n        });\n      },\n      showTicks: function (on) { tick.forEach(function (n) { n.setAttribute(\"opacity\", on ? \"1\" : \"0\"); }); }\n    };\n  }\n\n  // ── Module 6 helpers: the two-weight objective, contours, quick arrows ────\n  function L2(w1, w2) { return (w1 - 3) * (w1 - 3) + 2 * (w2 - 1) * (w2 - 1); }\n  function G2(w1, w2) { return [2 * (w1 - 3), 4 * (w2 - 1)]; }\n  // Contour of L2 at level c, drawn in the plane P (makeGraph) around the minimum (3, 1).\n  function levelEllipse(parent, P, c, cls) {\n    var e = el(\"ellipse\", { cx: P.x(3), cy: P.y(1), rx: Math.sqrt(c) * P.sx, ry: Math.sqrt(c / 2) * P.sy, fill: \"none\", class: cls || \"contour\" }, parent);\n    return e;\n  }\n  function arrowLine(parent, key, width, x1, y1, x2, y2) {\n    var a = arrow(parent, key, width);\n    setLine(a, x1, y1, x2, y2);\n    return a;\n  }\n\n  var EXPLAIN = {\"objective\":{\"h\":\"WHAT YOU ARE LOOKING AT\",\"t\":\"The same objective as before: **L(w1, w2) = (w1 − 3)² + 2(w2 − 1)²**. The rings are contours of equal loss, and **lower loss is toward the middle**.\"},\"unconstrained-minimum\":{\"h\":\"BEST CHOICE WITH NO RULES\",\"t\":\"With no restrictions, the best point is the middle, **(3, 1)**, where the loss is **0**.\"},\"add-constraint\":{\"h\":\"ADD A CONSTRAINT (A RULE)\",\"t\":\"Now there is a **budget on the total weight: w1 + w2 ≤ 2**. The yellow line is where **w1 + w2 = 2** exactly.\"},\"feasible-region\":{\"h\":\"THE FEASIBLE REGION\",\"t\":\"Points that satisfy the rule form the **feasible region** (green): everything on or below the line. **Only these points are allowed.**\"},\"infeasible-region\":{\"h\":\"THE INFEASIBLE REGION\",\"t\":\"Points on the other side break the rule: they are **infeasible** (red). The best unconstrained point (3, 1) has **w1 + w2 = 4**, which is over budget, so it is **not allowed**.\"},\"search-feasible\":{\"h\":\"SEARCH AMONG FEASIBLE POINTS\",\"t\":\"Try feasible candidates: **(1, 1) has loss 4, (2, 0) has loss 3, (1.5, 0.5) has loss 2.75**. The loss keeps improving as we approach the line from the left.\"},\"boundary\":{\"h\":\"SLIDE ALONG THE BOUNDARY\",\"t\":\"Move along the boundary **w1 + w2 = 2**. The loss falls and then rises again; the chart shows loss along the line. It is **lowest at w1 = 5/3**.\"},\"best-feasible-point\":{\"h\":\"THE BEST FEASIBLE POINT\",\"t\":\"The best allowed point is **(5/3, 1/3) ≈ (1.67, 0.33)**, with loss **8/3 ≈ 2.67**. It sits **on the boundary**: the constraint is **active**, doing real work.\"},\"ml-connection\":{\"h\":\"TAKEAWAY\",\"t\":\"Constraints appear as **limits on weight size, budgets and resources, probabilities that must add to 1, and variances that must be non-negative**. They are part of the model.\"}};\n  // ── scene ──\n  var steps = [\r\n    { id: \"objective\", label: \"The objective we want to minimize\", caption: \"The same objective as before: L(w1, w2) = (w1 − 3)² + 2(w2 − 1)². The rings are contours of equal loss; lower loss is toward the middle.\" },\r\n    { id: \"unconstrained-minimum\", label: \"Best choice with no rules\", caption: \"With no restrictions the best point is the middle, (3, 1), where the loss is 0.\" },\r\n    { id: \"add-constraint\", label: \"Add a constraint (a rule)\", caption: \"Now there is a budget on the total weight: w1 + w2 ≤ 2. The yellow line is where w1 + w2 = 2 exactly.\" },\r\n    { id: \"feasible-region\", label: \"The feasible region\", caption: \"Points that satisfy the rule form the feasible region (green): everything on or below the line. Only these points are allowed.\" },\r\n    { id: \"infeasible-region\", label: \"The infeasible region\", caption: \"Points on the other side break the rule: they are infeasible (red). The best unconstrained point (3, 1) has w1 + w2 = 4, which is over budget, so it is not allowed.\" },\r\n    { id: \"search-feasible\", label: \"Search among feasible points\", caption: \"Try feasible candidates: (1, 1) has loss 4, (2, 0) has loss 3, (1.5, 0.5) has loss 2.75. The loss keeps improving as we approach the line from the left.\" },\r\n    { id: \"boundary\", label: \"Slide along the boundary\", caption: \"Move along the boundary line w1 + w2 = 2. The loss falls and then rises again; the chart shows loss along the line. It is lowest at w1 = 5/3.\" },\r\n    { id: \"best-feasible-point\", label: \"The best feasible point\", caption: \"The best allowed point is (5/3, 1/3) ≈ (1.67, 0.33), with loss 8/3 ≈ 2.67. It sits ON the boundary: the constraint is active, it is doing real work.\" },\r\n    { id: \"ml-connection\", label: \"Constraints in ML\", caption: \"Constraints appear as limits on weight size, budgets and resources, probabilities that must add to 1, and variances that must be non-negative. They are part of the model.\" }\r\n  ];\r\n\r\n  var P = makeGraph(70, 250, 50, 55);\r\n  clipTo(\"cpclip\", 10, 40, 370, 300);\r\n  var plane = el(\"g\", {}, svg);\r\n  card(plane, 10, 40, 370, 300, \"fillA\").setAttribute(\"fill\", \"rgba(56,189,248,0.04)\");\r\n  var clipped = el(\"g\", { \"clip-path\": \"url(#cpclip)\" }, plane);\r\n  var fea = el(\"polygon\", { points: [[-1, 3], [-1, -1.5], [3.5, -1.5]].map(function (p) { return P.x(p[0]) + \",\" + P.y(p[1]); }).join(\" \"), class: \"feasible\" }, clipped);\r\n  var inf = el(\"polygon\", { points: [[-1, 3], [-1, 3.5], [6, 3.5], [6, -1.5], [3.5, -1.5]].map(function (p) { return P.x(p[0]) + \",\" + P.y(p[1]); }).join(\" \"), class: \"infeasible\", fill: \"rgba(248,113,113,0.22)\" }, clipped);\r\n  var rings = el(\"g\", {}, clipped);\r\n  [1, 4, 9, 16].forEach(function (c) { levelEllipse(rings, P, c, \"contour\"); });\r\n  drawAxes(plane, P, 6.2, 3.3, [0, 1, 2, 3, 4, 5, 6], [1, 2, 3]);\r\n  txt(plane, P.x(6.2), P.y(0) + 28, \"note\", \"w1\", \"end\");\r\n  txt(plane, P.x(0) + 8, P.y(3.3) + 12, \"note\", \"w2\", \"start\");\r\n\r\n  var starG = el(\"g\", {}, svg);\r\n  el(\"circle\", { cx: P.x(3), cy: P.y(1), r: 8, fill: \"#1db584\", stroke: \"#071510\", \"stroke-width\": 3 }, starG);\r\n  var starLbl = txt(starG, P.x(3) + 12, P.y(1) - 10, \"lbl lbl-g\", \"unconstrained minimum (3, 1)\", \"start\");\r\n  var cross = el(\"g\", {}, svg);\r\n  el(\"line\", { x1: P.x(3) - 9, y1: P.y(1) - 9, x2: P.x(3) + 9, y2: P.y(1) + 9, stroke: \"#f87171\", \"stroke-width\": 4 }, cross);\r\n  el(\"line\", { x1: P.x(3) - 9, y1: P.y(1) + 9, x2: P.x(3) + 9, y2: P.y(1) - 9, stroke: \"#f87171\", \"stroke-width\": 4 }, cross);\r\n  txt(cross, P.x(3) + 14, P.y(1) + 26, \"lbl lbl-r\", \"infeasible: 3 + 1 = 4 > 2\", \"start\");\r\n\r\n  var conG = el(\"g\", {}, svg);\r\n  var conLine = el(\"line\", { stroke: \"#e2b44a\", \"stroke-width\": 5, \"stroke-linecap\": \"round\" }, conG);\r\n  setLine(conLine, P.x(-1), P.y(3), P.x(3.5), P.y(-1.5));\r\n  txt(conG, P.x(0.2) - 6, P.y(1.8) - 14, \"lbl lbl-y\", \"w1 + w2 = 2\", \"end\");\r\n  var feaLbl = txt(svg, P.x(-0.6), P.y(-0.9), \"lbl lbl-g\", \"FEASIBLE  (w1 + w2 ≤ 2)\", \"start\");\r\n  var infLbl = txt(svg, P.x(3.3), P.y(2.8), \"lbl lbl-r\", \"INFEASIBLE  (w1 + w2 > 2)\", \"start\");\r\n\r\n  var candG = el(\"g\", {}, svg);\r\n  var CANDS = [[1, 1, 4], [2, 0, 3], [1.5, 0.5, 2.75]];\r\n  var candDots = CANDS.map(function (c) {\r\n    var g = el(\"g\", {}, candG);\r\n    el(\"circle\", { cx: P.x(c[0]), cy: P.y(c[1]), r: 7, fill: \"#ffffff\", stroke: \"#071510\", \"stroke-width\": 2 }, g);\r\n    txt(g, P.x(c[0]) - 12, P.y(c[1]) + 18, \"lbl\", \"(\" + c[0] + \", \" + c[1] + \")  L = \" + c[2], \"end\");\r\n    return g;\r\n  });\r\n  var mover = el(\"circle\", { r: 8, fill: \"#ffffff\", stroke: \"#071510\", \"stroke-width\": 3 }, svg);\r\n  var bestG = el(\"g\", {}, svg);\r\n  el(\"circle\", { cx: P.x(5 / 3), cy: P.y(1 / 3), r: 11, fill: \"none\", stroke: \"#1db584\", \"stroke-width\": 4 }, bestG);\r\n  el(\"circle\", { cx: P.x(5 / 3), cy: P.y(1 / 3), r: 5, fill: \"#1db584\" }, bestG);\r\n  txt(bestG, P.x(5 / 3) - 14, P.y(1 / 3) + 26, \"lbl lbl-g\", \"best feasible (5/3, 1/3)\", \"end\");\r\n\r\n  var panel = el(\"g\", {}, svg);\r\n  card(panel, 392, 40, 236, 118, \"fillG\");\r\n  var p1 = txt(panel, 510, 64, \"note\", \"\", \"middle\");\r\n  var p2 = txt(panel, 510, 92, \"mono\", \"\", \"middle\");\r\n  var p3 = txt(panel, 510, 118, \"mono\", \"\", \"middle\");\r\n  var p4 = txt(panel, 510, 146, \"big\", \"\", \"middle\");\r\n\r\n  var chartG = el(\"g\", {}, svg);\r\n  card(chartG, 392, 168, 236, 172, \"fillB\");\r\n  var CXf = function (w1) { return 410 + (w1 + 1) * 44; };\r\n  var CYf = function (l) { return 322 - l * 4.4; };\r\n  txt(chartG, 510, 190, \"lbl\", \"loss along the boundary\", \"middle\");\r\n  el(\"line\", { x1: 404, y1: CYf(0), x2: 620, y2: CYf(0), class: \"axis\" }, chartG);\r\n  var fb = function (w1) { return (w1 - 3) * (w1 - 3) + 2 * (2 - w1 - 1) * (2 - w1 - 1); };\r\n  el(\"path\", { class: \"curve-p\", d: curveD({ x: CXf, y: CYf }, fb, -1, 3.5, 60) }, chartG);\r\n  txt(chartG, CXf(-1), CYf(0) + 14, \"tick\", \"w1 = −1\", \"middle\");\r\n  txt(chartG, CXf(3.5), CYf(0) + 14, \"tick\", \"3.5\", \"middle\");\r\n  var chartDot = el(\"circle\", { r: 6, fill: \"#e2b44a\", stroke: \"#071510\", \"stroke-width\": 2 }, chartG);\r\n  var chartMin = el(\"g\", {}, chartG);\r\n  el(\"circle\", { cx: CXf(5 / 3), cy: CYf(fb(5 / 3)), r: 9, fill: \"none\", stroke: \"#1db584\", \"stroke-width\": 3 }, chartMin);\r\n  txt(chartMin, CXf(5 / 3), CYf(fb(5 / 3)) - 14, \"lbl lbl-g\", \"lowest: 2.67\", \"middle\");\r\n\r\n  var mlG = el(\"g\", {}, svg);\r\n  [[\"Weight-size limits\", \"e.g. keep weights small (a norm constraint)\"], [\"Budgets and resources\", \"total compute, money or time\"], [\"Valid probabilities\", \"values must add up to 1 and stay ≥ 0\"]].forEach(function (b, i) {\r\n    var y = 40 + i * 86;\r\n    card(mlG, 80, y, 480, 70, i === 1 ? \"fillB\" : \"fillG\");\r\n    txt(mlG, 320, y + 30, \"big\", b[0], \"middle\");\r\n    txt(mlG, 320, y + 54, \"note\", b[1], \"middle\");\r\n  });\r\n  txt(mlG, 320, 318, \"lbl lbl-y\", \"next: Lagrange multipliers, then KKT conditions\", \"middle\");\r\n\r\n  function moveTo(w1) {\r\n    var w2 = 2 - w1;\r\n    mover.setAttribute(\"cx\", P.x(w1)); mover.setAttribute(\"cy\", P.y(w2));\r\n    chartDot.setAttribute(\"cx\", CXf(w1)); chartDot.setAttribute(\"cy\", CYf(fb(w1)));\r\n    p2.textContent = \"(\" + fmt(w1, 2) + \", \" + fmt(w2, 2) + \")\";\r\n    p3.textContent = \"loss = \" + fmt(fb(w1), 2);\r\n  }\r\n\r\n  function render(index, id) {\r\n    var i = index;\r\n    show(plane, i <= 7);\r\n    show(fea, i >= 3 && i <= 7); show(inf, i >= 4 && i <= 7);\r\n    show(starG, i >= 1 && i <= 4);\r\n    show(cross, i === 4);\r\n    show(conG, i >= 2 && i <= 7);\r\n    show(feaLbl, i >= 3 && i <= 7); show(infLbl, i >= 4 && i <= 7);\r\n    show(candG, i === 5);\r\n    candDots.forEach(function (c, k) { show(c, i === 5); });\r\n    show(mover, i === 6); show(chartG, i === 6); show(chartMin, i === 6);\r\n    show(bestG, i === 7);\r\n    show(panel, i >= 0 && i <= 7);\r\n    show(mlG, i === 8);\r\n    p1.textContent = \"\"; p2.textContent = \"\"; p3.textContent = \"\"; p4.textContent = \"\";\r\n    if (i === 0) { p1.textContent = \"minimize\"; p2.textContent = \"(w1−3)² + 2(w2−1)²\"; p4.textContent = \"lower = better\"; }\r\n    if (i === 1) { p1.textContent = \"no rules\"; p2.textContent = \"best point: (3, 1)\"; p3.textContent = \"loss 0\"; p4.textContent = \"the middle of the rings\"; }\r\n    if (i === 2) { p1.textContent = \"a constraint (budget)\"; p2.textContent = \"w1 + w2 ≤ 2\"; p3.textContent = \"line: w1 + w2 = 2\"; }\r\n    if (i === 3) { p1.textContent = \"feasible region\"; p2.textContent = \"w1 + w2 ≤ 2\"; p4.textContent = \"allowed points\"; }\r\n    if (i === 4) { p1.textContent = \"infeasible region\"; p2.textContent = \"(3, 1): 3 + 1 = 4\"; p3.textContent = \"over budget\"; p4.textContent = \"not allowed\"; }\r\n    if (i === 5) {\r\n      p1.textContent = \"feasible candidates\"; p2.textContent = \"L(1,1) = 4\"; p3.textContent = \"L(2,0) = 3\"; p4.textContent = \"L(1.5, 0.5) = 2.75\";\r\n      anim(\"cand\", 1500, function (e) { candDots.forEach(function (c, k) { c.setAttribute(\"opacity\", Math.max(0, Math.min(1, e * 3.2 - k)).toFixed(2)); }); });\r\n    }\r\n    if (i === 6) {\r\n      p1.textContent = \"slide along w1 + w2 = 2\";\r\n      anim(\"slide\", 3000, function (e) {\r\n        var w1 = e < 0.75 ? lerp(3.4, 0, e / 0.75) : lerp(0, 5 / 3, (e - 0.75) / 0.25);\r\n        moveTo(w1);\r\n        p4.textContent = e > 0.99 ? \"lowest at w1 = 5/3\" : \"loss falls, then rises\";\r\n      });\r\n    }\r\n    if (i === 7) { p1.textContent = \"best feasible point\"; p2.textContent = \"(5/3, 1/3)\"; p3.textContent = \"loss = 8/3 ≈ 2.67\"; p4.textContent = \"constraint active\"; }\r\n  }\r\n\n\n  // ── shared runtime: stepping, explanation panel, educational autoplay pacing, bridge ──\n  var current = 0;\n  var explainHeadEl = document.getElementById(\"explain-h\");\n\n  // **bold** markers in an explanation become <strong> nodes (built with DOM calls, never innerHTML).\n  function setRich(node, str) {\n    node.textContent = \"\";\n    var parts = String(str).split(\"**\");\n    for (var i = 0; i < parts.length; i++) {\n      if (parts[i] === \"\") continue;\n      var seg = document.createElement(i % 2 ? \"strong\" : \"span\");\n      seg.textContent = parts[i];\n      node.appendChild(seg);\n    }\n  }\n\n  function explanationFor(index) {\n    var ex = (typeof EXPLAIN === \"object\" && EXPLAIN) ? EXPLAIN[steps[index].id] : null;\n    return ex || { h: \"WHAT IS HAPPENING\", t: steps[index].caption };\n  }\n\n  // Autoplay pace: 4.5 to 10.5 seconds per step, longer for longer explanations, so a learner can read.\n  function stepMs(index) {\n    var words = String(explanationFor(index).t).replace(/\\*\\*/g, \"\").split(/\\s+/).length;\n    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));\n  }\n\n  function renderStep(index) {\n    var ex = explanationFor(index);\n    labelEl.textContent = steps[index].label;\n    if (explainHeadEl) explainHeadEl.textContent = ex.h;\n    setRich(captionEl, ex.t);\n    render(index, steps[index].id);\n  }\n\n  function goTo(index) {\n    if (index < 0 || index >= steps.length) return;\n    current = index;\n    renderStep(current);\n    if (window.ReagvisBridge) window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n\n  renderStep(current);\n\n  // Autoplay: exactly one timer, one step per tick, stops on the final step.\n  // PLAY on the final step restarts from the first step and plays again.\n  var timer = null;\n\n  function stopAuto() {\n    if (timer !== null) {\n      clearTimeout(timer);\n      timer = null;\n    }\n  }\n\n  function scheduleNext() {\n    timer = setTimeout(function () {\n      timer = null;\n      if (current >= steps.length - 1) return;\n      goTo(current + 1);\n      if (current < steps.length - 1) scheduleNext();\n    }, stepMs(current));\n  }\n\n  function startAuto() {\n    if (timer !== null) return;\n    if (current >= steps.length - 1) goTo(0);\n    scheduleNext();\n  }\n\n  window.addEventListener(\"pagehide\", stopAuto);\n\n  window.ReagvisAnimation = {\n    stepDuration: stepMs,\n    onCommand: function (type, stepId) {\n      if (type === \"PLAY\") startAuto();\n      else if (type === \"PAUSE\") stopAuto();\n      else if (type === \"NEXT\") { stopAuto(); goTo(current + 1); }\n      else if (type === \"PREVIOUS\") { stopAuto(); goTo(current - 1); }\n      else if (type === \"RESET\") { stopAuto(); goTo(0); }\n      else if (type === \"GOTO_STEP\") {\n        stopAuto();\n        for (var i = 0; i < steps.length; i++) {\n          if (steps[i].id === stepId) { goTo(i); break; }\n        }\n      }\n    },\n  };\n\n  if (window.ReagvisBridge) {\n    window.ReagvisBridge.ready();\n    window.ReagvisBridge.stepChanged(steps[current].id);\n  }\n})();\n",
+  "lastFrozenContentHash": null,
+  "lastFrozenRevisionId": null,
+  "manifest": {
+    "bridgeVersion": {
+      "$numberInt": "1"
+    },
+    "capabilities": [
+      "play",
+      "pause",
+      "next",
+      "previous",
+      "reset",
+      "gotoStep"
+    ],
+    "heightPx": {
+      "$numberInt": "590"
+    },
+    "traceEvents": [
+      "objective",
+      "unconstrained-minimum",
+      "add-constraint",
+      "feasible-region",
+      "infeasible-region",
+      "search-feasible",
+      "boundary",
+      "best-feasible-point",
+      "ml-connection"
+    ]
+  },
+  "packageId": "d81bb8ad-0846-4027-ace9-d40c5ee1b326",
+  "packageTrace": {
+    "steps": [
+      {
+        "animationEvent": "objective",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "The objective scores every (w1, w2).",
+          "python": "def loss(w1, w2):\n    return (w1 - 3) ** 2 + 2 * (w2 - 1) ** 2\n\nprint(loss(1, 1))   # 4"
+        },
+        "id": "objective",
+        "label": "The objective we want to minimize"
+      },
+      {
+        "animationEvent": "unconstrained-minimum",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "With no rules the minimum is at (3, 1).",
+          "python": "def loss(w1, w2):\n    return (w1 - 3) ** 2 + 2 * (w2 - 1) ** 2\n\nprint(loss(3, 1))   # 0"
+        },
+        "id": "unconstrained-minimum",
+        "label": "Best choice with no rules"
+      },
+      {
+        "animationEvent": "add-constraint",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Add the rule: w1 + w2 must be at most 2.",
+          "python": "def loss(w1, w2):\n    return (w1 - 3) ** 2 + 2 * (w2 - 1) ** 2\n\ndef feasible(w1, w2):\n    return w1 + w2 <= 2\n\nprint(feasible(3, 1))   # False : 3 + 1 = 4 > 2"
+        },
+        "id": "add-constraint",
+        "label": "Add a constraint (a rule)"
+      },
+      {
+        "animationEvent": "feasible-region",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Feasible points satisfy the rule.",
+          "python": "def loss(w1, w2):\n    return (w1 - 3) ** 2 + 2 * (w2 - 1) ** 2\n\ndef feasible(w1, w2):\n    return w1 + w2 <= 2\n\nprint(feasible(1, 1), feasible(2, 0), feasible(1.5, 0.5))   # True True True"
+        },
+        "id": "feasible-region",
+        "label": "The feasible region"
+      },
+      {
+        "animationEvent": "infeasible-region",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Infeasible points break the rule.",
+          "python": "def loss(w1, w2):\n    return (w1 - 3) ** 2 + 2 * (w2 - 1) ** 2\n\ndef feasible(w1, w2):\n    return w1 + w2 <= 2\n\nprint(feasible(3, 1), feasible(3, 0))   # False False"
+        },
+        "id": "infeasible-region",
+        "label": "The infeasible region"
+      },
+      {
+        "animationEvent": "search-feasible",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Compare feasible candidates by their loss.",
+          "python": "def loss(w1, w2):\n    return (w1 - 3) ** 2 + 2 * (w2 - 1) ** 2\n\ndef feasible(w1, w2):\n    return w1 + w2 <= 2\n\nfor p in [(1, 1), (2, 0), (1.5, 0.5)]:\n    print(p, feasible(*p), loss(*p))\n# (1, 1) True 4 / (2, 0) True 3 / (1.5, 0.5) True 2.75"
+        },
+        "id": "search-feasible",
+        "label": "Search among feasible points"
+      },
+      {
+        "animationEvent": "boundary",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Along the boundary w2 = 2 - w1 the loss falls then rises.",
+          "python": "def loss(w1, w2):\n    return (w1 - 3) ** 2 + 2 * (w2 - 1) ** 2\n\nfor w1 in [3, 2, 5 / 3, 1, 0]:\n    print(round(w1, 2), round(loss(w1, 2 - w1), 2))\n# 3 8.0 / 2 3.0 / 1.67 2.67 / 1 4.0 / 0 11.0"
+        },
+        "id": "boundary",
+        "label": "Slide along the boundary"
+      },
+      {
+        "animationEvent": "best-feasible-point",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "Search the feasible grid for the lowest loss.",
+          "python": "def loss(w1, w2):\n    return (w1 - 3) ** 2 + 2 * (w2 - 1) ** 2\n\ndef feasible(w1, w2):\n    return w1 + w2 <= 2\n\ngrid = [(i / 10, j / 10) for i in range(-30, 61) for j in range(-30, 61)]\nallowed = [p for p in grid if feasible(*p)]\nbest = min(allowed, key=lambda p: loss(*p))\nprint(best, round(loss(*best), 2))   # (1.7, 0.3) 2.67"
+        },
+        "id": "best-feasible-point",
+        "label": "The best feasible point"
+      },
+      {
+        "animationEvent": "ml-connection",
+        "code": {
+          "cpp": null,
+          "java": null,
+          "pseudocode": "A budget on the total size of the weights is a constraint.",
+          "python": "def within_budget(w, budget=2.0):\n    return sum(w) <= budget\n\nprint(within_budget([1.0, 0.5]), within_budget([2.0, 1.5]))   # True False"
+        },
+        "id": "ml-connection",
+        "label": "Constraints in ML"
+      }
+    ],
+    "version": {
+      "$numberInt": "1"
+    }
+  },
+  "revision": {
+    "$numberInt": "5"
+  },
+  "revisionId": "r2",
+  "sourceKind": "zip",
+  "status": "frozen",
+  "title": "ML Module 6 — Constrained Optimization",
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1791902498589"
+    }
+  },
+  "updatedBy": {
+    "$oid": "000000000000000000000000"
+  }
+}
