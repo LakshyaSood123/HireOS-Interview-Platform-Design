@@ -67,6 +67,8 @@ const animationPackageSchema = new Schema(
     js: { type: String, default: null },
     assets: { type: [assetSchema], required: true, default: [] },
     packageTrace: { type: packageTraceSchema, default: null },
+    /** Narration (text-to-speech) config + generated audio, owned by this revision. See narration/narration.types.ts. */
+    narration: { type: Schema.Types.Mixed, default: null },
 
     /** Set only on a `"draft"` revision, after it has been frozen at least
      * once — lets `freezePackageRevisionIfNeeded` reuse the same frozen

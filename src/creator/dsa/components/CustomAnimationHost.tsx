@@ -24,14 +24,15 @@
 // — the sandbox attribute and CSP's `connect-src`/`default-src` are what's
 // doing the actual containment work, not script-src.
 
-import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react"
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState, useSyncExternalStore } from "react"
 import type { CmsAnimationPackage } from "../animationPackageClient"
 import { BRIDGE_VERSION, parseBridgeEvent, buildBridgeCommand, type BridgeCommand, type BridgeEventMessage } from "../animationBridge"
 import type { CmsPackageCapability } from "../animationPackageClient"
 import type { CmsDsaBridgeMode } from "../dsaCmsTypes"
+import { NARRATION_RATES, NarrationController, type NarrationCommand } from "../../../learning/narration/narrationController"
 
 interface CustomAnimationHostProps {
-  pkg: Pick<CmsAnimationPackage, "html" | "css" | "js" | "assets" | "manifest">
+  pkg: Pick<CmsAnimationPackage, "html" | "css" | "js" | "assets" | "manifest"> & { narration?: CmsAnimationPackage["narration"] }
   bridgeMode: CmsDsaBridgeMode
   /** Called with a semantic step id whenever the package emits STEP_CHANGED
    * (synchronized mode only) — the caller (Preview Draft / a future
@@ -89,6 +90,8 @@ function composeSandboxDocument(pkg: CustomAnimationHostProps["pkg"]): string {
       window.addEventListener("message", function (event) {
         var data = event.data;
         if (!data || data.bridgeVersion !== BRIDGE_VERSION) return;
+        // Narration timing: { stepId: audio ms } from the parent, only while narration is ON. Read lazily by the autoplay timer.
+        if (data.type === "NARRATION_TIMING") { window.__REAGVIS_NARRATION__ = data.durations || {}; return; }
         var handler = window.ReagvisAnimation && window.ReagvisAnimation.onCommand;
         if (typeof handler === "function") handler(data.type, data.stepId);
       });
@@ -123,11 +126,24 @@ export interface CustomAnimationHostHandle {
   gotoStep: (stepId: string) => void
 }
 
+const NO_SUBSCRIBE = () => () => undefined
+const NO_SNAPSHOT = () => null
+
 const CustomAnimationHost = forwardRef<CustomAnimationHostHandle, CustomAnimationHostProps>(function CustomAnimationHost({ pkg, bridgeMode, onStepChanged, className }, ref) {
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const [ready, setReady] = useState(false)
   const srcDoc = useMemo(() => composeSandboxDocument(pkg), [pkg])
   const declaredCapabilities = pkg.manifest.capabilities
+
+  // Narration: one controller per loaded package revision. It plays audio in THIS page (never inside the sandbox) and follows
+  // the animation's own STEP_CHANGED events and the learner's commands; see learning/narration/narrationController.ts.
+  const narrationData = pkg.narration && pkg.narration.enabled ? pkg.narration : null
+  const narration = useMemo(
+    () => (narrationData && bridgeMode === "synchronized" ? new NarrationController(narrationData, pkg.manifest.traceEvents) : null),
+    [narrationData, bridgeMode, pkg.manifest.traceEvents],
+  )
+  useEffect(() => () => narration?.dispose(), [narration])
+  const narr = useSyncExternalStore(narration ? narration.subscribe : NO_SUBSCRIBE, narration ? narration.getSnapshot : NO_SNAPSHOT)
 
   useEffect(() => {
     setReady(false)
@@ -141,6 +157,7 @@ const CustomAnimationHost = forwardRef<CustomAnimationHostHandle, CustomAnimatio
 
       if (message.type === "READY") setReady(true)
       if (message.type === "STEP_CHANGED" && bridgeMode === "synchronized" && message.stepId) {
+        narration?.stepChanged(message.stepId)
         onStepChanged?.(message.stepId)
       }
       // HEIGHT_CHANGED is parsed/bounded but not acted on in V1 — the host
@@ -148,12 +165,20 @@ const CustomAnimationHost = forwardRef<CustomAnimationHostHandle, CustomAnimatio
     }
     window.addEventListener("message", onMessage)
     return () => window.removeEventListener("message", onMessage)
-  }, [bridgeMode, onStepChanged, srcDoc])
+  }, [bridgeMode, onStepChanged, srcDoc, narration])
+
+  // Tell the animation how long each narrated step's audio is (only while narration is ON), so its autoplay waits for the voice.
+  const narrationOn = narr?.enabled ?? false
+  useEffect(() => {
+    if (!ready || !narration) return
+    iframeRef.current?.contentWindow?.postMessage({ bridgeVersion: BRIDGE_VERSION, type: "NARRATION_TIMING", durations: narration.durations() }, "*")
+  }, [ready, narration, narrationOn])
 
   function sendCommand(type: BridgeCommand, stepId?: string) {
     if (bridgeMode === "standalone") return // standalone packages are never sent commands
     const message = buildBridgeCommand(type, declaredCapabilities, stepId)
     if (!message) return // not declared in the manifest — refuse to send, same guard as animationBridge.ts's own doc
+    narration?.command(type as NarrationCommand)
     iframeRef.current?.contentWindow?.postMessage(message, "*")
   }
 
@@ -183,6 +208,45 @@ const CustomAnimationHost = forwardRef<CustomAnimationHostHandle, CustomAnimatio
               </button>
             ))}
           {!ready && <span className="text-[10.5px] text-gray-500">waiting for READY…</span>}
+          {narration && narr?.available && (
+            <div className="flex items-center gap-2 ml-auto flex-wrap" role="group" aria-label="Narration controls">
+              <span className="text-[10px] font-semibold text-gray-400" title="This voice is generated by AI software, not a human recording.">AI-generated narration</span>
+              <button
+                type="button"
+                onClick={() => narration.setEnabled(!narr.enabled)}
+                aria-pressed={narr.enabled}
+                aria-label={narr.enabled ? "Narration on. Click to turn narration off" : "Narration off. Click to turn narration on"}
+                className={`px-3 py-1.5 rounded-lg text-[11px] font-bold border cursor-pointer transition-all ${narr.enabled ? "text-emerald-200 bg-emerald-500/15 border-emerald-400/30" : "text-gray-400 bg-white/5 border-white/10"}`}
+              >
+                {narr.enabled ? "🔊 Narration on" : "🔇 Narration off"}
+              </button>
+              <button
+                type="button"
+                onClick={() => narration.replay()}
+                disabled={!narr.enabled || !narr.currentStepHasNarration}
+                aria-label="Replay the narration of this explanation"
+                className="px-3 py-1.5 rounded-lg text-[11px] font-bold text-gray-200 bg-white/5 hover:bg-white/10 border border-white/10 disabled:opacity-40 cursor-pointer transition-all"
+              >
+                ↻ Replay explanation
+              </button>
+              <label className="flex items-center gap-1 text-[11px] text-gray-400">
+                <span className="sr-only">Narration speed</span>
+                <select
+                  value={narr.rate}
+                  onChange={e => narration.setRate(Number(e.target.value))}
+                  aria-label="Narration speed"
+                  className="rounded-lg bg-white/5 border border-white/10 text-gray-200 text-[11px] font-bold px-2 py-1.5 cursor-pointer"
+                >
+                  {NARRATION_RATES.map(r => (
+                    <option key={r} value={r} className="text-black">
+                      {r}x
+                    </option>
+                  ))}
+                </select>
+              </label>
+              {narr.unavailable && <span className="text-[10.5px] text-amber-300" role="status">Narration unavailable for this step</span>}
+            </div>
+          )}
         </div>
       )}
     </div>

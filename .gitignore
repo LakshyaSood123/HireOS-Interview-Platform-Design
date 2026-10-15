@@ -24,3 +24,7 @@ logs/
 /deployment/backups/
 *.archive.gz
 *.archive.gz.sha256
+
+# Narrated course release exports (~90 MB, audio inside the package JSON). Regenerable with backend/scripts/exportCourseRelease.ts;
+# store off-machine like database backups, never in Git.
+/deployment/releases/

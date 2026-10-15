@@ -1,7 +1,12 @@
+import * as narrationService from "./narration/narration.service.js";
+import {
+  courseNarrationGenerateSchema, narrationAudioParams, narrationGenerateSchema, narrationOverviewQuery, narrationSettingsSchema,
+  type CourseNarrationGenerateInput, type NarrationAudioParams, type NarrationGenerateInput, type NarrationSettingsInput,
+} from "./narration/narration.schema.js";
 import { Router } from "express";
 
 import { currentUserId, requireAuth, requireRole } from "../../middleware/auth.js";
-import { body, params, validate } from "../../middleware/validate.js";
+import { query, body, params, validate } from "../../middleware/validate.js";
 import { sendData } from "../../shared/envelope.js";
 import * as cmsService from "./cms.service.js";
 import * as animationPackageService from "./animationPackage.service.js";
@@ -163,6 +168,39 @@ cmsRouter.get(
   },
 );
 
+/**
+ * Narration (text-to-speech) — admin-only, like everything under `/cms/**`. Generation runs on the backend with the
+ * server-configured provider; learners never reach these routes (requireRole("admin") is enforced server-side) and play
+ * stored audio from the frozen package revision instead.
+ */
+cmsRouter.get("/cms/animation-packages/:packageId/narration", requireAuth, requireRole("admin"), validate({ params: packageIdParams, query: narrationOverviewQuery }), async (req, res) => {
+  const { packageId } = params<PackageIdParams>(req);
+  const { revisionId } = query<{ revisionId?: string }>(req);
+  sendData(res, await narrationService.getNarrationOverview(packageId, revisionId ?? "draft"));
+});
+
+cmsRouter.patch("/cms/animation-packages/:packageId/narration", requireAuth, requireRole("admin"), validate({ params: packageIdParams, body: narrationSettingsSchema }), async (req, res) => {
+  const { packageId } = params<PackageIdParams>(req);
+  sendData(res, await narrationService.updateNarrationSettings(packageId, body<NarrationSettingsInput>(req)));
+});
+
+cmsRouter.post("/cms/animation-packages/:packageId/narration/generate", requireAuth, requireRole("admin"), validate({ params: packageIdParams, body: narrationGenerateSchema }), async (req, res) => {
+  const { packageId } = params<PackageIdParams>(req);
+  const input = body<NarrationGenerateInput>(req);
+  sendData(res, await narrationService.generateNarration(packageId, { mode: input.mode, stepId: input.stepId, force: input.force }));
+});
+
+cmsRouter.get("/cms/animation-packages/:packageId/revisions/:revisionId/narration/audio/:stepId", requireAuth, requireRole("admin"), validate({ params: narrationAudioParams }), async (req, res) => {
+  const { packageId, revisionId, stepId } = params<NarrationAudioParams>(req);
+  sendData(res, await narrationService.getNarrationAudio(packageId, revisionId, stepId));
+});
+
+cmsRouter.post("/cms/courses/:courseId/narration/generate", requireAuth, requireRole("admin"), validate({ params: courseIdParams, body: courseNarrationGenerateSchema }), async (req, res) => {
+  const { courseId } = params<CourseIdParams>(req);
+  const input = body<CourseNarrationGenerateInput>(req);
+  sendData(res, await narrationService.generateCourseNarration(courseId, input.mode, { force: input.force }));
+});
+
 cmsRouter.patch(
   "/cms/animation-packages/:packageId",
   requireAuth,
@@ -224,6 +262,7 @@ cmsRouter.post(
           js: extracted.js,
           packageTrace: extracted.packageTrace,
           expectedRevision: input.expectedRevision,
+          ...(extracted.narration ? { narration: extracted.narration } : {}),
         },
         "zip",
         extracted.assets,

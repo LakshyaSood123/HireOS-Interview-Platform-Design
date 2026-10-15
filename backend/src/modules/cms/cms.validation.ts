@@ -12,12 +12,17 @@ import { isApprovedPistonHarnessKey } from "./pistonHarnessKeys.js";
 import { normalizeAnimationSource } from "./cms.types.js";
 import { CmsAnimationPackage } from "./animationPackage.model.js";
 import type { CmsVersionContent } from "./cms.types.js";
+import { extractExplanations } from "./narration/narration.text.js";
+import type { PackageNarration } from "./narration/narration.types.js";
+import { validateNarration } from "./narration/narration.validation.js";
 
 export interface CmsValidationIssue {
   entityType: "course" | "zone" | "module" | "checkpoint";
   entityId: string;
   field?: string;
   message: string;
+  /** Absent = error (blocks publishing). "warning" is informational and never blocks. */
+  severity?: "error" | "warning";
 }
 
 export function validateCmsVersionContent(content: CmsVersionContent): CmsValidationIssue[] {
@@ -279,6 +284,37 @@ export async function validatePackageReferences(zones: CmsVersionContent["zones"
         message: `Custom animation package "${ref.packageId}" revision "${ref.revisionId}" does not exist.`,
       });
     }
+  }
+  return issues;
+}
+
+/**
+ * Narration checks for the custom animation packages a course version references (see narration/narration.validation.ts
+ * for the policy). Errors block publishing; warnings (never-generated or stale narration) are reported but do not.
+ * A package with narration disabled/absent contributes nothing, so existing courses validate exactly as before.
+ */
+export async function validateNarrationReferences(zones: CmsVersionContent["zones"]): Promise<CmsValidationIssue[]> {
+  const issues: CmsValidationIssue[] = [];
+  const seen = new Map<string, CmsValidationIssue[]>();
+  for (const zone of zones) for (const zm of zone.modules) for (const cp of zm.checkpoints) {
+    const anim = normalizeAnimationSource(cp.workspace?.animation);
+    if (anim?.kind !== "custom") continue;
+    const key = `${anim.packageId}@${anim.revisionId}`;
+    let found = seen.get(key);
+    if (!found) {
+      found = [];
+      const pkg = await CmsAnimationPackage.findOne({ packageId: anim.packageId, revisionId: anim.revisionId }, { narration: 1, js: 1, manifest: 1 }).lean();
+      const narration = (pkg as { narration?: PackageNarration | null } | null)?.narration;
+      if (pkg && narration && narration.enabled) {
+        const stepIds = (pkg.manifest as { traceEvents: string[] }).traceEvents;
+        for (const n of validateNarration(narration, { stepIds, explanations: extractExplanations(pkg.js) })) {
+          found.push({ entityType: "checkpoint", entityId: cp.id, field: "workspace.animation.narration", severity: n.severity, message: `Narration${n.stepId ? ` (step "${n.stepId}")` : ""}: ${n.message}` });
+        }
+      }
+      seen.set(key, found);
+    }
+    // report once per checkpoint that uses the package, re-targeted at this checkpoint
+    for (const i of found) issues.push({ ...i, entityId: cp.id });
   }
   return issues;
 }

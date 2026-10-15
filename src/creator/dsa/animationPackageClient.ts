@@ -45,6 +45,16 @@ export interface CmsPackageTrace {
   steps: CmsPackageTraceStep[]
 }
 
+/** Narration (text-to-speech) that travels with a package revision — see backend narration.types.ts. */
+export type CmsNarrationStatus = "MISSING" | "GENERATED" | "STALE" | "DISABLED" | "ERROR"
+export interface CmsPackageNarration {
+  schemaVersion: number
+  enabled: boolean
+  defaults: { voice: string; language: string; speed: number }
+  steps: Record<string, { enabled: boolean; asset?: string; durationMs?: number; provider?: string; voice?: string; language?: string; speed?: number; sourceTextHash?: string; generatedAt?: string; error?: string }>
+  audio: { path: string; contentType: string; dataBase64: string }[]
+}
+
 export interface CmsAnimationPackage {
   packageId: string
   revisionId: string
@@ -58,6 +68,7 @@ export interface CmsAnimationPackage {
   js: string | null
   assets: CmsPackageAsset[]
   packageTrace: CmsPackageTrace | null
+  narration?: CmsPackageNarration | null
 }
 
 export function createAnimationPackage(client: ApiClient, title: string): Promise<CmsAnimationPackage> {
@@ -132,4 +143,79 @@ export function fileToBase64(file: File): Promise<string> {
     reader.onerror = () => reject(reader.error ?? new Error("Failed to read file"))
     reader.readAsDataURL(file)
   })
+}
+
+// ── Narration (admin) ─────────────────────────────────────────────────────────────────────────────────────────────
+// Generation runs on the backend with the server-configured provider; the browser never sees provider credentials.
+
+export interface CmsNarrationStepView {
+  stepId: string
+  label: string
+  heading: string
+  explanation: string
+  status: CmsNarrationStatus
+  enabled: boolean
+  voice?: string
+  language?: string
+  speed?: number
+  durationMs?: number
+  generatedAt?: string
+  provider?: string
+  asset?: string
+  bytes?: number
+  error?: string
+}
+export interface CmsNarrationIssue {
+  severity: "error" | "warning"
+  code: string
+  stepId?: string
+  message: string
+}
+export interface CmsNarrationOverview {
+  packageId: string
+  revisionId: string
+  title: string
+  enabled: boolean
+  defaults: { voice: string; language: string; speed: number }
+  provider: { configured: string; isProduction: boolean; available: boolean; problem?: string; defaultVoice?: string }
+  counts: Record<CmsNarrationStatus, number> & { total: number }
+  totalAudioBytes: number
+  steps: CmsNarrationStepView[]
+  issues: CmsNarrationIssue[]
+}
+export interface CmsNarrationGenerationSummary {
+  packageId: string
+  provider: string
+  mode: string
+  generated: number
+  reused: number
+  skipped: number
+  failed: number
+  steps: { stepId: string; outcome: "generated" | "reused" | "skipped" | "failed"; reason?: string; durationMs?: number }[]
+}
+
+const pkgPath = (packageId: string) => `/cms/animation-packages/${encodeURIComponent(packageId)}`
+
+export function getNarrationOverview(client: ApiClient, packageId: string, revisionId = "draft"): Promise<CmsNarrationOverview> {
+  return client.request<CmsNarrationOverview>("GET", `${pkgPath(packageId)}/narration?revisionId=${encodeURIComponent(revisionId)}`).then(res => res.data)
+}
+
+export function updateNarrationSettings(
+  client: ApiClient,
+  packageId: string,
+  patch: { enabled?: boolean; defaults?: Partial<CmsNarrationOverview["defaults"]>; steps?: Record<string, { enabled?: boolean }> },
+): Promise<CmsNarrationOverview> {
+  return client.request<CmsNarrationOverview>("PATCH", `${pkgPath(packageId)}/narration`, { body: patch }).then(res => res.data)
+}
+
+export function generateNarration(
+  client: ApiClient,
+  packageId: string,
+  input: { mode: "missing" | "stale" | "missing-and-stale" | "step"; stepId?: string; force?: boolean },
+): Promise<CmsNarrationGenerationSummary> {
+  return client.request<CmsNarrationGenerationSummary>("POST", `${pkgPath(packageId)}/narration/generate`, { body: input }).then(res => res.data)
+}
+
+export function getNarrationAudio(client: ApiClient, packageId: string, revisionId: string, stepId: string): Promise<{ contentType: string; dataBase64: string; durationMs: number | null }> {
+  return client.request<{ contentType: string; dataBase64: string; durationMs: number | null }>("GET", `${pkgPath(packageId)}/revisions/${encodeURIComponent(revisionId)}/narration/audio/${encodeURIComponent(stepId)}`).then(res => res.data)
 }

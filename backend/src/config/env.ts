@@ -72,12 +72,28 @@ const envSchema = z
     LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"]).default("info"),
     LOG_PRETTY: booleanish.default(false),
 
+    // Animation narration (text-to-speech). Generation is admin-only and runs on the backend; learners only play stored audio.
+    // "none" = no provider (default in production), "dev" = deterministic test provider (development only).
+    // Real providers are registered in modules/cms/narration/narration.provider.ts; their credentials belong here too.
+    NARRATION_PROVIDER: z.string().regex(/^[a-z0-9-]+$/).optional(),
+    // Provider-neutral narration settings. "default" voice in a package resolves to NARRATION_DEFAULT_VOICE (a provider-specific
+    // fallback applies when unset).
+    NARRATION_DEFAULT_VOICE: z.string().regex(/^[A-Za-z0-9_-]{1,64}$/).optional(),
+    NARRATION_REQUEST_TIMEOUT_MS: z.coerce.number().int().min(1_000).max(300_000).default(60_000),
+    // Local, offline Kokoro-82M provider (NARRATION_PROVIDER=local-kokoro). No credential. Needed only on a machine that GENERATES
+    // narration; learners just play stored audio. Defaults point at backend/.models/kokoro (created by `npm run narration:setup`).
+    NARRATION_LOCAL_PYTHON: z.string().min(1).optional(),
+    NARRATION_LOCAL_MODEL_PATH: z.string().min(1).optional(),
+    NARRATION_LOCAL_DEVICE: z.enum(["cpu", "cuda", "auto"]).default("cpu"),
+    NARRATION_LOCAL_FORMAT: z.enum(["mp3", "wav"]).default("mp3"),
+
     // Code execution — wired on Day 4, declared here so env stays one place.
     EXECUTION_PROVIDER: z.enum(["piston", "mock"]).default("piston"),
     PISTON_URL: z.string().url().default("http://localhost:2000"),
   })
   .transform((value) => ({
     ...value,
+    NARRATION_PROVIDER: value.NARRATION_PROVIDER ?? (value.NODE_ENV === "production" ? "none" : "dev"),
     isProduction: value.NODE_ENV === "production",
     isTest: value.NODE_ENV === "test",
   }));
@@ -117,6 +133,7 @@ export function productionConfigProblems(value: Env, source: NodeJS.ProcessEnv):
   if (value.JWT_ACCESS_SECRET === value.JWT_REFRESH_SECRET) problems.push("JWT_REFRESH_SECRET: must differ from JWT_ACCESS_SECRET.");
   if (!explicit("MONGO_DB_NAME")) problems.push("MONGO_DB_NAME: required in production (the default is the development database name).");
   else if (/_dev$|_test$/.test(value.MONGO_DB_NAME)) problems.push("MONGO_DB_NAME: a *_dev / *_test database name must not be used in production.");
+  if (value.NARRATION_PROVIDER === "dev") problems.push("NARRATION_PROVIDER: the development narration provider must not be used in production (use a real provider id, or leave it unset for none).");
   if (value.LOG_PRETTY) problems.push("LOG_PRETTY: must be false in production (structured JSON logs).");
   return problems;
 }

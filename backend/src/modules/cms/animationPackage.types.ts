@@ -131,9 +131,9 @@ export const ANIMATION_PACKAGE_LIMITS = {
   maxAssetCount: 20,
   maxAssetBytes: 500_000,
   maxTotalAssetBytes: 3_000_000,
-  maxZipCompressedBytes: 5_000_000,
+  maxZipCompressedBytes: 12_000_000,
   maxZipUncompressedBytes: 8_000_000,
-  maxZipEntryCount: 50,
+  maxZipEntryCount: 80,
   traceEventsMaxCount: 200,
   traceEventIdMaxChars: 64,
   // trace.json limits — deliberately close to the existing CMS Structured

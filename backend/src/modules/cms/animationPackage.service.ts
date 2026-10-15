@@ -15,10 +15,12 @@ import {
   type CmsPackageTrace,
 } from "./animationPackage.types.js";
 import { packageTraceSchema } from "./animationPackage.schema.js";
+import { NARRATION_AUDIO_EXTENSIONS, NARRATION_LIMITS, type PackageNarration } from "./narration/narration.types.js";
+import { AUDIO_PATH_RE, packageNarrationSchema } from "./narration/narration.validation.js";
 
 const DRAFT_REVISION_ID = "draft";
 
-function contentHash(content: Pick<CmsAnimationPackageContent, "title" | "manifest" | "html" | "css" | "js" | "assets" | "packageTrace">): string {
+function contentHash(content: Pick<CmsAnimationPackageContent, "title" | "manifest" | "html" | "css" | "js" | "assets" | "packageTrace"> & { narration?: PackageNarration | null }): string {
   return createHash("sha256")
     .update(
       JSON.stringify({
@@ -32,6 +34,8 @@ function contentHash(content: Pick<CmsAnimationPackageContent, "title" | "manife
         // still produces a different hash — see PART "DEDUPLICATION": same
         // animation + different trace.json MUST mint a new frozen revision.
         packageTrace: content.packageTrace ?? null,
+        // Only present when the package has narration, so packages without it hash exactly as before.
+        ...(content.narration ? { narration: content.narration } : {}),
       }),
     )
     .digest("hex");
@@ -106,6 +110,8 @@ export async function savePackageDraftContent(
      * on `savePackageContentSchema.packageTrace`. */
     packageTrace?: CmsPackageTrace | null;
     expectedRevision: number;
+    /** undefined = keep the existing narration; an object replaces it (ZIP uploads that carry narration.json + audio/). */
+    narration?: PackageNarration | null;
   },
   sourceKind: "html" | "zip" = "html",
   assets: CmsPackageAsset[] = [],
@@ -136,6 +142,10 @@ export async function savePackageDraftContent(
   draft.js = input.js ?? null;
   draft.assets = assets as CmsAnimationPackageAttributes["assets"];
   draft.packageTrace = (input.packageTrace ?? null) as CmsAnimationPackageAttributes["packageTrace"];
+  if (input.narration !== undefined) {
+    draft.narration = input.narration;
+    draft.markModified("narration");
+  }
   draft.updatedBy = actorId as unknown as CmsAnimationPackageAttributes["updatedBy"];
   draft.revision += 1;
   await draft.save();
@@ -188,6 +198,9 @@ export interface ExtractedZipPackage {
    * cms.routes.ts's upload-zip handler), not here, since this function
    * parses files independently of each other in one pass. */
   packageTrace: CmsPackageTrace | null;
+  /** Parsed, schema-validated narration (narration.json + audio/ files), or null when the ZIP carries none. Audio is
+   * counted against NARRATION_LIMITS, separately from the text/asset limits. */
+  narration: PackageNarration | null;
 }
 
 /**
@@ -223,6 +236,9 @@ export async function extractZipPackage(zipBuffer: Buffer): Promise<ExtractedZip
   let js: string | null = null;
   let manifestFromZip: ExtractedZipPackage["manifestFromZip"] = null;
   let packageTrace: CmsPackageTrace | null = null;
+  let narrationMeta: Record<string, unknown> | null = null;
+  const narrationAudio: PackageNarration["audio"] = [];
+  let totalAudioBytes = 0;
   const assets: CmsPackageAsset[] = [];
   let totalUncompressedBytes = 0;
   let totalAssetBytes = 0;
@@ -270,6 +286,13 @@ export async function extractZipPackage(zipBuffer: Buffer): Promise<ExtractedZip
         } catch {
           throw ApiError.validation("manifest.json is not valid JSON.");
         }
+      } else if (kind === "json" && isTopLevel && /^narration\.json$/i.test(path)) {
+        if (Buffer.byteLength(text, "utf8") > 300_000) throw ApiError.validation("narration.json is too large.");
+        try {
+          narrationMeta = JSON.parse(text) as Record<string, unknown>;
+        } catch {
+          throw ApiError.validation("narration.json is not valid JSON.");
+        }
       } else if (kind === "json" && isTopLevel && /^trace\.json$/i.test(path)) {
         if (Buffer.byteLength(text, "utf8") > ANIMATION_PACKAGE_LIMITS.packageTraceJsonMaxBytes) {
           throw ApiError.validation(`trace.json exceeds the ${ANIMATION_PACKAGE_LIMITS.packageTraceJsonMaxBytes}-byte limit.`);
@@ -302,8 +325,20 @@ export async function extractZipPackage(zipBuffer: Buffer): Promise<ExtractedZip
         // upload — found via a genuinely hostile ZIP fixture built with
         // Python's zipfile (whose writer does not path-normalize), sent to
         // this real endpoint.
-        throw ApiError.validation(`Unexpected file in ZIP: "${path}". Only animation.html, animation.css, animation.js, manifest.json, trace.json (all top-level), and images under assets/ are allowed.`);
+        throw ApiError.validation(`Unexpected file in ZIP: "${path}". Only animation.html, animation.css, animation.js, manifest.json, trace.json, narration.json (all top-level), narration audio under audio/, and images under assets/ are allowed.`);
       }
+      continue;
+    }
+
+    if (NARRATION_AUDIO_EXTENSIONS[ext] && path.startsWith(NARRATION_LIMITS.pathPrefix)) {
+      // Narration audio: strictly audio/<name>.<ext>; never executed, only stored and later played by the learner browser.
+      if (!AUDIO_PATH_RE.test(path)) throw ApiError.validation(`Unsafe narration audio path in ZIP: "${path}" (expected audio/<name>.mp3|wav|ogg|m4a).`);
+      const audioBuf = await entry.async("nodebuffer");
+      if (audioBuf.byteLength > NARRATION_LIMITS.maxAudioBytes) throw ApiError.validation(`Narration audio "${path}" exceeds the per-file limit (${NARRATION_LIMITS.maxAudioBytes} bytes).`);
+      totalAudioBytes += audioBuf.byteLength;
+      if (totalAudioBytes > NARRATION_LIMITS.maxTotalAudioBytes) throw ApiError.validation(`Narration audio exceeds the total limit (${NARRATION_LIMITS.maxTotalAudioBytes} bytes).`);
+      if (narrationAudio.length >= NARRATION_LIMITS.maxAudioFiles) throw ApiError.validation(`Too many narration audio files: max ${NARRATION_LIMITS.maxAudioFiles}.`);
+      narrationAudio.push({ path, contentType: NARRATION_AUDIO_EXTENSIONS[ext]!, dataBase64: audioBuf.toString("base64") });
       continue;
     }
 
@@ -338,7 +373,18 @@ export async function extractZipPackage(zipBuffer: Buffer): Promise<ExtractedZip
     throw ApiError.validation("The ZIP archive must contain animation.html at its root.");
   }
 
-  return { html, css, js, assets, manifestFromZip, packageTrace };
+  let narration: PackageNarration | null = null;
+  if (narrationMeta || narrationAudio.length > 0) {
+    if (!narrationMeta) throw ApiError.validation("The ZIP contains audio/ files but no narration.json describing them.");
+    const parsedNarration = packageNarrationSchema.safeParse({ ...narrationMeta, audio: narrationAudio });
+    if (!parsedNarration.success) {
+      const issue = parsedNarration.error.issues[0];
+      throw ApiError.validation(`narration.json failed validation: ${issue ? `${issue.path.join(".")}: ${issue.message}` : "invalid shape"}.`);
+    }
+    narration = parsedNarration.data as PackageNarration;
+  }
+
+  return { html, css, js, assets, manifestFromZip, packageTrace, narration };
 }
 
 const contentTypeAllowed = new Set<string>(ANIMATION_PACKAGE_ASSET_CONTENT_TYPES);
@@ -376,14 +422,18 @@ export async function freezePackageRevisionIfNeeded(packageId: string, session: 
     js: draft.js ?? null,
     assets: (draft.assets ?? []) as CmsPackageAsset[],
     packageTrace: (draft.packageTrace ?? null) as CmsPackageTrace | null,
+    narration: (draft.narration ?? null) as PackageNarration | null,
   });
 
   if (draft.lastFrozenContentHash === hash && draft.lastFrozenRevisionId) {
     return draft.lastFrozenRevisionId;
   }
 
-  const frozenCount = await CmsAnimationPackage.countDocuments({ packageId, status: "frozen" }).session(session ?? null);
-  const revisionId = `r${frozenCount + 1}`;
+  // Next id = highest existing rN + 1 (not "how many frozen revisions exist"): a database restored from a course release holds
+  // only the revisions that release references (e.g. just r2), and counting would hand out "r2" a second time.
+  const frozen = await CmsAnimationPackage.find({ packageId, status: "frozen" }, { revisionId: 1 }).session(session ?? null).lean();
+  const highest = frozen.reduce((max, doc) => Math.max(max, Number(/^r(\d+)$/.exec(doc.revisionId)?.[1] ?? 0)), 0);
+  const revisionId = `r${highest + 1}`;
 
   await CmsAnimationPackage.create(
     [
@@ -402,6 +452,7 @@ export async function freezePackageRevisionIfNeeded(packageId: string, session: 
         js: draft.js,
         assets: draft.assets,
         packageTrace: draft.packageTrace ?? null,
+        narration: draft.narration ?? null,
       },
     ],
     { session },

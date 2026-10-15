@@ -8,7 +8,7 @@ import { forgetCurriculum } from "../curriculum/curriculum.service.js";
 import { CourseProgress } from "../learning/courseProgress.model.js";
 import { CmsCourse } from "./cmsCourse.model.js";
 import { CmsCourseVersion, type CmsCourseVersionAttributes } from "./cmsCourseVersion.model.js";
-import { validateCmsVersionContent, validatePackageReferences, type CmsValidationIssue } from "./cms.validation.js";
+import { validateCmsVersionContent, validatePackageReferences, validateNarrationReferences, type CmsValidationIssue } from "./cms.validation.js";
 import { buildSnapshotFromCmsVersion } from "./snapshotFromCmsVersion.js";
 import { normalizeAnimationSource, type CmsCourseType, type CmsZone } from "./cms.types.js";
 import { CmsAnimationPackage } from "./animationPackage.model.js";
@@ -177,7 +177,8 @@ export async function saveDraft(
 export async function validateDraft(courseId: string): Promise<CmsValidationIssue[]> {
   const draft = await CmsCourseVersion.findOne({ courseId, status: "draft" }).lean();
   if (!draft) throw ApiError.notFound(`No draft exists for course "${courseId}". Load one first.`);
-  return validateCmsVersionContent({ courseId: draft.courseId, title: draft.title, courseType: draft.courseType as CmsCourseType, zones: draft.zones as CmsZone[] });
+  const content = { courseId: draft.courseId, title: draft.title, courseType: draft.courseType as CmsCourseType, zones: draft.zones as CmsZone[] };
+  return [...validateCmsVersionContent(content), ...(await validateNarrationReferences(content.zones))];
 }
 
 export async function resetDraft(courseId: string, actorId: string): Promise<CmsCourseVersionAttributes> {
@@ -226,6 +227,8 @@ export async function publishDraft(courseId: string, actorId: string): Promise<P
   if (!draft) throw ApiError.notFound(`No draft exists for course "${courseId}". Load one first.`);
 
   const issues = validateCmsVersionContent({ courseId: draft.courseId, title: draft.title, courseType: draft.courseType as CmsCourseType, zones: draft.zones as CmsZone[] });
+  // Narration: errors block publishing, warnings (missing/stale narration) do not.
+  issues.push(...(await validateNarrationReferences(draft.zones as CmsZone[])).filter((i) => i.severity !== "warning"));
   if (issues.length > 0) {
     throw ApiError.validation("The draft has validation errors and cannot be published.", { issues });
   }
@@ -495,5 +498,7 @@ export async function getLearnerReferencedPackageRevision(
     js: revision.js ?? null,
     assets: revision.assets,
     packageTrace: revision.packageTrace ?? null,
+    // Narration travels with the frozen revision (audio is played by the learner browser); only enabled narration is sent.
+    narration: (revision as { narration?: { enabled?: boolean } | null }).narration?.enabled ? (revision as { narration?: unknown }).narration : null,
   };
 }

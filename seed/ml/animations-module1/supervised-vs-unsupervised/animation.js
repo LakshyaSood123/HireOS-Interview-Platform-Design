@@ -60,7 +60,12 @@
 
   function stepMs(index) {
     var words = String(explanationFor(index).t).replace(/\*\*/g, "").split(/\s+/).length;
-    return Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));
+    var base = Math.max(4500, Math.min(10500, Math.round(3800 + words * 165)));
+    // Narrated steps wait for their audio: never shorter than the text-based pace, never shorter than narration + 600 ms.
+    // The host (parent page) supplies { stepId: durationMs } via a NARRATION_TIMING message, only while narration is ON.
+    var narrationTimes = window.__REAGVIS_NARRATION__;
+    var narrationMs = narrationTimes && narrationTimes[steps[index].id];
+    return narrationMs > 0 ? Math.max(base, Math.round(narrationMs) + 600) : base;
   }
 
   function showExplanation(index) {

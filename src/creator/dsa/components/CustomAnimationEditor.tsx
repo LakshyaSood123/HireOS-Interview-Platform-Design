@@ -21,6 +21,7 @@ import type { CmsDsaBridgeMode } from "../dsaCmsTypes"
 import type { PromptContext } from "../promptGenerator"
 import PromptGeneratorModal from "./PromptGeneratorModal"
 import PackageRequirementsModal from "./PackageRequirementsModal"
+import NarrationPanel from "./NarrationPanel"
 
 interface CustomAnimationEditorProps {
   packageId: string
@@ -309,6 +310,9 @@ export default function CustomAnimationEditor({ packageId, bridgeMode, onBridgeM
         />
       )}
       {showRequirements && <PackageRequirementsModal focus="package" onClose={() => setShowRequirements(false)} />}
+
+      {/* Narration for the package DRAFT revision (generation is explicit; nothing runs on load). */}
+      <NarrationPanel packageId={packageId} bridgeMode={bridgeMode} contentRevision={pkg?.revision} />
     </div>
   )
 }

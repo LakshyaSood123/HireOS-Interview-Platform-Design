@@ -10,7 +10,7 @@
 
 import type { ApiClient } from "./apiClient"
 import type { CmsDsaZone } from "../../creator/dsa/dsaCmsTypes"
-import type { CmsAnimationPackage, CmsPackageTrace } from "../../creator/dsa/animationPackageClient"
+import type { CmsAnimationPackage, CmsPackageNarration, CmsPackageTrace } from "../../creator/dsa/animationPackageClient"
 
 /** `GET /me/courses/:courseId/content` — the learner's pinned published
  * version. Field names match the backend's cmsCourseVersion document. */
@@ -29,6 +29,8 @@ export type LearnerAnimationPackage = Pick<CmsAnimationPackage, "html" | "css" |
   revisionId: string
   title: string
   packageTrace?: CmsPackageTrace | null
+  /** Present only when the revision ships enabled narration (audio travels with the package). */
+  narration?: CmsPackageNarration | null
 }
 
 export function fetchPinnedCourseContent(client: ApiClient, courseId: string): Promise<PinnedCourseContent> {

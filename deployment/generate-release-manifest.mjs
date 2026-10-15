@@ -15,7 +15,7 @@ const git = (...args) => execFileSync("git", args, { cwd: root, encoding: "utf8"
 
 const rules = [
   // [group, required?, regex]
-  ["EXCLUDE: local/QA/backup artifacts", false, /^(\.codex-backups|\.codex-screenshots|\.safety_backups)\/|\.bak$|^reagvis-.*\.png$|^deployment\/backups\/|\.archive\.gz|^\.tmp-/],
+  ["EXCLUDE: local/QA/backup artifacts, unrelated LFS working-tree files", false, /^(\.codex-backups|\.codex-screenshots|\.safety_backups)\/|\.bak$|^reagvis-.*\.png$|^deployment\/backups\/|^deployment\/releases\/|\.archive\.gz|^\.tmp-|^docs\/Reagvis_Trails_Backend_Handoff_and_Project_Plan\.docx$|^src\/imports\/Screenshot_.*\.png$/],
   ["EXCLUDE: generated, rebuildable", false, /^seed\/ml\/(animations-module\d+-built|module\d+-zips|module1-zips)\//],
   ["CORE BACKEND", true, /^backend\/(src|package\.json|package-lock\.json|tsconfig\.json|\.env\.example|\.env\.production\.example)/],
   ["BACKEND SCRIPTS (attach/finalize/release/ops)", true, /^backend\/scripts\//],
@@ -25,7 +25,8 @@ const rules = [
   ["FRONTEND", true, /^(src\/|index\.html|vite\.config\.ts|package\.json|pnpm-lock\.yaml|tsconfig\.json|\.env\.production\.example)/],
   ["DEPLOYMENT / BOOTSTRAP", true, /^deployment\//],
   ["DOCUMENTATION", true, /^(docs\/|README\.md|backend\/README\.md|[A-Z_]+\.md$)/],
-  ["GITIGNORE / REPO CONFIG", true, /^\.git(ignore|attributes)$/],
+  ["LOCAL TTS ENGINE TOOLS (worker, model download, audio audit)", true, /^backend\/tools\/local-tts\/[^/]+\.py$/],
+  ["GITIGNORE / REPO CONFIG", true, /^(backend\/)?\.git(ignore|attributes)$/],
 ];
 
 function classify(file) {

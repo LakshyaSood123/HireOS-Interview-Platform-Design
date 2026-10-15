@@ -8,3 +8,7 @@ coverage/
 .env
 .env.local
 !.env.example
+
+# Local narration (Kokoro) runtime, model weights and QA audio: large, regenerable, never committed.
+.models/
+.narration-qa/
