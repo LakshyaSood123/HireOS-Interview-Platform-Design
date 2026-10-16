@@ -97,6 +97,13 @@ const defaultAuthLimiters = createAuthLimiters();
 export const registerRateLimit = defaultAuthLimiters.registerLimit;
 export const loginRateLimit = [defaultAuthLimiters.loginIpLimit, defaultAuthLimiters.loginIdentityLimit];
 
+/** Permanent course deletion re-checks a password, so it is throttled per admin: 10 attempts per 15 minutes. */
+export const permanentDeleteRateLimit = build({
+  windowMs: 15 * 60 * 1000,
+  limit: 10,
+  keyGenerator: userOrIpKey,
+});
+
 /** 120 per minute per user — everything else. */
 export const generalRateLimit = build({
   windowMs: 60 * 1000,

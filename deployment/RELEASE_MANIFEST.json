@@ -1,25 +1,31 @@
 {
-  "generatedAt": "2026-10-15T17:12:07.248Z",
+  "generatedAt": "2026-10-16T05:06:25.524Z",
   "branch": "feature/ml-course-vertical-slice",
-  "head": "3712bfaebb30e743154a1d92fbed3848f6272daa",
+  "head": "ae1b45eb3044a3a015c949a92a8c52ff26f0b18e",
   "note": "Review, then stage the listed paths explicitly. Never use `git add .` or `git add -A`. Excluded groups must not be committed.",
   "summary": {
-    "GITIGNORE / REPO CONFIG": {
-      "files": 2,
-      "untracked": 0,
-      "modified": 2,
+    "CORE BACKEND": {
+      "files": 11,
+      "untracked": 2,
+      "modified": 9,
       "requiredForRelease": true
     },
-    "CORE BACKEND": {
-      "files": 19,
-      "untracked": 9,
-      "modified": 10,
+    "TESTS": {
+      "files": 5,
+      "untracked": 4,
+      "modified": 1,
       "requiredForRelease": true
     },
     "DEPLOYMENT / BOOTSTRAP": {
-      "files": 2,
+      "files": 1,
       "untracked": 0,
-      "modified": 2,
+      "modified": 1,
+      "requiredForRelease": true
+    },
+    "DOCUMENTATION": {
+      "files": 1,
+      "untracked": 0,
+      "modified": 1,
       "requiredForRelease": true
     },
     "EXCLUDE: local/QA/backup artifacts, unrelated LFS working-tree files": {
@@ -28,37 +34,13 @@
       "modified": 3,
       "requiredForRelease": false
     },
-    "ANIMATION SOURCE + GENERATORS": {
-      "files": 8,
-      "untracked": 0,
-      "modified": 8,
-      "requiredForRelease": true
-    },
     "FRONTEND": {
-      "files": 6,
-      "untracked": 2,
-      "modified": 4,
+      "files": 22,
+      "untracked": 4,
+      "modified": 18,
       "requiredForRelease": true
     },
     "BACKEND SCRIPTS (attach/finalize/release/ops)": {
-      "files": 10,
-      "untracked": 10,
-      "modified": 0,
-      "requiredForRelease": true
-    },
-    "TESTS": {
-      "files": 5,
-      "untracked": 5,
-      "modified": 0,
-      "requiredForRelease": true
-    },
-    "LOCAL TTS ENGINE TOOLS (worker, model download, audio audit)": {
-      "files": 3,
-      "untracked": 3,
-      "modified": 0,
-      "requiredForRelease": true
-    },
-    "DOCUMENTATION": {
       "files": 1,
       "untracked": 1,
       "modified": 0,
@@ -72,138 +54,75 @@
     }
   },
   "stageExplicitly": {
-    "GITIGNORE / REPO CONFIG": [
-      ".gitignore",
-      "backend/.gitignore"
-    ],
     "CORE BACKEND": [
-      "backend/.env.example",
-      "backend/.env.production.example",
-      "backend/package.json",
-      "backend/src/config/env.ts",
-      "backend/src/modules/cms/animationPackage.model.ts",
-      "backend/src/modules/cms/animationPackage.service.ts",
-      "backend/src/modules/cms/animationPackage.types.ts",
+      "backend/src/middleware/rateLimit.ts",
       "backend/src/modules/cms/cms.routes.ts",
+      "backend/src/modules/cms/cms.schema.ts",
       "backend/src/modules/cms/cms.service.ts",
       "backend/src/modules/cms/cms.validation.ts",
-      "backend/src/modules/cms/narration/narration.provider.ts",
-      "backend/src/modules/cms/narration/narration.schema.ts",
+      "backend/src/modules/cms/cmsAuditLog.model.ts",
+      "backend/src/modules/cms/cmsCourse.model.ts",
+      "backend/src/modules/cms/cmsCourseVersion.model.ts",
+      "backend/src/modules/cms/courseDeletion.service.ts",
       "backend/src/modules/cms/narration/narration.service.ts",
-      "backend/src/modules/cms/narration/narration.status.ts",
-      "backend/src/modules/cms/narration/narration.text.ts",
-      "backend/src/modules/cms/narration/narration.types.ts",
-      "backend/src/modules/cms/narration/narration.validation.ts",
-      "backend/src/modules/cms/narration/providers/localKokoro.provider.ts",
-      "backend/src/modules/cms/narration/providers/mp3.ts"
-    ],
-    "DEPLOYMENT / BOOTSTRAP": [
-      "deployment/RELEASE_MANIFEST.json",
-      "deployment/generate-release-manifest.mjs"
-    ],
-    "ANIMATION SOURCE + GENERATORS": [
-      "seed/ml/animations-module1/generalization-fit-comparison/animation.js",
-      "seed/ml/animations-module1/ml-workflow/animation.js",
-      "seed/ml/animations-module1/supervised-vs-unsupervised/animation.js",
-      "seed/ml/animations-module1/training-validation-testing/animation.js",
-      "seed/ml/animations/features-and-labels/animation.js",
-      "seed/ml/animations/linear-regression-learning/animation.js",
-      "seed/ml/animations/what-is-machine-learning/animation.js",
-      "seed/ml/shared/explain-runtime.js"
-    ],
-    "FRONTEND": [
-      "src/creator/dsa/animationPackageClient.ts",
-      "src/creator/dsa/components/CustomAnimationEditor.tsx",
-      "src/creator/dsa/components/CustomAnimationHost.tsx",
-      "src/creator/dsa/components/NarrationPanel.tsx",
-      "src/learning/narration/narrationController.ts",
-      "src/learning/services/learnerCourseApi.ts"
-    ],
-    "BACKEND SCRIPTS (attach/finalize/release/ops)": [
-      "backend/scripts/compareNarrationDrafts.ts",
-      "backend/scripts/compareNarrationVoices.ts",
-      "backend/scripts/digestRelease.ts",
-      "backend/scripts/generateCourseNarration.ts",
-      "backend/scripts/generateNarrationForCheckpoints.ts",
-      "backend/scripts/narrationQaSafetyCheck.ts",
-      "backend/scripts/narrationReviewManifest.ts",
-      "backend/scripts/releaseNarratedCourse.ts",
-      "backend/scripts/setupLocalNarration.ts",
-      "backend/scripts/verifyCourseNarration.ts"
+      "backend/src/shared/errors.ts"
     ],
     "TESTS": [
-      "backend/tests/fixtures/fakeKokoroWorker.mjs",
-      "backend/tests/narration.local.test.ts",
-      "backend/tests/narration.pronunciation.test.ts",
-      "backend/tests/narration.test.ts",
-      "src/learning/__tests__/narrationController.test.ts"
+      "backend/tests/authRateLimit.test.ts",
+      "backend/tests/cmsCourseCreation.test.ts",
+      "backend/tests/courseDeletion.test.ts",
+      "backend/tests/zipSafety.test.ts",
+      "src/learning/__tests__/courseCatalog.test.ts"
     ],
-    "LOCAL TTS ENGINE TOOLS (worker, model download, audio audit)": [
-      "backend/tools/local-tts/audit_audio.py",
-      "backend/tools/local-tts/download_model.py",
-      "backend/tools/local-tts/kokoro_worker.py"
+    "DEPLOYMENT / BOOTSTRAP": [
+      "deployment/RELEASE_MANIFEST.json"
     ],
     "DOCUMENTATION": [
-      "docs/NARRATION_LOCAL_TTS.md"
+      "docs/PILOT_DEPLOYMENT.md"
+    ],
+    "FRONTEND": [
+      "src/components/course/PinnedCourseWorld.tsx",
+      "src/creator/CreatorStudioApp.tsx",
+      "src/creator/__tests__/courseDeletion.test.ts",
+      "src/creator/cmsCourseAdapter.ts",
+      "src/creator/components/CourseDetailsModal.tsx",
+      "src/creator/components/CreatorDashboard.tsx",
+      "src/creator/courseDeletion.ts",
+      "src/creator/dsa/animationPackageClient.ts",
+      "src/creator/dsa/components/DeleteCourseModal.tsx",
+      "src/creator/dsa/components/DsaCheckpointEditor.tsx",
+      "src/creator/dsa/components/DsaDraftPreview.tsx",
+      "src/creator/dsa/components/DsaEditorShell.tsx",
+      "src/creator/dsa/components/DsaZoneList.tsx",
+      "src/creator/dsa/dsaCmsClient.ts",
+      "src/creator/dsa/promptGenerator.ts",
+      "src/learning/courseCatalog.ts",
+      "src/learning/courseHomeConfig.ts",
+      "src/learning/courseSources.ts",
+      "src/learning/libraryCourseSource.ts",
+      "src/learning/services/apiClient.ts",
+      "src/pages/ReagvisTrailPage.tsx",
+      "src/state/AppStateContext.tsx"
+    ],
+    "BACKEND SCRIPTS (attach/finalize/release/ops)": [
+      "backend/scripts/digestCmsState.ts"
     ]
   },
   "files": [
     {
-      "file": ".gitignore",
-      "state": "TRACKED MODIFIED",
-      "group": "GITIGNORE / REPO CONFIG",
-      "required": true
-    },
-    {
-      "file": "backend/.env.example",
-      "state": "TRACKED MODIFIED",
-      "group": "CORE BACKEND",
-      "required": true
-    },
-    {
-      "file": "backend/.env.production.example",
-      "state": "TRACKED MODIFIED",
-      "group": "CORE BACKEND",
-      "required": true
-    },
-    {
-      "file": "backend/.gitignore",
-      "state": "TRACKED MODIFIED",
-      "group": "GITIGNORE / REPO CONFIG",
-      "required": true
-    },
-    {
-      "file": "backend/package.json",
-      "state": "TRACKED MODIFIED",
-      "group": "CORE BACKEND",
-      "required": true
-    },
-    {
-      "file": "backend/src/config/env.ts",
-      "state": "TRACKED MODIFIED",
-      "group": "CORE BACKEND",
-      "required": true
-    },
-    {
-      "file": "backend/src/modules/cms/animationPackage.model.ts",
-      "state": "TRACKED MODIFIED",
-      "group": "CORE BACKEND",
-      "required": true
-    },
-    {
-      "file": "backend/src/modules/cms/animationPackage.service.ts",
-      "state": "TRACKED MODIFIED",
-      "group": "CORE BACKEND",
-      "required": true
-    },
-    {
-      "file": "backend/src/modules/cms/animationPackage.types.ts",
+      "file": "backend/src/middleware/rateLimit.ts",
       "state": "TRACKED MODIFIED",
       "group": "CORE BACKEND",
       "required": true
     },
     {
       "file": "backend/src/modules/cms/cms.routes.ts",
+      "state": "TRACKED MODIFIED",
+      "group": "CORE BACKEND",
+      "required": true
+    },
+    {
+      "file": "backend/src/modules/cms/cms.schema.ts",
       "state": "TRACKED MODIFIED",
       "group": "CORE BACKEND",
       "required": true
@@ -221,15 +140,45 @@
       "required": true
     },
     {
+      "file": "backend/src/modules/cms/cmsCourse.model.ts",
+      "state": "TRACKED MODIFIED",
+      "group": "CORE BACKEND",
+      "required": true
+    },
+    {
+      "file": "backend/src/modules/cms/cmsCourseVersion.model.ts",
+      "state": "TRACKED MODIFIED",
+      "group": "CORE BACKEND",
+      "required": true
+    },
+    {
+      "file": "backend/src/modules/cms/narration/narration.service.ts",
+      "state": "TRACKED MODIFIED",
+      "group": "CORE BACKEND",
+      "required": true
+    },
+    {
+      "file": "backend/src/shared/errors.ts",
+      "state": "TRACKED MODIFIED",
+      "group": "CORE BACKEND",
+      "required": true
+    },
+    {
+      "file": "backend/tests/authRateLimit.test.ts",
+      "state": "TRACKED MODIFIED",
+      "group": "TESTS",
+      "required": true
+    },
+    {
       "file": "deployment/RELEASE_MANIFEST.json",
       "state": "TRACKED MODIFIED",
       "group": "DEPLOYMENT / BOOTSTRAP",
       "required": true
     },
     {
-      "file": "deployment/generate-release-manifest.mjs",
+      "file": "docs/PILOT_DEPLOYMENT.md",
       "state": "TRACKED MODIFIED",
-      "group": "DEPLOYMENT / BOOTSTRAP",
+      "group": "DOCUMENTATION",
       "required": true
     },
     {
@@ -239,51 +188,33 @@
       "required": false
     },
     {
-      "file": "seed/ml/animations-module1/generalization-fit-comparison/animation.js",
+      "file": "src/components/course/PinnedCourseWorld.tsx",
       "state": "TRACKED MODIFIED",
-      "group": "ANIMATION SOURCE + GENERATORS",
+      "group": "FRONTEND",
       "required": true
     },
     {
-      "file": "seed/ml/animations-module1/ml-workflow/animation.js",
+      "file": "src/creator/CreatorStudioApp.tsx",
       "state": "TRACKED MODIFIED",
-      "group": "ANIMATION SOURCE + GENERATORS",
+      "group": "FRONTEND",
       "required": true
     },
     {
-      "file": "seed/ml/animations-module1/supervised-vs-unsupervised/animation.js",
+      "file": "src/creator/cmsCourseAdapter.ts",
       "state": "TRACKED MODIFIED",
-      "group": "ANIMATION SOURCE + GENERATORS",
+      "group": "FRONTEND",
       "required": true
     },
     {
-      "file": "seed/ml/animations-module1/training-validation-testing/animation.js",
+      "file": "src/creator/components/CourseDetailsModal.tsx",
       "state": "TRACKED MODIFIED",
-      "group": "ANIMATION SOURCE + GENERATORS",
+      "group": "FRONTEND",
       "required": true
     },
     {
-      "file": "seed/ml/animations/features-and-labels/animation.js",
+      "file": "src/creator/components/CreatorDashboard.tsx",
       "state": "TRACKED MODIFIED",
-      "group": "ANIMATION SOURCE + GENERATORS",
-      "required": true
-    },
-    {
-      "file": "seed/ml/animations/linear-regression-learning/animation.js",
-      "state": "TRACKED MODIFIED",
-      "group": "ANIMATION SOURCE + GENERATORS",
-      "required": true
-    },
-    {
-      "file": "seed/ml/animations/what-is-machine-learning/animation.js",
-      "state": "TRACKED MODIFIED",
-      "group": "ANIMATION SOURCE + GENERATORS",
-      "required": true
-    },
-    {
-      "file": "seed/ml/shared/explain-runtime.js",
-      "state": "TRACKED MODIFIED",
-      "group": "ANIMATION SOURCE + GENERATORS",
+      "group": "FRONTEND",
       "required": true
     },
     {
@@ -293,13 +224,37 @@
       "required": true
     },
     {
-      "file": "src/creator/dsa/components/CustomAnimationEditor.tsx",
+      "file": "src/creator/dsa/components/DsaCheckpointEditor.tsx",
       "state": "TRACKED MODIFIED",
       "group": "FRONTEND",
       "required": true
     },
     {
-      "file": "src/creator/dsa/components/CustomAnimationHost.tsx",
+      "file": "src/creator/dsa/components/DsaDraftPreview.tsx",
+      "state": "TRACKED MODIFIED",
+      "group": "FRONTEND",
+      "required": true
+    },
+    {
+      "file": "src/creator/dsa/components/DsaEditorShell.tsx",
+      "state": "TRACKED MODIFIED",
+      "group": "FRONTEND",
+      "required": true
+    },
+    {
+      "file": "src/creator/dsa/components/DsaZoneList.tsx",
+      "state": "TRACKED MODIFIED",
+      "group": "FRONTEND",
+      "required": true
+    },
+    {
+      "file": "src/creator/dsa/dsaCmsClient.ts",
+      "state": "TRACKED MODIFIED",
+      "group": "FRONTEND",
+      "required": true
+    },
+    {
+      "file": "src/creator/dsa/promptGenerator.ts",
       "state": "TRACKED MODIFIED",
       "group": "FRONTEND",
       "required": true
@@ -317,171 +272,75 @@
       "required": false
     },
     {
-      "file": "src/learning/services/learnerCourseApi.ts",
+      "file": "src/learning/courseHomeConfig.ts",
       "state": "TRACKED MODIFIED",
       "group": "FRONTEND",
       "required": true
     },
     {
-      "file": "backend/scripts/compareNarrationDrafts.ts",
+      "file": "src/learning/courseSources.ts",
+      "state": "TRACKED MODIFIED",
+      "group": "FRONTEND",
+      "required": true
+    },
+    {
+      "file": "src/learning/libraryCourseSource.ts",
+      "state": "TRACKED MODIFIED",
+      "group": "FRONTEND",
+      "required": true
+    },
+    {
+      "file": "src/learning/services/apiClient.ts",
+      "state": "TRACKED MODIFIED",
+      "group": "FRONTEND",
+      "required": true
+    },
+    {
+      "file": "src/pages/ReagvisTrailPage.tsx",
+      "state": "TRACKED MODIFIED",
+      "group": "FRONTEND",
+      "required": true
+    },
+    {
+      "file": "src/state/AppStateContext.tsx",
+      "state": "TRACKED MODIFIED",
+      "group": "FRONTEND",
+      "required": true
+    },
+    {
+      "file": "backend/scripts/digestCmsState.ts",
       "state": "UNTRACKED",
       "group": "BACKEND SCRIPTS (attach/finalize/release/ops)",
       "required": true
     },
     {
-      "file": "backend/scripts/compareNarrationVoices.ts",
-      "state": "UNTRACKED",
-      "group": "BACKEND SCRIPTS (attach/finalize/release/ops)",
-      "required": true
-    },
-    {
-      "file": "backend/scripts/digestRelease.ts",
-      "state": "UNTRACKED",
-      "group": "BACKEND SCRIPTS (attach/finalize/release/ops)",
-      "required": true
-    },
-    {
-      "file": "backend/scripts/generateCourseNarration.ts",
-      "state": "UNTRACKED",
-      "group": "BACKEND SCRIPTS (attach/finalize/release/ops)",
-      "required": true
-    },
-    {
-      "file": "backend/scripts/generateNarrationForCheckpoints.ts",
-      "state": "UNTRACKED",
-      "group": "BACKEND SCRIPTS (attach/finalize/release/ops)",
-      "required": true
-    },
-    {
-      "file": "backend/scripts/narrationQaSafetyCheck.ts",
-      "state": "UNTRACKED",
-      "group": "BACKEND SCRIPTS (attach/finalize/release/ops)",
-      "required": true
-    },
-    {
-      "file": "backend/scripts/narrationReviewManifest.ts",
-      "state": "UNTRACKED",
-      "group": "BACKEND SCRIPTS (attach/finalize/release/ops)",
-      "required": true
-    },
-    {
-      "file": "backend/scripts/releaseNarratedCourse.ts",
-      "state": "UNTRACKED",
-      "group": "BACKEND SCRIPTS (attach/finalize/release/ops)",
-      "required": true
-    },
-    {
-      "file": "backend/scripts/setupLocalNarration.ts",
-      "state": "UNTRACKED",
-      "group": "BACKEND SCRIPTS (attach/finalize/release/ops)",
-      "required": true
-    },
-    {
-      "file": "backend/scripts/verifyCourseNarration.ts",
-      "state": "UNTRACKED",
-      "group": "BACKEND SCRIPTS (attach/finalize/release/ops)",
-      "required": true
-    },
-    {
-      "file": "backend/src/modules/cms/narration/narration.provider.ts",
+      "file": "backend/src/modules/cms/cmsAuditLog.model.ts",
       "state": "UNTRACKED",
       "group": "CORE BACKEND",
       "required": true
     },
     {
-      "file": "backend/src/modules/cms/narration/narration.schema.ts",
+      "file": "backend/src/modules/cms/courseDeletion.service.ts",
       "state": "UNTRACKED",
       "group": "CORE BACKEND",
       "required": true
     },
     {
-      "file": "backend/src/modules/cms/narration/narration.service.ts",
-      "state": "UNTRACKED",
-      "group": "CORE BACKEND",
-      "required": true
-    },
-    {
-      "file": "backend/src/modules/cms/narration/narration.status.ts",
-      "state": "UNTRACKED",
-      "group": "CORE BACKEND",
-      "required": true
-    },
-    {
-      "file": "backend/src/modules/cms/narration/narration.text.ts",
-      "state": "UNTRACKED",
-      "group": "CORE BACKEND",
-      "required": true
-    },
-    {
-      "file": "backend/src/modules/cms/narration/narration.types.ts",
-      "state": "UNTRACKED",
-      "group": "CORE BACKEND",
-      "required": true
-    },
-    {
-      "file": "backend/src/modules/cms/narration/narration.validation.ts",
-      "state": "UNTRACKED",
-      "group": "CORE BACKEND",
-      "required": true
-    },
-    {
-      "file": "backend/src/modules/cms/narration/providers/localKokoro.provider.ts",
-      "state": "UNTRACKED",
-      "group": "CORE BACKEND",
-      "required": true
-    },
-    {
-      "file": "backend/src/modules/cms/narration/providers/mp3.ts",
-      "state": "UNTRACKED",
-      "group": "CORE BACKEND",
-      "required": true
-    },
-    {
-      "file": "backend/tests/fixtures/fakeKokoroWorker.mjs",
+      "file": "backend/tests/cmsCourseCreation.test.ts",
       "state": "UNTRACKED",
       "group": "TESTS",
       "required": true
     },
     {
-      "file": "backend/tests/narration.local.test.ts",
+      "file": "backend/tests/courseDeletion.test.ts",
       "state": "UNTRACKED",
       "group": "TESTS",
       "required": true
     },
     {
-      "file": "backend/tests/narration.pronunciation.test.ts",
+      "file": "backend/tests/zipSafety.test.ts",
       "state": "UNTRACKED",
       "group": "TESTS",
-      "required": true
-    },
-    {
-      "file": "backend/tests/narration.test.ts",
-      "state": "UNTRACKED",
-      "group": "TESTS",
-      "required": true
-    },
-    {
-      "file": "backend/tools/local-tts/audit_audio.py",
-      "state": "UNTRACKED",
-      "group": "LOCAL TTS ENGINE TOOLS (worker, model download, audio audit)",
-      "required": true
-    },
-    {
-      "file": "backend/tools/local-tts/download_model.py",
-      "state": "UNTRACKED",
-      "group": "LOCAL TTS ENGINE TOOLS (worker, model download, audio audit)",
-      "required": true
-    },
-    {
-      "file": "backend/tools/local-tts/kokoro_worker.py",
-      "state": "UNTRACKED",
-      "group": "LOCAL TTS ENGINE TOOLS (worker, model download, audio audit)",
-      "required": true
-    },
-    {
-      "file": "docs/NARRATION_LOCAL_TTS.md",
-      "state": "UNTRACKED",
-      "group": "DOCUMENTATION",
       "required": true
     },
     {
@@ -4397,19 +4256,31 @@
       "required": false
     },
     {
-      "file": "src/creator/dsa/components/NarrationPanel.tsx",
+      "file": "src/creator/__tests__/courseDeletion.test.ts",
       "state": "UNTRACKED",
       "group": "FRONTEND",
       "required": true
     },
     {
-      "file": "src/learning/__tests__/narrationController.test.ts",
+      "file": "src/creator/courseDeletion.ts",
+      "state": "UNTRACKED",
+      "group": "FRONTEND",
+      "required": true
+    },
+    {
+      "file": "src/creator/dsa/components/DeleteCourseModal.tsx",
+      "state": "UNTRACKED",
+      "group": "FRONTEND",
+      "required": true
+    },
+    {
+      "file": "src/learning/__tests__/courseCatalog.test.ts",
       "state": "UNTRACKED",
       "group": "TESTS",
       "required": true
     },
     {
-      "file": "src/learning/narration/narrationController.ts",
+      "file": "src/learning/courseCatalog.ts",
       "state": "UNTRACKED",
       "group": "FRONTEND",
       "required": true

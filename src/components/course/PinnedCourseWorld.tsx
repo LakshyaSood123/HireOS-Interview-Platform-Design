@@ -9,7 +9,8 @@ import type { ReactNode } from "react"
 import { useAppState } from "../../state/AppStateContext"
 import CourseHome from "./CourseHome"
 import CourseCurriculum from "./CourseCurriculum"
-import { ML_HOME } from "../../learning/courseHomeConfig"
+import { backendCourseHomeConfig } from "../../learning/courseHomeConfig"
+import { getCatalogEntry } from "../../learning/courseCatalog"
 import { buildCourseStats, countCompleted } from "../../learning/courseHomeStats"
 
 export default function PinnedCourseWorld() {
@@ -47,6 +48,12 @@ export default function PinnedCourseWorld() {
   }
 
   const course = pinnedCourse.course
+  const catalogEntry = getCatalogEntry(pinnedCourse.courseId ?? "")
+  const homeConfig = backendCourseHomeConfig({
+    courseId: pinnedCourse.courseId ?? "",
+    category: catalogEntry?.details.category,
+    description: catalogEntry?.details.description || catalogEntry?.details.shortDescription,
+  })
   const stats = buildCourseStats({ zones: course.zones, getCheckpointState })
   const { done } = countCompleted(course.zones, getCheckpointState)
 
@@ -57,7 +64,7 @@ export default function PinnedCourseWorld() {
 
   return (
     <CourseHome
-      config={ML_HOME}
+      config={homeConfig}
       title={course.title}
       stats={stats}
       hasProgress={done > 0}

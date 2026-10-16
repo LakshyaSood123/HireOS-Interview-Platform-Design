@@ -29,6 +29,7 @@ import { RoutingCodeRunner } from "../learning/services/pistonCodeRunner"
 import { LocalNotesRepository, type NotesRepository } from "../learning/services/notesRepository"
 import { ApiNotesRepository } from "../learning/services/apiNotesRepository"
 import { getUnifiedLibraryCourses } from "../learning/libraryCourseSource"
+import { loadCourseCatalog, useCourseCatalog } from "../learning/courseCatalog"
 import CmsCourseRuntime from "../components/cms/CmsCourseRuntime"
 import { useAuth } from "../auth/AuthContext"
 import { usePilotLearnerUi } from "../config/pilotMode"
@@ -81,9 +82,14 @@ export default function ReagvisTrailPage({ onNavigateHireOS }: ReagvisTrailPageP
   const activeLab = getConceptCodeLab(codeLab.request?.animationId)
   const pilot = usePilotLearnerUi()
   // Pilot learners only see finished course worlds: the DSA world is not part of the pilot.
-  const unifiedLibraryCourses = getUnifiedLibraryCourses().filter(c => !pilot || c.id !== DSA_COURSE_ID)
+  const courseCatalog = useCourseCatalog()
+  const unifiedLibraryCourses = getUnifiedLibraryCourses(courseCatalog).filter(c => !pilot || c.id !== DSA_COURSE_ID)
 
   const { client } = useAuth()
+  // Courses published from the backend CMS: refresh the catalog whenever the Course Library is shown.
+  useEffect(() => {
+    if (reagvisView === "library") void loadCourseCatalog(client)
+  }, [client, reagvisView])
   const apiNotesRepository = useMemo<NotesRepository>(() => new ApiNotesRepository(client), [client])
   const notesRepository = isBackendSyncedCourse(activeCourseId) ? apiNotesRepository : localNotesRepository
 

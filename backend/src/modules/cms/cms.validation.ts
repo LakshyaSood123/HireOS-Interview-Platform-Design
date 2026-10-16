@@ -192,6 +192,20 @@ export function validateCmsVersionContent(content: CmsVersionContent): CmsValida
   for (const [id, count] of moduleIds) if (count > 1) issues.push({ entityType: "module", entityId: id, message: `Duplicate module id "${id}".` });
   for (const [id, count] of checkpointIds) if (count > 1) issues.push({ entityType: "checkpoint", entityId: id, message: `Duplicate checkpoint id "${id}".` });
 
+  // Structure completeness (every course type): a brand-new course starts empty (just Basecamp), and an empty course, zone or module is
+  // an authoring-in-progress state that must not be published. Archived structure is ignored.
+  let activeCheckpoints = 0;
+  for (const zone of content.zones.filter((z) => z.state === "active")) {
+    const activeModules = zone.modules.filter((m) => m.state === "active");
+    if (activeModules.length === 0) issues.push({ entityType: "zone", entityId: zone.id, message: `Zone "${zone.title}" has no modules yet.` });
+    for (const zoneModule of activeModules) {
+      const count = zoneModule.checkpoints.filter((c) => c.state === "active").length;
+      activeCheckpoints += count;
+      if (count === 0) issues.push({ entityType: "module", entityId: zoneModule.id, message: `Module "${zoneModule.title}" has no checkpoints yet.` });
+    }
+  }
+  if (activeCheckpoints === 0) issues.push({ entityType: "course", entityId: content.courseId, message: "The course has no checkpoints yet." });
+
   const allCheckpointIds = new Set(checkpointIds.keys());
   for (const zone of content.zones) {
     for (const zoneModule of zone.modules) {
@@ -223,6 +237,11 @@ export function validateCmsVersionContent(content: CmsVersionContent): CmsValida
         for (const cp of zm.checkpoints) {
           if (cp.type === "lesson" && cp.workspace && cp.workspace.theory.length === 0) {
             issues.push({ entityType: "checkpoint", entityId: cp.id, field: "workspace.theory", message: "A lesson checkpoint needs at least one concept block." });
+          }
+          for (const [i, block] of (cp.workspace?.theory ?? []).entries()) {
+            if (!block.heading.trim() || !block.body.trim()) {
+              issues.push({ entityType: "checkpoint", entityId: cp.id, field: `workspace.theory.${i}`, message: `Concept block ${i + 1} needs both a heading and body text.` });
+            }
           }
         }
       }

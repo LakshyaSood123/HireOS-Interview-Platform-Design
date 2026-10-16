@@ -23,7 +23,7 @@ export default function DsaZoneList({ course, onChange, onOpenZone }: DsaZoneLis
     <div className="max-w-5xl mx-auto px-6 py-8">
       <div className="mb-6">
         <h2 className="text-xs font-black uppercase tracking-wider text-[#A7CE65] mb-1">Zones</h2>
-        <p className="text-[11px] text-gray-500">The top level of the DSA curriculum tree — each zone groups a set of modules.</p>
+        <p className="text-[11px] text-gray-500">The top level of the course — each zone groups a set of modules.</p>
       </div>
 
       <div className="space-y-3">

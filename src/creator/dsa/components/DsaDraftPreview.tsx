@@ -34,6 +34,10 @@ import LessonWorkspace from "../../../components/lesson/LessonWorkspace"
 import type { ProgressState } from "../../../learning/types"
 import { useAuth } from "../../../auth/AuthContext"
 import { getAnimationPackageRevision } from "../animationPackageClient"
+import CourseHome from "../../../components/course/CourseHome"
+import CourseCurriculum from "../../../components/course/CourseCurriculum"
+import { backendCourseHomeConfig } from "../../../learning/courseHomeConfig"
+import { buildCourseStats } from "../../../learning/courseHomeStats"
 import type { LearnerAnimationPackage } from "../../../learning/services/learnerCourseApi"
 
 const previewRunner = new DisabledCodeRunner()
@@ -141,12 +145,48 @@ export default function DsaDraftPreview({ course, target, onTargetChange }: DsaD
     )
   }
 
+  if (learnerCourse.id !== "dsa-foundations") {
+    // Canonical learner Course Home for a backend (pinned) course: the same CourseHome + CourseCurriculum components Machine Learning and
+    // every published CMS course use. Everything is "available" in a preview and nothing is written anywhere.
+    const allModules = learnerCourse.zones.flatMap(z => z.modules)
+    const moduleStates: Record<string, ProgressState> = Object.fromEntries(allModules.map(m => [m.id, "available" as ProgressState]))
+    const stats = buildCourseStats({ zones: learnerCourse.zones, getCheckpointState: () => "available" })
+    const firstModule = allModules.find(m => m.checkpoints.length > 0)
+    const zoneOf = (moduleId: string) => learnerCourse.zones.find(z => z.modules.some(m => m.id === moduleId))
+    return (
+      <div className="relative">
+        <PreviewBadge />
+        <CourseHome
+          config={backendCourseHomeConfig({ courseId: learnerCourse.id, description: learnerCourse.description })}
+          title={learnerCourse.title}
+          stats={stats}
+          hasProgress={false}
+          onPrimary={() => firstModule && onTargetChange({ zoneId: zoneOf(firstModule.id)?.id ?? null, moduleId: firstModule.id, checkpointId: null })}
+          onBack={() => onTargetChange({ zoneId: null, moduleId: null, checkpointId: null })}
+          backLabel="Course overview (draft preview)"
+        >
+          {allModules.length === 0 ? (
+            <p className="text-sm text-[#3E5A47] bg-white/60 border border-dashed border-[#C2D6B8] rounded-2xl p-6 text-center">
+              No modules yet. Add a module to a zone in the Curriculum tab and it will appear here exactly as learners will see it.
+            </p>
+          ) : (
+            <CourseCurriculum
+              zones={learnerCourse.zones}
+              moduleStates={moduleStates}
+              onEnterModule={m => onTargetChange({ zoneId: zoneOf(m.id)?.id ?? null, moduleId: m.id, checkpointId: null })}
+            />
+          )}
+        </CourseHome>
+      </div>
+    )
+  }
+
   if (zone) {
     return (
       <div className="max-w-4xl mx-auto px-6 py-8">
         <PreviewBanner />
         <button onClick={() => onTargetChange({ zoneId: null, moduleId: null, checkpointId: null })} className="text-xs font-bold text-[#5B8854] hover:text-[#2F6747] cursor-pointer mb-4">
-          ← DSA Interview Trail
+          ← {learnerCourse.title}
         </button>
         <h2 className="text-2xl font-black text-[#1B3F2B] mb-1">{zone.title}</h2>
         <p className="text-sm text-gray-600 mb-6">{zone.description}</p>
@@ -197,7 +237,7 @@ function PreviewBanner() {
   return (
     <div className="mb-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10.5px] font-black uppercase tracking-wider bg-amber-400/15 text-amber-700 border border-amber-400/40">
       <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
-      Draft Preview — not the live DSA course
+      Draft Preview — not the published course
     </div>
   )
 }

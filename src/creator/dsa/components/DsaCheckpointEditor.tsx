@@ -35,6 +35,18 @@ export default function DsaCheckpointEditor({ course, zone, module, checkpoint, 
     commit({ workspace })
   }
 
+  // Prerequisite choices: any other active checkpoint in the course that does not (directly or indirectly) already depend on this one,
+  // so an author cannot create a cycle from the editor.
+  const allCheckpoints = (course.dsaZones ?? []).flatMap(z => z.modules.flatMap(m => m.checkpoints))
+  const prereqsOf = new Map(allCheckpoints.map(c => [c.id, c.prerequisites]))
+  const dependsOnThis = (id: string, seen = new Set<string>()): boolean => {
+    if (id === checkpoint.id) return true
+    if (seen.has(id)) return false
+    seen.add(id)
+    return (prereqsOf.get(id) ?? []).some(p => dependsOnThis(p, seen))
+  }
+  const prerequisiteChoices = allCheckpoints.filter(c => c.id !== checkpoint.id && c.state === "active" && !checkpoint.prerequisites.includes(c.id) && !dependsOnThis(c.id))
+
   // Real, currently-authored context only — every field is omitted by
   // promptGenerator.ts when absent, never fabricated (PART 9).
   const promptContext: PromptContext = {
@@ -106,16 +118,41 @@ export default function DsaCheckpointEditor({ course, zone, module, checkpoint, 
 
         <div>
           <label className={LABEL_CLASS}>
-            Prerequisites <span className="text-gray-600 normal-case font-normal">(read-only in this phase — see PART 16 of the schema task)</span>
+            Prerequisites <span className="text-gray-600 normal-case font-normal">(checkpoints a learner must complete first)</span>
           </label>
           {checkpoint.prerequisites.length === 0 ? (
-            <p className="text-xs text-gray-500">None — this is an entry point.</p>
+            <p className="text-xs text-gray-500 mb-2">None — this is an entry point.</p>
           ) : (
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-1.5 mb-2">
               {checkpoint.prerequisites.map(id => (
-                <span key={id} className="px-2 py-1 rounded-lg bg-white/5 border border-white/10 text-[11px] font-mono text-gray-300">{id}</span>
+                <span key={id} className="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white/5 border border-white/10 text-[11px] font-mono text-gray-300">
+                  {id}
+                  <button
+                    type="button"
+                    aria-label={`Remove prerequisite ${id}`}
+                    onClick={() => commit({ prerequisites: checkpoint.prerequisites.filter(p => p !== id) })}
+                    className="text-gray-500 hover:text-red-300 cursor-pointer"
+                  >
+                    ✕
+                  </button>
+                </span>
               ))}
             </div>
+          )}
+          {prerequisiteChoices.length > 0 && (
+            <select
+              aria-label="Add prerequisite"
+              value=""
+              onChange={e => e.target.value && commit({ prerequisites: [...checkpoint.prerequisites, e.target.value] })}
+              className={FIELD_CLASS}
+            >
+              <option value="">Add a prerequisite…</option>
+              {prerequisiteChoices.map(c => (
+                <option key={c.id} value={c.id} className="bg-[#0b1d16]">
+                  {c.title} ({c.id})
+                </option>
+              ))}
+            </select>
           )}
         </div>
 
@@ -134,6 +171,11 @@ export default function DsaCheckpointEditor({ course, zone, module, checkpoint, 
         <>
           <div className="rounded-2xl bg-[#0F2A20] border border-white/10 p-6 space-y-4">
             <h3 className="text-xs font-black uppercase tracking-wider text-[#A7CE65]">Lesson Content</h3>
+            {checkpoint.workspace.theory.length === 0 && !checkpoint.workspace.quickCheck && !checkpoint.workspace.codingActivity && !checkpoint.workspace.animation && (
+              <p className="text-xs text-gray-400 bg-black/20 border border-dashed border-white/15 rounded-xl px-4 py-3">
+                No lesson content yet. Add what this lesson needs: a theory block, a Quick Check, a coding activity, a study animation or a code trace below. A lesson does not need every block.
+              </p>
+            )}
             <div>
               <label className={LABEL_CLASS}>Workspace Title (heading shown in Lesson Workspace)</label>
               <input className={FIELD_CLASS} value={checkpoint.workspace.title} onChange={e => commitWorkspace({ title: e.target.value })} />

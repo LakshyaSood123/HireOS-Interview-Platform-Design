@@ -1,39 +1,45 @@
-import { useState, useMemo } from "react"
+import { useEffect, useState, useMemo } from "react"
 import type { CourseAuthoringRepository } from "../courseAuthoringRepository"
 import type { CreatorCourse } from "../types"
-import { peekDsaDashboardSummary } from "../dsa/dsaDraftRepository"
+import { useAuth } from "../../auth/AuthContext"
+import { createCmsCourse, listCmsCourses, type CmsCourseSummary } from "../dsa/dsaCmsClient"
 import CourseDetailsModal from "./CourseDetailsModal"
 
 interface CreatorDashboardProps {
   repository: CourseAuthoringRepository
   onOpenCourse: (id: string) => void
-  onOpenDsa: () => void
-  onCourseCreated: (course: CreatorCourse) => void
+  /** Opens a backend CMS course (DSA, Machine Learning, or one created in Creator Studio) in the structured editor. */
+  onOpenCmsCourse: (courseId: string) => void
+  /** A one-line success notice (for example after a course was permanently deleted). */
+  notice?: string | null
+  onDismissNotice?: () => void
   onExit: () => void
 }
 
-function DsaCourseCard({ onOpen }: { onOpen: () => void }) {
-  const summary = useMemo(() => peekDsaDashboardSummary(), [])
+function BackendCourseCard({ course, onOpen }: { course: CmsCourseSummary; onOpen: () => void }) {
+  const published = course.latestPublishedVersion
   return (
     <button
       onClick={onOpen}
       className="text-left w-full rounded-2xl bg-[#0F2A20] border border-[#38BDF8]/30 hover:border-[#38BDF8]/60 p-5 transition-all cursor-pointer shadow-lg hover:shadow-[#38BDF8]/10 group"
     >
       <div className="flex items-start justify-between gap-3 mb-3">
-        <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0 bg-[#38BDF8]/15 border border-[#38BDF8]/40">
-          🏔️
-        </div>
-        <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider shrink-0 bg-[#38BDF8]/15 text-[#7DD3FC] border border-[#38BDF8]/40">
-          Structured DSA Course
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0 bg-[#38BDF8]/15 border border-[#38BDF8]/40">🏔️</div>
+        <span
+          className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider shrink-0 ${
+            published ? "bg-[#1DB584]/20 text-[#4FD8A8] border border-[#1DB584]/40" : "bg-amber-500/15 text-amber-300 border border-amber-500/30"
+          }`}
+        >
+          {published ? `Published ${published}` : "Draft only"}
         </span>
       </div>
-      <h3 className="text-sm font-bold text-white mb-1 truncate group-hover:text-[#7DD3FC] transition-colors">DSA Interview Trail</h3>
+      <h3 className="text-sm font-bold text-white mb-1 truncate group-hover:text-[#7DD3FC] transition-colors">{course.title}</h3>
       <p className="text-xs text-gray-400 leading-relaxed line-clamp-2 mb-3 min-h-[2.2em]">
-        The real Data Structures &amp; Algorithms curriculum, editable as an isolated local draft.
+        {course.details?.shortDescription || "Open the course to edit its zones, modules and lessons."}
       </p>
       <div className="flex items-center justify-between text-[10.5px] text-gray-500 pt-3 border-t border-white/10">
-        <span>{summary.zones} zones • {summary.modules} modules • {summary.checkpoints} checkpoints</span>
-        <span>{summary.hasDraft ? "Draft saved" : "Not yet opened"}</span>
+        <span>CMS course · zones → modules → checkpoints</span>
+        <span>{course.creationSource === "manual" ? "Created in Creator Studio" : "Seeded course"}</span>
       </div>
     </button>
   )
@@ -81,17 +87,38 @@ function CourseCard({ course, onOpen }: { course: CreatorCourse; onOpen: () => v
   )
 }
 
-export default function CreatorDashboard({ repository, onOpenCourse, onOpenDsa, onCourseCreated, onExit }: CreatorDashboardProps) {
-  const [courses, setCourses] = useState<CreatorCourse[]>(() => repository.listCourses())
+export default function CreatorDashboard({ repository, onOpenCourse, onOpenCmsCourse, notice, onDismissNotice, onExit }: CreatorDashboardProps) {
+  const [courses] = useState<CreatorCourse[]>(() => repository.listCourses())
   const [showCreateModal, setShowCreateModal] = useState(false)
+  const { client } = useAuth()
+  const [cmsCourses, setCmsCourses] = useState<CmsCourseSummary[] | null>(null)
+  const [cmsError, setCmsError] = useState<string | null>(null)
+  const [creating, setCreating] = useState(false)
+  const [createError, setCreateError] = useState<string | null>(null)
+
+  useEffect(() => {
+    listCmsCourses(client)
+      .then(list => setCmsCourses(list))
+      .catch(() => setCmsError("Couldn't load the CMS courses from the backend."))
+  }, [client])
+
+  // New courses are created through the backend CMS: the same canonical draft every other course uses (Basecamp first).
+  const handleCreateCmsCourse = (input: Parameters<typeof createCmsCourse>[1]) => {
+    if (creating) return
+    setCreating(true)
+    setCreateError(null)
+    createCmsCourse(client, input)
+      .then(({ course }) => {
+        setShowCreateModal(false)
+        onOpenCmsCourse(course.courseId)
+      })
+      .catch(error => setCreateError(error instanceof Error ? error.message : "Couldn't create the course."))
+      .finally(() => setCreating(false))
+  }
 
   const drafts = useMemo(() => courses.filter(c => c.status === "draft"), [courses])
   const published = useMemo(() => courses.filter(c => c.status === "published-demo"), [courses])
 
-  const handleCreated = (course: CreatorCourse) => {
-    setShowCreateModal(false)
-    onCourseCreated(course)
-  }
 
   return (
     <div className="min-h-screen w-full">
@@ -130,33 +157,39 @@ export default function CreatorDashboard({ repository, onOpenCourse, onOpenDsa, 
       </div>
 
       <div className="max-w-[1400px] mx-auto px-6 sm:px-10 py-8">
+        {notice && (
+          <div role="status" className="mb-5 flex items-center justify-between gap-3 rounded-xl bg-[#1DB584]/15 border border-[#1DB584]/40 px-4 py-3 text-xs font-bold text-[#4FD8A8]">
+            <span>✓ {notice}</span>
+            <button onClick={onDismissNotice} className="text-[#4FD8A8]/80 hover:text-white cursor-pointer" aria-label="Dismiss notice">✕</button>
+          </div>
+        )}
         <div className="flex items-center gap-2 mb-4 text-[10px] text-gray-500">
           <span className="w-1.5 h-1.5 rounded-full bg-white/20" />
-          <span>Demo Creator</span>
+          <span>CMS courses are saved to the backend as editable drafts</span>
           <span className="opacity-40">•</span>
-          <span>Local persistence only — not connected to a real backend</span>
+          <span>Local demo drafts below are stored in this browser only</span>
         </div>
 
         <section className="mb-8">
-          <h2 className="text-xs font-black uppercase tracking-wider text-[#A7CE65] mb-3">Courses ({courses.length + 1})</h2>
+          <h2 className="text-xs font-black uppercase tracking-wider text-[#A7CE65] mb-3">CMS Courses ({cmsCourses?.length ?? 0})</h2>
+          {cmsError && <p className="text-xs text-red-400 mb-3">{cmsError}</p>}
+          {cmsCourses === null && !cmsError && <p className="text-xs text-gray-500">Loading courses…</p>}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <DsaCourseCard onOpen={onOpenDsa} />
-            {courses.map(c => (
-              <CourseCard key={c.id} course={c} onOpen={() => onOpenCourse(c.id)} />
+            {(cmsCourses ?? []).map(c => (
+              <BackendCourseCard key={c.courseId} course={c} onOpen={() => onOpenCmsCourse(c.courseId)} />
             ))}
           </div>
         </section>
 
-        {courses.length === 0 && (
-          <div className="rounded-2xl border border-dashed border-white/15 bg-[#0F2A20]/50 p-14 text-center mb-8">
-            <p className="text-sm text-gray-400 mb-4">No standard courses yet. Start building your first trail.</p>
-            <button
-              onClick={() => setShowCreateModal(true)}
-              className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-[#1DB584] hover:bg-[#159a6f] transition-all cursor-pointer"
-            >
-              + Create Course
-            </button>
-          </div>
+        {courses.length > 0 && (
+          <section className="mb-8">
+            <h2 className="text-xs font-black uppercase tracking-wider text-gray-400 mb-3">Local demo drafts — this browser only ({courses.length})</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {courses.map(c => (
+                <CourseCard key={c.id} course={c} onOpen={() => onOpenCourse(c.id)} />
+              ))}
+            </div>
+          </section>
         )}
 
         {courses.length > 0 && (
@@ -209,11 +242,21 @@ export default function CreatorDashboard({ repository, onOpenCourse, onOpenDsa, 
       {showCreateModal && (
         <CourseDetailsModal
           onClose={() => setShowCreateModal(false)}
-          onCreate={input => {
-            const created = repository.createCourse(input)
-            setCourses(repository.listCourses())
-            handleCreated(created)
-          }}
+          onCreate={input =>
+            handleCreateCmsCourse({
+              title: input.title,
+              shortDescription: input.shortDescription,
+              description: input.description,
+              category: input.category,
+              difficulty: input.difficulty,
+              duration: input.duration,
+              instructor: input.instructor,
+              tags: input.tags,
+              accentColor: input.accentColor,
+            })
+          }
+          busy={creating}
+          error={createError}
         />
       )}
     </div>

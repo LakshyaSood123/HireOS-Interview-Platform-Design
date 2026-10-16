@@ -13,6 +13,28 @@ export type CourseIdParams = z.infer<typeof courseIdParams>;
 export const versionIdParams = z.object({ courseId: curriculumId, versionId: z.string().trim().min(1).max(32) });
 export type VersionIdParams = z.infer<typeof versionIdParams>;
 
+/** Creator Studio "Create Course" / "Course Details" fields (the same ones the existing course form collects). */
+export const COURSE_DIFFICULTIES = ["Beginner", "Intermediate", "Advanced"] as const;
+const courseDetailsFields = {
+  title: z.string().trim().min(1, "A course title is required.").max(120),
+  subtitle: z.string().trim().max(200).default(""),
+  shortDescription: z.string().trim().min(1, "A short description is required.").max(300),
+  description: z.string().trim().max(4000).default(""),
+  category: z.string().trim().max(60).default(""),
+  difficulty: z.enum(COURSE_DIFFICULTIES).default("Beginner"),
+  duration: z.string().trim().max(40).default(""),
+  instructor: z.string().trim().max(80).default(""),
+  tags: z.array(z.string().trim().min(1).max(40)).max(12).default([]),
+  accentColor: z.string().trim().regex(/^#[0-9a-fA-F]{6}$/, "Accent colour must look like #1DB584.").default("#1DB584"),
+};
+export const createCourseSchema = z.object(courseDetailsFields);
+export type CreateCourseInput = z.infer<typeof createCourseSchema>;
+/** Permanent delete: the admin's CURRENT password and the exact course title. Neither is ever logged or stored. */
+export const permanentDeleteSchema = z.object({ password: z.string().min(1, "Enter your password.").max(200), confirmation: z.string().min(1, "Type the course title to confirm.").max(200) });
+export type PermanentDeleteInput = z.infer<typeof permanentDeleteSchema>;
+export const updateCourseDetailsSchema = z.object(courseDetailsFields).partial().refine((v) => Object.keys(v).length > 0, "Nothing to update.");
+export type UpdateCourseDetailsInput = z.infer<typeof updateCourseDetailsSchema>;
+
 const theoryBlockSchema = z.object({ heading: z.string().max(200), body: z.string().max(4000) });
 const codeExampleSchema = z.object({ language: z.enum(CMS_LANGUAGES), code: z.string().max(8000) });
 const quickCheckSchema = z.object({
@@ -71,7 +93,7 @@ const customAnimationSourceSchema = z.object({
 const traceStepSchema = z.object({
   stepId: z.string().min(1).max(64),
   label: z.string().max(200),
-  pseudocode: z.string().min(1).max(2000),
+  pseudocode: z.string().max(2000), // may be empty in a draft; publish validation requires it
   python: z.string().max(2000).nullable().optional(),
   cpp: z.string().max(2000).nullable().optional(),
   java: z.string().max(2000).nullable().optional(),

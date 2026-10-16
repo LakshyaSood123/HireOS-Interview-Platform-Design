@@ -13,6 +13,8 @@ import { buildSnapshotFromCmsVersion } from "./snapshotFromCmsVersion.js";
 import { normalizeAnimationSource, type CmsCourseType, type CmsZone } from "./cms.types.js";
 import { CmsAnimationPackage } from "./animationPackage.model.js";
 import { freezePackageRevisionIfNeeded } from "./animationPackage.service.js";
+import type { CreateCourseInput, UpdateCourseDetailsInput } from "./cms.schema.js";
+import { isCourseDeletable } from "./courseDeletion.service.js";
 
 /**
  * A pre-existing `CmsCourseVersion` document may hold the old, bare
@@ -49,23 +51,154 @@ function normalizeZonesAnimationSources(zones: CmsZone[]): CmsZone[] {
  * one per course regardless of this shared id. */
 const DRAFT_VERSION_ID = "draft";
 
+export interface CmsCourseDetails {
+  subtitle: string;
+  shortDescription: string;
+  description: string;
+  category: string;
+  difficulty: string;
+  duration: string;
+  instructor: string;
+  tags: string[];
+  accentColor: string;
+}
+
 export interface CmsCourseSummary {
   courseId: string;
   title: string;
   courseType: CmsCourseType;
   latestDraftVersion: string | null;
   latestPublishedVersion: string | null;
+  /** Provenance only ("manual" = created in Creator Studio). Never used to decide capability. */
+  creationSource: string | null;
+  details: CmsCourseDetails | null;
+  /** True only for a course the CMS may permanently delete (created through the CMS, not protected). The backend enforces this again on delete. */
+  canPermanentlyDelete: boolean;
 }
 
-export async function listCourses(): Promise<CmsCourseSummary[]> {
-  const courses = await CmsCourse.find().lean();
-  return courses.map((course) => ({
+function summaryOf(course: {
+  courseId: string; title: string; courseType: string; latestDraftVersion?: string | null; latestPublishedVersion?: string | null; creationSource?: string | null; details?: unknown; systemProtected?: boolean | null;
+}): CmsCourseSummary {
+  return {
     courseId: course.courseId,
     title: course.title,
     courseType: course.courseType as CmsCourseType,
     latestDraftVersion: course.latestDraftVersion ?? null,
     latestPublishedVersion: course.latestPublishedVersion ?? null,
-  }));
+    creationSource: course.creationSource ?? null,
+    details: (course.details as CmsCourseDetails | undefined) ?? null,
+    canPermanentlyDelete: isCourseDeletable(course),
+  };
+}
+
+export async function listCourses(): Promise<CmsCourseSummary[]> {
+  const courses = await CmsCourse.find().lean();
+  return courses.map(summaryOf);
+}
+
+export async function getCourseSummary(courseId: string): Promise<CmsCourseSummary> {
+  const course = await CmsCourse.findOne({ courseId }).lean();
+  if (!course) throw ApiError.notFound(`No course "${courseId}".`);
+  return summaryOf(course);
+}
+
+const BASECAMP_ZONE: CmsZone = { id: "basecamp", order: 0, title: "Basecamp", description: "Where every trail begins.", modules: [], state: "active" };
+
+function slugForCourse(title: string): string {
+  const slug = title
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 48);
+  return slug || "course";
+}
+
+/**
+ * Creates a brand-new course in the SAME canonical model every other course uses: a `cmsCourses` pointer, a `standard` course type
+ * and an editable draft whose first zone is a real "Basecamp" zone. Nothing is published, and no other course is touched.
+ * The draft then goes through the normal save / validate / preview / publish lifecycle like any course.
+ */
+export async function createCourse(actorId: string, input: CreateCourseInput): Promise<{ course: CmsCourseSummary; draft: CmsCourseVersionAttributes }> {
+  const base = slugForCourse(input.title);
+  for (let attempt = 1; attempt <= 25; attempt++) {
+    const courseId = attempt === 1 ? base : `${base}-${attempt}`.slice(0, 64);
+    if (await CmsCourse.exists({ courseId })) continue;
+    const details = {
+      subtitle: input.subtitle,
+      shortDescription: input.shortDescription,
+      description: input.description,
+      category: input.category,
+      difficulty: input.difficulty,
+      duration: input.duration,
+      instructor: input.instructor,
+      tags: input.tags,
+      accentColor: input.accentColor,
+    };
+    try {
+      await CmsCourse.create({ courseId, title: input.title, courseType: "standard", latestDraftVersion: DRAFT_VERSION_ID, latestPublishedVersion: null, creationSource: "manual", details });
+    } catch (err) {
+      if ((err as { code?: number }).code === 11000) continue; // lost a race for this id: try the next suffix
+      throw err;
+    }
+    try {
+      const draft = await CmsCourseVersion.create({
+        courseId,
+        versionId: DRAFT_VERSION_ID,
+        status: "draft",
+        createdFromVersion: null,
+        createdBy: actorId,
+        updatedBy: actorId,
+        revision: 1,
+        title: input.title,
+        courseType: "standard",
+        zones: [BASECAMP_ZONE],
+      });
+      const course = await CmsCourse.findOne({ courseId }).lean();
+      return { course: summaryOf(course!), draft: draft.toObject() };
+    } catch (err) {
+      await CmsCourse.deleteOne({ courseId }); // never leave a pointer without its draft
+      throw err;
+    }
+  }
+  throw ApiError.validation("Could not allocate a unique course id for this title; try a different title.");
+}
+
+/** Edits the library-card details of a course that was created through the CMS. Courses that pre-date CMS creation are not editable here. */
+export async function updateCourseDetails(courseId: string, patch: UpdateCourseDetailsInput): Promise<CmsCourseSummary> {
+  const course = await CmsCourse.findOne({ courseId });
+  if (!course) throw ApiError.notFound(`No course "${courseId}".`);
+  if (course.creationSource !== "manual" || !course.details) throw ApiError.validation(`Course "${courseId}" has no editable course details.`);
+  const { title, ...rest } = patch;
+  if (title !== undefined) course.title = title;
+  for (const [key, value] of Object.entries(rest)) (course.details as unknown as Record<string, unknown>)[key] = value;
+  course.markModified("details");
+  await course.save();
+  if (title !== undefined) await CmsCourseVersion.updateOne({ courseId, status: "draft" }, { $set: { title } });
+  return summaryOf(course.toObject());
+}
+
+export interface CmsCatalogEntry {
+  courseId: string;
+  title: string;
+  courseType: CmsCourseType;
+  publishedVersion: string;
+  lessonCount: number;
+  details: CmsCourseDetails;
+}
+
+/** Learner-facing catalog: courses created through the CMS that have a published version. The static DSA / ML cards are not listed here. */
+export async function listPublishedCatalog(): Promise<CmsCatalogEntry[]> {
+  const courses = await CmsCourse.find({ latestPublishedVersion: { $ne: null }, details: { $exists: true, $ne: null } }).lean();
+  const entries: CmsCatalogEntry[] = [];
+  for (const course of courses) {
+    const version = await CmsCourseVersion.findOne({ courseId: course.courseId, versionId: course.latestPublishedVersion, status: "published" }).lean();
+    if (!version) continue;
+    const lessonCount = (version.zones as CmsZone[]).flatMap((z) => z.modules).filter((m) => m.state === "active").flatMap((m) => m.checkpoints).filter((c) => c.state === "active").length;
+    entries.push({ courseId: course.courseId, title: course.title, courseType: course.courseType as CmsCourseType, publishedVersion: course.latestPublishedVersion!, lessonCount, details: course.details as unknown as CmsCourseDetails });
+  }
+  return entries;
 }
 
 async function getActivePublishedVersion(courseId: string): Promise<CmsCourseVersionAttributes & { _id: unknown } | null> {

@@ -18,7 +18,8 @@ import { CMS_CHECKPOINT_TYPES, CMS_COURSE_TYPES, CMS_ENTITY_STATES, CMS_EXECUTIO
  */
 
 const testCaseSchema = new Schema(
-  { id: { type: String, required: true }, description: { type: String, required: true }, input: { type: String, required: true }, expected: { type: String, required: true } },
+  // Authoring text may be empty while a draft is being written (an author adds a row, then types); the publish validation reports empties.
+  { id: { type: String, required: true }, description: { type: String, default: "" }, input: { type: String, default: "" }, expected: { type: String, default: "" } },
   { _id: false },
 );
 
@@ -29,10 +30,10 @@ const codeExampleSchema = new Schema(
 
 const quickCheckSchema = new Schema(
   {
-    question: { type: String, required: true },
+    question: { type: String, default: "" },
     options: { type: [String], required: true },
     correctIndex: { type: Number, required: true },
-    explanation: { type: String, required: true },
+    explanation: { type: String, default: "" },
   },
   { _id: false },
 );
@@ -42,9 +43,9 @@ const quickCheckSchema = new Schema(
  * own documented reasoning for the same choice. */
 const codingActivitySchema = new Schema(
   {
-    prompt: { type: String, required: true },
+    prompt: { type: String, default: "" },
     constraints: { type: [String], default: undefined },
-    functionName: { type: String, required: true },
+    functionName: { type: String, default: "" },
     requiredKeywords: { type: [String], required: true, default: [] },
     starterCode: { type: Schema.Types.Mixed, required: true, default: () => ({}) },
     languages: { type: [{ type: String, enum: CMS_LANGUAGES }], required: true },
@@ -68,7 +69,7 @@ const codingActivitySchema = new Schema(
 // similarly-shaped flexible content.
 const animationRefSchema = Schema.Types.Mixed;
 
-const theoryBlockSchema = new Schema({ heading: { type: String, required: true }, body: { type: String, required: true } }, { _id: false });
+const theoryBlockSchema = new Schema({ heading: { type: String, default: "" }, body: { type: String, default: "" } }, { _id: false });
 
 /** Trees module only. Mongoose doesn't need a recursive `TreeVizNode` schema
  * declared up front — `Schema.Types.Mixed` holds the (small, learner-authored)

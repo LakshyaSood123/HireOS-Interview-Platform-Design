@@ -12,6 +12,8 @@ import {
   validateCmsDraft,
   CMS_DSA_COURSE_ID,
   CMS_EDITABLE_COURSES,
+  listCmsCourses,
+  type CmsCourseSummary,
   type CmsDraft,
   type CmsValidationIssue,
   type CmsVersionSummary,
@@ -24,12 +26,18 @@ import DsaModuleEditor from "./DsaModuleEditor"
 import DsaCheckpointEditor from "./DsaCheckpointEditor"
 import DsaValidationPanel from "./DsaValidationPanel"
 import DsaDraftPreview from "./DsaDraftPreview"
+import DeleteCourseModal from "./DeleteCourseModal"
+import { showDangerZone } from "../../courseDeletion"
 
 interface DsaEditorShellProps {
   onBackToDashboard: () => void
+  /** The backend CMS course to open first (any course: DSA, Machine Learning, or one created in Creator Studio). */
+  initialCourseId?: string
+  /** Called after a course was permanently deleted; the app returns to the course list. */
+  onCourseDeleted?: (title: string) => void
 }
 
-type Tab = "curriculum" | "validation" | "preview" | "versions"
+type Tab = "curriculum" | "validation" | "preview" | "versions" | "settings"
 type LoadState = "loading" | "ready" | "error"
 
 export interface PreviewTarget {
@@ -62,11 +70,20 @@ function draftToCourse(draft: CmsDraft, courseId: string): CreatorCourse {
 /** Draft canonical source is the backend CMS — see dsaCmsClient.ts. This
  * shell no longer reads/writes localStorage as the source of truth; it only
  * holds the currently-loaded draft and its server revision in React state. */
-export default function DsaEditorShell({ onBackToDashboard }: DsaEditorShellProps) {
+export default function DsaEditorShell({ onBackToDashboard: leaveEditor, initialCourseId, onCourseDeleted }: DsaEditorShellProps) {
   const { client } = useAuth()
   // Which backend CMS course the editor is working on. DSA is the default;
   // Machine Learning Foundations is the second course (see CMS_EDITABLE_COURSES).
-  const [cmsCourseId, setCmsCourseId] = useState<string>(CMS_DSA_COURSE_ID)
+  const [cmsCourseId, setCmsCourseId] = useState<string>(initialCourseId ?? CMS_DSA_COURSE_ID)
+  // Every course the backend CMS knows (the selector is not limited to DSA / ML).
+  const [cmsCourses, setCmsCourses] = useState<CmsCourseSummary[] | null>(null)
+  useEffect(() => {
+    listCmsCourses(client).then(setCmsCourses).catch(() => setCmsCourses(null))
+  }, [client])
+  const courseOptions = cmsCourses ? cmsCourses.map(c => ({ id: c.courseId, label: c.title })) : [...CMS_EDITABLE_COURSES]
+  const currentCourseSummary = cmsCourses?.find(c => c.courseId === cmsCourseId) ?? null
+  const dangerZoneAllowed = showDangerZone(currentCourseSummary)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
   const isDsaCourse = cmsCourseId === CMS_DSA_COURSE_ID
   const [loadState, setLoadState] = useState<LoadState>("loading")
   const [loadError, setLoadError] = useState<string | null>(null)
@@ -137,6 +154,11 @@ export default function DsaEditorShell({ onBackToDashboard }: DsaEditorShellProp
   }
 
   const isDirty = useMemo(() => (course ? JSON.stringify(course.dsaZones) !== savedSnapshot : false), [course, savedSnapshot])
+  // Leaving the editor never silently drops unsaved work.
+  const onBackToDashboard = () => {
+    if (isDirty && !window.confirm("You have unsaved changes to this draft. Leave without saving?")) return
+    leaveEditor()
+  }
   const counts = useMemo(() => (course ? countAll(course) : { zones: 0, modules: 0, checkpoints: 0 }), [course])
   const issues = useMemo(() => (course ? validateDsaDraft(course) : []), [course])
   const errorCount = issues.filter(i => i.severity === "error").length
@@ -310,7 +332,7 @@ export default function DsaEditorShell({ onBackToDashboard }: DsaEditorShellProp
   }
 
   const breadcrumb: { label: string; onClick: () => void }[] = [
-    { label: "DSA Interview Trail", onClick: () => { setSelectedZoneId(null); setSelectedModuleId(null); setSelectedCheckpointId(null) } },
+    { label: course?.title || "Course", onClick: () => { setSelectedZoneId(null); setSelectedModuleId(null); setSelectedCheckpointId(null) } },
   ]
   if (selectedZone) breadcrumb.push({ label: selectedZone.title, onClick: () => { setSelectedModuleId(null); setSelectedCheckpointId(null) } })
   if (selectedModule) breadcrumb.push({ label: selectedModule.title, onClick: () => setSelectedCheckpointId(null) })
@@ -331,7 +353,7 @@ export default function DsaEditorShell({ onBackToDashboard }: DsaEditorShellProp
                 onChange={e => handleCourseChange(e.target.value)}
                 className="text-sm font-black text-white bg-transparent border border-white/15 rounded-md px-2 py-0.5 cursor-pointer"
               >
-                {CMS_EDITABLE_COURSES.map(c => (
+                {courseOptions.map(c => (
                   <option key={c.id} value={c.id} className="bg-[#0b1d16]">
                     {c.label}
                   </option>
@@ -361,6 +383,7 @@ export default function DsaEditorShell({ onBackToDashboard }: DsaEditorShellProp
           >
             Preview Draft
           </button>
+          {isDsaCourse && (
           <button
             onClick={() => setShowResetConfirm("static")}
             disabled={!isDsaCourse}
@@ -371,9 +394,11 @@ export default function DsaEditorShell({ onBackToDashboard }: DsaEditorShellProp
           >
             Reset to Static DSA
           </button>
+          )}
           <button
             onClick={() => setShowResetConfirm("published")}
-            title="Discard the draft and recreate it from the currently published version — saved immediately"
+            disabled={currentCourseSummary !== null && !currentCourseSummary.latestPublishedVersion}
+            title={currentCourseSummary !== null && !currentCourseSummary.latestPublishedVersion ? "Nothing is published yet, so there is nothing to reset to" : "Discard the draft and recreate it from the currently published version — saved immediately"}
             className="px-4 py-2 rounded-xl text-xs font-bold text-red-300 bg-red-500/10 hover:bg-red-500/15 border border-red-500/25 cursor-pointer transition-all"
           >
             Reset to Published
@@ -419,6 +444,7 @@ export default function DsaEditorShell({ onBackToDashboard }: DsaEditorShellProp
           ["validation", `Validation${errorCount > 0 ? ` (${errorCount})` : ""}`],
           ["preview", "Preview Draft"],
           ["versions", "Versions"],
+          ...(dangerZoneAllowed ? ([["settings", "Course Settings"]] as [Tab, string][]) : []),
         ] as [Tab, string][]).map(([key, label]) => (
           <button
             key={key}
@@ -500,6 +526,48 @@ export default function DsaEditorShell({ onBackToDashboard }: DsaEditorShellProp
         )}
 
         {tab === "preview" && <DsaDraftPreview course={course} target={previewTarget} onTargetChange={setPreviewTarget} />}
+
+        {tab === "settings" && dangerZoneAllowed && currentCourseSummary && (
+          <div className="max-w-3xl mx-auto px-6 py-6 space-y-6">
+            <div className="rounded-2xl bg-[#0F2A20] border border-white/10 p-6">
+              <h2 className="text-sm font-black text-white mb-1">Course Details</h2>
+              <p className="text-xs text-gray-500 mb-4">Created in Creator Studio. Zones, modules and lessons are edited in the Curriculum tab.</p>
+              <dl className="grid grid-cols-[140px_1fr] gap-y-2 text-xs">
+                <dt className="text-gray-500">Title</dt><dd className="text-white">{currentCourseSummary.title}</dd>
+                <dt className="text-gray-500">Short description</dt><dd className="text-gray-300">{currentCourseSummary.details?.shortDescription || "—"}</dd>
+                <dt className="text-gray-500">Category</dt><dd className="text-gray-300">{currentCourseSummary.details?.category || "—"}</dd>
+                <dt className="text-gray-500">Published version</dt><dd className="text-gray-300">{currentCourseSummary.latestPublishedVersion ?? "Not published yet"}</dd>
+                <dt className="text-gray-500">Course id</dt><dd className="text-gray-400 font-mono">{currentCourseSummary.courseId}</dd>
+              </dl>
+            </div>
+
+            <div className="rounded-2xl border border-red-500/40 bg-red-500/[0.06] p-6" aria-label="Danger Zone">
+              <h2 className="text-sm font-black text-red-300 mb-1">Danger Zone</h2>
+              <p className="text-xs text-gray-300 leading-relaxed mb-1">
+                <b>Permanently Delete Course</b>: this permanently deletes this course and its owned course data. This action cannot be undone.
+              </p>
+              <p className="text-[11px] text-gray-500 mb-4">To hide or retire something reversibly, use Archive on a zone, module or checkpoint instead.</p>
+              <button
+                onClick={() => setShowDeleteModal(true)}
+                className="px-5 py-2.5 rounded-xl text-xs font-black text-red-200 bg-red-500/10 hover:bg-red-500/20 border border-red-500/40 cursor-pointer"
+              >
+                Permanently Delete Course
+              </button>
+            </div>
+          </div>
+        )}
+
+        {showDeleteModal && currentCourseSummary && (
+          <DeleteCourseModal
+            courseId={currentCourseSummary.courseId}
+            courseTitle={currentCourseSummary.title}
+            onClose={() => setShowDeleteModal(false)}
+            onDeleted={() => {
+              setShowDeleteModal(false)
+              onCourseDeleted?.(currentCourseSummary.title)
+            }}
+          />
+        )}
 
         {tab === "versions" && (
           <div className="max-w-3xl mx-auto px-6 py-6">

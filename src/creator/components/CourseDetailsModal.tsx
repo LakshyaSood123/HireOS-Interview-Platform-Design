@@ -5,6 +5,10 @@ import type { CreateCourseInput } from "../courseAuthoringRepository"
 interface CourseDetailsModalProps {
   onClose: () => void
   onCreate: (input: CreateCourseInput) => void
+  /** True while the course is being created on the backend. */
+  busy?: boolean
+  /** A creation failure to show to the author. */
+  error?: string | null
 }
 
 const EMPTY: CourseDetailsValue = {
@@ -19,7 +23,7 @@ const EMPTY: CourseDetailsValue = {
   accentColor: "#1DB584",
 }
 
-export default function CourseDetailsModal({ onClose, onCreate }: CourseDetailsModalProps) {
+export default function CourseDetailsModal({ onClose, onCreate, busy = false, error = null }: CourseDetailsModalProps) {
   const [value, setValue] = useState<CourseDetailsValue>(EMPTY)
   const [errors, setErrors] = useState<Partial<Record<keyof CourseDetailsValue, string>>>({})
 
@@ -50,7 +54,7 @@ export default function CourseDetailsModal({ onClose, onCreate }: CourseDetailsM
       <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-[#0F2A20] border border-white/10 shadow-2xl">
         <div className="px-7 pt-6 pb-4 border-b border-white/10 flex items-center justify-between">
           <div>
-            <p className="text-[10.5px] font-black uppercase tracking-wider text-[#A7CE65] mb-1">Step 1 of 5</p>
+            <p className="text-[10.5px] font-black uppercase tracking-wider text-[#A7CE65] mb-1">Step 1 · Course details</p>
             <h2 className="text-lg font-black text-white">Course Details</h2>
           </div>
           <button onClick={onClose} className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center cursor-pointer text-gray-400">
@@ -59,6 +63,7 @@ export default function CourseDetailsModal({ onClose, onCreate }: CourseDetailsM
         </div>
         <div className="px-7 py-6">
           <CourseDetailsForm value={value} onChange={setValue} errors={errors} />
+          {error && <p className="text-xs text-red-400 mt-4" role="alert">{error}</p>}
         </div>
         <div className="px-7 py-5 border-t border-white/10 flex items-center justify-end gap-3">
           <button onClick={onClose} className="px-4 py-2.5 rounded-xl text-xs font-bold text-gray-300 bg-white/5 hover:bg-white/10 border border-white/10 cursor-pointer transition-all">
@@ -66,9 +71,10 @@ export default function CourseDetailsModal({ onClose, onCreate }: CourseDetailsM
           </button>
           <button
             onClick={handleSubmit}
+            disabled={busy}
             className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#1DB584] to-[#10B981] hover:from-[#159a6f] hover:to-[#0d9668] shadow-md shadow-[#1DB584]/25 cursor-pointer transition-all"
           >
-            Continue to Curriculum →
+            {busy ? "Creating…" : "Create course and open Zones →"}
           </button>
         </div>
       </div>

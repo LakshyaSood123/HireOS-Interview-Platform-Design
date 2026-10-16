@@ -137,6 +137,12 @@ function bridgeContractBlock(bridgeMode: CmsDsaBridgeMode): string {
       '- window.ReagvisBridge.stepChanged(stepId) — call this every time the animation reaches a new semantic step, passing one of the ids declared in manifest.json\'s "traceEvents". IMPORTANT: call it for the FIRST step too, right after ready() — not just on later transitions. If you never call stepChanged() for the initial state, the host has no current step to synchronize against until the first command arrives, and step-jump controls have nothing to jump from.',
     )
   }
+  if (bridgeMode === "synchronized") {
+    lines.push("")
+    lines.push("NARRATION TEXT (required so the lesson can be voiced): animation.js MUST declare, at top level, one explanation per traceEvents step id, written EXACTLY in this form, on one assignment that ends with `};`:")
+    lines.push('  var EXPLAIN = {"initialize": {"h": "Short step heading", "t": "One or two plain sentences explaining this step. Use **bold** sparingly."}, "compare-mid": {"h": "...", "t": "..."}};')
+    lines.push('Rules: the keys are exactly the ids in manifest.json "traceEvents"; every id has both "h" and "t"; the object is valid JSON (double quotes, no trailing commas, no functions); and the same "t" text is what the animation shows the learner for that step. Do not store the explanation under other names such as "detail" or "title" only — the narration reads var EXPLAIN.')
+  }
   lines.push("")
   lines.push("To RECEIVE commands from the host page, define this global function — it will be called for every command the host sends:")
   lines.push("  window.ReagvisAnimation = { onCommand: function(type, stepId) { /* type is one of the command names below; stepId is only set for GOTO_STEP */ } };")

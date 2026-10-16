@@ -1,6 +1,5 @@
 import { useState, useCallback } from "react"
 import { courseAuthoringRepository } from "./courseAuthoringRepository"
-import type { CreatorCourse } from "./types"
 import CreatorDashboard from "./components/CreatorDashboard"
 import CourseEditorShell from "./components/CourseEditorShell"
 import DsaEditorShell from "./dsa/components/DsaEditorShell"
@@ -48,20 +47,26 @@ export default function CreatorStudioApp({ onExit }: CreatorStudioAppProps) {
   const isAdmin = useIsAdmin()
   const [screen, setScreen] = useState<"dashboard" | "editor" | "dsa-editor">("dashboard")
   const [activeCourseId, setActiveCourseId] = useState<string | null>(null)
+  // The backend CMS course open in the structured editor (DSA, Machine Learning, or any course created in Creator Studio).
+  const [cmsCourseId, setCmsCourseId] = useState<string>("dsa-foundations")
   const [refreshKey, setRefreshKey] = useState(0)
+  const [notice, setNotice] = useState<string | null>(null)
 
   const openCourse = useCallback((id: string) => {
     setActiveCourseId(id)
     setScreen("editor")
   }, [])
 
-  const openDsa = useCallback(() => {
+  const openCmsCourse = useCallback((courseId: string) => {
+    setCmsCourseId(courseId)
     setScreen("dsa-editor")
   }, [])
 
-  const createAndOpen = useCallback((course: CreatorCourse) => {
-    setActiveCourseId(course.id)
-    setScreen("editor")
+  const courseDeleted = useCallback(() => {
+    setNotice("Course permanently deleted.")
+    setActiveCourseId(null)
+    setCmsCourseId("dsa-foundations")
+    setScreen("dashboard")
     setRefreshKey(k => k + 1)
   }, [])
 
@@ -80,8 +85,9 @@ export default function CreatorStudioApp({ onExit }: CreatorStudioAppProps) {
           key={refreshKey}
           repository={courseAuthoringRepository}
           onOpenCourse={openCourse}
-          onOpenDsa={openDsa}
-          onCourseCreated={createAndOpen}
+          onOpenCmsCourse={openCmsCourse}
+          notice={notice}
+          onDismissNotice={() => setNotice(null)}
           onExit={onExit}
         />
       )}
@@ -92,7 +98,7 @@ export default function CreatorStudioApp({ onExit }: CreatorStudioAppProps) {
           onBackToDashboard={backToDashboard}
         />
       )}
-      {screen === "dsa-editor" && <DsaEditorShell onBackToDashboard={backToDashboard} />}
+      {screen === "dsa-editor" && <DsaEditorShell initialCourseId={cmsCourseId} onBackToDashboard={backToDashboard} onCourseDeleted={courseDeleted} />}
     </div>
   )
 }

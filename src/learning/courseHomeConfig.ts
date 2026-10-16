@@ -46,6 +46,25 @@ export const ML_HOME: CourseHomeConfig = {
 
 const CMS_VARIANTS: CourseHeroVariant[] = ["python-a", "python-b"]
 
+/** Home config for a course published from the backend CMS (anything that is not DSA or Machine Learning). Presentation only:
+ * wording comes from the course's own details; the hero variant is chosen from the id so two courses look different. */
+export function backendCourseHomeConfig(args: { courseId: string; category?: string; description?: string }): CourseHomeConfig {
+  if (args.courseId === ML_COURSE_ID) return ML_HOME
+  let hash = 0
+  for (const ch of args.courseId) hash = (hash * 31 + ch.charCodeAt(0)) >>> 0
+  const variant = CMS_VARIANTS[hash % CMS_VARIANTS.length]
+  return {
+    courseId: args.courseId,
+    destinationName: args.category || "Creator Studio",
+    themeLabel: "Course Trail",
+    icon: "🎓",
+    description: args.description || "",
+    heroVariant: variant,
+    beginLabel: "Begin Trail",
+    continueLabel: "Continue Trail",
+  }
+}
+
 /** Home config for a published Creator Studio course. The hero variant is
  * chosen by the course's position in the published list, so two published
  * courses get visibly different destinations without hardcoding their ids. */

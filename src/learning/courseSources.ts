@@ -26,12 +26,21 @@ const COURSE_SOURCES: Readonly<Record<string, CourseSourceDefinition>> = {
   [ML_COURSE_ID]: { id: ML_COURSE_ID, source: "backend-pinned" },
 }
 
+// Courses created in Creator Studio and published (listed by the backend catalog, see learning/courseCatalog.ts) are registered here at
+// runtime, so they are opened exactly like Machine Learning: no per-course code, no per-course deployment.
+const dynamicBackendCourses = new Set<string>()
+
+export function registerBackendPinnedCourses(courseIds: Iterable<string>): void {
+  for (const id of courseIds) if (!(id in COURSE_SOURCES)) dynamicBackendCourses.add(id)
+}
+
 export function getCourseSourceDefinition(courseId: string): CourseSourceDefinition | undefined {
-  return COURSE_SOURCES[courseId]
+  if (COURSE_SOURCES[courseId]) return COURSE_SOURCES[courseId]
+  return dynamicBackendCourses.has(courseId) ? { id: courseId, source: "backend-pinned" } : undefined
 }
 
 export function isBackendPinnedCourse(courseId: string): boolean {
-  return COURSE_SOURCES[courseId]?.source === "backend-pinned"
+  return COURSE_SOURCES[courseId]?.source === "backend-pinned" || dynamicBackendCourses.has(courseId)
 }
 
 /** True when learner progress for this course is reconciled with the backend

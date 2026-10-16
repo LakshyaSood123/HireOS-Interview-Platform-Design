@@ -112,3 +112,81 @@ export function activateCmsVersion(client: ApiClient, courseId: string, versionI
     .request<void>("POST", `/cms/courses/${encodeURIComponent(courseId)}/versions/${encodeURIComponent(versionId)}/activate`)
     .then(() => undefined)
 }
+
+// ── Courses (create / list) ────────────────────────────────────────────────────────────────────────────
+
+export interface CmsCourseDetails {
+  subtitle: string
+  shortDescription: string
+  description: string
+  category: string
+  difficulty: string
+  duration: string
+  instructor: string
+  tags: string[]
+  accentColor: string
+}
+
+export interface CmsCourseSummary {
+  courseId: string
+  title: string
+  courseType: string
+  latestDraftVersion: string | null
+  latestPublishedVersion: string | null
+  /** Provenance only ("manual" = created in Creator Studio). It never changes what the editor can do. */
+  creationSource: string | null
+  details: CmsCourseDetails | null
+  /** Decided by the backend: created through the CMS and not protected. Protected / seeded courses are never permanently deletable. */
+  canPermanentlyDelete: boolean
+}
+
+export interface CreateCmsCourseInput {
+  title: string
+  shortDescription: string
+  subtitle?: string
+  description?: string
+  category?: string
+  difficulty?: "Beginner" | "Intermediate" | "Advanced"
+  duration?: string
+  instructor?: string
+  tags?: string[]
+  accentColor?: string
+}
+
+export function listCmsCourses(client: ApiClient): Promise<CmsCourseSummary[]> {
+  return client.request<CmsCourseSummary[]>("GET", "/cms/courses").then(res => res.data)
+}
+
+/** Creates a brand-new course in the canonical model: an editable draft whose first zone is Basecamp. Nothing is published. */
+export function createCmsCourse(client: ApiClient, input: CreateCmsCourseInput): Promise<{ course: CmsCourseSummary; draft: CmsDraft }> {
+  return client.request<{ course: CmsCourseSummary; draft: CmsDraft }>("POST", "/cms/courses", { body: input }).then(res => res.data)
+}
+
+// ── Permanent deletion (manually created courses only; the backend enforces everything) ─────────────────
+
+export interface CmsDeletionImpact {
+  courseId: string
+  courseTitle: string
+  zones: number
+  modules: number
+  checkpoints: number
+  versions: number
+  snapshots: number
+  packageRevisions: number
+  packagesDeleted: number
+  packagesKept: number
+  narrationAssets: number
+  learnersPinned: number
+  progressRecords: number
+  canDelete: boolean
+  blockers: string[]
+}
+
+export function getCourseDeleteImpact(client: ApiClient, courseId: string): Promise<CmsDeletionImpact> {
+  return client.request<CmsDeletionImpact>("GET", `/cms/courses/${encodeURIComponent(courseId)}/delete-impact`).then(res => res.data)
+}
+
+/** The password is sent once in the request body of this call and verified by the backend against the signed-in admin. */
+export function permanentlyDeleteCourse(client: ApiClient, courseId: string, input: { password: string; confirmation: string }): Promise<{ courseId: string; courseTitle: string }> {
+  return client.request<{ courseId: string; courseTitle: string }>("POST", `/cms/courses/${encodeURIComponent(courseId)}/permanent-delete`, { body: input }).then(res => res.data)
+}

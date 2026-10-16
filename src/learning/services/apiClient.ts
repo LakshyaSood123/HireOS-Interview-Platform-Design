@@ -84,6 +84,8 @@ interface RequestOptions {
   body?: unknown
   /** Default true: send the access token, and renew it once on a 401. */
   authenticated?: boolean
+  /** Overrides the client's default timeout for ONE slow, deliberate request (e.g. an admin generating narration with the local engine). */
+  timeoutMs?: number
 }
 
 interface RawResponse {
@@ -191,13 +193,13 @@ export class ApiClient {
     const session = authenticated ? this.session() : null
     if (authenticated && !session) throw new SessionExpiredError()
 
-    let response = await this.send(method, path, options.body, session?.accessToken)
+    let response = await this.send(method, path, options.body, session?.accessToken, options.timeoutMs)
 
     if (response.status === 401 && session) {
       // Access tokens are short-lived: renew once, then retry once.
       const renewed = await this.renew(session.accessToken)
       if (!renewed) throw new SessionExpiredError()
-      response = await this.send(method, path, options.body, renewed.accessToken)
+      response = await this.send(method, path, options.body, renewed.accessToken, options.timeoutMs)
       if (response.status === 401) {
         this.writeSession(null)
         throw new SessionExpiredError()
@@ -214,13 +216,13 @@ export class ApiClient {
     return user
   }
 
-  private async send(method: string, path: string, body: unknown, accessToken?: string): Promise<RawResponse> {
+  private async send(method: string, path: string, body: unknown, accessToken?: string, timeoutMs: number = this.timeoutMs): Promise<RawResponse> {
     const headers: Record<string, string> = { Accept: "application/json" }
     if (body !== undefined) headers["Content-Type"] = "application/json"
     if (accessToken) headers.Authorization = `Bearer ${accessToken}`
 
     const controller = new AbortController()
-    const timer = setTimeout(() => controller.abort(), this.timeoutMs)
+    const timer = setTimeout(() => controller.abort(), timeoutMs)
     try {
       const response = await this.fetchImpl(`${this.baseUrl}${path}`, {
         method,

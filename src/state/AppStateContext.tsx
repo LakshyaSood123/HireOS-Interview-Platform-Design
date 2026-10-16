@@ -21,7 +21,7 @@ import { MockRecommendationProvider } from "../learning/services/recommendationP
 import { completeCheckpointOnBackend, fetchCourseState } from "../learning/services/progressApi"
 import { fetchPinnedCourseContent } from "../learning/services/learnerCourseApi"
 import { pinnedContentToLearnerCourse } from "../learning/pinnedCourseAdapter"
-import { ApiUnavailableError, SessionExpiredError } from "../learning/services/apiClient"
+import { ApiRequestError, ApiUnavailableError, SessionExpiredError } from "../learning/services/apiClient"
 import { DSA_COURSE_ID, isBackendPinnedCourse, isBackendSyncedCourse } from "../learning/courseSources"
 import { useAuth } from "../auth/AuthContext"
 
@@ -264,7 +264,10 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
         // is already on screen (local cache or demo bootstrap) rather than
         // show a broken/empty state or clear a valid local session.
         setProgressSyncStatus("error")
-        if (!(error instanceof ApiUnavailableError)) console.error("[reagvis] progress load failed", error)
+        // A server that does not host this course (for example an ML-only production database) answers 404: nothing to reconcile,
+        // not a fault worth a console error.
+        const courseNotHosted = error instanceof ApiRequestError && error.status === 404
+        if (!(error instanceof ApiUnavailableError) && !courseNotHosted) console.error("[reagvis] progress load failed", error)
       })
     return () => {
       cancelled = true

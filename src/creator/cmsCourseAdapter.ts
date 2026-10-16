@@ -20,7 +20,7 @@ import type {
 } from "../learning/types"
 
 export interface UnifiedLibraryCourse extends LibraryCourse {
-  source: "static" | "cms"
+  source: "static" | "cms" | "backend"
 }
 
 /** A generic icon rotation for CMS courses — Creator Studio does not (yet)

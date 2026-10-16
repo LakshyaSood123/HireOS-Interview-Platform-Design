@@ -9,8 +9,10 @@ import { currentUserId, requireAuth, requireRole } from "../../middleware/auth.j
 import { query, body, params, validate } from "../../middleware/validate.js";
 import { sendData } from "../../shared/envelope.js";
 import * as cmsService from "./cms.service.js";
+import * as courseDeletion from "./courseDeletion.service.js";
+import { permanentDeleteRateLimit } from "../../middleware/rateLimit.js";
 import * as animationPackageService from "./animationPackage.service.js";
-import { courseIdParams, saveDraftSchema, versionIdParams, type CourseIdParams, type SaveDraftInput, type VersionIdParams } from "./cms.schema.js";
+import { courseIdParams, createCourseSchema, permanentDeleteSchema, type PermanentDeleteInput, saveDraftSchema, updateCourseDetailsSchema, type CreateCourseInput, type UpdateCourseDetailsInput, versionIdParams, type CourseIdParams, type SaveDraftInput, type VersionIdParams } from "./cms.schema.js";
 import { z } from "zod";
 import { curriculumId } from "../../shared/ids.js";
 const learnerPackageRevisionParams = z.object({ courseId: curriculumId, packageId: z.string().trim().min(1).max(64), revisionId: z.string().trim().min(1).max(32) });
@@ -40,6 +42,47 @@ export const cmsRouter = Router();
 
 cmsRouter.get("/cms/courses", requireAuth, requireRole("admin"), async (_req, res) => {
   sendData(res, await cmsService.listCourses());
+});
+
+cmsRouter.post("/cms/courses", requireAuth, requireRole("admin"), validate({ body: createCourseSchema }), async (req, res) => {
+  const created = await cmsService.createCourse(currentUserId(req), body<CreateCourseInput>(req));
+  sendData(res, created, 201);
+});
+
+cmsRouter.get("/cms/courses/:courseId", requireAuth, requireRole("admin"), validate({ params: courseIdParams }), async (req, res) => {
+  sendData(res, await cmsService.getCourseSummary(params<CourseIdParams>(req).courseId));
+});
+
+cmsRouter.patch(
+  "/cms/courses/:courseId/details",
+  requireAuth,
+  requireRole("admin"),
+  validate({ params: courseIdParams, body: updateCourseDetailsSchema }),
+  async (req, res) => {
+    sendData(res, await cmsService.updateCourseDetails(params<CourseIdParams>(req).courseId, body<UpdateCourseDetailsInput>(req)));
+  },
+);
+
+/** Read-only: what permanently deleting this course would remove, and whether anything blocks it. Admin only. */
+cmsRouter.get("/cms/courses/:courseId/delete-impact", requireAuth, requireRole("admin"), validate({ params: courseIdParams }), async (req, res) => {
+  sendData(res, await courseDeletion.getDeletionImpact(params<CourseIdParams>(req).courseId));
+});
+
+/** Irreversible. Requires the CURRENT admin's password and the exact course title (POST, not DELETE, so the credentials travel in a body). */
+cmsRouter.post(
+  "/cms/courses/:courseId/permanent-delete",
+  requireAuth,
+  requireRole("admin"),
+  permanentDeleteRateLimit,
+  validate({ params: courseIdParams, body: permanentDeleteSchema }),
+  async (req, res) => {
+    sendData(res, await courseDeletion.deleteCoursePermanently(params<CourseIdParams>(req).courseId, currentUserId(req), body<PermanentDeleteInput>(req)));
+  },
+);
+
+/** Learner-facing catalog of published CMS-created courses (library cards). Authenticated, not admin-only. */
+cmsRouter.get("/courses", requireAuth, async (_req, res) => {
+  sendData(res, await cmsService.listPublishedCatalog());
 });
 
 cmsRouter.get(

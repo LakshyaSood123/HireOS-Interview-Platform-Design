@@ -27,6 +27,11 @@ function stepsOf(pkg: PackageDoc): { id: string; label: string }[] {
   return pkg.manifest.traceEvents.map((id) => ({ id, label: labels.get(id) ?? id }));
 }
 
+/** Mongo may store an empty `steps: {}` / `audio: []` as absent; always hand callers the full shape. */
+function withShape(n: PackageNarration | null | undefined): PackageNarration | null {
+  return n ? { ...n, steps: n.steps ?? {}, audio: n.audio ?? [] } : null;
+}
+
 function clone<T>(v: T): T {
   return JSON.parse(JSON.stringify(v)) as T;
 }
@@ -45,7 +50,7 @@ export interface NarrationOverview {
 }
 
 export function buildOverview(pkg: PackageDoc): NarrationOverview {
-  const narration = pkg.narration ?? null;
+  const narration = withShape(pkg.narration as PackageNarration | null | undefined);
   const explanations = extractExplanations(pkg.js);
   const steps = stepsOf(pkg);
   const views: StepStatusView[] = steps.map((s) => {
@@ -96,8 +101,8 @@ export async function getNarrationOverview(packageId: string, revisionId = DRAFT
 
 export async function getNarrationAudio(packageId: string, revisionId: string, stepId: string): Promise<{ contentType: string; dataBase64: string; durationMs: number | null }> {
   const pkg = await loadRevision(packageId, revisionId);
-  const rec = pkg.narration?.steps[stepId];
-  const file = rec?.asset ? pkg.narration?.audio.find((a) => a.path === rec.asset) : undefined;
+  const rec = withShape(pkg.narration as PackageNarration | null | undefined)?.steps[stepId];
+  const file = rec?.asset ? (pkg.narration?.audio ?? []).find((a) => a.path === rec.asset) : undefined;
   if (!rec || !file) throw ApiError.notFound(`No narration audio for step "${stepId}".`);
   return { contentType: file.contentType, dataBase64: file.dataBase64, durationMs: rec.durationMs ?? null };
 }
@@ -112,7 +117,7 @@ export interface NarrationSettingsPatch {
 export async function updateNarrationSettings(packageId: string, patch: NarrationSettingsPatch): Promise<NarrationOverview> {
   const doc = await CmsAnimationPackage.findOne({ packageId, status: "draft" });
   if (!doc) throw ApiError.notFound(`No draft revision exists for animation package "${packageId}".`);
-  const narration: PackageNarration = doc.narration ? clone(doc.narration as PackageNarration) : emptyNarration();
+  const narration: PackageNarration = doc.narration ? withShape(clone(doc.narration as PackageNarration))! : emptyNarration();
   const known = new Set((doc.manifest as { traceEvents: string[] }).traceEvents);
   if (patch.enabled !== undefined) narration.enabled = patch.enabled;
   if (patch.defaults) narration.defaults = { ...narration.defaults, ...patch.defaults };
@@ -182,7 +187,7 @@ export async function generateNarration(
     const explanation = explanations[step.id];
     const doc = await CmsAnimationPackage.findOne({ packageId, status: "draft" });
     if (!doc) throw ApiError.notFound(`No draft revision exists for animation package "${packageId}".`);
-    const narration: PackageNarration = doc.narration ? clone(doc.narration as PackageNarration) : emptyNarration();
+    const narration: PackageNarration = doc.narration ? withShape(clone(doc.narration as PackageNarration))! : emptyNarration();
     // Requesting generation switches narration on for the package.
     narration.enabled = true;
     const rec = narration.steps[step.id] ?? { enabled: true };

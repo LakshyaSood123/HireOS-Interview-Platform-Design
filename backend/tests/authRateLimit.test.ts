@@ -55,4 +55,13 @@ describe("auth rate limits", () => {
     expect(statuses.filter((s) => s === 201)).toHaveLength(30);
     expect(statuses.slice(30)).toEqual([429, 429]);
   });
+  it("keeps the per-IP backstop: a flood of failed logins across many accounts from one IP is stopped, successful logins are not counted", async () => {
+    const app = appWithLimiters();
+    for (let i = 0; i < 20; i++) expect((await request(app).post("/login").send({ email: "ok@example.com", password: "correct" })).status).toBe(200);
+    const statuses: number[] = [];
+    for (let i = 0; i < 102; i++) statuses.push((await request(app).post("/login").send({ email: `target${i}@example.com`, password: "wrong" })).status);
+    expect(statuses.filter((s) => s === 401)).toHaveLength(100);
+    expect(statuses.slice(100)).toEqual([429, 429]);
+    expect((await request(app).post("/login").send({ email: "ok@example.com", password: "correct" })).status).toBe(429);
+  });
 });

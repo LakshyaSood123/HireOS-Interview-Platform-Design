@@ -208,12 +208,15 @@ export function updateNarrationSettings(
   return client.request<CmsNarrationOverview>("PATCH", `${pkgPath(packageId)}/narration`, { body: patch }).then(res => res.data)
 }
 
+/** Local speech generation takes seconds per step (and the model loads on first use), far beyond the client's normal 6 s request limit. */
+const NARRATION_GENERATION_TIMEOUT_MS = 15 * 60_000
+
 export function generateNarration(
   client: ApiClient,
   packageId: string,
   input: { mode: "missing" | "stale" | "missing-and-stale" | "step"; stepId?: string; force?: boolean },
 ): Promise<CmsNarrationGenerationSummary> {
-  return client.request<CmsNarrationGenerationSummary>("POST", `${pkgPath(packageId)}/narration/generate`, { body: input }).then(res => res.data)
+  return client.request<CmsNarrationGenerationSummary>("POST", `${pkgPath(packageId)}/narration/generate`, { body: input, timeoutMs: NARRATION_GENERATION_TIMEOUT_MS }).then(res => res.data)
 }
 
 export function getNarrationAudio(client: ApiClient, packageId: string, revisionId: string, stepId: string): Promise<{ contentType: string; dataBase64: string; durationMs: number | null }> {
